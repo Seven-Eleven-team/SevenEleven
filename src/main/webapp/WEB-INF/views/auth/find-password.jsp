@@ -6,7 +6,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>비밀번호 재설정 | 여행 플래너</title>
+  <title>비밀번호 재설정 | 지출메이트</title>
 
   <link rel="stylesheet" href="/css/header.css" />
   
@@ -26,7 +26,7 @@
     <div class="auth-left">
       <div class="brand">
         <div class="logo">TP</div>
-        <div class="title">여행 플래너</div>
+        <div class="title">지출메이트</div>
       </div>
 
       <form class="form" action="/members/find-password" method="post">
