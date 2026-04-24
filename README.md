@@ -1,5 +1,5 @@
 ##	팀명 : 세븐일레븐
--	노션 : https://www.notion.so/332984c1fe328003ac4ce8024382925c?source=copy_link
+-	노션 : [https://www.notion.so/332984c1fe328003ac4ce8024382925c?source=copy_link](https://www.notion.so/337c6c4cb51580eca9cadcc9efd87728)
 -	강호영 : https://github.com/hoyoung6604
 -	김하영 : https://github.com/happang0815
 -	정진우 : https://github.com/balgeom
