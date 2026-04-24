@@ -7,7 +7,8 @@
 -	유다연 : https://github.com/20222267-stack
 -	이은아 : https://github.com/euna0428
 -	윤혁재 : https://github.com/YOONHyukjae
--	===========================
+
+
 ###	 직책
 -	팀장 : 강호영
 -	기술리더 : 강호영
