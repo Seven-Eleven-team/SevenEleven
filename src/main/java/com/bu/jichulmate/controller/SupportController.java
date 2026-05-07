@@ -26,6 +26,11 @@ public class SupportController {
         return "support/qna";
     }
 
+    @GetMapping("/qna/write")
+    public String writePage() {
+        return "support/write";
+    }
+
     @PostMapping("/qna")
     public String create(InquiryCreateRequest request){
         Long userId = 1L;

@@ -9,44 +9,67 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "INQUIRIES")
 public class Inquiry {
 
+    // ===============================
+    // PK (시퀀스 기반)
+    // ===============================
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "inquiry_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_INQUIRIES")
     @SequenceGenerator(
-            name = "inquiry_seq",
-            sequenceName = "SEQ_INQUIRIES",
+            name = "SEQ_INQUIRIES",           // 반드시 동일하게
+            sequenceName = "SEQ_INQUIRIES",   // DB 시퀀스 이름
             allocationSize = 1
     )
-    @Column(name = "INQUIRY_ID") // 🔥 PK 매핑
+    @Column(name = "INQUIRY_ID")
     private Long id;
 
-    @Column(name = "USER_ID")
+    // ===============================
+    // 사용자 ID
+    // ===============================
+    @Column(name = "USER_ID", nullable = false)
     private Long userId;
 
-    @Column(name = "TITLE")
+    // ===============================
+    // 제목
+    // ===============================
+    @Column(name = "TITLE", nullable = false)
     private String title;
 
-    @Column(name = "CONTENT")
+    // ===============================
+    // 내용
+    // ===============================
+    @Column(name = "CONTENT", nullable = false)
     private String content;
 
+    // ===============================
+    // 상태 (WAITING / ANSWERED)
+    // ===============================
     @Column(name = "STATUS")
     private String status;
 
+    // ===============================
+    // 생성일 (자동 처리)
+    // ===============================
     @CreatedDate
-    @Column(name = "CREATED_AT", updatable = false)
+    @Column(name = "CREATED_AT", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    // 🔽 선택 (나중 확장용 - 지금 안 써도 OK)
+    // ===============================
+    // 관리자 답변
+    // ===============================
     @Column(name = "ANSWER_CONTENT")
     private String answerContent;
 
+    // ===============================
+    // 수정일
+    // ===============================
     @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;
 }

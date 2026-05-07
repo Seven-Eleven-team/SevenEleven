@@ -1,5 +1,6 @@
 package com.bu.jichulmate.service;
 
+import java.time.LocalDateTime;
 import com.bu.jichulmate.domain.Inquiry;
 import com.bu.jichulmate.dto.support.InquiryCreateRequest;
 import com.bu.jichulmate.dto.support.InquiryResponse;
@@ -15,7 +16,9 @@ public class SupportService {
 
     private final InquiryRepository inquiryRepository;
 
+    // ===============================
     // 문의 작성
+    // ===============================
     public void createInquiry(Long userId, InquiryCreateRequest request) {
 
         Inquiry inquiry = new Inquiry();
@@ -25,25 +28,36 @@ public class SupportService {
         inquiry.setContent(request.getContent());
         inquiry.setStatus("WAITING");
 
+        // 핵심 (DB 에러 해결)
+        inquiry.setCreatedAt(LocalDateTime.now());
+
         inquiryRepository.save(inquiry);
     }
 
+    // ===============================
     // 내 문의 목록
+    // ===============================
     public List<InquiryResponse> getMyInquiries(Long userId) {
 
         return inquiryRepository.findByUserId(userId)
                 .stream()
                 .map(inquiry -> {
                     InquiryResponse res = new InquiryResponse();
+
                     res.setId(inquiry.getId());
                     res.setTitle(inquiry.getTitle());
                     res.setContent(inquiry.getContent());
                     res.setStatus(inquiry.getStatus());
                     res.setCreatedAt(inquiry.getCreatedAt());
+
                     return res;
                 })
                 .toList();
     }
+
+    // ===============================
+    // 1대1 문의 자동응답 (번호 선택)
+    // ===============================
     public String getAnswerByType(int type) {
 
         switch (type) {
@@ -59,5 +73,4 @@ public class SupportService {
                 return "잘못된 입력입니다.";
         }
     }
-
 }
