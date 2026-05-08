@@ -1,0 +1,11 @@
+<%@ page pageEncoding="UTF-8" %>
+
+<header class="site-header">
+    <a class="site-logo" href="/">지출메이트</a>
+
+    <nav class="site-nav" aria-label="상단 메뉴">
+        <button type="button" class="header-auth-button" data-auth-open="choice">
+            로그인 / 회원가입
+        </button>
+    </nav>
+</header>
