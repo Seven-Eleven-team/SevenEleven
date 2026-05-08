@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ include file="webapp/WEB-INF/views/common/modal/theme.jspf" %>
+<%--<%@ include file="webapp/WEB-INF/views/common/modal/theme.jspf" %>--%>
 <!doctype html>
 <html lang="ko">
 <head>
@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="/css/ui-toast.css" />
 
   <script defer src="/js/ui-toast.js"></script>
-  <script defer src="/js/theme.js"></script>
+  <%--<script defer src="/js/theme.js"></script>--%>
   <script defer src="/js/nav-wave.js"></script>
 
 </head>
@@ -25,11 +25,11 @@
   <div class="auth-wrap">
     <div class="auth-left">
       <div class="brand">
-        <div class="logo">TP</div>
+        <div class="logo">JM</div>
         <div class="title">지출메이트</div>
       </div>
 
-      <form class="form" action="/members/find-password" method="post">
+      <form class="form" action="/auth/find-password" method="post">
         <div class="label">가입 이메일</div>
         <input class="input" name="email" type="email" placeholder="example@email.com" required />
 
@@ -55,7 +55,7 @@
         </c:if>
 
         <div class="auth-footer" style="margin-top:10px;">
-          <a class="underline" href="/members/login"><b>로그인으로</b></a>
+          <a class="underline" href="/auth/login"><b>로그인으로</b></a>
         </div>
 
         <div class="auth-footer" style="margin-top:6px;">

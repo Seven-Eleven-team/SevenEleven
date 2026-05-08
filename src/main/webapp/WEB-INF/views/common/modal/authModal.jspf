@@ -1,4 +1,7 @@
-<!-- auth-modal 공통 include -->
+<%@ page pageEncoding="UTF-8" %>
+
+<%@ include file="/WEB-INF/views/common/modal/authChoiceModal.jspf" %>
+<%@ include file="/WEB-INF/views/common/modal/termsAgreementModal.jspf" %>
 <%@ include file="/WEB-INF/views/common/modal/loginModal.jspf" %>
 <%@ include file="/WEB-INF/views/common/modal/signupModal.jspf" %>
 <%@ include file="/WEB-INF/views/common/modal/findPasswordModal.jspf" %>

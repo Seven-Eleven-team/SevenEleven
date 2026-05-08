@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ include file="/WEB-INF/views/common/theme.jspf" %>
+<%--<%@ include file="/WEB-INF/views/common/theme.jspf" %>--%>
 <!doctype html>
 <html lang="ko">
 <head>
@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="/css/ui-toast.css" />
 
   <script defer src="/js/ui-toast.js"></script>
-  <script defer src="/js/theme.js"></script>
+  <%--<script defer src="/js/theme.js"></script>--%>
   <script defer src="/js/pages/login-page.js"></script>
   <script defer src="/js/nav-wave.js"></script>
 </head>
