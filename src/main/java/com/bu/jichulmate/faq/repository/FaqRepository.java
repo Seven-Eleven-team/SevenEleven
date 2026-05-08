@@ -11,5 +11,7 @@ public interface FaqRepository extends JpaRepository<Faq, Long> {
 
     List<Faq> findByIsActiveAndCategoryOrderBySortOrderAsc(String isActive, String category);
 
+
+
     List<Faq> findAllByOrderBySortOrderAsc();
 }
