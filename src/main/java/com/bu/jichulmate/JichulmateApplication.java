@@ -9,5 +9,4 @@ public class JichulmateApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(JichulmateApplication.class, args);
 	}
-
 }
