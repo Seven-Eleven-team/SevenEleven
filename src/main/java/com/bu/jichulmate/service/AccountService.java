@@ -1,4 +1,3 @@
-/*
 package com.bu.jichulmate.service;
 
 import com.bu.jichulmate.domain.Account;
@@ -26,8 +25,9 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
 
-    */
-/** 계좌 목록 조회 (삭제된 계좌 제외) *//*
+
+
+//* 계좌 목록 조회 (삭제된 계좌 제외)
 
     public List<Account> getAccountsByUser(Long userId) {
         User user = findUser(userId);
@@ -35,12 +35,13 @@ public class AccountService {
                 .findByUserAndDeletedFalseOrderByPrimaryDescCreatedAtDesc(user);
     }
 
-    */
-/**
-     * MY-03: 계좌 등록
-     * - 최대 5개 제한
-     * - 계좌번호 중복 시 "이미 존재하거나, 유효하지 않는 계좌입니다." 에러
-     *//*
+
+
+//*
+//     * MY-03: 계좌 등록
+//     * - 최대 5개 제한
+//     * - 계좌번호 중복 시 "이미 존재하거나, 유효하지 않는 계좌입니다." 에러
+//
 
     @Transactional
     public void registerAccount(Long userId, AccountRegisterRequest request) {
@@ -73,11 +74,14 @@ public class AccountService {
                 .build());
     }
 
-    */
-/**
+
+
+/*
+*
      * MY-04: 계좌 수정
      * - 계좌번호 중복 시 "이미 존재하거나, 유효하지 않는 계좌입니다." 에러
-     *//*
+
+*/
 
     @Transactional
     public void updateAccount(Long userId, Long accountId, AccountUpdateRequest request) {
@@ -102,13 +106,16 @@ public class AccountService {
         accountRepository.save(account);
     }
 
-    */
-/**
+
+
+/*
+*
      * MY-06: 계좌 삭제 (soft delete)
      * - 계좌가 1개이면 삭제 불가 "최소 1개 계좌 필요"
      * - IS_DELETED = true 처리
      * - 대표계좌 삭제 시 다음 계좌 자동 대표 승계
-     *//*
+*/
+
 
     @Transactional
     public void deleteAccount(Long userId, Long accountId) {
@@ -140,8 +147,13 @@ public class AccountService {
         accountRepository.save(account);
     }
 
-    */
-/** 대표계좌 변경 *//*
+
+
+
+
+
+//* 대표계좌 변경
+
 
     @Transactional
     public void setPrimaryAccount(Long userId, Long accountId) {
@@ -164,4 +176,4 @@ public class AccountService {
         return accountRepository.findByIdAndUserAndDeletedFalse(accountId, user)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.ACCOUNT_NOT_FOUND));
     }
-}*/
+}

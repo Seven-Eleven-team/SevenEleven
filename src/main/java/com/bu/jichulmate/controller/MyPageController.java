@@ -1,4 +1,3 @@
-/*
 package com.bu.jichulmate.controller;
 
 import com.bu.jichulmate.domain.*;
@@ -86,10 +85,11 @@ public class MyPageController {
         }
     }
 
-    */
-/**
+/*
+*
      * POST /mypage/edit/profile-image  (AJAX - 프로필 사진 변경)
-     *//*
+*/
+
 
     @PostMapping("/edit/profile-image")
     @ResponseBody
@@ -108,11 +108,12 @@ public class MyPageController {
 
     // ── MY-02: 보안 설정 (PIN) ────────────────────────────────
 
-    */
-/**
+/*
+*
      * GET /mypage/security
      * 보안 설정 페이지
-     *//*
+*/
+
 
     @GetMapping("/security")
     public String securityPage(HttpSession session, Model model) {
@@ -122,11 +123,12 @@ public class MyPageController {
         return "mypage/security";
     }
 
-    */
-/**
+/*
+*
      * POST /mypage/security/pin  (AJAX)
      * PIN 번호 변경
-     *//*
+*/
+
 
     @PostMapping("/security/pin")
     @ResponseBody
@@ -145,12 +147,13 @@ public class MyPageController {
 
     // ── MY-05: 멘토 성향 설정 ─────────────────────────────────
 
-    */
-/**
+/*
+*
      * POST /mypage/mentor-type  (AJAX)
      * 멘토 성향 선택 저장
      * mentorType: MILD(순한맛) / MEDIUM(중간맛) / SPICY(매운맛)
-     *//*
+*/
+
 
     @PostMapping("/mentor-type")
     @ResponseBody
@@ -411,4 +414,4 @@ public class MyPageController {
                     .body(ApiResponse.error(e.getMessage()));
         }
     }
-}*/
+}

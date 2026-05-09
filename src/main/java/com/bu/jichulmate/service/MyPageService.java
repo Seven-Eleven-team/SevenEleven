@@ -1,4 +1,3 @@
-/*
 package com.bu.jichulmate.service;
 
 import com.bu.jichulmate.domain.*;
@@ -9,6 +8,7 @@ import com.bu.jichulmate.exception.ErrorCode;
 import com.bu.jichulmate.exception.NotFoundException;
 import com.bu.jichulmate.exception.UnauthorizedException;
 import com.bu.jichulmate.repository.*;
+import jdk.jshell.JShell;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,10 +48,10 @@ public class MyPageService {
     public MyPageSummaryResponse getMyPageSummary(Long userId) {
         User user = findUser(userId);
 
-        List<Subscription> activeList =
+        List<JShell.Subscription> activeList =
                 subscriptionRepository.findByUserAndStatus(user, "ACTIVE");
         long monthlyTotal = activeList.stream()
-                .mapToLong(Subscription::getMonthlyFee).sum();
+                .mapToLong(JShell.Subscription::getMonthlyFee).sum();
         String nextBilling = activeList.stream()
                 .filter(s -> s.getNextBillingDate() != null)
                 .map(s -> s.getNextBillingDate().toString())
@@ -147,10 +147,9 @@ public class MyPageService {
         userRepository.save(user);
     }
 
-    */
 /**
-     * 프로필 사진 업로드
-     *//*
+     * 프로필 사진 업로드*/
+
 
     @Transactional
     public String updateProfileImage(Long userId, MultipartFile file) throws IOException {
@@ -176,11 +175,12 @@ public class MyPageService {
 
     // ── MY-02: 보안 설정 (PIN) ────────────────────────────────
 
-    */
-/**
+/*
+*
      * PIN 번호 변경
      * 실패: "4자리 숫자 필요" 안내
-     *//*
+*/
+
 
     @Transactional
     public void updatePin(Long userId, PinUpdateRequest request) {
@@ -208,11 +208,10 @@ public class MyPageService {
 
     // ── MY-05: 멘토 성향 설정 ─────────────────────────────────
 
-    */
-/**
-     * 멘토 성향 선택 저장
-     * MILD(순한맛) / MEDIUM(중간맛) / SPICY(매운맛)
-     *//*
+//*
+//     * 멘토 성향 선택 저장
+//     * MILD(순한맛) / MEDIUM(중간맛) / SPICY(매운맛)
+
 
     @Transactional
     public void updateMentorType(Long userId, String mentorType) {
@@ -434,4 +433,4 @@ public class MyPageService {
         if (accountNumber == null || accountNumber.length() < 4) return accountNumber;
         return "****" + accountNumber.substring(accountNumber.length() - 4);
     }
-}*/
+}

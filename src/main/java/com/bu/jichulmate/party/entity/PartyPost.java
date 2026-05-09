@@ -28,6 +28,8 @@ public class PartyPost {
     @Column(name = "MONTHLY_PRICE", nullable = false)
     private Integer monthlyPrice;
 
+    // ★ 이 부분에 @Lob을 추가해서 오라클 DB와 모양을 맞춰줍니다.
+    @Lob
     @Column(name = "DESCRIPTION")
     private String description;
 
