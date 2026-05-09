@@ -1,0 +1,113 @@
+/* 플로팅 버튼 */
+#ai-mentor-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform 0.3s;
+}
+#ai-mentor-btn:hover { transform: scale(1.1); }
+#ai-mentor-btn img { width: 100%; border-radius: 50%; }
+
+/* 채팅 모달창 */
+#ai-mentor-modal {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 350px;
+    height: 500px;
+    background: white;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    z-index: 1001;
+    overflow: hidden;
+}
+.hidden { display: none !important; }
+
+/* 헤더 스타일 */
+.ai-modal-header {
+    background: white;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header-content h4 { margin: 0; font-size: 16px; color: #333; }
+.current-date { font-size: 11px; color: #999; }
+
+/* 맛 선택 영역 */
+.ai-flavor-selector {
+    padding: 10px;
+    background: #f9f9f9;
+    display: flex;
+    justify-content: space-around;
+    font-size: 12px;
+}
+
+/* 채팅창 몸통 */
+.ai-modal-body {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background: #f5f6f7;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 말풍선 공통 */
+.chat-bubble {
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: 15px;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+/* AI 말풍선 (왼쪽, 진한 색) */
+.ai-bubble {
+    align-self: flex-start;
+    background: #4A76A8;
+    color: white;
+    border-bottom-left-radius: 2px;
+}
+
+/* 사용자 말풍선 (오른쪽, 연한 색) */
+.user-bubble {
+    align-self: flex-end;
+    background: #E1E9F2;
+    color: #333;
+    border-bottom-right-radius: 2px;
+}
+
+/* 푸터(입력창) */
+.ai-modal-footer {
+    padding: 10px;
+    display: flex;
+    gap: 5px;
+    background: white;
+    border-top: 1px solid #eee;
+}
+#ai-chat-input {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 8px 15px;
+    font-size: 13px;
+}
+#send-btn {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+}

@@ -9,3 +9,5 @@
         </button>
     </nav>
 </header>
+
+<%@ include file="/WEB-INF/views/common/layout/ai-mentor.jspf" %>
