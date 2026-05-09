@@ -5,12 +5,15 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "INQUIRIES")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class Inquiry {
+@Table(name = "BOARDS")
+@Getter @Setter
+@NoArgsConstructor // JPA 필수 기본 생성자
+@AllArgsConstructor // Builder 필수 모든 필드 생성자
+@Builder
+public class Board {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "inquiry_seq")
-    @SequenceGenerator(name = "inquiry_seq", sequenceName = "INQUIRY_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "board_seq")
+    @SequenceGenerator(name = "board_seq", sequenceName = "BOARD_SEQ", allocationSize = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -24,7 +27,7 @@ public class Inquiry {
     private String content;
 
     @Column(nullable = false)
-    private String status = "PENDING";
+    private boolean deleted = false;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

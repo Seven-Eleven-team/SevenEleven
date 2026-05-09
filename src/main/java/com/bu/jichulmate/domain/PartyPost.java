@@ -5,26 +5,26 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "INQUIRIES")
+@Table(name = "PARTY_POSTS")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class Inquiry {
+public class PartyPost {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "inquiry_seq")
-    @SequenceGenerator(name = "inquiry_seq", sequenceName = "INQUIRY_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "party_seq")
+    @SequenceGenerator(name = "party_seq", sequenceName = "PARTY_SEQ", allocationSize = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "host_user_id", nullable = false)
+    private User hostUser;
 
     @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "CLOB")
-    private String content;
+    @Column(nullable = false)
+    private String status = "RECRUITING";
 
     @Column(nullable = false)
-    private String status = "PENDING";
+    private boolean deleted = false;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
