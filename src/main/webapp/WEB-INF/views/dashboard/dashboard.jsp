@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <title>지출메이트 - 대시보드</title>
     <link rel="stylesheet" href="/css/dashboard.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/vendor/chart.min.js"></script>
 </head>
 <body>
 

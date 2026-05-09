@@ -1,3 +1,4 @@
+/*
 package com.bu.jichulmate.service;
 
 import com.bu.jichulmate.domain.*;
@@ -146,9 +147,11 @@ public class MyPageService {
         userRepository.save(user);
     }
 
-    /**
+    */
+/**
      * 프로필 사진 업로드
-     */
+     *//*
+
     @Transactional
     public String updateProfileImage(Long userId, MultipartFile file) throws IOException {
         if (file == null || file.isEmpty()) {
@@ -173,10 +176,12 @@ public class MyPageService {
 
     // ── MY-02: 보안 설정 (PIN) ────────────────────────────────
 
-    /**
+    */
+/**
      * PIN 번호 변경
      * 실패: "4자리 숫자 필요" 안내
-     */
+     *//*
+
     @Transactional
     public void updatePin(Long userId, PinUpdateRequest request) {
         User user = findUser(userId);
@@ -203,10 +208,12 @@ public class MyPageService {
 
     // ── MY-05: 멘토 성향 설정 ─────────────────────────────────
 
-    /**
+    */
+/**
      * 멘토 성향 선택 저장
      * MILD(순한맛) / MEDIUM(중간맛) / SPICY(매운맛)
-     */
+     *//*
+
     @Transactional
     public void updateMentorType(Long userId, String mentorType) {
         if (!List.of("MILD", "MEDIUM", "SPICY").contains(mentorType)) {
@@ -427,4 +434,4 @@ public class MyPageService {
         if (accountNumber == null || accountNumber.length() < 4) return accountNumber;
         return "****" + accountNumber.substring(accountNumber.length() - 4);
     }
-}
+}*/
