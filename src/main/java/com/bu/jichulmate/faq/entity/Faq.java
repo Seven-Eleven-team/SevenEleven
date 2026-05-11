@@ -25,7 +25,7 @@ public class Faq {
     @Column(name = "SORT_ORDER", nullable = false)
     private Integer sortOrder;
 
-    @Column(name = "IS_ACTIVE", nullable = false)
+    @Column(name = "IS_ACTIVE", nullable = false, length = 1)
     private String isActive;
 
     @Column(name = "CREATED_AT", nullable = false, updatable = false)

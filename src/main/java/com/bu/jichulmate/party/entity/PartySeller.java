@@ -37,7 +37,7 @@ public class PartySeller {
     @Column(name = "ACCOUNT_NUMBER", nullable = false)
     private String accountNumber;
 
-    @Column(name = "HAS_EXPERIENCE", nullable = false)
+    @Column(name = "HAS_EXPERIENCE", nullable = false, length = 1)
     private String hasExperience;
 
     @Column(name = "CREATED_AT", nullable = false, updatable = false)
