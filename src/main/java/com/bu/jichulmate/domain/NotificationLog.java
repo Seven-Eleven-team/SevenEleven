@@ -5,26 +5,23 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "INQUIRIES")
+@Table(name = "NOTIFICATION_LOGS")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class Inquiry {
+public class NotificationLog {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "inquiry_seq")
-    @SequenceGenerator(name = "inquiry_seq", sequenceName = "INQUIRY_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notif_seq")
+    @SequenceGenerator(name = "notif_seq", sequenceName = "NOTIF_SEQ", allocationSize = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private User user; // findByUser... 와 매칭
 
     @Column(nullable = false)
-    private String title;
-
-    @Column(columnDefinition = "CLOB")
-    private String content;
+    private String message;
 
     @Column(nullable = false)
-    private String status = "PENDING";
+    private boolean read = false;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

@@ -28,7 +28,7 @@ public class PartyPost {
     @Column(name = "MONTHLY_PRICE", nullable = false)
     private Integer monthlyPrice;
 
-    @Column(name = "DESCRIPTION")
+    @Column(name = "DESCRIPTION", length = 4000)
     private String description;
 
     @Column(name = "STATUS", nullable = false)

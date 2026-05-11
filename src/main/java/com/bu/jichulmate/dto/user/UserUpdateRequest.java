@@ -13,7 +13,7 @@ public class UserUpdateRequest {
     private String loginId;
 
     @NotBlank(message = "닉네임을 입력해주세요.")
-    @Size(min = 2, max = 20, message = "닉네임은 2~5자여야 합니다.")
+    @Size(min = 2, max = 5, message = "닉네임은 2~5자여야 합니다.")
     private String nickname;
 
     @Email(message = "올바른 이메일 형식이 아닙니다.")

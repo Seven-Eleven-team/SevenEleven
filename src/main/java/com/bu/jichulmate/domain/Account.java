@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor @AllArgsConstructor
 @Builder
 public class Account {
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_seq")
     @SequenceGenerator(name = "account_seq", sequenceName = "ACCOUNT_SEQ", allocationSize = 1)
@@ -33,7 +32,6 @@ public class Account {
     @Builder.Default
     private boolean primary = false;
 
-    // MY-06: soft delete (IS_DELETED = 'Y')
     @Column(name = "is_deleted", nullable = false)
     @Builder.Default
     private boolean deleted = false;
