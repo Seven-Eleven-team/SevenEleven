@@ -1,35 +1,39 @@
 package com.bu.jichulmate.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "SAVING_GOALS")
-@Getter
-@Setter
-@NoArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class SavingGoal {
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "goal_seq")
-    @SequenceGenerator(name = "goal_seq", sequenceName = "SEQ_SAVING_GOALS", allocationSize = 1)
-    @Column(name = "GOAL_ID")
+    @SequenceGenerator(name = "goal_seq", sequenceName = "GOAL_SEQ", allocationSize = 1)
     private Long id;
 
-    @Column(name = "USER_ID", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "ITEM_NAME", nullable = false)
-    private String itemName;
+    @Column(nullable = false)
+    private String goalName; // getGoalName() 매칭
 
-    @Column(name = "ITEM_PRICE", nullable = false)
-    private Long itemPrice;
+    @Column(nullable = false)
+    private long targetAmount; // getTargetAmount() 매칭
 
-    @Column(name = "SAVED_AMOUNT", nullable = false)
-    private Long savedAmount = 0L;
+    @Column(nullable = false)
+    private long savedAmount; // getSavedAmount() 매칭
 
-    @Column(name = "STATUS")
-    private String status = "ING"; // 예전 DB 버전에 맞춤
+    @Column(nullable = false)
+    private boolean deleted = false;
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
