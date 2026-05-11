@@ -19,6 +19,7 @@ src/main/webapp/WEB-INF/views
 │   │   ├── 📄 signupModal.jspf                (회원가입 입력 모달)
 │   │   ├── 📄 findPasswordModal.jspf          (비밀번호 찾기 모달)
 │   │   └── 📄 loginRequiredModal.jspf         (로그인 필요 안내 모달)
+│   │   └── 📄 faqModal.jspf                   (플로팅 버튼 클릭 시 뜨는 채팅 스타일 모달)
 │   │
 │   └── 📂 error
 │       ├── 📄 404.jsp                         (페이지 없음)
@@ -73,10 +74,6 @@ src/main/webapp/WEB-INF/views
 │
 ├── 📂 support                                  (고객센터)
 │   ├── 📄 support.jsp                         (고객센터 메인 허브)
-│   ├── 📄 notice.jsp                          (공지사항 목록)
-│   ├── 📄 noticeDetail.jsp                    (공지 상세)
-│   ├── 📄 faq.jsp                             (FAQ 목록)
-│   ├── 📄 faqDetail.jsp                       (FAQ 상세)
 │   ├── 📄 qna.jsp                             (문의 목록)
 │   ├── 📄 qnaDetail.jsp                       (문의 상세)
 │   ├── 📄 qnaForm.jsp                         (문의 작성)
