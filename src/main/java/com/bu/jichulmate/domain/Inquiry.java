@@ -33,4 +33,6 @@ public class Inquiry {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
+
+
 }

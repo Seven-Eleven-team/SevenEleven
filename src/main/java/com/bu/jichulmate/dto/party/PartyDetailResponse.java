@@ -1,9 +1,9 @@
-package com.bu.jichulmate.party.dto;
+package com.bu.jichulmate.dto.party;
 
-import com.bu.jichulmate.party.entity.PartyPost;
+import com.bu.jichulmate.domain.PartyPost;
 import java.time.LocalDate;
 
-public class PartyPostResponse {
+public class PartyDetailResponse {
     private Long partyId;
     private Long sellerId;
     private String ottCategory;
@@ -15,7 +15,7 @@ public class PartyPostResponse {
     private LocalDate createdAt;
     private LocalDate updatedAt;
 
-    public PartyPostResponse(PartyPost post) {
+    public PartyDetailResponse(PartyPost post) {
         this.partyId = post.getPartyId();
         this.sellerId = post.getSellerId();
         this.ottCategory = post.getOttCategory();

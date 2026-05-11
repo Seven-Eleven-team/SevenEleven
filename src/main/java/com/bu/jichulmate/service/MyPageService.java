@@ -176,7 +176,7 @@ public class MyPageService {
         b.setDeleted(true); boardRepository.save(b);
     }
 
-    public Page<Inquiry> getMyInquiries(Long userId, Pageable p) { return inquiryRepository.findByUserOrderByCreatedAtDesc(findUser(userId), p); }
+    public Page<Inquiry> getMyInquiries(Long userId, Pageable p) { return inquiryRepository.findByUserOrderByCreatedAtDesc(findUser(userId)); }
     @Transactional
     public void deleteMyInquiry(Long userId, Long iId) {
         Inquiry i = inquiryRepository.findById(iId).orElseThrow(() -> new NotFoundException(ErrorCode.INQUIRY_NOT_FOUND));

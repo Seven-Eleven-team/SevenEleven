@@ -39,7 +39,7 @@ public class SupportService {
     // ===============================
     public List<InquiryResponse> getMyInquiries(Long userId) {
 
-        return inquiryRepository.findByUserId(userId)
+        return inquiryRepository.findByUserOrderByCreatedAtDesc(userId)
                 .stream()
                 .map(inquiry -> {
                     InquiryResponse res = new InquiryResponse();
