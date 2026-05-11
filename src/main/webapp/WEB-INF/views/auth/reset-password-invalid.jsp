@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ include file="/WEB-INF/views/common/theme.jspf" %>
+<%--<%@ include file="/WEB-INF/views/common/theme.jspf" %>--%>
 <!doctype html>
 <html lang="ko">
 <head>
@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="/css/ui-toast.css" />
 
   <script defer src="/js/ui-toast.js"></script>
-  <script defer src="/js/theme.js"></script>
+  <%--<script defer src="/js/theme.js"></script>--%>
   <script defer src="/js/nav-wave.js"></script>
 
 </head>
@@ -25,7 +25,7 @@
   <div class="auth-wrap">
     <div class="auth-left">
       <div class="brand">
-        <div class="logo">TP</div>
+        <div class="logo">JM</div>
         <div class="title">지출메이트</div>
       </div>
 
@@ -47,12 +47,12 @@
           아래 버튼을 눌러 재설정 링크를 다시 받아주세요.
         </div>
 
-        <a class="primary-btn" href="/members/find-password" style="display:inline-block; text-align:center; margin-top:14px;">
+        <a class="primary-btn" href="/auth/find-password" style="display:inline-block; text-align:center; margin-top:14px;">
           재설정 링크 다시 받기
         </a>
 
         <div class="auth-footer" style="margin-top:10px;">
-          <a class="underline" href="/members/login"><b>로그인으로</b></a>
+          <a class="underline" href="/auth/login"><b>로그인으로</b></a>
         </div>
 
         <div class="auth-footer" style="margin-top:6px;">
