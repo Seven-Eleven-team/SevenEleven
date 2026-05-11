@@ -23,7 +23,7 @@
         <a href="#"
            class="auth-link"
            id="headerAuthLink"
-           data-auth-open="choice">
+           data-auth-open="login">
             로그인 / 회원가입
         </a>
 

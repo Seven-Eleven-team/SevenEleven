@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const header = document.querySelector(".site-header");
     const heroSection = document.querySelector(".hero-section");
     const cardSection = document.querySelector(".scroll-card-section");
-    const cards = document.querySelectorAll(".service-card");
+    const cards = Array.from(document.querySelectorAll(".service-card"));
     const fanSection = document.querySelector(".fan-card-section");
     const fanCardWrap = document.querySelector(".fan-card-wrap");
 
@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         const trimmed = text.trim();
+
         if (!trimmed) {
             return "M";
         }
@@ -128,53 +129,73 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
+    function clearCardState(card) {
+        card.classList.remove("is-active", "is-back", "is-hidden-up", "is-waiting");
+    }
+
     function updateCards() {
         if (!cardSection || cards.length === 0) {
             return;
         }
 
         const sectionTop = cardSection.offsetTop;
-        const scrollY = window.scrollY;
         const sectionHeight = cardSection.offsetHeight;
         const viewportHeight = window.innerHeight;
+        const scrollY = window.scrollY;
 
-        const scrollStart = sectionTop - viewportHeight * 0.35;
-        const scrollEnd = sectionTop + sectionHeight - viewportHeight * 1.15;
-
-        let progress = (scrollY - scrollStart) / (scrollEnd - scrollStart);
-        progress = Math.max(0, Math.min(1, progress));
+        const stickyDistance = Math.max(sectionHeight - viewportHeight, 1);
+        const rawProgress = (scrollY - sectionTop) / stickyDistance;
+        const progress = clamp(rawProgress, 0, 1);
 
         const cardCount = cards.length;
-        const step = 1 / cardCount;
+        const segment = 1 / cardCount;
+        const activeIndex = clamp(Math.floor(progress / segment), 0, cardCount - 1);
 
         cards.forEach(function (card, index) {
-            card.classList.remove("is-active", "is-back", "is-hidden-up", "is-waiting");
+            clearCardState(card);
 
-            const start = step * index;
-            const end = step * (index + 1);
-
-            if (progress < start) {
-                card.classList.add("is-waiting");
-            } else if (progress >= start && progress < end) {
-                card.classList.add("is-active");
-            } else if (progress >= end && progress < end + step * 0.65) {
+            if (index < activeIndex) {
                 card.classList.add("is-back");
-            } else {
-                card.classList.add("is-hidden-up");
+                return;
             }
+
+            if (index === activeIndex) {
+                card.classList.add("is-active");
+                return;
+            }
+
+            card.classList.add("is-waiting");
         });
+
+        if (progress >= 0.995) {
+            cards.forEach(function (card, index) {
+                clearCardState(card);
+
+                if (index === cardCount - 1) {
+                    card.classList.add("is-active");
+                } else {
+                    card.classList.add("is-hidden-up");
+                }
+            });
+        }
     }
 
     function handleScroll() {
-        if (!ticking) {
-            window.requestAnimationFrame(function () {
-                updateHeaderState();
-                updateCards();
-                ticking = false;
-            });
-
-            ticking = true;
+        if (ticking) {
+            return;
         }
+
+        window.requestAnimationFrame(function () {
+            updateHeaderState();
+            updateCards();
+            ticking = false;
+        });
+
+        ticking = true;
     }
 
     window.addEventListener("load", function () {
@@ -185,25 +206,16 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 2600);
 
         updateHeaderState();
+        updateCards();
     });
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+
     window.addEventListener("resize", function () {
         updateHeaderState();
         updateCards();
     });
 
-    /*
-     * auth-modal.js에서 로그인/회원가입 성공 직후
-     * 아래 이벤트를 dispatch 해주면 헤더 아바타가 즉시 바뀜
-     *
-     * window.dispatchEvent(new CustomEvent("jichulmate:auth-success", {
-     *   detail: {
-     *     displayName: "곤듀",
-     *     type: "login"
-     *   }
-     * }));
-     */
     window.addEventListener("jichulmate:auth-success", function (event) {
         const detail = event.detail || {};
         const displayName = detail.displayName || detail.nickname || detail.name || "Mate";

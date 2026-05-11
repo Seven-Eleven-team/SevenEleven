@@ -17,7 +17,6 @@
         <div class="auth-wrap auth-wrap--split auth-wrap--reverse">
             <div class="auth-left">
                 <div class="brand">
-                    <div class="logo" aria-hidden="true">지</div>
                     <div class="title" id="signupModalTitle">회원가입</div>
                 </div>
 
