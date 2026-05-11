@@ -1,0 +1,177 @@
+/* ========================= */
+/* 알림 메인 */
+/* ========================= */
+
+.alarm-main{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+/* ========================= */
+/* 페이지 제목 */
+/* ========================= */
+
+.page-title{
+
+    font-size:32px;
+
+    font-weight:700;
+
+    margin-bottom:25px;
+
+    color:#222;
+}
+
+/* ========================= */
+/* 카드 */
+/* ========================= */
+
+.alarm-card{
+
+    width:100%;
+
+    height:100%;
+
+    background:white;
+
+    border:1px solid #dbdbdb;
+
+    border-radius:20px;
+
+    padding:35px;
+
+    display:flex;
+
+    flex-direction:column;
+}
+.container{
+
+    align-items:stretch;
+}
+/* ========================= */
+/* 알림 테이블 */
+/* ========================= */
+
+.alarm-table{
+
+    width:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    flex:1;
+}
+
+/* ========================= */
+/* 알림 행 */
+/* ========================= */
+
+.alarm-row{
+
+    height:60px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 20px;
+
+    border-bottom:1px solid #ddd;
+
+    transition:0.2s;
+}
+
+/* hover 효과 */
+
+.alarm-row:hover{
+
+    background:#f8f9fc;
+}
+
+/* ========================= */
+/* 왼쪽 영역 */
+/* ========================= */
+
+.alarm-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+}
+
+/* ========================= */
+/* 아이콘 */
+/* ========================= */
+
+.alarm-icon{
+
+    font-size:18px;
+}
+
+/* ========================= */
+/* 알림 텍스트 */
+/* ========================= */
+
+.alarm-text{
+
+    font-size:14px;
+
+    font-weight:500;
+
+    color:#222;
+}
+
+/* 위험 숫자 */
+
+.danger-text{
+
+    color:#ff4d4d;
+
+    font-weight:700;
+}
+
+/* ========================= */
+/* 경고 타입 */
+/* ========================= */
+
+.warning{
+
+    background:#fff8f0;
+}
+
+/* ========================= */
+/* 빈 줄 */
+/* ========================= */
+
+.empty-line{
+
+    height:60px;
+
+    border-bottom:1px solid #ddd;
+}
+
+/* ========================= */
+/* 페이지네이션 */
+/* ========================= */
+
+.pagination{
+
+    text-align:center;
+
+    margin-top:20px;
+
+    padding-top:20px;
+
+    font-size:11px;
+
+    color:#666;
+}

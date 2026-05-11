@@ -70,6 +70,12 @@ src/main/webapp/WEB-INF/views
 │       ├── 📄 profile.jsp                     (회원 정보 수정)
 │       ├── 📄 security.jsp                    (PIN / 보안 설정)
 │       ├── 📄 accounts.jsp                    (계좌 목록)
+│       ├── 📄 mysub.jsp                       (내 구독 관리)
+│       ├── 📄 mypost.jsp                      (내 게시글 보기)
+│       ├── 📄 myque.jsp                       (내 문의)
+│       ├── 📄 myreport.jsp                    (내 신고 목록)
+│       ├── 📄 myalarm.jsp                     (내 알림)
+│       ├── 📄 mysale.jsp                      (내 판매 목록)
 │       └── 📄 account-form.jsp                (계좌 등록 / 수정)
 │
 ├── 📂 support                                  (고객센터)
