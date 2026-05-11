@@ -1,0 +1,11 @@
+<nav class="sidebar">
+    <ul>
+        <li><a href="#"> 지출관리 </a> </li>
+        <li><a href="#"> OTT 구독 </a> </li>
+        <li><a href="#"> 지출통계 </a> </li>
+        <li><a href="#"> 게시판 </a> </li>
+        <li><a href="#"> 고객센터 </a> </li>
+        <li><a href="#"> 판매자 등록 </a> </li>
+        <li><a href="#"> 로그아웃 </a> </li>
+    </ul>
+</nav>

@@ -43,6 +43,7 @@ src/main/resources/static
 │   ├── 📄 auth-guard.js                       (비로그인 사용자 접근 제한 / 인증 체크 스크립트)
 │   ├── 📄 auth-modal.js                       (로그인 / 회원가입 / 인증 모달 제어 스크립트)
 │   ├── 📄 alert.js                            (커스텀 경고창 / 안내창 공통 스크립트)
+
 │
 ├── 📂 pages                               (각 화면 전용 스크립트 분리 관리)
 │   ├── 📄 index.js                        (메인 페이지 전용 스크립트)
