@@ -11,5 +11,6 @@ public class DashboardResponse {
     private List<Long> lastMonthData;
     private List<Long> thisMonthData;
 
+
     private List<GoalAchievementResponse> goals;
 }

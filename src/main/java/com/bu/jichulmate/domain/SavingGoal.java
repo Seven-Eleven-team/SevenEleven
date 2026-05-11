@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 @Table(name = "SAVING_GOALS")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class SavingGoal {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "goal_seq")
     @SequenceGenerator(name = "goal_seq", sequenceName = "GOAL_SEQ", allocationSize = 1)

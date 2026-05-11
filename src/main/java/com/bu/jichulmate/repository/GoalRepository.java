@@ -10,9 +10,6 @@ import java.util.List;
 @Repository
 public interface GoalRepository extends JpaRepository<SavingGoal, Long> {
 
-    // 마이페이지 메인 - 절약 목표 최대 3개
-    List<SavingGoal> findTop3ByUserAndDeletedFalseOrderByCreatedAtDesc(User user);
+    Optional<SavingGoal> findTopByUserIdOrderByIdDesc(Long userId);
 
-    // 전체 목표 목록 (GoalController에서 사용)
-    List<SavingGoal> findByUserAndDeletedFalseOrderByCreatedAtDesc(User user);
 }

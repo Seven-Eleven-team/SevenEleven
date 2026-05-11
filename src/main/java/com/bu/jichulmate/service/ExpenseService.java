@@ -15,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExpenseService {
 
+
     private final ExpenseRepository expenseRepository;
     // ★ 넘어온 ID로 카테고리 엔티티를 찾기 위해 CategoryRepository를 추가합니다.
     private final CategoryRepository categoryRepository;

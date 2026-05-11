@@ -21,4 +21,5 @@ public class ExpenseUpdateRequest {
     private LocalDate expenseDate;
 
     private String isFixed;
+
 }

@@ -20,10 +20,8 @@ public class Expense {
     @Column(name = "EXPENSE_ID")
     private Long id;
 
+
     // TODO: User 엔티티 생성 후 주석 해제 (연관관계 LAZY 필수)
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "USER_ID", nullable = false)
-    // private User user;
     @Column(name = "USER_ID", nullable = false) // User 엔티티 생성 전까지 임시 사용
     private Long userId;
 

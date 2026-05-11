@@ -7,4 +7,5 @@ public class CategoryRatioResponse {
     private String categoryName;
     private long totalAmount;
     private int percentage;
+
 }

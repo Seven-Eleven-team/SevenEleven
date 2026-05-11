@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
+
     // [대시보드용] XML 파일 없이 JPA Native Query로 오라클 쿼리 직접 실행!
     @Query(value = "SELECT c.NAME as categoryName, NVL(SUM(e.AMOUNT), 0) as totalAmount " +
             "FROM CATEGORIES c " +

@@ -18,6 +18,7 @@ public class Category {
     @Column(name = "CATEGORY_ID")
     private Long id;
 
+
     @Column(name = "NAME", nullable = false, length = 50)
     private String name;
 
