@@ -10,4 +10,5 @@ public interface GoalRepository extends JpaRepository<SavingGoal, Long> {
     List<SavingGoal> findByUserId(Long userId);
 
     Optional<SavingGoal> findTopByUserIdOrderByIdDesc(Long userId);
+
 }

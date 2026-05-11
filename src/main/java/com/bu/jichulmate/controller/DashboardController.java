@@ -104,6 +104,7 @@ public class DashboardController {
                         .mapToLong(Expense::getAmount).sum())
                 .collect(Collectors.toList());
 
+
         SavingGoal myGoal = goalRepository.findTopByUserIdOrderByIdDesc(1L).orElse(null);
         model.addAttribute("goal", myGoal);
 

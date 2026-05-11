@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SavingGoal {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "goal_seq")
     @SequenceGenerator(name = "goal_seq", sequenceName = "SEQ_SAVING_GOALS", allocationSize = 1)

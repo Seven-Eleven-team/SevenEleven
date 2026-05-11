@@ -16,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DashboardService {
 
+
     private final ExpenseRepository expenseRepository;
     private final GoalRepository goalRepository;
 

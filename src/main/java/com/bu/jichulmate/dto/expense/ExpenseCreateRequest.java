@@ -21,4 +21,5 @@ public class ExpenseCreateRequest {
     private LocalDate expenseDate;
 
     private String isFixed; // 'Y' 또는 'N' (기본값 N)
+
 }

@@ -33,6 +33,7 @@ public class GoalController {
             goal.setUserId(request.getUserId());
             goal.setSavedAmount(0L); // 초기값 0원 세팅
 
+
             // 2. DB에 저장
             goalRepository.save(goal);
 
