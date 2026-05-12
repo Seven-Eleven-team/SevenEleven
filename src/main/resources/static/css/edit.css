@@ -1,0 +1,335 @@
+/* ======================================== */
+/* board-edit.css */
+/* ======================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Pretendard', sans-serif;
+}
+
+body{
+    background:#f5f5f5;
+    color:#222;
+}
+
+/* ======================================== */
+/* 상단 네비 */
+/* ======================================== */
+
+.top-nav{
+
+    width:100%;
+    height:70px;
+
+    background:#1e2d4d;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:0 40px;
+
+    color:white;
+}
+
+.menu-icon{
+
+    font-size:28px;
+
+    cursor:pointer;
+}
+
+.logo{
+
+    font-size:32px;
+    font-weight:700;
+
+    cursor:pointer;
+}
+
+.my-page{
+
+    font-size:14px;
+}
+
+/* ======================================== */
+/* 전체 영역 */
+/* ======================================== */
+
+.board-edit-wrap{
+
+    width:1200px;
+
+    margin:40px auto;
+}
+
+/* ======================================== */
+/* 게시판 제목 */
+/* ======================================== */
+
+.board-title{
+
+    font-size:30px;
+
+    font-weight:700;
+
+    color:#222;
+
+    margin-bottom:18px;
+}
+
+/* ======================================== */
+/* 수정 카드 */
+/* ======================================== */
+
+.edit-card{
+
+    width:100%;
+
+    min-height:760px;
+
+    background:white;
+
+    border:1px solid #dbdbdb;
+
+    border-radius:20px;
+
+    padding:35px;
+}
+
+/* ======================================== */
+/* 제목 입력 */
+/* ======================================== */
+
+.input-title{
+
+    width:100%;
+
+    height:60px;
+
+    border:none;
+
+    border-bottom:1px solid #bdbdbd;
+
+    outline:none;
+
+    font-size:26px;
+
+    padding:0 5px;
+
+    margin-bottom:25px;
+}
+
+.input-title::placeholder{
+
+    color:#aaa;
+}
+
+/* ======================================== */
+/* 첨부 파일 */
+/* ======================================== */
+
+.file-upload-wrap{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-bottom:25px;
+}
+
+/* 업로드 박스 */
+
+.file-box{
+
+    width:120px;
+    height:120px;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+
+    background:#fafafa;
+
+    position:relative;
+
+    overflow:hidden;
+
+    cursor:pointer;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    transition:0.2s;
+}
+
+.file-box:hover{
+
+    background:#f1f3f7;
+}
+
+/* 첨부 아이콘 */
+
+.clip-icon{
+
+    font-size:42px;
+
+    color:#c5cad4;
+}
+
+/* input 숨김 */
+
+.file-input{
+
+    display:none;
+}
+
+/* 미리보기 */
+
+.preview-img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+}
+
+/* ======================================== */
+/* 내용 입력 */
+/* ======================================== */
+
+.content-textarea{
+
+    width:100%;
+
+    height:430px;
+
+    border:none;
+
+    border-top:1px solid #ddd;
+
+    outline:none;
+
+    resize:none;
+
+    padding-top:20px;
+
+    font-size:16px;
+
+    line-height:1.8;
+}
+
+.content-textarea::placeholder{
+
+    color:#aaa;
+}
+
+/* ======================================== */
+/* 하단 버튼 */
+/* ======================================== */
+
+.bottom-btn-wrap{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-top:35px;
+}
+
+/* 이전 버튼 */
+
+.back-btn{
+
+    width:140px;
+    height:46px;
+
+    border:none;
+
+    border-radius:30px;
+
+    background:#d8deea;
+
+    color:#333;
+
+    font-size:14px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:0.2s;
+}
+
+.back-btn:hover{
+
+    background:#cdd4e2;
+}
+
+/* 수정 버튼 */
+
+.submit-btn{
+
+    width:170px;
+    height:46px;
+
+    border:none;
+
+    border-radius:30px;
+
+    background:#1e2d4d;
+
+    color:white;
+
+    font-size:14px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:0.2s;
+}
+
+.submit-btn:hover{
+
+    opacity:0.92;
+}
+
+/* ======================================== */
+/* 반응형 */
+/* ======================================== */
+
+@media(max-width:1300px){
+
+    .board-edit-wrap{
+
+        width:95%;
+    }
+}
+
+@media(max-width:768px){
+
+    .file-upload-wrap{
+
+        flex-wrap:wrap;
+    }
+
+    .file-box{
+
+        width:90px;
+        height:90px;
+    }
+
+    .clip-icon{
+
+        font-size:32px;
+    }
+
+    .content-textarea{
+
+        height:350px;
+    }
+}
