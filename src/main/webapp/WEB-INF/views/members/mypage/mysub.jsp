@@ -8,6 +8,63 @@
     <%-- CSS 파일들 --%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/mypage.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/subscription.css">
+
+    <style>
+        /* 이용 약관 모달 전용 스타일 */
+        .terms-modal-content {
+            width: 450px !important;
+            padding: 50px 40px !important;
+            border-radius: 20px !important;
+            text-align: left !important;
+            position: relative;
+        }
+
+        .terms-title {
+            font-size: 26px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+            color: #000;
+        }
+
+        .terms-divider {
+            border: 0;
+            border-top: 1.5px solid #333;
+            margin-bottom: 25px;
+        }
+
+        .terms-body {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #333;
+            margin-bottom: 30px;
+            word-break: keep-all; /* 단어 단위 줄바꿈으로 깔끔하게 */
+        }
+
+        .terms-footer-line {
+            border: 0;
+            border-top: 1px solid #dbdbdb;
+            margin-bottom: 30px;
+        }
+
+        .terms-btn-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* 시안의 남색 확인 버튼 */
+        .btn-confirm-dark {
+            width: 140px;
+            height: 45px;
+            background-color: #1e2d4d !important;
+            color: #fff !important;
+            border: none !important;
+            border-radius: 25px !important; /* 알약 모양 버튼 */
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
@@ -18,7 +75,6 @@
 </header>
 
 <div class="container">
-    <%-- 사이드바 조각 파일이 있다면 include로 대체 가능 --%>
     <aside class="sidebar">
         <ul>
             <li><a href="${pageContext.request.contextPath}/members/mypage/mypage">대시보드</a></li>
@@ -31,7 +87,7 @@
         </ul>
     </aside>
 
-    <main class="manage-content"> <%-- 클래스명 수정 --%>
+    <main class="manage-content">
         <h2 class="page-title">내 구독 관리</h2>
 
         <div class="tab-menu">
@@ -45,7 +101,6 @@
                 <c:choose>
                     <c:when test="${not empty subscriptionActiveList}">
                         <c:forEach var="sub" items="${subscriptionActiveList}" varStatus="status">
-                            <%-- CSS의 .manage-left / .manage-right 구조 유지 --%>
                             <div class="${status.index % 2 == 0 ? 'manage-left' : 'manage-right'}">
                                 <div class="sub-manage-card">
                                     <div class="card-header">
@@ -59,10 +114,10 @@
                                         <div class="card-btns">
                                             <button class="btn-extend" onclick="location.href='${pageContext.request.contextPath}/subscription/form?id=${sub.id}'">연장하기</button>
                                             <button class="btn-cancel" onclick="confirmCancel('${sub.id}', '${sub.serviceName}')">해지하기</button>
+                                            <span onclick="openTermsModal()" style="font-size: 11px; color: #999; text-decoration: underline; cursor: pointer; margin-top: 8px; text-align: center;">이용약관 보기</span>
                                         </div>
                                     </div>
 
-                                    <%-- 상세 정보 (CSS의 order-log-box 느낌으로 활용) --%>
                                     <div class="order-log-box">
                                         <p class="log-title">상태: ${sub.statusMsg}</p>
                                         <table class="log-table">
@@ -126,19 +181,39 @@
     </div>
 </div>
 
+<%-- 이용약관 모달 (이미지 시안 2 반영) --%>
+<div id="termsModal" class="modal-overlay">
+    <div class="modal-content terms-modal-content">
+        <h2 class="terms-title">이용 약관</h2>
+        <hr class="terms-divider">
+
+        <div class="terms-body">
+            <p style="margin-bottom: 20px;">
+                구독 파티"란 OTT 등 정기 결제 서비스를 회원 간에 공동으로 이용하고 비용을 부담하기 위해 서비스 내에서 결성된 그룹을 의미합니다.
+            </p>
+            <p>
+                "지출메이트 플랫폼은 회원 간의 구독 쉐어 매칭을 지원할 뿐,<br><br>
+                실제 분할 결제 이행 여부 및 사기 등 회원 간의 사적 거래에서 발생하는 금전적 피해에 대해서는 회사가 일체 법적 책임을 지지 않는다"는 방어 조항(면책 조항) 명시
+            </p>
+        </div>
+
+        <hr class="terms-footer-line">
+        <div class="terms-btn-wrapper">
+            <button class="btn-confirm-dark" onclick="closeTermsModal()">확인</button>
+        </div>
+    </div>
+</div>
+
 <script>
-    // 탭 전환 함수 (클래스 토글 방식)
     function switchTab(index) {
         const tabs = document.querySelectorAll('.tab');
         const contents = document.querySelectorAll('.tab-content');
-
         tabs.forEach((tab, i) => {
             tab.classList.toggle('active', i === index);
             contents[i].classList.toggle('active', i === index);
         });
     }
 
-    // 모달 제어
     function confirmCancel(subId, serviceName) {
         const modal = document.getElementById('realCancelModal');
         document.getElementById('cancelServiceName').innerText = serviceName;
@@ -152,9 +227,20 @@
         document.getElementById('realCancelModal').style.display = 'none';
     }
 
+    // 이용약관 모달 제어
+    function openTermsModal() {
+        document.getElementById('termsModal').style.display = 'flex';
+    }
+
+    function closeTermsModal() {
+        document.getElementById('termsModal').style.display = 'none';
+    }
+
     window.onclick = function(event) {
-        const modal = document.getElementById('realCancelModal');
-        if (event.target == modal) closeCancelModal();
+        const cancelModal = document.getElementById('realCancelModal');
+        const termsModal = document.getElementById('termsModal');
+        if (event.target == cancelModal) closeCancelModal();
+        if (event.target == termsModal) closeTermsModal();
     }
 </script>
 
