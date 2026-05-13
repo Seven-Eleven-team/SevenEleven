@@ -1,8 +1,8 @@
-package com.bu.jichulmate.faq.controller;
+package com.bu.jichulmate.controller;
 
-import com.bu.jichulmate.faq.dto.FaqRequest;
-import com.bu.jichulmate.faq.dto.FaqResponse;
-import com.bu.jichulmate.faq.service.FaqService;
+import com.bu.jichulmate.dto.support.FaqRequest;
+import com.bu.jichulmate.dto.support.FaqResponse;
+import com.bu.jichulmate.service.FaqService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

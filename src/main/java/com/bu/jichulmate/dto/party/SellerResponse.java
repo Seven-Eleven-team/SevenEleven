@@ -1,6 +1,6 @@
-package com.bu.jichulmate.party.dto;
+package com.bu.jichulmate.dto.party;
 
-import com.bu.jichulmate.party.entity.PartySeller;
+import com.bu.jichulmate.domain.PartySeller;
 import java.time.LocalDate;
 
 public class SellerResponse {

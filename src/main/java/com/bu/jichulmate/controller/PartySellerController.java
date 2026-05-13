@@ -1,8 +1,8 @@
-package com.bu.jichulmate.party.controller;
+package com.bu.jichulmate.controller;
 
-import com.bu.jichulmate.party.dto.SellerRequest;
-import com.bu.jichulmate.party.dto.SellerResponse;
-import com.bu.jichulmate.party.service.PartySellerService;
+import com.bu.jichulmate.dto.party.SellerRequest;
+import com.bu.jichulmate.dto.party.SellerResponse;
+import com.bu.jichulmate.service.PartySellerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

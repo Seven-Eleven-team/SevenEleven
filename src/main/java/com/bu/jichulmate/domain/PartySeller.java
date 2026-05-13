@@ -1,4 +1,4 @@
-package com.bu.jichulmate.party.entity;
+package com.bu.jichulmate.domain;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;

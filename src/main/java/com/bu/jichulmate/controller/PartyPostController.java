@@ -1,8 +1,8 @@
-package com.bu.jichulmate.party.controller;
+package com.bu.jichulmate.controller;
 
-import com.bu.jichulmate.party.dto.PartyPostRequest;
-import com.bu.jichulmate.party.dto.PartyPostResponse;
-import com.bu.jichulmate.party.service.PartyPostService;
+import com.bu.jichulmate.dto.party.PartyPostRequest;
+import com.bu.jichulmate.dto.party.PartyPostResponse;
+import com.bu.jichulmate.service.PartyPostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
