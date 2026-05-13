@@ -16,13 +16,13 @@
             <h2> 1:1 문의 시 빠르게 도와드립니다! </h2>
             <div class="support-cards">
                 <div class="support-card">
-                    <a href="#">
+                    <a href="/support/qna">
                         <i class="bi bi-chat-left-dots"></i>
                         <p> 1:1 문의 </p>
                     </a>
                 </div>
                 <div class="support-card">
-                    <a href="#">
+                    <a href="/support/qna/form">
                         <i class="bi bi-megaphone"></i>
                         <p> 문의 글 작성 </p>
                     </a>
