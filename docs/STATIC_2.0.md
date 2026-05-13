@@ -2,6 +2,7 @@ src/main/resources/static
 │
 ├── 📂 css                                      (화면별 스타일 / 공통 UI 스타일 관리)
 │   ├── 📄 home.css                            (메인 홈 화면 스타일)
+│   ├── 📄 header.css                            (헤더 스타일)
 │   ├── 📄 dashboard.css                       (대시보드 화면 스타일)
 │   ├── 📄 expense.css                         (지출 내역 조회 / 등록 / 수정 화면 스타일)
 │   ├── 📄 goal.css                            (예산 목표 / 절약 목표 화면 스타일)
