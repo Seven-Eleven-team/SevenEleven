@@ -1,4 +1,4 @@
-package com.bu.jichulmate.faq.dto;
+package com.bu.jichulmate.dto.support;
 
 public class FaqRequest {
 

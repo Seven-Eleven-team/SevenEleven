@@ -45,8 +45,9 @@ public class MyPageService {
                 .map(s -> s.getNextBillingDate().toString())
                 .min(String::compareTo).orElse("-");
 
-        List<GoalSummary> goals = goalRepository.findTop3ByUserAndDeletedFalseOrderByCreatedAtDesc(user).stream()
+        List<GoalSummary> goals = goalRepository.findTop3ByUserUserIdOrderByIdDesc(userId).stream()
                 .map(g -> {
+                    // ★ 에러 원인 해결: getTargetAmount(), getGoalName() 복구!
                     long target = g.getTargetAmount();
                     long saved = g.getSavedAmount();
                     int rate = target == 0 ? 0 : (int) Math.min((saved * 100L) / target, 100);
@@ -61,7 +62,7 @@ public class MyPageService {
                 .userId(user.getUserId())
                 .loginId(user.getLoginId())
                 .nickname(user.getNickname())
-                .email(user.getEmail()) // ✅ 수정완료: getLoginId() -> getEmail()
+                .email(user.getEmail())
                 .gender(user.getGender())
                 .birthDate(user.getBirthDate())
                 .profileImage(user.getProfileImage())
@@ -87,7 +88,7 @@ public class MyPageService {
 
         user.setLoginId(loginId);
         user.setNickname(nickname);
-        user.setEmail(email); // ✅ 수정완료: 이메일 업데이트 누락 해결
+        user.setEmail(email);
         user.setGender(gender);
         user.setBirthDate(birthDate);
         userRepository.save(user);
@@ -125,7 +126,6 @@ public class MyPageService {
 
     @Transactional
     public void updateMentorType(Long userId, String type) {
-        // AI 멘토 성향 (MILD, MEDIUM, SPICY) 대문자 저장
         String upperType = type.toUpperCase();
         if (!List.of("MILD", "MEDIUM", "SPICY").contains(upperType)) throw new ValidationException(ErrorCode.INVALID_INPUT, "잘못된 성향");
         User user = findUser(userId);
@@ -169,6 +169,7 @@ public class MyPageService {
     }
 
     public Page<Board> getMyBoards(Long userId, Pageable p) { return boardRepository.findByUserAndDeletedFalseOrderByCreatedAtDesc(findUser(userId), p); }
+
     @Transactional
     public void deleteMyBoard(Long userId, Long bId) {
         Board b = boardRepository.findById(bId).orElseThrow(() -> new NotFoundException(ErrorCode.BOARD_NOT_FOUND));
@@ -176,10 +177,13 @@ public class MyPageService {
         b.setDeleted(true); boardRepository.save(b);
     }
 
-    public Page<Inquiry> getMyInquiries(Long userId, Pageable p) { return inquiryRepository.findByUserOrderByCreatedAtDesc(findUser(userId), p); }
+    public Page<Inquiry> getMyInquiries(Long userId, Pageable p) { return inquiryRepository.findByUserUserIdOrderByCreatedAtDesc(userId, p); }
+
     @Transactional
     public void deleteMyInquiry(Long userId, Long iId) {
         Inquiry i = inquiryRepository.findById(iId).orElseThrow(() -> new NotFoundException(ErrorCode.INQUIRY_NOT_FOUND));
+
+        // ★ 에러 원인 해결: i.getUserId() 가 아니라 i.getUser().getUserId() 로 복구!
         if (!i.getUser().getUserId().equals(userId)) throw new UnauthorizedException(ErrorCode.ACCESS_DENIED);
         if ("ANSWERED".equals(i.getStatus())) throw new BusinessException(ErrorCode.INVALID_INPUT, "답변 완료된 문의 삭제 불가");
         inquiryRepository.delete(i);
@@ -203,9 +207,16 @@ public class MyPageService {
         log.setRead(true); notificationLogRepository.save(log);
     }
 
-    public Page<PartyPost> getMyPartyPosts(Long userId, Pageable p) { return partyRepository.findByHostUserOrderByCreatedAtDesc(findUser(userId), p); }
+    // ★ 에러 원인 해결: 파티 게시글 조회 시 원래 쓰시던 User 객체 검색으로 복구!
+    public Page<PartyPost> getMyPartyPosts(Long userId, Pageable p) {
+        User user = findUser(userId);
+        return partyRepository.findByHostUserOrderByCreatedAtDesc(user, p);
+    }
+
     public PartyPost getMyPartyPostDetail(Long userId, Long pId) {
         PartyPost post = partyRepository.findById(pId).orElseThrow(() -> new NotFoundException(ErrorCode.PARTY_NOT_FOUND));
+
+        // ★ 에러 원인 해결: post.getSellerId() 가 아니라 post.getHostUser().getUserId() 로 복구!
         if (!post.getHostUser().getUserId().equals(userId)) throw new UnauthorizedException(ErrorCode.ACCESS_DENIED);
         return post;
     }
@@ -213,6 +224,8 @@ public class MyPageService {
     @Transactional
     public void completePartyTrade(Long userId, Long pId) {
         PartyPost post = partyRepository.findById(pId).orElseThrow(() -> new NotFoundException(ErrorCode.PARTY_NOT_FOUND));
+
+        // ★ 에러 원인 해결: post.getSellerId() 가 아니라 post.getHostUser().getUserId() 로 복구!
         if (!post.getHostUser().getUserId().equals(userId)) throw new UnauthorizedException(ErrorCode.ACCESS_DENIED);
         post.setStatus("COMPLETED"); partyRepository.save(post);
     }

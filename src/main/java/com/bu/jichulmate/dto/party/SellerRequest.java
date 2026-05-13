@@ -1,4 +1,4 @@
-package com.bu.jichulmate.party.dto;
+package com.bu.jichulmate.dto.party;
 
 import java.time.LocalDate;
 

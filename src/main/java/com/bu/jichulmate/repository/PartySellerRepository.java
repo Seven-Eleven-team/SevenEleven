@@ -1,6 +1,6 @@
-package com.bu.jichulmate.party.repository;
+package com.bu.jichulmate.repository;
 
-import com.bu.jichulmate.party.entity.PartySeller;
+import com.bu.jichulmate.domain.PartySeller;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

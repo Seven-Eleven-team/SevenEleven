@@ -165,7 +165,7 @@
     <p>© 지출메이트</p>
 </footer>
 
-<%@ include file="/WEB-INF/views/common/modal/authModal.jspf" %>
+<%-- <%@ include file="/WEB-INF/views/common/modal/authModal.jspf" %> --%>
 
 <script src="${pageContext.request.contextPath}/js/auth-modal.js"></script>
 <script src="${pageContext.request.contextPath}/js/pages/index.js?v=3"></script>

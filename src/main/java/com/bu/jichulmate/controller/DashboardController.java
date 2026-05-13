@@ -105,7 +105,7 @@ public class DashboardController {
                 .collect(Collectors.toList());
 
 
-        SavingGoal myGoal = goalRepository.findTopByUserIdOrderByIdDesc(1L).orElse(null);
+        SavingGoal myGoal = goalRepository.findTopByUserUserIdOrderByIdDesc(1L).orElse(null);
         model.addAttribute("goal", myGoal);
 
         model.addAttribute("barCategories", barCategoryNames);

@@ -27,21 +27,21 @@
                     <div class="goal-header-row">
                         <div class="goal-title-area">
                             <h3>나의 목표 🎯</h3>
-                            <span class="goal-name" id="displayGoalName">${goal.itemName != null ? goal.itemName : '목표를 설정해주세요'}</span>
+                            <span class="goal-name" id="displayGoalName">${goal.goalName != null ? goal.goalName : '목표를 설정해주세요'}</span>
                         </div>
 
                         <div class="goal-right-area">
                             <button type="button" class="goal-edit-btn" onclick="openGoalModal()">목표 등록</button>
                             <div class="goal-text-area" style="margin-top: 10px;">
                                 <span class="current-text" id="displayCurrentAmount"><fmt:formatNumber value="${goal.savedAmount != null ? goal.savedAmount : 0}" pattern="#,###" />원</span>
-                                <span class="target-text" id="displayTargetAmount"> / <fmt:formatNumber value="${goal.itemPrice != null ? goal.itemPrice : 0}" pattern="#,###" />원</span>
+                                <span class="target-text" id="displayTargetAmount"> / <fmt:formatNumber value="${goal.targetAmount != null ? goal.targetAmount : 0}" pattern="#,###" />원</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="horizontal-progress-wrapper">
                         <div class="horizontal-progress-bar">
-                            <c:set var="percent" value="${goal.itemPrice > 0 ? (goal.savedAmount / goal.itemPrice) * 100 : 0}" />
+                            <c:set var="percent" value="${goal.targetAmount > 0 ? (goal.savedAmount / goal.targetAmount) * 100 : 0}" />
                             <div class="horizontal-progress-fill" style="width: ${percent > 100 ? 100 : percent}%;"></div>
                         </div>
                         <div class="progress-labels">
@@ -142,10 +142,10 @@
             </div>
 
             <p class="section-title">목표 이름</p>
-            <input type="text" id="regGoalName" class="large-input full-input" placeholder="예: 1억 모으기" value="${goal.itemName}">
+            <input type="text" id="regGoalName" class="large-input full-input" placeholder="예: 1억 모으기" value="${goal.goalName}">
 
             <p class="section-title" style="margin-top: 10px;">목표 금액 (₩)</p>
-            <input type="text" id="regGoalAmount" class="large-input full-input" placeholder="0" oninput="formatNumber(this)" value="<fmt:formatNumber value='${goal.itemPrice}' pattern='#,###' />" style="margin-bottom: 30px;">
+            <input type="text" id="regGoalAmount" class="large-input full-input" placeholder="0" oninput="formatNumber(this)" value="<fmt:formatNumber value='${goal.targetAmount}' pattern='#,###' />" style="margin-bottom: 30px;">
 
             <button type="button" class="final-save-btn" onclick="saveGoalData()">목표 저장 완료</button>
         </div>

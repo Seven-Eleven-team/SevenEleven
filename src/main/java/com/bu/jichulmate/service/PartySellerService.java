@@ -1,9 +1,9 @@
-package com.bu.jichulmate.party.service;
+package com.bu.jichulmate.service;
 
-import com.bu.jichulmate.party.dto.SellerRequest;
-import com.bu.jichulmate.party.dto.SellerResponse;
-import com.bu.jichulmate.party.entity.PartySeller;
-import com.bu.jichulmate.party.repository.PartySellerRepository;
+import com.bu.jichulmate.dto.party.SellerRequest;
+import com.bu.jichulmate.dto.party.SellerResponse;
+import com.bu.jichulmate.domain.PartySeller;
+import com.bu.jichulmate.repository.PartySellerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
