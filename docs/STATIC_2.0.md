@@ -22,8 +22,10 @@ src/main/resources/static
 │   ├── 📄 admin-components.css                (관리자 공통 버튼 / 테이블 / 카드 컴포넌트 스타일)
 │   └── 📄 admin-console.css                   (관리자 콘솔 메인 화면 스타일)
 │
-├── 📂 img                                      (프로젝트 공통 이미지 / 배경 이미지 / 빈 상태 이미지 관리)
+├── 📂 images                                  (프로젝트 공통 이미지 / 배경 이미지 / 빈 상태 이미지 관리)
 │   ├── 📄 logo.png                            (서비스 대표 로고 이미지)
+│   ├── 📄 ai_modal.jpg                        (ai_modal 아이콘 이미지)
+│   ├── 📄 main-bg.jpg                         (메인 대표 이미지)
 │   ├── 📄 hero.jpg                            (메인 화면 대표 배너 이미지)
 │   ├── 📄 main_dark.jpg                       (다크 테마 메인 배경 이미지)     🗑️
 │   ├── 📄 main_light.jpg                      (라이트 테마 메인 배경 이미지)   🗑️
