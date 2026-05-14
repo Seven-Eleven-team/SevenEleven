@@ -15,7 +15,7 @@
         <input class="qnaForm-title" type="text" placeholder="제목">
         <textarea class="qnaForm-content" name="content" placeholder="문의 내용을 입력해주세요"></textarea>
         <div class="qnaForm-btns">
-            <button class="qnaForm-btn-prev"> 이전으로 </button>
+            <button class="qnaForm-btn-prev" type="button"> 이전으로 </button>
             <button class="qnaForm-btn-submit"> 수정완료 </button>
         </div>
     </div>

@@ -1,6 +1,21 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <div class="faq-modal">
-    <div class="faq-chat-area">
-        <!-- 대화내용 -->
+    <div class="faq-chat-area" id="faqChatArea">
+        <!-- 첫 메시지 -->
+        <div class="faq-bot-msg">
+            <p>문제의 유형을 번호로 남겨주세요.</p>
+            <ul class="faq-list">
+                <c:forEach var="faq" items="${faqList}" varStatus="status">
+                    <li>
+                        ${status.index + 1}.
+                        <button class="faq-question-btn" type="button" data-id="${faq.faqId}">
+                            ${faq.question}
+                        </button>
+                    </li>
+                </c:forEach>
+            </ul>
+        </div>
     </div>
     <div class="faq-input-area">
         <input class="faq-input" type="text" placeholder="문의 내용을 입력하세요.">
