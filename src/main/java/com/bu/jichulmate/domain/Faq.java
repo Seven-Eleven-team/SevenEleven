@@ -1,25 +1,30 @@
-package com.bu.jichulmate.faq.entity;
+package com.bu.jichulmate.domain;
 
 import jakarta.persistence.*;
+import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "FAQS")
+@Getter @Setter                // ★ Getter, Setter를 자동으로 생성해줍니다.
+@NoArgsConstructor             // ★ 기본 생성자를 만들어줍니다.
+@AllArgsConstructor            // ★ 모든 필드를 포함한 생성자를 만들어줍니다.
+@Builder                       // ★ 빌더 패턴으로 객체 생성을 도와줍니다.
 public class Faq {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "faqs_seq")
-    @SequenceGenerator(name = "faqs_seq", sequenceName = "FAQS_SEQ", allocationSize = 1)
+    @SequenceGenerator(name = "faqs_seq", sequenceName = "SEQ_FAQS", allocationSize = 1) // ★ 시퀀스 이름 SEQ_FAQS 확인!
     @Column(name = "FAQ_ID")
     private Long faqId;
 
-    @Column(name = "CATEGORY", nullable = false)
+    @Column(name = "CATEGORY", nullable = false, length = 50)
     private String category;
 
-    @Column(name = "QUESTION", nullable = false)
+    @Column(name = "QUESTION", nullable = false, length = 200)
     private String question;
 
-    @Column(name = "ANSWER", nullable = false)
+    @Column(name = "ANSWER", nullable = false, length = 4000)
     private String answer;
 
     @Column(name = "SORT_ORDER", nullable = false)
@@ -38,6 +43,8 @@ public class Faq {
         if (this.sortOrder == null) this.sortOrder = 1;
     }
 
+    // ★ FaqService의 에러를 해결해주는 핵심 비즈니스 로직 메서드!
+    // 이것은 DB 컬럼이 아니라 자바 객체 내부의 데이터를 변경하는 기능입니다.
     public void update(String category, String question, String answer, Integer sortOrder, String isActive) {
         this.category = category;
         this.question = question;
@@ -45,12 +52,4 @@ public class Faq {
         this.sortOrder = sortOrder;
         this.isActive = isActive;
     }
-
-    public Long getFaqId() { return faqId; }
-    public String getCategory() { return category; }
-    public String getQuestion() { return question; }
-    public String getAnswer() { return answer; }
-    public Integer getSortOrder() { return sortOrder; }
-    public String getIsActive() { return isActive; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
 }
