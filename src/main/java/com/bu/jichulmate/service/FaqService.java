@@ -2,7 +2,7 @@ package com.bu.jichulmate.service;
 
 import com.bu.jichulmate.dto.support.FaqRequest;
 import com.bu.jichulmate.dto.support.FaqResponse;
-import com.bu.jichulmate.faq.entity.Faq; // ★ Faq 엔티티 위치를 알려주는 핵심 한 줄!
+import com.bu.jichulmate.domain.Faq; // ★ Faq 엔티티 위치를 알려주는 핵심 한 줄!
 import com.bu.jichulmate.repository.FaqRepository;
 
 import org.springframework.stereotype.Service;
