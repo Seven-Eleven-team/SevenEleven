@@ -13,7 +13,6 @@ public class PartyPost {
     @SequenceGenerator(name = "party_seq", sequenceName = "PARTY_SEQ", allocationSize = 1)
     private Long id;
 
-    // ★ sellerId(Long) 대신 User 객체로 연결!
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "host_user_id", nullable = false)
     private User hostUser;
@@ -29,6 +28,9 @@ public class PartyPost {
 
     @Column(nullable = false)
     private Integer monthlyPrice;
+
+    @Column(nullable = false)
+    private Integer saleMonths;
 
     @Lob
     @Column(length = 4000)
