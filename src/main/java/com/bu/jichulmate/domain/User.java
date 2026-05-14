@@ -55,4 +55,7 @@ public class User {
 
     @Column(name = "PIN")
     private String pin;
+
+    public Object getId() {
+    }
 }
