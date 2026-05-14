@@ -1,6 +1,6 @@
 package com.bu.jichulmate.dto.support;
 
-import com.bu.jichulmate.faq.entity.Faq; // ★ 가장 중요한 임포트! (에러의 주범 해결)
+import com.bu.jichulmate.domain.Faq; // ★ 가장 중요한 임포트! (에러의 주범 해결)
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

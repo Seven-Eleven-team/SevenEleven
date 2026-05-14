@@ -174,7 +174,7 @@ public class MyPageService {
     public void deleteMyBoard(Long userId, Long bId) {
         Board b = boardRepository.findById(bId).orElseThrow(() -> new NotFoundException(ErrorCode.BOARD_NOT_FOUND));
         if (!b.getUser().getUserId().equals(userId)) throw new UnauthorizedException(ErrorCode.ACCESS_DENIED);
-        b.setDeleted(true); boardRepository.save(b);
+        bCategoryExpense.javaFaq.javaInquiry.java.java.setDeleted(true); boardRepository.save(b);
     }
 
     public Page<Inquiry> getMyInquiries(Long userId, Pageable p) { return inquiryRepository.findByUserUserIdOrderByCreatedAtDesc(userId, p); }

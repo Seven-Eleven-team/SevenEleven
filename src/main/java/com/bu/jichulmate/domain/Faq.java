@@ -1,25 +1,27 @@
-package com.bu.jichulmate.faq.entity;
+package com.bu.jichulmate.domain;
 
 import jakarta.persistence.*;
+import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "FAQS")
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Faq {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "faqs_seq")
-    @SequenceGenerator(name = "faqs_seq", sequenceName = "FAQS_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_faqs_gen")
+    @SequenceGenerator(name = "seq_faqs_gen", sequenceName = "SEQ_FAQS", allocationSize = 1)
     @Column(name = "FAQ_ID")
     private Long faqId;
 
-    @Column(name = "CATEGORY", nullable = false)
+    @Column(name = "CATEGORY", nullable = false, length = 50)
     private String category;
 
-    @Column(name = "QUESTION", nullable = false)
+    @Column(name = "QUESTION", nullable = false, length = 200)
     private String question;
 
-    @Column(name = "ANSWER", nullable = false)
+    @Column(name = "ANSWER", nullable = false, length = 4000)
     private String answer;
 
     @Column(name = "SORT_ORDER", nullable = false)
@@ -38,6 +40,8 @@ public class Faq {
         if (this.sortOrder == null) this.sortOrder = 1;
     }
 
+    // ★ FaqService의 에러를 해결해주는 핵심 비즈니스 로직 메서드!
+    // 이것은 DB 컬럼이 아니라 자바 객체 내부의 데이터를 변경하는 기능입니다.
     public void update(String category, String question, String answer, Integer sortOrder, String isActive) {
         this.category = category;
         this.question = question;
@@ -45,12 +49,4 @@ public class Faq {
         this.sortOrder = sortOrder;
         this.isActive = isActive;
     }
-
-    public Long getFaqId() { return faqId; }
-    public String getCategory() { return category; }
-    public String getQuestion() { return question; }
-    public String getAnswer() { return answer; }
-    public Integer getSortOrder() { return sortOrder; }
-    public String getIsActive() { return isActive; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
 }

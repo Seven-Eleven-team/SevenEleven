@@ -1,15 +1,11 @@
 package com.bu.jichulmate.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.*;
 import java.time.LocalDate;
 
 @Getter
-@Setter // 👈 이 어노테이션이 있어야 setEmail(), setNickname() 등이 자동으로 생성됩니다.
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -17,45 +13,47 @@ import java.time.LocalDate;
 @Table(name = "USERS")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSeq")
-    @SequenceGenerator(name = "userSeq", sequenceName = "SEQ_USERS", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_users_gen")
+    @SequenceGenerator(name = "seq_users_gen", sequenceName = "SEQ_USERS", allocationSize = 1)
     @Column(name = "USER_ID")
     private Long userId;
 
-    @Column(name = "LOGIN_ID", nullable = false, unique = true)
+    @Column(name = "LOGIN_ID", nullable = false, unique = true, length = 100)
     private String loginId;
 
-    // ★★★ 이 부분이 없어서 setEmail 오류가 났던 것입니다. 반드시 추가하세요! ★★★
-    @Column(name = "EMAIL", nullable = false)
-    private String email;
-
-    @Column(name = "NICKNAME", nullable = false)
+    @Column(name = "NICKNAME", nullable = false, unique = true, length = 100)
     private String nickname;
 
-    @Column(name = "PASSWORD", nullable = false)
+    @Column(name = "PASSWORD", nullable = false, length = 255)
     private String password;
 
-    @Column(name = "GENDER")
+    @Column(name = "GENDER", length = 10)
     private String gender;
 
-    @Column(name = "BIRTH_DATE")
+    @Column(name = "BIRTH_DATE", nullable = false)
     private LocalDate birthDate;
 
-    @Column(name = "MENTOR_TONE")
+    @Builder.Default
+    @Column(name = "PROVIDER", nullable = false, length = 20)
+    private String provider = "LOCAL";
+
+    @Builder.Default
+    @Column(name = "IS_2FA_ENABLED", nullable = false, length = 1)
+    private String is2faEnabled = "N";
+
+    @Builder.Default
+    @Column(name = "MENTOR_TONE", nullable = false, length = 20)
     private String mentorTone = "MILD";
 
-    @Column(name = "ROLE")
+    @Builder.Default
+    @Column(name = "ROLE", nullable = false, length = 20)
     private String role = "USER";
 
-    @Column(name = "PROFILE_IMAGE")
-    private String profileImage;
+    @Builder.Default
+    @Column(name = "ACCOUNT_STATUS", nullable = false, length = 20)
+    private String accountStatus = "ACTIVE";
 
-    @Column(name = "EMAIL_NOTIFY")
-    private boolean emailNotify = true;
-
-    @Column(name = "PIN")
-    private String pin;
-
-    public Object getId() {
-    }
+    @Builder.Default
+    @Column(name = "IS_NOTI_ENABLED", nullable = false, length = 1)
+    private String isNotiEnabled = "Y";
 }

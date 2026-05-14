@@ -1,6 +1,6 @@
 package com.bu.jichulmate.dto.party;
 
-import com.bu.jichulmate.domain.PartyPost; // ★ 완벽한 엔티티 경로
+import com.bu.jichulmate.domain.PartyPost;
 import lombok.Data;
 import java.time.LocalDateTime;
 
@@ -16,11 +16,10 @@ public class PartyPostResponse {
     private String status;
     private LocalDateTime createdAt;
 
-    // ★ 올려주신 엔티티의 변수명(id, hostUser)에 완벽하게 맞췄습니다!
     public PartyPostResponse(PartyPost post) {
         this.partyId = post.getId();
-        this.sellerId = post.getHostUser().getUserId();
-        this.ottCategory = post.getOttCategory();
+        this.sellerId = post.getSeller().getUserId();
+        this.ottCategory = post.getService().getServiceCategory();
         this.shareId = post.getShareId();
         this.sharePassword = post.getSharePassword();
         this.monthlyPrice = post.getMonthlyPrice();

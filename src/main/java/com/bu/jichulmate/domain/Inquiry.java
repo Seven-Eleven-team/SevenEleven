@@ -9,28 +9,31 @@ import java.time.LocalDateTime;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Inquiry {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "inquiry_seq")
-    @SequenceGenerator(name = "inquiry_seq", sequenceName = "INQUIRY_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_inquiries_gen")
+    @SequenceGenerator(name = "seq_inquiries_gen", sequenceName = "SEQ_INQUIRIES", allocationSize = 1)
+    @Column(name = "INQUIRY_ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-    @Column(nullable = false)
+    @Column(name = "TITLE", nullable = false, length = 150)
     private String title;
 
-    @Column(columnDefinition = "CLOB")
+    @Column(name = "CONTENT", nullable = false, length = 4000)
     private String content;
 
-    @Column(nullable = false)
-    private String status = "PENDING";
+    @Column(name = "ANSWER_CONTENT", length = 4000) // ★ 관리자 답변용
+    private String answerContent;
 
-    @Column(name = "created_at", updatable = false)
+    @Builder.Default
+    @Column(name = "STATUS", nullable = false, length = 20)
+    private String status = "WAITING";
+
+    @Column(name = "CREATED_AT", updatable = false)
     private LocalDateTime createdAt;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
+    @Column(name = "UPDATED_AT")
+    private LocalDateTime updatedAt;
 }
