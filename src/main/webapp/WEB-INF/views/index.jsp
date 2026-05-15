@@ -8,8 +8,8 @@
     <title>지출메이트</title>
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/home.css?v=3">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/auth-modal.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/auth-modal-terms-addition.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/auth-modal.css?v=4">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/auth-modal-terms-addition.css?v=4">
 </head>
 <body>
 
@@ -169,7 +169,6 @@
 
 
 <%@ include file="/WEB-INF/views/common/modal/authModal.jspf" %>
-<%@ include file="/WEB-INF/views/common/modal/termsAgreementModal.jspf" %>
 
 <script src="${pageContext.request.contextPath}/js/auth-modal.js"></script>
 <script src="${pageContext.request.contextPath}/js/pages/index.js?v=3"></script>

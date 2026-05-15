@@ -21,6 +21,10 @@
     let signupTerms = [];
     let termsAgreementPassed = false;
     let authFormsBound = false;
+    let authNavigationGuardBound = false;
+
+    const AUTH_ACTIVE_KEY = 'jichulmate:auth-active';
+    let allowAuthNavigation = false;
 
     function getContextPath() {
         const contextMeta = document.querySelector('meta[name="context-path"]');
@@ -34,6 +38,235 @@
 
     function getApiUrl(path) {
         return getContextPath() + path;
+    }
+
+    function getNavigationType() {
+        const entries = window.performance && typeof window.performance.getEntriesByType === 'function'
+            ? window.performance.getEntriesByType('navigation')
+            : [];
+
+        if (entries && entries.length > 0) {
+            return entries[0].type || 'navigate';
+        }
+
+        if (window.performance && window.performance.navigation) {
+            return window.performance.navigation.type === 1 ? 'reload' : 'navigate';
+        }
+
+        return 'navigate';
+    }
+
+    function getHeaderElements() {
+        return {
+            area: document.getElementById('headerActionArea'),
+            authLink: document.getElementById('headerAuthLink'),
+            profileLink: document.getElementById('headerProfileLink'),
+            avatar: document.getElementById('userAvatarInitial')
+        };
+    }
+
+    function setHeaderLoggedOut() {
+        const header = getHeaderElements();
+
+        if (!header.area) {
+            return;
+        }
+
+        header.area.dataset.serverLogin = 'false';
+        header.area.classList.remove('is-login', 'is-logged-in');
+        header.area.classList.add('is-logout', 'is-logged-out');
+        header.area.style.display = 'flex';
+
+        if (header.authLink) {
+            header.authLink.style.display = 'inline-flex';
+            header.authLink.style.visibility = 'visible';
+            header.authLink.style.opacity = '1';
+            header.authLink.removeAttribute('hidden');
+            header.authLink.removeAttribute('aria-hidden');
+            header.authLink.classList.remove('is-hidden', 'hidden');
+        }
+
+        if (header.profileLink) {
+            header.profileLink.style.display = 'none';
+            header.profileLink.style.visibility = 'hidden';
+            header.profileLink.style.opacity = '0';
+            header.profileLink.setAttribute('aria-hidden', 'true');
+            header.profileLink.classList.add('is-hidden');
+        }
+
+        sessionStorage.removeItem(AUTH_ACTIVE_KEY);
+    }
+
+    function getInitialFromLoginData(data, form) {
+        if (data) {
+            const user = data.user || data.loginUser || data.member || {};
+
+            const source =
+                user.nickname ||
+                user.name ||
+                user.mNickname ||
+                user.mName ||
+                data.nickname ||
+                data.name ||
+                data.mNickname ||
+                data.mName;
+
+            if (source) {
+                return String(source).trim().charAt(0).toUpperCase();
+            }
+        }
+
+        if (form) {
+            const idField = form.querySelector('#loginId, input[name="id"], input[name="email"], input[name="mEmail"]');
+
+            if (idField && idField.value) {
+                return String(idField.value).trim().charAt(0).toUpperCase();
+            }
+        }
+
+        return 'M';
+    }
+
+    function setHeaderLoggedIn(data, form) {
+        const header = getHeaderElements();
+
+        if (!header.area) {
+            return;
+        }
+
+        header.area.dataset.serverLogin = 'true';
+        header.area.classList.remove('is-logout', 'is-logged-out');
+        header.area.classList.add('is-login', 'is-logged-in');
+        header.area.style.display = 'flex';
+
+        if (header.authLink) {
+            header.authLink.style.display = 'none';
+            header.authLink.style.visibility = 'hidden';
+            header.authLink.style.opacity = '0';
+            header.authLink.setAttribute('aria-hidden', 'true');
+            header.authLink.classList.add('is-hidden');
+        }
+
+        if (header.profileLink) {
+            header.profileLink.style.display = 'inline-flex';
+            header.profileLink.style.visibility = 'visible';
+            header.profileLink.style.opacity = '1';
+            header.profileLink.removeAttribute('hidden');
+            header.profileLink.removeAttribute('aria-hidden');
+            header.profileLink.classList.remove('is-hidden', 'hidden');
+        }
+
+        if (header.avatar) {
+            header.avatar.textContent = getInitialFromLoginData(data, form);
+        }
+
+        sessionStorage.setItem(AUTH_ACTIVE_KEY, 'true');
+    }
+
+    function requestServerLogout() {
+        const logoutUrl = getApiUrl('/auth/logout');
+
+        sessionStorage.removeItem(AUTH_ACTIVE_KEY);
+
+        if (navigator.sendBeacon) {
+            try {
+                const payload = new Blob([], {
+                    type: 'application/x-www-form-urlencoded;charset=UTF-8'
+                });
+
+                navigator.sendBeacon(logoutUrl, payload);
+                return;
+            } catch (error) {
+                console.warn('[auth-modal] sendBeacon 로그아웃 실패:', error);
+            }
+        }
+
+        fetch(logoutUrl, {
+            method: 'POST',
+            keepalive: true,
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).catch(function (error) {
+            console.warn('[auth-modal] 로그아웃 요청 실패:', error);
+        });
+    }
+
+    function forceLogoutAndResetHeader() {
+        setHeaderLoggedOut();
+
+        return fetch(getApiUrl('/auth/logout'), {
+            method: 'POST',
+            cache: 'no-store',
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(function () {
+            setHeaderLoggedOut();
+        }).catch(function (error) {
+            console.warn('[auth-modal] 초기 로그아웃 요청 실패:', error);
+            setHeaderLoggedOut();
+        });
+    }
+
+    function bindAuthNavigationGuard() {
+        if (authNavigationGuardBound) {
+            return;
+        }
+
+        authNavigationGuardBound = true;
+
+        document.addEventListener('click', function (event) {
+            const profileLink = event.target.closest('#headerProfileLink');
+
+            if (profileLink) {
+                allowAuthNavigation = true;
+            }
+        });
+
+        window.addEventListener('pagehide', function () {
+            const header = getHeaderElements();
+            const isLoggedIn =
+                sessionStorage.getItem(AUTH_ACTIVE_KEY) === 'true' ||
+                (header.area && header.area.dataset.serverLogin === 'true');
+
+            if (!isLoggedIn) {
+                return;
+            }
+
+            if (allowAuthNavigation) {
+                return;
+            }
+
+            requestServerLogout();
+        });
+    }
+
+    function initializeAuthSessionState() {
+        const header = getHeaderElements();
+
+        if (!header.area) {
+            return;
+        }
+
+        const serverLogin = header.area.dataset.serverLogin === 'true';
+        const navigationType = getNavigationType();
+
+        if (serverLogin && navigationType === 'reload') {
+            forceLogoutAndResetHeader();
+            return;
+        }
+
+        if (serverLogin && sessionStorage.getItem(AUTH_ACTIVE_KEY) !== 'true') {
+            forceLogoutAndResetHeader();
+            return;
+        }
+
+        if (serverLogin) {
+            setHeaderLoggedIn(null, null);
+        } else {
+            setHeaderLoggedOut();
+        }
     }
 
     function getOverlay(type) {
@@ -187,6 +420,11 @@
             loadSignupTerms();
         }
 
+        if (type === 'login') {
+            const loginForm = document.getElementById('loginForm') || document.querySelector('form[action$="/auth/login"]');
+            removeLoginSummary(loginForm);
+        }
+
         window.requestAnimationFrame(function () {
             focusFirstElement(overlay);
         });
@@ -248,24 +486,33 @@
 
         fetch(getApiUrl('/api/terms/signup'), {
             method: 'GET',
+            cache: 'no-store',
             headers: {
                 'Accept': 'application/json'
             }
         })
             .then(function (response) {
                 if (!response.ok) {
-                    throw new Error('이용약관 조회에 실패했습니다.');
+                    throw new Error('이용약관 조회 실패 - HTTP 상태 코드: ' + response.status);
                 }
 
                 return response.json();
             })
             .then(function (data) {
+                console.log('[auth-modal] 회원가입 약관 응답:', data);
+
                 signupTerms = Array.isArray(data.terms) ? data.terms : [];
                 signupTermsLoaded = true;
+
                 renderTerms(signupTerms);
                 resetTermsState();
             })
-            .catch(function () {
+            .catch(function (error) {
+                console.error('[auth-modal] 이용약관 조회 오류:', error);
+
+                signupTermsLoaded = false;
+                signupTerms = [];
+
                 if (termsList) {
                     termsList.innerHTML = '<div class="terms-error">이용약관을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</div>';
                 }
@@ -435,17 +682,74 @@
     function toggleTermsContent(targetName) {
         const content = document.querySelector('[data-terms-content="' + targetName + '"]');
         const button = document.querySelector('[data-terms-toggle="' + targetName + '"]');
+        const termsList = termsListElement();
 
         if (!content) {
             return;
         }
 
-        const isOpen = content.classList.toggle('is-open');
+        const item = content.closest('.terms-item');
+        const isAlreadyOpen = content.classList.contains('is-open');
+
+        document.querySelectorAll('.terms-content.is-open').forEach(function (openedContent) {
+            if (openedContent !== content) {
+                openedContent.classList.remove('is-open');
+            }
+        });
+
+        document.querySelectorAll('[data-terms-toggle]').forEach(function (toggle) {
+            if (toggle !== button) {
+                toggle.textContent = '내용 보기 〉';
+                toggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        if (isAlreadyOpen) {
+            content.classList.remove('is-open');
+
+            if (button) {
+                button.textContent = '내용 보기 〉';
+                button.setAttribute('aria-expanded', 'false');
+            }
+
+            return;
+        }
+
+        content.classList.add('is-open');
 
         if (button) {
-            button.textContent = isOpen ? '내용 닫기 〉' : '내용 보기 〉';
-            button.setAttribute('aria-expanded', String(isOpen));
+            button.textContent = '내용 닫기 〉';
+            button.setAttribute('aria-expanded', 'true');
         }
+
+        if (!termsList || !item) {
+            return;
+        }
+
+        window.setTimeout(function () {
+            const listRect = termsList.getBoundingClientRect();
+            const itemRect = item.getBoundingClientRect();
+
+            const currentScrollTop = termsList.scrollTop;
+            const itemTopInList = itemRect.top - listRect.top + currentScrollTop;
+            const itemBottomInList = itemTopInList + item.offsetHeight;
+
+            const visibleTop = currentScrollTop;
+            const visibleBottom = currentScrollTop + termsList.clientHeight;
+
+            let nextScrollTop = currentScrollTop;
+
+            if (itemTopInList < visibleTop) {
+                nextScrollTop = itemTopInList - 12;
+            } else if (itemBottomInList > visibleBottom) {
+                nextScrollTop = itemBottomInList - termsList.clientHeight + 18;
+            }
+
+            termsList.scrollTo({
+                top: Math.max(0, nextScrollTop),
+                behavior: 'smooth'
+            });
+        }, 80);
     }
 
     function applyTermsToSignupForm() {
@@ -613,6 +917,32 @@
         }
     }
 
+    function removeLoginSummary(form) {
+        const loginForm = form || document.getElementById('loginForm') || document.querySelector('form[action$="/auth/login"]');
+
+        if (loginForm) {
+            loginForm.querySelectorAll('.auth-invalid-summary').forEach(function (summary) {
+                summary.remove();
+            });
+
+            const loginDialog = loginForm.closest('.auth-modal__dialog');
+
+            if (loginDialog) {
+                loginDialog.querySelectorAll('.auth-invalid-summary').forEach(function (summary) {
+                    summary.remove();
+                });
+            }
+        }
+
+        const loginOverlay = document.getElementById('loginOverlay');
+
+        if (loginOverlay) {
+            loginOverlay.querySelectorAll('.auth-invalid-summary').forEach(function (summary) {
+                summary.remove();
+            });
+        }
+    }
+
     function setFieldError(field, message) {
         if (!field) {
             return;
@@ -674,10 +1004,23 @@
         form.querySelectorAll('.auth-field-error, .auth-invalid-summary').forEach(function (message) {
             message.remove();
         });
+
+        form.querySelectorAll('.input-row.is-shaking, .input.is-shaking').forEach(function (target) {
+            target.classList.remove('is-shaking');
+        });
+
+        if (form.id === 'loginForm') {
+            removeLoginSummary(form);
+        }
     }
 
     function showInlineSummary(form, message) {
         if (!form) {
+            return;
+        }
+
+        if (form.id === 'loginForm') {
+            removeLoginSummary(form);
             return;
         }
 
@@ -699,34 +1042,20 @@
         }
     }
 
-    function shakeForm(form) {
-        if (!form) {
-            return;
-        }
+    function shakeFields(fields) {
+        const targetFields = Array.from(fields || []).filter(Boolean);
 
-        const dialog = form.closest('.auth-modal__dialog, .terms-modal, .auth-choice-modal');
+        targetFields.forEach(function (field) {
+            const shakeTarget = field.closest('.input-row') || field;
 
-        form.classList.remove('is-shaking');
+            shakeTarget.classList.remove('is-shaking');
+            void shakeTarget.offsetWidth;
+            shakeTarget.classList.add('is-shaking');
 
-        if (dialog) {
-            dialog.classList.remove('is-shaking');
-        }
-
-        void form.offsetWidth;
-
-        form.classList.add('is-shaking');
-
-        if (dialog) {
-            dialog.classList.add('is-shaking');
-        }
-
-        window.setTimeout(function () {
-            form.classList.remove('is-shaking');
-
-            if (dialog) {
-                dialog.classList.remove('is-shaking');
-            }
-        }, 460);
+            window.setTimeout(function () {
+                shakeTarget.classList.remove('is-shaking');
+            }, 460);
+        });
     }
 
     function getInvalidMessage(field) {
@@ -775,8 +1104,13 @@
             setFieldError(field, getInvalidMessage(field));
         });
 
-        showInlineSummary(form, '입력한 정보를 다시 확인해 주세요.');
-        shakeForm(form);
+        if (form.id !== 'loginForm') {
+            showInlineSummary(form, '입력한 정보를 다시 확인해 주세요.');
+        } else {
+            removeLoginSummary(form);
+        }
+
+        shakeFields(invalidFields);
         invalidFields[0].focus();
 
         return false;
@@ -791,9 +1125,134 @@
 
         return fields.filter(function (field) {
             return names.some(function (name) {
-                return field.name === name || field.id === name || field.dataset.field === name;
+                const targetName = String(name || '').toLowerCase();
+                const fieldName = String(field.name || '').toLowerCase();
+                const fieldId = String(field.id || '').toLowerCase();
+                const dataField = String(field.dataset.field || '').toLowerCase();
+
+                return (
+                    fieldName === targetName ||
+                    fieldId === targetName ||
+                    dataField === targetName
+                );
             });
         });
+    }
+
+    function normalizeLoginFieldNames(fieldNames, message, responseData) {
+        const names = Array.isArray(fieldNames) ? fieldNames : [];
+        const extraNames = [];
+
+        if (responseData) {
+            if (responseData.field) {
+                extraNames.push(responseData.field);
+            }
+
+            if (responseData.errorField) {
+                extraNames.push(responseData.errorField);
+            }
+
+            if (responseData.target) {
+                extraNames.push(responseData.target);
+            }
+
+            if (responseData.reason) {
+                extraNames.push(responseData.reason);
+            }
+
+            if (responseData.code) {
+                extraNames.push(responseData.code);
+            }
+        }
+
+        const normalized = names
+            .concat(extraNames)
+            .map(function (name) {
+                return String(name || '').toLowerCase();
+            })
+            .filter(Boolean);
+
+        const messageText = String(message || '').toLowerCase();
+
+        const hasPasswordField = normalized.some(function (name) {
+            return (
+                name === 'password' ||
+                name === 'pw' ||
+                name === 'mpw' ||
+                name === 'loginpassword' ||
+                name.indexOf('password') > -1 ||
+                name.indexOf('pw') > -1 ||
+                name.indexOf('비밀번호') > -1
+            );
+        });
+
+        const hasIdField = normalized.some(function (name) {
+            return (
+                name === 'id' ||
+                name === 'email' ||
+                name === 'memail' ||
+                name === 'loginid' ||
+                name.indexOf('id') > -1 ||
+                name.indexOf('email') > -1 ||
+                name.indexOf('아이디') > -1 ||
+                name.indexOf('이메일') > -1 ||
+                name.indexOf('not_found') > -1 ||
+                name.indexOf('notfound') > -1 ||
+                name.indexOf('no_user') > -1
+            );
+        });
+
+        if (hasPasswordField && !hasIdField) {
+            return ['password', 'pw', 'mPw', 'loginPassword'];
+        }
+
+        if (hasIdField && !hasPasswordField) {
+            return ['id', 'email', 'mEmail', 'loginId'];
+        }
+
+        if (
+            messageText.indexOf('비밀번호') > -1 ||
+            messageText.indexOf('password') > -1 ||
+            messageText.indexOf('pw') > -1
+        ) {
+            return ['password', 'pw', 'mPw', 'loginPassword'];
+        }
+
+        if (
+            messageText.indexOf('아이디') > -1 ||
+            messageText.indexOf('이메일') > -1 ||
+            messageText.indexOf('email') > -1 ||
+            messageText.indexOf('id') > -1
+        ) {
+            return ['id', 'email', 'mEmail', 'loginId'];
+        }
+
+        return ['id', 'email', 'mEmail', 'loginId'];
+    }
+
+    function getLoginFieldMessage(field, fallbackMessage) {
+        const name = String(field.name || '').toLowerCase();
+        const id = String(field.id || '').toLowerCase();
+
+        if (
+            name.indexOf('password') > -1 ||
+            name.indexOf('pw') > -1 ||
+            id.indexOf('password') > -1 ||
+            id.indexOf('pw') > -1
+        ) {
+            return '비밀번호가 올바르지 않습니다.';
+        }
+
+        if (
+            name.indexOf('id') > -1 ||
+            name.indexOf('email') > -1 ||
+            id.indexOf('id') > -1 ||
+            id.indexOf('email') > -1
+        ) {
+            return '아이디가 올바르지 않습니다.';
+        }
+
+        return fallbackMessage || '입력값을 다시 확인해 주세요.';
     }
 
     function getLoginFailFields(form) {
@@ -820,14 +1279,41 @@
         });
     }
 
-    function markInvalidFields(form, message, fieldNames) {
+    function markInvalidFields(form, message, fieldNames, responseData) {
         clearFormErrors(form);
 
-        let targetFields = findFieldsByNames(form, fieldNames);
+        let targetFields = [];
 
-        if (form.id === 'loginForm' && targetFields.length === 0) {
-            targetFields = getLoginFailFields(form);
+        if (form.id === 'loginForm') {
+            removeLoginSummary(form);
+
+            const loginFieldNames = normalizeLoginFieldNames(fieldNames, message, responseData);
+
+            targetFields = findFieldsByNames(form, loginFieldNames);
+
+            if (targetFields.length === 0) {
+                targetFields = findFieldsByNames(form, ['id', 'email', 'mEmail', 'loginId']);
+            }
+
+            if (targetFields.length === 0) {
+                targetFields = getLoginFailFields(form).slice(0, 1);
+            }
+
+            targetFields.forEach(function (field) {
+                setFieldError(field, getLoginFieldMessage(field, message));
+            });
+
+            removeLoginSummary(form);
+            shakeFields(targetFields);
+
+            if (targetFields[0]) {
+                targetFields[0].focus();
+            }
+
+            return;
         }
+
+        targetFields = findFieldsByNames(form, fieldNames);
 
         if (targetFields.length === 0) {
             targetFields = getFormFields(form);
@@ -838,7 +1324,7 @@
         });
 
         showInlineSummary(form, message || '입력한 정보를 다시 확인해 주세요.');
-        shakeForm(form);
+        shakeFields(targetFields);
 
         if (targetFields[0]) {
             targetFields[0].focus();
@@ -922,6 +1408,10 @@
 
         setSubmitDisabled(form, true);
 
+        if (form.id === 'loginForm') {
+            removeLoginSummary(form);
+        }
+
         fetch(form.action, {
             method: (form.method || 'POST').toUpperCase(),
             body: new FormData(form),
@@ -935,7 +1425,7 @@
                     const failMessage = data.message || options.failMessage || '요청 처리에 실패했습니다.';
 
                     if (options.inlineFail) {
-                        markInvalidFields(form, failMessage, data.fields || options.invalidFieldNames || []);
+                        markInvalidFields(form, failMessage, data.fields || options.invalidFieldNames || [], data);
                         return;
                     }
 
@@ -945,6 +1435,11 @@
                         nextModal: options.failNextModal || null
                     });
                     return;
+                }
+
+                if (form.id === 'loginForm') {
+                    removeLoginSummary(form);
+                    setHeaderLoggedIn(data, form);
                 }
 
                 if (options.resetOnSuccess) {
@@ -964,12 +1459,13 @@
                     nextModal: options.successNextModal || null
                 });
             })
-            .catch(function () {
+            .catch(function (error) {
+                console.error('[auth-modal] 폼 요청 오류:', error);
+
                 const errorMessage = options.errorMessage || '처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.';
 
                 if (options.inlineFail) {
-                    showInlineSummary(form, errorMessage);
-                    shakeForm(form);
+                    markInvalidFields(form, errorMessage, options.invalidFieldNames || [], null);
                     return;
                 }
 
@@ -981,6 +1477,10 @@
             })
             .finally(function () {
                 setSubmitDisabled(form, false);
+
+                if (form.id === 'loginForm') {
+                    removeLoginSummary(form);
+                }
             });
     }
 
@@ -993,6 +1493,10 @@
             }
 
             clearFieldError(event.target);
+
+            if (form.id === 'loginForm') {
+                removeLoginSummary(form);
+            }
 
             if (!form.querySelector('.input.is-invalid, select.is-invalid, textarea.is-invalid')) {
                 form.querySelectorAll('.auth-invalid-summary').forEach(function (summary) {
@@ -1007,6 +1511,10 @@
             }
 
             clearFieldError(event.target);
+
+            if (form.id === 'loginForm') {
+                removeLoginSummary(form);
+            }
 
             if (!form.querySelector('.input.is-invalid, select.is-invalid, textarea.is-invalid')) {
                 form.querySelectorAll('.auth-invalid-summary').forEach(function (summary) {
@@ -1033,20 +1541,25 @@
             .forEach(bindFormRealtimeValidation);
 
         if (loginForm) {
+            removeLoginSummary(loginForm);
+
             loginForm.addEventListener('submit', function (event) {
                 event.preventDefault();
 
+                removeLoginSummary(loginForm);
+
                 if (!handleNativeInvalid(loginForm)) {
+                    removeLoginSummary(loginForm);
                     return;
                 }
 
                 submitFormAsJson(loginForm, {
                     successTitle: '로그인 완료',
                     successMessage: '로그인이 완료되었습니다.',
-                    failMessage: '아이디 또는 비밀번호가 올바르지 않습니다.',
+                    failMessage: '아이디가 올바르지 않습니다.',
                     eventName: 'jichulmate:auth-success',
                     inlineFail: true,
-                    invalidFieldNames: ['id', 'email', 'mEmail', 'password', 'pw', 'mPw']
+                    invalidFieldNames: []
                 });
             });
         }
@@ -1117,18 +1630,18 @@
             });
 
             updateTermsState();
-            return;
+            return true;
         }
 
         if (termsCheck) {
             updateTermsState();
-            return;
+            return true;
         }
 
         if (toggleButton) {
             event.preventDefault();
             toggleTermsContent(toggleButton.dataset.termsToggle);
-            return;
+            return true;
         }
 
         if (confirmButton) {
@@ -1219,9 +1732,27 @@
         }
     });
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', bindAuthForms);
-    } else {
+    function initializeAuthModalScript() {
+        initializeAuthSessionState();
+        bindAuthNavigationGuard();
         bindAuthForms();
+
+        window.setTimeout(function () {
+            initializeAuthSessionState();
+        }, 0);
+
+        window.setTimeout(function () {
+            initializeAuthSessionState();
+        }, 80);
+
+        window.setTimeout(function () {
+            initializeAuthSessionState();
+        }, 200);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeAuthModalScript);
+    } else {
+        initializeAuthModalScript();
     }
 })();
