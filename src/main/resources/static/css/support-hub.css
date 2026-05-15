@@ -5,6 +5,7 @@
     flex-direction: column;
     align-items: center;
     margin-top: 40px;
+    min-height: calc(100vh - 74px - 260px);
 }
 
 .support-cards {
@@ -21,6 +22,12 @@
     width: 200px;
     height: 200px;
     text-align: center;
+    transition: transform 0.2s ease;
+    cursor: pointer;
+}
+
+.support-card:hover {
+    transform: translateY(-5px);
 }
 
 .support-card i {
@@ -35,14 +42,16 @@
     flex-direction: column;
     align-items: center;
     text-decoration: none;
+    color: #193b60;
 }
 
 .support-box {
     background: #ffffff;
     border-radius: 16px;
-    padding: 60px;
+    padding: 80px 60px;
     width: 800px;
     text-align: center;
+    min-height: 500px;
 }
 
 @media (max-width: 768px) {

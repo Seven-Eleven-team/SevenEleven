@@ -4,8 +4,8 @@
         <li><a href="/subscription"> OTT 구독 </a> </li>
         <li><a href="/dashboard"> 지출통계 </a> </li>
         <li><a href="/board"> 게시판 </a> </li>
-        <li><a href="support"> 고객센터 </a> </li>
+        <li><a href="/support"> 고객센터 </a> </li>
         <li><a href="/party"> 판매자 등록 </a> </li>
-        <li><a href="logout"> 로그아웃 </a> </li>
+        <li><a href="/logout"> 로그아웃 </a> </li>
     </ul>
 </nav>

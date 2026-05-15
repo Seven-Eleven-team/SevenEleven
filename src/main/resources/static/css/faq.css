@@ -7,6 +7,7 @@
     background: #ffffff;
     border-radius: 16px;
     border: 1px solid #e0e0e0;
+    display: none;
 }
 
 .faq-chat-area {
@@ -34,4 +35,31 @@
     font-size: 20px;
     color: #4b8df7;
     cursor: pointer;
+}
+
+.faq-modal.open {
+    display: block;
+}
+
+.faq-bot-msg {
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.faq-user-msg {
+    text-align: right;
+    margin-bottom: 10px;
+    color: #193b60;
+    font-weight: bold;
+}
+
+.faq-question-btn {
+    background: #4b6fa5;
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    cursor: pointer;
+    margin: 4px 0;
+    display: block;
 }
