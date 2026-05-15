@@ -1,22 +1,20 @@
 package com.bu.jichulmate.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "EXPENSES")
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor @Builder
 public class Expense {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exp_seq")
-    @SequenceGenerator(name = "exp_seq", sequenceName = "SEQ_EXPENSES", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_expenses_gen")
+    @SequenceGenerator(name = "seq_expenses_gen", sequenceName = "SEQ_EXPENSES", allocationSize = 1)
     @Column(name = "EXPENSE_ID")
     private Long id;
 

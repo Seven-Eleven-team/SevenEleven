@@ -13,17 +13,17 @@ import java.util.Optional;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-    List<Account> findByUserAndDeletedFalseOrderByPrimaryDescCreatedAtDesc(User user);
-    Optional<Account> findByIdAndUserAndDeletedFalse(Long id, User user);
-    Optional<Account> findByUserAndPrimaryTrueAndDeletedFalse(User user);
-    long countByUserAndDeletedFalse(User user);
+    List<Account> findByUserOrderByIsPrimaryDescCreatedAtDesc(User user);
+    Optional<Account> findByIdAndUser(Long id, User user);
+    Optional<Account> findByUserAndIsPrimary(User user, String isPrimary);
+    long countByUser(User user);
 
-    @Query("SELECT COUNT(a) > 0 FROM Account a WHERE a.accountNumber = :accountNumber AND a.deleted = false AND a.id <> :excludeId")
+    @Query("SELECT COUNT(a) > 0 FROM Account a WHERE a.accountNumber = :accountNumber AND a.id <> :excludeId")
     boolean existsByAccountNumberExcludeId(@Param("accountNumber") String accountNumber, @Param("excludeId") Long excludeId);
 
-    boolean existsByAccountNumberAndDeletedFalse(String accountNumber);
+    boolean existsByAccountNumber(String accountNumber);
 
     @Modifying
-    @Query("UPDATE Account a SET a.primary = false WHERE a.user = :user AND a.deleted = false")
+    @Query("UPDATE Account a SET a.isPrimary = 'N' WHERE a.user = :user")
     void clearAllPrimary(@Param("user") User user);
 }

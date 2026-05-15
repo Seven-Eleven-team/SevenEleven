@@ -23,7 +23,7 @@ public class TermsAgreementService {
                 : new HashSet<>(agreedTermIds);
 
         List<Terms> requiredTerms = latestTerms.stream()
-                .filter(Terms::required)
+                .filter(terms -> "Y".equals(terms.getIsRequired()))
                 .toList();
 
         boolean allRequiredAgreed = requiredTerms.stream()
