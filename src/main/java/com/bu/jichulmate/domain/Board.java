@@ -6,34 +6,42 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "BOARDS")
-@Getter @Setter
-@NoArgsConstructor // JPA 필수 기본 생성자
-@AllArgsConstructor // Builder 필수 모든 필드 생성자
-@Builder
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Board {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "board_seq")
-    @SequenceGenerator(name = "board_seq", sequenceName = "BOARD_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_boards_gen")
+    @SequenceGenerator(name = "seq_boards_gen", sequenceName = "SEQ_BOARDS", allocationSize = 1)
+    @Column(name = "BOARD_ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-    @Column(nullable = false)
+    @Column(name = "BOARD_TYPE", nullable = false, length = 30)
+    private String boardType;
+
+    @Column(name = "TITLE", nullable = false, length = 150)
     private String title;
 
-    @Column(columnDefinition = "CLOB")
+    @Column(name = "CONTENT", nullable = false, length = 4000)
     private String content;
 
-    @Column(nullable = false)
-    private boolean deleted = false;
+    @Builder.Default
+    @Column(name = "VIEWS_COUNT", nullable = false)
+    private Integer viewsCount = 0;
 
-    @Column(name = "created_at", updatable = false)
+    @Builder.Default
+    @Column(name = "LIKES_COUNT", nullable = false)
+    private Integer likesCount = 0;
+
+    @Builder.Default
+    @Column(name = "IS_DELETED", nullable = false, length = 1)
+    private String isDeleted = "N";
+
+    @Column(name = "CREATED_AT", updatable = false)
     private LocalDateTime createdAt;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
+    @Column(name = "UPDATED_AT")
+    private LocalDateTime updatedAt;
 }

@@ -8,17 +8,15 @@ import java.time.LocalDate;
 @NoArgsConstructor @AllArgsConstructor
 public class UserUpdateRequest {
 
-    // MY-01: 아이디 변경 추가
-    @Size(min = 4, max = 20, message = "아이디는 4~20자여야 합니다.")
+    // 아이디이자 이메일 역할을 하는 필드
+    @NotBlank(message = "이메일(아이디)을 입력해주세요.")
+    @Email(message = "올바른 이메일 형식이 아닙니다.")
+    @Size(min = 4, max = 50, message = "아이디는 4~50자여야 합니다.")
     private String loginId;
 
     @NotBlank(message = "닉네임을 입력해주세요.")
     @Size(min = 2, max = 5, message = "닉네임은 2~5자여야 합니다.")
     private String nickname;
-
-    @Email(message = "올바른 이메일 형식이 아닙니다.")
-    @NotBlank(message = "이메일을 입력해주세요.")
-    private String email;
 
     private String currentPassword;
 

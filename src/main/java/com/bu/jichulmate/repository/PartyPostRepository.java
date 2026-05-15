@@ -10,6 +10,6 @@ import java.util.List;
 public interface PartyPostRepository extends JpaRepository<PartyPost, Long> {
 
     // ★ PartyPostService에서 찾고 있는 메서드입니다. 꼭 있어야 에러가 안 납니다!
-    List<PartyPost> findByHostUserUserId(Long userId);
+    List<PartyPost> findBySellerUserId(Long userId); // ★ 변경!
 
 }

@@ -6,15 +6,12 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "FAQS")
-@Getter @Setter                // ★ Getter, Setter를 자동으로 생성해줍니다.
-@NoArgsConstructor             // ★ 기본 생성자를 만들어줍니다.
-@AllArgsConstructor            // ★ 모든 필드를 포함한 생성자를 만들어줍니다.
-@Builder                       // ★ 빌더 패턴으로 객체 생성을 도와줍니다.
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Faq {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "faqs_seq")
-    @SequenceGenerator(name = "faqs_seq", sequenceName = "SEQ_FAQS", allocationSize = 1) // ★ 시퀀스 이름 SEQ_FAQS 확인!
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_faqs_gen")
+    @SequenceGenerator(name = "seq_faqs_gen", sequenceName = "SEQ_FAQS", allocationSize = 1)
     @Column(name = "FAQ_ID")
     private Long faqId;
 

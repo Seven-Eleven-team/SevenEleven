@@ -5,51 +5,32 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "ACCOUNTS")
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-@Builder
+@Table(name = "BANK_ACCOUNTS")
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_seq")
-    @SequenceGenerator(name = "account_seq", sequenceName = "ACCOUNT_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_bank_accounts_gen")
+    @SequenceGenerator(name = "seq_bank_accounts_gen", sequenceName = "SEQ_BANK_ACCOUNTS", allocationSize = 1)
+    @Column(name = "ACCOUNT_ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-    @Column(name = "bank_name", nullable = false, length = 50)
+    @Column(name = "BANK_NAME", nullable = false, length = 50)
     private String bankName;
 
-    @Column(name = "account_number", nullable = false, length = 30)
+    @Column(name = "ACCOUNT_NUMBER", nullable = false, length = 100)
     private String accountNumber;
 
-    @Column(name = "account_holder", nullable = false, length = 30)
-    private String accountHolder;
-
-    @Column(name = "is_primary", nullable = false)
     @Builder.Default
-    private boolean primary = false;
+    @Column(name = "IS_PRIMARY", nullable = false, length = 1)
+    private String isPrimary = "Y";
 
-    @Column(name = "is_deleted", nullable = false)
-    @Builder.Default
-    private boolean deleted = false;
-
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "CREATED_AT", updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
+    @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
 }
