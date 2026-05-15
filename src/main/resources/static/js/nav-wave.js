@@ -4,6 +4,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     hamburgerBtn.addEventListener('click', function() {
         sidebar.classList.toggle('open');
+
+    });
+    //  사이드바 바깥 부분 클릭하면 사이드바 닫기
+    document.addEventListener('click', function(e) {
+        if(!sidebar.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+            sidebar.classList.remove('open');
+        }
     });
 
     // faqModal 열림/닫힘
@@ -12,6 +19,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     chatBtn.addEventListener('click', function() {
         faqModal.classList.toggle('open');
+    });
+
+//  FAQ 모달 바깥 부분 클릭하면 FAQ모달 닫기
+    document.addEventListener('click', function(e) {
+        if(!faqModal.contains(e.target) && !chatBtn.contains(e.target)) {
+            faqModal.classList.remove('open');
+        }
     });
 
     const faqInput = document.querySelector('.faq-input');      // 입력창
@@ -32,6 +46,23 @@ document.addEventListener('DOMContentLoaded', function() {
         faqChatArea.appendChild(div);
     }
 
+//  FAQ 질문 목록 불러오기
+    const faqList = document.getElementById('faqList');
+
+    fetch('/support/api/faqs/questions')
+        .then(response => response.json())
+        .then(questions => {
+            questions.forEach(function(question, index) {
+                const li = document.createElement('li');
+                li.textContent = (index + 1) + '. ';
+                const btn = document.createElement('button');
+                btn.className = 'faq-question-btn';
+                btn.textContent = question;
+                li.appendChild(btn);
+                faqList.appendChild(li);
+            });
+        });
+
     faqSendBtn.addEventListener('click', function() {
         const input = faqInput.value.trim();    // 입력창 내용 가져오기
         if(!input) return;      // 빈 값이면 아무것도 안함
@@ -47,4 +78,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 faqChatArea.scrollTop = faqChatArea.scrollHeight    // 스크롤 맨 아래로
             });
     });
+
+//  엔터 키로도 전송될 수 있게
+    faqInput.addEventListener('keydown', function(e) {
+        if(e.key === 'Enter') {
+            faqSendBtn.click();
+        }
+    });
+
+
 });

@@ -45,7 +45,7 @@
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
     color: #f9f7f7;
-    font-size: 28x;
+    font-size: 28px;
 }
 
 .hamburger-btn {
@@ -56,4 +56,17 @@
     color: #f9f7f7;
     z-index: 1100;
     position: relative;
+}
+
+.auth-link {
+    color : #f9f7f7;
+    text-decoration: none;
+}
+
+.auth-link:visited {
+    color: #f9f7f7;
+}
+
+.auth-link:hover {
+    color: #4b8df7;
 }
