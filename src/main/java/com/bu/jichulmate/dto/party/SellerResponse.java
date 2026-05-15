@@ -17,7 +17,7 @@ public class SellerResponse {
     private LocalDate createdAt;
 
     public SellerResponse(PartySeller seller) {
-        this.sellerId = seller.getSellerId();
+        this.sellerId = seller.getId();
         this.userId = seller.getUserId();
         this.name = seller.getName();
         this.birthDate = seller.getBirthDate();

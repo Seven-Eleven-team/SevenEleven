@@ -10,39 +10,43 @@ import java.time.LocalDateTime;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Subscription {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sub_seq")
-    @SequenceGenerator(name = "sub_seq", sequenceName = "SUB_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_subscriptions_gen")
+    @SequenceGenerator(name = "seq_subscriptions_gen", sequenceName = "SEQ_SUBSCRIPTIONS", allocationSize = 1)
+    @Column(name = "SUB_ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user; // findByUser... 와 매칭
+    @JoinColumn(name = "USER_ID", nullable = false)
+    private User user;
 
-    @Column(nullable = false)
-    private String serviceName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARTY_ID", nullable = false)
+    private PartyPost party;
 
-    @Column(nullable = false)
-    private String status = "ACTIVE"; // findByUserAndStatus... 와 매칭
-
-    @Column(nullable = false)
+    @Column(name = "MONTHLY_FEE", nullable = false)
     private long monthlyFee;
 
-    @Column(name = "next_billing_date")
-    private LocalDate nextBillingDate;
+    @Column(name = "TOTAL_AMOUNT", nullable = false)
+    private long totalAmount;
 
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt; // OrderByCreatedAtDesc 와 매칭
+    @Column(name = "PERIOD_MONTHS", nullable = false)
+    private int periodMonths;
 
-    // 상세 정보 (Detail DTO용)
-    private String serviceLogo;
-    private String orderCode;
-    private String chargeTimeline;
-    private String chargeDateTime;
-    private String accountStatus;
-    private String paymentMethod;
-    private String ottUserId;
+    @Column(name = "START_DATE", nullable = false)
     private LocalDate startDate;
-    private String cancelUrl;
+
+    @Column(name = "END_DATE", nullable = false)
+    private LocalDate endDate;
+
+    @Column(name = "NEXT_PAY_DATE")
+    private LocalDate nextPayDate;
+
+    @Builder.Default
+    @Column(name = "STATUS", nullable = false)
+    private String status = "ACTIVE";
+
+    @Column(name = "CREATED_AT", updatable = false)
+    private LocalDateTime createdAt;
 
     @PrePersist
     protected void onCreate() {

@@ -9,25 +9,30 @@ import java.time.LocalDateTime;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Report {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "report_seq")
-    @SequenceGenerator(name = "report_seq", sequenceName = "REPORT_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_reports_gen")
+    @SequenceGenerator(name = "seq_reports_gen", sequenceName = "SEQ_REPORTS", allocationSize = 1)
+    @Column(name = "REPORT_ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reporter_id", nullable = false)
-    private User reporter; // findByReporter... 와 매칭 (중요!)
+    @JoinColumn(name = "REPORTER_ID", nullable = false)
+    private User reporter;
 
-    @Column(nullable = false)
-    private String targetType; // "SUBSCRIPTION" 등
+    @Column(name = "TARGET_TYPE", nullable = false)
+    private String targetType;
 
-    @Column(nullable = false)
+    @Column(name = "TARGET_ID", nullable = false)
     private Long targetId;
 
-    @Column(columnDefinition = "CLOB", nullable = false)
-    private String reportReason;
+    @Column(name = "REASON", nullable = false)
+    private String reason;
 
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt; // OrderByCreatedAtDesc 와 매칭
+    @Builder.Default
+    @Column(name = "STATUS", nullable = false)
+    private String status = "WAITING";
+
+    @Column(name = "CREATED_AT", updatable = false)
+    private LocalDateTime createdAt;
 
     @PrePersist
     protected void onCreate() {

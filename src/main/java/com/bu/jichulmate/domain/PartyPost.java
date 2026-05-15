@@ -9,42 +9,50 @@ import java.time.LocalDateTime;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class PartyPost {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "party_seq")
-    @SequenceGenerator(name = "party_seq", sequenceName = "PARTY_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_party_posts_gen")
+    @SequenceGenerator(name = "seq_party_posts_gen", sequenceName = "SEQ_PARTY_POSTS", allocationSize = 1)
+    @Column(name = "PARTY_ID")
     private Long id;
 
-    // ★ sellerId(Long) 대신 User 객체로 연결!
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "host_user_id", nullable = false)
-    private User hostUser;
+    @JoinColumn(name = "SELLER_ID", nullable = false) // ★ PartySeller 테이블 참조로 변경
+    private PartySeller seller;
 
-    @Column(nullable = false)
-    private String ottCategory;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SERVICE_ID", nullable = false) // ★ 마스터 테이블 참조로 변경
+    private SubscriptionMaster service;
 
-    @Column(nullable = false)
+    @Column(name = "SHARE_ID", nullable = false, length = 100)
     private String shareId;
 
-    @Column(nullable = false)
+    @Column(name = "SHARE_PASSWORD", nullable = false, length = 255)
     private String sharePassword;
 
-    @Column(nullable = false)
+    @Column(name = "MONTHLY_PRICE", nullable = false)
     private Integer monthlyPrice;
 
+    @Builder.Default
+    @Column(name = "TOTAL_SLOTS", nullable = false)
+    private Integer totalSlots = 4;
+
+    @Builder.Default
+    @Column(name = "OCCUPIED_SLOTS", nullable = false)
+    private Integer occupiedSlots = 0;
+
+    @Builder.Default
+    @Column(name = "STATUS", nullable = false, length = 20)
+    private String status = "WAITING"; // WAITING, APPROVED, REJECTED, FULL
+
+    @Column(name = "REJECT_REASON", length = 500)
+    private String rejectReason;
+
     @Lob
-    @Column(length = 4000)
+    @Column(name = "DESCRIPTION")
     private String description;
 
-    @Column(nullable = false)
-    private String status = "RECRUITING";
-
-    @Column(nullable = false)
-    private boolean deleted = false;
-
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "CREATED_AT", updatable = false)
     private LocalDateTime createdAt;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
+    @Column(name = "UPDATED_AT")
+    private LocalDateTime updatedAt;
 }
