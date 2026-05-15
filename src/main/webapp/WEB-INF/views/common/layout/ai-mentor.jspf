@@ -1,0 +1,33 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<div id="ai-mentor-btn" onclick="toggleAiModal()">
+    <img src="/images/ai_modal.jpg" alt="AI Mentor">
+</div>
+
+<div id="ai-mentor-modal" class="hidden">
+    <div class="ai-modal-header">
+        <div class="header-content">
+            <h4>나만의 AI 멘토링</h4>
+            <span class="current-date" id="ai-chat-date"></span>
+        </div>
+        <button class="close-btn" onclick="toggleAiModal()">×</button>
+    </div>
+
+    <div class="ai-flavor-selector">
+        <label><input type="radio" name="ai-flavor" value="mild" checked> 😇 순한맛</label>
+        <label><input type="radio" name="ai-flavor" value="medium"> 😐 중간맛</label>
+        <label><input type="radio" name="ai-flavor" value="spicy"> 🔥 매운맛</label>
+    </div>
+
+    <div class="ai-modal-body" id="ai-chat-body">
+        <div class="chat-bubble ai-bubble">
+            은아 님 어서와~ 오늘은 어떤 지출이 고민이야?
+        </div>
+    </div>
+
+    <div class="ai-modal-footer">
+        <input type="text" id="ai-chat-input" placeholder="채팅 칠 때 메인 색깔은 어두운 색으로" onkeyup="checkEnter(event)">
+        <button id="send-btn" onclick="sendAiMessage()">
+            <i class="arrow-up-icon">↑</i>
+        </button>
+    </div>
+</div>

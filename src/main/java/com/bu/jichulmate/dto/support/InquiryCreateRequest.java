@@ -1,12 +1,9 @@
 package com.bu.jichulmate.dto.support;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data // ★ 이게 있어야 SupportService에서 에러가 안 납니다!
 public class InquiryCreateRequest {
-
     private String title;
     private String content;
 }

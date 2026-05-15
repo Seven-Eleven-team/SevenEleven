@@ -2,6 +2,7 @@ src/main/resources/static
 │
 ├── 📂 css                                      (화면별 스타일 / 공통 UI 스타일 관리)
 │   ├── 📄 home.css                            (메인 홈 화면 스타일)
+│   ├── 📄 header.css                            (헤더 스타일)
 │   ├── 📄 dashboard.css                       (대시보드 화면 스타일)
 │   ├── 📄 expense.css                         (지출 내역 조회 / 등록 / 수정 화면 스타일)
 │   ├── 📄 goal.css                            (예산 목표 / 절약 목표 화면 스타일)
@@ -21,8 +22,10 @@ src/main/resources/static
 │   ├── 📄 admin-components.css                (관리자 공통 버튼 / 테이블 / 카드 컴포넌트 스타일)
 │   └── 📄 admin-console.css                   (관리자 콘솔 메인 화면 스타일)
 │
-├── 📂 img                                      (프로젝트 공통 이미지 / 배경 이미지 / 빈 상태 이미지 관리)
+├── 📂 images                                  (프로젝트 공통 이미지 / 배경 이미지 / 빈 상태 이미지 관리)
 │   ├── 📄 logo.png                            (서비스 대표 로고 이미지)
+│   ├── 📄 ai_modal.jpg                        (ai_modal 아이콘 이미지)
+│   ├── 📄 main-bg.jpg                         (메인 대표 이미지)
 │   ├── 📄 hero.jpg                            (메인 화면 대표 배너 이미지)
 │   ├── 📄 main_dark.jpg                       (다크 테마 메인 배경 이미지)     🗑️
 │   ├── 📄 main_light.jpg                      (라이트 테마 메인 배경 이미지)   🗑️
@@ -43,6 +46,7 @@ src/main/resources/static
 │   ├── 📄 auth-guard.js                       (비로그인 사용자 접근 제한 / 인증 체크 스크립트)
 │   ├── 📄 auth-modal.js                       (로그인 / 회원가입 / 인증 모달 제어 스크립트)
 │   ├── 📄 alert.js                            (커스텀 경고창 / 안내창 공통 스크립트)
+
 │
 ├── 📂 pages                               (각 화면 전용 스크립트 분리 관리)
 │   ├── 📄 index.js                        (메인 페이지 전용 스크립트)
