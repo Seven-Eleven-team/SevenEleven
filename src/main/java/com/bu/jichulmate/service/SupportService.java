@@ -27,7 +27,7 @@ public class SupportService {
         Inquiry inquiry = new Inquiry();
 
         // ★ 에러 원인 해결: setUserId 가 아니라 setUser(객체) 로 복구!
-        inquiry.setUser(user);
+        inquiry.setUserId(userId);
         inquiry.setTitle(request.getTitle());
         inquiry.setContent(request.getContent());
         inquiry.setStatus("WAITING");
