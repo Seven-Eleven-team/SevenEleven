@@ -1,75 +1,36 @@
 package com.bu.jichulmate.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
+import lombok.*;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "INQUIRIES")
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Inquiry {
-
-    // ===============================
-    // PK (시퀀스 기반)
-    // ===============================
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_INQUIRIES")
-    @SequenceGenerator(
-            name = "SEQ_INQUIRIES",           // 반드시 동일하게
-            sequenceName = "SEQ_INQUIRIES",   // DB 시퀀스 이름
-            allocationSize = 1
-    )
-    @Column(name = "INQUIRY_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "inquiry_seq")
+    @SequenceGenerator(name = "inquiry_seq", sequenceName = "INQUIRY_SEQ", allocationSize = 1)
     private Long id;
 
-    // ===============================
-    // 사용자 ID
-    // ===============================
-    @Column(name = "USER_ID", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    // ===============================
-    // 제목
-    // ===============================
-    @Column(name = "TITLE", nullable = false)
+    @Column(nullable = false)
     private String title;
 
-    // ===============================
-    // 내용
-    // ===============================
-    @Column(name = "CONTENT", nullable = false)
+    @Column(columnDefinition = "CLOB")
     private String content;
 
-    // ===============================
-    // 상태 (WAITING / ANSWERED)
-    // ===============================
-    @Column(name = "STATUS")
-    private String status;
+    @Column(nullable = false)
+    private String status = "PENDING";
 
-    // ===============================
-    // 생성일 (자동 처리)
-    // ===============================
-    @CreatedDate
-    @Column(name = "CREATED_AT", nullable = false, updatable = false)
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    // ===============================
-    // 관리자 답변
-    // ===============================
-    @Column(name = "ANSWER_CONTENT")
-    private String answerContent;
-
-    // ===============================
-    // 수정일
-    // ===============================
-    @Column(name = "UPDATED_AT")
-    private LocalDateTime updatedAt;
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
