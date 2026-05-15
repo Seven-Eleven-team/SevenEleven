@@ -1,82 +1,87 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%--<%@ include file="/WEB-INF/views/common/theme.jspf" %>--%>
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>비밀번호 재설정 | 지출메이트</title>
 
-  <link rel="stylesheet" href="/css/header.css" />
-  
-<link rel="stylesheet" href="/css/login.css">
-  <link rel="stylesheet" href="/css/ui-toast.css" />
-
-  <script defer src="/js/ui-toast.js"></script>
- <%-- <script defer src="/js/theme.js"></script>--%>
-  <script defer src="/js/nav-wave.js"></script>
-
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/auth-modal.css">
 </head>
 <body>
 
-<%--<jsp:include page="/WEB-INF/views/common/header.jsp" />--%>
-
-  <div class="auth-wrap">
-    <div class="auth-left">
-      <div class="brand">
-        <div class="logo">JM</div>
-        <div class="title">지출메이트</div>
-      </div>
-
-      <form class="form" action="/auth/password/reset" method="post">
-        <!-- 토큰은 URL로 받은 걸 hidden으로 넘김 -->
-        <input type="hidden" name="token" value="${token}" />
-
-        <div class="label">새 비밀번호</div>
-        <div class="input-row">
-          <input class="input" name="password" type="password" placeholder="새 비밀번호" required />
-          <span class="eye">👁</span>
-        </div>
-
-        <div class="label">새 비밀번호 확인</div>
-        <div class="input-row">
-          <input class="input" name="passwordConfirm" type="password" placeholder="새 비밀번호 확인" required />
-          <span class="eye">👁</span>
-        </div>
-
-        <div style="margin-top:8px; font-size:13px; color:#666; line-height:1.5;">
-          안전을 위해 8자 이상, 영문/숫자 조합을 권장합니다.
-        </div>
-
-        <button class="primary-btn" type="submit" style="margin-top:14px;">비밀번호 변경</button>
-
-        <c:if test="${not empty error}">
-          <div style="margin-top:12px; font-size:14px; color:#c00;">
-            ${error}
-          </div>
-        </c:if>
-
-        <div class="auth-footer" style="margin-top:10px;">
-          <a class="underline" href="/auth/login"><b>로그인으로</b></a>
-        </div>
-
-        <div class="auth-footer" style="margin-top:6px;">
-          <a class="underline" href="/"><b>홈으로</b></a>
-        </div>
-      </form>
+<div class="auth-wrap">
+  <div class="auth-left">
+    <div class="brand">
+      <div class="logo">지</div>
+      <div class="title">비밀번호 재설정</div>
     </div>
 
-    <div class="auth-right bg-mountain"></div>
+    <form
+            class="form"
+            id="resetPasswordForm"
+            action="${pageContext.request.contextPath}/auth/password/reset"
+            method="post"
+    >
+      <input type="hidden" name="token" value="${token}">
+
+      <label class="label" for="resetPassword">새 비밀번호</label>
+      <div class="input-row">
+        <input
+                class="input"
+                id="resetPassword"
+                name="password"
+                type="password"
+                placeholder="새 비밀번호"
+                required
+        >
+      </div>
+
+      <label class="label" for="resetPasswordConfirm">새 비밀번호 확인</label>
+      <div class="input-row">
+        <input
+                class="input"
+                id="resetPasswordConfirm"
+                name="passwordConfirm"
+                type="password"
+                placeholder="새 비밀번호 확인"
+                required
+        >
+      </div>
+
+      <div style="margin-top:8px; font-size:13px; color:#666; line-height:1.5;">
+        안전을 위해 8자 이상으로 입력해 주세요.
+      </div>
+
+      <button class="primary-btn" type="submit" style="margin-top:14px;">
+        비밀번호 변경
+      </button>
+
+      <c:if test="${not empty error}">
+        <div style="margin-top:12px; font-size:14px; color:#c00;">
+            ${error}
+        </div>
+      </c:if>
+
+      <div class="auth-footer" style="margin-top:10px;">
+        <a class="underline" href="${pageContext.request.contextPath}/auth/login">
+          <b>로그인으로</b>
+        </a>
+      </div>
+
+      <div class="auth-footer" style="margin-top:6px;">
+        <a class="underline" href="${pageContext.request.contextPath}/">
+          <b>홈으로</b>
+        </a>
+      </div>
+    </form>
   </div>
 
-  <!-- eye(비밀번호 보기) 토글: login.css와 동일 UX 원하면 아래 JS로 동작 -->
-  
+  <div class="auth-right bg-mountain"></div>
+</div>
 
-
-  <%--<%@ include file="/WEB-INF/views/common/footer.jspf" %>--%>
-
-
+<script src="${pageContext.request.contextPath}/js/auth-modal.js?v=4"></script>
 </body>
 </html>
-

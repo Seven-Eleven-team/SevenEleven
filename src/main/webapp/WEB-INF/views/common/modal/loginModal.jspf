@@ -17,11 +17,15 @@
         <div class="auth-wrap auth-wrap--split">
             <div class="auth-left">
                 <div class="brand">
-                    <div class="logo" aria-hidden="true">지</div>
                     <div class="title" id="loginModalTitle">로그인</div>
                 </div>
 
-                <form class="form" action="${pageContext.request.contextPath}/auth/login" method="post">
+                <form
+                        class="form"
+                        id="loginForm"
+                        action="${pageContext.request.contextPath}/auth/login"
+                        method="post"
+                >
                     <label class="label" for="loginId">아이디</label>
                     <input
                             class="input"
@@ -63,7 +67,7 @@
                             비밀번호 찾기
                         </button>
                         <span class="footer-divider">·</span>
-                        <button type="button" class="text-link" data-auth-open="signup">
+                        <button type="button" class="text-link" data-auth-open="terms">
                             신규 회원가입
                         </button>
                     </div>

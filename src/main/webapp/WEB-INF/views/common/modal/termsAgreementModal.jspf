@@ -38,7 +38,7 @@
             </p>
 
             <div class="terms-actions">
-                <button type="button" class="terms-cancel-button" data-auth-open="choice">
+                <button type="button" class="terms-cancel-button" data-auth-open="login">
                     이전
                 </button>
 
