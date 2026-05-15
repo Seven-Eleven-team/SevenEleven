@@ -3,13 +3,11 @@ package com.bu.jichulmate.dto.terms;
 import com.bu.jichulmate.domain.Terms;
 import lombok.Builder;
 import lombok.Getter;
-
 import java.time.LocalDateTime;
 
 @Getter
 @Builder
 public class TermsResponse {
-
     private Long termId;
     private String termType;
     private String title;
@@ -26,7 +24,8 @@ public class TermsResponse {
                 .title(terms.getTermType().getTitle())
                 .version(terms.getVersion())
                 .content(terms.getContent())
-                .required(terms.required())
+                // ★ 수정: "Y"일 때 true 반환
+                .required("Y".equalsIgnoreCase(terms.getIsRequired()))
                 .applyDate(terms.getApplyDate())
                 .displayOrder(terms.getTermType().getDisplayOrder())
                 .build();

@@ -30,7 +30,7 @@ public class TermsService {
                 .toList();
 
         List<String> requiredTermTypes = latestTerms.stream()
-                .filter(Terms::required)
+                .filter(terms -> "Y".equals(terms.getIsRequired()))
                 .map(terms -> terms.getTermType().name())
                 .toList();
 

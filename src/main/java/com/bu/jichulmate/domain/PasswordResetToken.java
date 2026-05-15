@@ -15,7 +15,7 @@ public class PasswordResetToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_auth_tokens_gen")
-    @SequenceGenerator(name = "seq_auth_tokens_gen", sequenceName = "SEQ_AUTH_TOKENS")
+    @SequenceGenerator(name = "seq_auth_tokens_gen", sequenceName = "SEQ_AUTH_TOKENS", allocationSize = 1)
     @Column(name = "TOKEN_ID") //
     private Long id;
 

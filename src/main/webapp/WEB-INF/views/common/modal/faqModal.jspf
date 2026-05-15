@@ -2,6 +2,8 @@
     <div class="faq-chat-area">
         <!-- 대화내용 -->
     </div>
-    <input class="faq-input" type="text" placeholder="문의 내용을 입력하세요.">
-    <button class="faq-send-btn"><i class="bi bi-arrow-up-circle"></i></button>
+    <div class="faq-input-area">
+        <input class="faq-input" type="text" placeholder="문의 내용을 입력하세요.">
+        <button class="faq-send-btn"><i class="bi bi-arrow-up-circle"></i></button>
+    </div>
 </div>
