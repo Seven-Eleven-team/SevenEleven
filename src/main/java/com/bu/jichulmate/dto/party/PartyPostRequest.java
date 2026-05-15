@@ -13,5 +13,6 @@ public class PartyPostRequest {
     private String shareId;
     private String sharePassword;
     private Integer monthlyPrice;
+    private Integer saleMonths;
     private String description;
 }
