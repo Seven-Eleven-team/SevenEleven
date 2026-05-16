@@ -9,7 +9,7 @@ import lombok.Builder;
 import java.time.LocalDate;
 
 @Getter
-@Setter // 👈 이 어노테이션이 있어야 setEmail(), setNickname() 등이 자동으로 생성됩니다.
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -25,7 +25,6 @@ public class User {
     @Column(name = "LOGIN_ID", nullable = false, unique = true)
     private String loginId;
 
-    // ★★★ 이 부분이 없어서 setEmail 오류가 났던 것입니다. 반드시 추가하세요! ★★★
     @Column(name = "EMAIL", nullable = false)
     private String email;
 
@@ -52,6 +51,10 @@ public class User {
 
     @Column(name = "EMAIL_NOTIFY")
     private boolean emailNotify = true;
+
+    @Builder.Default
+    @Column(name = "ACCOUNT_STATUS")
+    private String accountStatus = "ACTIVE";
 
     @Column(name = "PIN")
     private String pin;

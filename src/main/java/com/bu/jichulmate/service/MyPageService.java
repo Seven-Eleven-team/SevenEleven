@@ -62,7 +62,7 @@ public class MyPageService {
                 .birthDate(user.getBirthDate())
                 .role(user.getRole())
                 .sellerRegistered(isSeller)
-                .emailNotify("Y".equals(user.getIsNotiEnabled()))
+                .emailNotify(user.isEmailNotify())
                 .activeSubscriptionCount(activeSubscriptions.size())
                 .unreadNotificationCount((int) unreadNotiCount)
                 .goals(goalList)
