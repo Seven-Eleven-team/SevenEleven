@@ -1,9 +1,11 @@
 package com.bu.jichulmate.service;
 
+import com.bu.jichulmate.domain.PartyPost;
 import com.bu.jichulmate.domain.Subscription;
 import com.bu.jichulmate.domain.User;
 import com.bu.jichulmate.dto.subscription.SubscriptionCreateRequest;
 import com.bu.jichulmate.dto.subscription.SubscriptionResponse;
+import com.bu.jichulmate.repository.PartyPostRepository;
 import com.bu.jichulmate.repository.SubscriptionRepository;
 import com.bu.jichulmate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ public class SubscriptionService {
 
     private final SubscriptionRepository subscriptionRepository;
     private final UserRepository userRepository;
+    private final PartyPostRepository partyPostRepository;
 
     // 구독 등록
     public void createSubscription(
@@ -29,6 +32,12 @@ public class SubscriptionService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
                         new RuntimeException("회원 없음"));
+
+        // 파티 조회
+        PartyPost party = partyPostRepository.findById(
+                request.getPartyId()
+        ).orElseThrow(() ->
+                new RuntimeException("파티 없음"));
 
         // 시작일
         LocalDate startDate = LocalDate.now();
@@ -50,10 +59,8 @@ public class SubscriptionService {
         // 회원 저장
         subscription.setUser(user);
 
-        // OTT 서비스 ID 저장
-        subscription.setPartyId(
-                request.getPartyId()
-        );
+        // 파티 저장
+        subscription.setParty(party);
 
         // 월 요금
         subscription.setMonthlyFee(
@@ -112,19 +119,26 @@ public class SubscriptionService {
                             subscription.getId()
                     );
 
-                    // OTT 서비스 ID
+                    // 파티 ID
                     res.setPartyId(
-                            subscription.getPartyId()
+                            subscription.getParty().getId()
+                    );
+
+                    // OTT 서비스 이름
+                    res.setServiceName(
+                            subscription.getParty()
+                                    .getService()
+                                    .getServiceName()
                     );
 
                     // 월 요금
                     res.setMonthlyFee(
-                            subscription.getMonthlyFee()
+                            (int) subscription.getMonthlyFee()
                     );
 
                     // 총 결제 금액
                     res.setTotalAmount(
-                            subscription.getTotalAmount()
+                            (int) subscription.getTotalAmount()
                     );
 
                     // 구독 개월 수
