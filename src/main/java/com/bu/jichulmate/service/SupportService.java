@@ -27,7 +27,7 @@ public class SupportService {
         Inquiry inquiry = new Inquiry();
 
         // ★ 에러 원인 해결: setUserId 가 아니라 setUser(객체) 로 복구!
-        inquiry.setUser(user);
+        inquiry.setUserId(userId);
         inquiry.setTitle(request.getTitle());
         inquiry.setContent(request.getContent());
         inquiry.setStatus("WAITING");
@@ -39,7 +39,7 @@ public class SupportService {
     public List<InquiryResponse> getMyInquiries(Long userId) {
         // (참고: Repository에 List<Inquiry> findByUserUserId(Long userId) 가 있어야 작동합니다!)
         // 기존에 쓰시던 findByUserId 가 에러가 난다면 findByUserUserId 로 수정해 주세요.
-        return inquiryRepository.findByUserUserId(userId)
+        return inquiryRepository.findByUserId(userId)
                 .stream()
                 .map(inquiry -> {
                     InquiryResponse res = new InquiryResponse();

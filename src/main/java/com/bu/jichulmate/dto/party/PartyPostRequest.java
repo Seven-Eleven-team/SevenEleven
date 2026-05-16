@@ -1,17 +1,18 @@
 package com.bu.jichulmate.dto.party;
 
+import lombok.*;
+
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class PartyPostRequest {
-    private Long sellerId;
-    private String ottCategory;
+
+    private Long sellerId; // 판매자 ID (PartySeller 테이블의 PK)
+
+    // ★ 기존 ottCategory(String) 대신 마스터 테이블의 ID를 받습니다.
+    private Long serviceId;
+
     private String shareId;
     private String sharePassword;
     private Integer monthlyPrice;
+    private Integer saleMonths;
     private String description;
-
-    public Long getSellerId() { return sellerId; }
-    public String getOttCategory() { return ottCategory; }
-    public String getShareId() { return shareId; }
-    public String getSharePassword() { return sharePassword; }
-    public Integer getMonthlyPrice() { return monthlyPrice; }
-    public String getDescription() { return description; }
 }

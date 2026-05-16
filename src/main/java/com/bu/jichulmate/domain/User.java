@@ -52,6 +52,10 @@ public class User {
     @Column(name = "EMAIL_NOTIFY")
     private boolean emailNotify = true;
 
+    @Builder.Default
+    @Column(name = "ACCOUNT_STATUS")
+    private String accountStatus = "ACTIVE";
+
     @Column(name = "PIN")
     private String pin;
 }

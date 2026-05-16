@@ -1,20 +1,17 @@
 package com.bu.jichulmate.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "CATEGORIES")
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor @Builder
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cat_seq")
-    @SequenceGenerator(name = "cat_seq", sequenceName = "SEQ_CATEGORIES", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_categories_gen")
+    @SequenceGenerator(name = "seq_categories_gen", sequenceName = "SEQ_CATEGORIES", allocationSize = 1)
     @Column(name = "CATEGORY_ID")
     private Long id;
 

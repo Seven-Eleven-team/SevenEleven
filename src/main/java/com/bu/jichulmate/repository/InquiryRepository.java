@@ -12,8 +12,8 @@ import java.util.List;
 public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
 
     // 1. SupportService 용 (리스트 반환)
-    List<Inquiry> findByUserUserId(Long userId);
+    List<Inquiry> findByUserId(Long userId);
 
     // 2. MyPageService 용 (페이징 + 최신순 정렬)
-    Page<Inquiry> findByUserUserIdOrderByCreatedAtDesc(Long userId, Pageable pageable);
+    Page<Inquiry> findByUserIdOrderByCreatedAtDesc(Long userId, Pageable pageable);
 }

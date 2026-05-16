@@ -1,17 +1,20 @@
 package com.bu.jichulmate.domain;
 
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "PARTY_SELLERS")
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class PartySeller {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "party_sellers_seq")
-    @SequenceGenerator(name = "party_sellers_seq", sequenceName = "PARTY_SELLERS_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_party_sellers_gen")
+    @SequenceGenerator(name = "seq_party_sellers_gen", sequenceName = "SEQ_PARTY_SELLERS", allocationSize = 1)
     @Column(name = "SELLER_ID")
-    private Long sellerId;
+    private Long id;
 
     @Column(name = "USER_ID", nullable = false)
     private Long userId;
@@ -63,15 +66,4 @@ public class PartySeller {
         this.hasExperience = hasExperience;
     }
 
-    public Long getSellerId() { return sellerId; }
-    public Long getUserId() { return userId; }
-    public String getName() { return name; }
-    public LocalDate getBirthDate() { return birthDate; }
-    public String getPhone() { return phone; }
-    public String getZipCode() { return zipCode; }
-    public String getAddress() { return address; }
-    public String getBankName() { return bankName; }
-    public String getAccountNumber() { return accountNumber; }
-    public String getHasExperience() { return hasExperience; }
-    public LocalDate getCreatedAt() { return createdAt; }
 }

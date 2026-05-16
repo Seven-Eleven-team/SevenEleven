@@ -7,9 +7,8 @@ import java.util.List;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class MyPageSummaryResponse {
     private Long userId;
-    private String loginId;
+    private String loginId; // ★ 이메일 형식의 로그인 아이디
     private String nickname;
-    private String email;
     private String gender;
     private LocalDate birthDate;
     private String profileImage;
@@ -17,6 +16,7 @@ public class MyPageSummaryResponse {
     private boolean sellerRegistered;
     private boolean emailNotify;
     private int activeSubscriptionCount;
+    private int unreadNotificationCount;
     private long monthlySubscriptionTotal;
     private String nextBillingDate;
     private List<GoalSummary> goals;

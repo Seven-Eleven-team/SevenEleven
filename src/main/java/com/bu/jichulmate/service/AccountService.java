@@ -20,52 +20,34 @@ public class AccountService {
 
     public List<Account> getAccountsByUser(Long userId) {
         User user = findUser(userId);
-        return accountRepository.findByUserAndDeletedFalseOrderByPrimaryDescCreatedAtDesc(user);
+        // ★ 수정: deleted 제거된 리포지토리 메서드 호출
+        return accountRepository.findByUserOrderByIsPrimaryDescCreatedAtDesc(user);
     }
 
     @Transactional
     public void registerAccount(Long userId, AccountRegisterRequest request) {
         User user = findUser(userId);
 
-        if (accountRepository.countByUserAndDeletedFalse(user) >= MAX_ACCOUNTS) {
+        if (accountRepository.countByUser(user) >= MAX_ACCOUNTS) {
             throw new BusinessException(ErrorCode.ACCOUNT_LIMIT_EXCEEDED);
         }
-        if (accountRepository.existsByAccountNumberAndDeletedFalse(request.getAccountNumber())) {
+        if (accountRepository.existsByAccountNumber(request.getAccountNumber())) {
             throw new BusinessException(ErrorCode.ACCOUNT_DUPLICATE);
         }
 
-        // 첫 계좌이거나 primary 요청인 경우 처리
-        boolean isPrimary = request.isPrimary() || (accountRepository.countByUserAndDeletedFalse(user) == 0);
-        if (isPrimary) {
+        // ★ 수정: boolean을 "Y"/"N"으로 변환하여 저장
+        String isPrimary = (request.isPrimary() || accountRepository.countByUser(user) == 0) ? "Y" : "N";
+        if ("Y".equals(isPrimary)) {
             accountRepository.clearAllPrimary(user);
         }
 
-        accountRepository.save(Account.builder()
+        Account account = Account.builder()
                 .user(user)
                 .bankName(request.getBankName())
                 .accountNumber(request.getAccountNumber())
-                .accountHolder(request.getAccountHolder())
-                .primary(isPrimary)
-                .build());
-    }
+                .isPrimary(isPrimary)
+                .build();
 
-    @Transactional
-    public void updateAccount(Long userId, Long accountId, AccountUpdateRequest request) {
-        User user = findUser(userId);
-        Account account = findAccountByIdAndUser(accountId, user);
-
-        if (accountRepository.existsByAccountNumberExcludeId(request.getAccountNumber(), accountId)) {
-            throw new BusinessException(ErrorCode.ACCOUNT_DUPLICATE);
-        }
-
-        if (request.isPrimary()) {
-            accountRepository.clearAllPrimary(user);
-        }
-
-        account.setBankName(request.getBankName());
-        account.setAccountNumber(request.getAccountNumber());
-        account.setAccountHolder(request.getAccountHolder());
-        account.setPrimary(request.isPrimary());
         accountRepository.save(account);
     }
 
@@ -74,24 +56,17 @@ public class AccountService {
         User user = findUser(userId);
         Account account = findAccountByIdAndUser(accountId, user);
 
-        if (accountRepository.countByUserAndDeletedFalse(user) <= 1) {
-            throw new BusinessException(ErrorCode.ACCOUNT_MIN_REQUIRED);
-        }
+        // ★ 수정: 하드 딜리트로 변경 (설계서에 deleted 컬럼 없음)
+        accountRepository.delete(account);
 
-        if (account.isPrimary()) {
-            // 다른 계좌 중 하나를 대표 계좌로 승격
-            accountRepository.findByUserAndDeletedFalseOrderByPrimaryDescCreatedAtDesc(user).stream()
-                    .filter(a -> !a.getId().equals(accountId))
+        if ("Y".equals(account.getIsPrimary())) {
+            accountRepository.findByUserOrderByIsPrimaryDescCreatedAtDesc(user).stream()
                     .findFirst()
                     .ifPresent(a -> {
-                        a.setPrimary(true);
+                        a.setIsPrimary("Y");
                         accountRepository.save(a);
                     });
         }
-
-        account.setDeleted(true);
-        account.setPrimary(false);
-        accountRepository.save(account);
     }
 
     @Transactional
@@ -100,7 +75,7 @@ public class AccountService {
         Account account = findAccountByIdAndUser(accountId, user);
 
         accountRepository.clearAllPrimary(user);
-        account.setPrimary(true);
+        account.setIsPrimary("Y");
         accountRepository.save(account);
     }
 
@@ -109,7 +84,7 @@ public class AccountService {
     }
 
     private Account findAccountByIdAndUser(Long accountId, User user) {
-        return accountRepository.findByIdAndUserAndDeletedFalse(accountId, user)
+        return accountRepository.findByIdAndUser(accountId, user)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.ACCOUNT_NOT_FOUND));
     }
 }
