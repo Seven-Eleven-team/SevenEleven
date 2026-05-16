@@ -1019,8 +1019,11 @@
             return;
         }
 
-        if (form.id === 'loginForm') {
-            removeLoginSummary(form);
+        if (form.id === 'loginForm' || form.id === 'signupForm') {
+            form.querySelectorAll('.auth-invalid-summary').forEach(function (summary) {
+                summary.remove();
+            });
+
             return;
         }
 
@@ -1104,10 +1107,16 @@
             setFieldError(field, getInvalidMessage(field));
         });
 
-        if (form.id !== 'loginForm') {
+        if (form.id !== 'loginForm' && form.id !== 'signupForm') {
             showInlineSummary(form, '입력한 정보를 다시 확인해 주세요.');
         } else {
-            removeLoginSummary(form);
+            form.querySelectorAll('.auth-invalid-summary').forEach(function (summary) {
+                summary.remove();
+            });
+
+            if (form.id === 'loginForm') {
+                removeLoginSummary(form);
+            }
         }
 
         shakeFields(invalidFields);
@@ -1140,119 +1149,11 @@
     }
 
     function normalizeLoginFieldNames(fieldNames, message, responseData) {
-        const names = Array.isArray(fieldNames) ? fieldNames : [];
-        const extraNames = [];
-
-        if (responseData) {
-            if (responseData.field) {
-                extraNames.push(responseData.field);
-            }
-
-            if (responseData.errorField) {
-                extraNames.push(responseData.errorField);
-            }
-
-            if (responseData.target) {
-                extraNames.push(responseData.target);
-            }
-
-            if (responseData.reason) {
-                extraNames.push(responseData.reason);
-            }
-
-            if (responseData.code) {
-                extraNames.push(responseData.code);
-            }
-        }
-
-        const normalized = names
-            .concat(extraNames)
-            .map(function (name) {
-                return String(name || '').toLowerCase();
-            })
-            .filter(Boolean);
-
-        const messageText = String(message || '').toLowerCase();
-
-        const hasPasswordField = normalized.some(function (name) {
-            return (
-                name === 'password' ||
-                name === 'pw' ||
-                name === 'mpw' ||
-                name === 'loginpassword' ||
-                name.indexOf('password') > -1 ||
-                name.indexOf('pw') > -1 ||
-                name.indexOf('비밀번호') > -1
-            );
-        });
-
-        const hasIdField = normalized.some(function (name) {
-            return (
-                name === 'id' ||
-                name === 'email' ||
-                name === 'memail' ||
-                name === 'loginid' ||
-                name.indexOf('id') > -1 ||
-                name.indexOf('email') > -1 ||
-                name.indexOf('아이디') > -1 ||
-                name.indexOf('이메일') > -1 ||
-                name.indexOf('not_found') > -1 ||
-                name.indexOf('notfound') > -1 ||
-                name.indexOf('no_user') > -1
-            );
-        });
-
-        if (hasPasswordField && !hasIdField) {
-            return ['password', 'pw', 'mPw', 'loginPassword'];
-        }
-
-        if (hasIdField && !hasPasswordField) {
-            return ['id', 'email', 'mEmail', 'loginId'];
-        }
-
-        if (
-            messageText.indexOf('비밀번호') > -1 ||
-            messageText.indexOf('password') > -1 ||
-            messageText.indexOf('pw') > -1
-        ) {
-            return ['password', 'pw', 'mPw', 'loginPassword'];
-        }
-
-        if (
-            messageText.indexOf('아이디') > -1 ||
-            messageText.indexOf('이메일') > -1 ||
-            messageText.indexOf('email') > -1 ||
-            messageText.indexOf('id') > -1
-        ) {
-            return ['id', 'email', 'mEmail', 'loginId'];
-        }
-
         return ['id', 'email', 'mEmail', 'loginId'];
     }
 
     function getLoginFieldMessage(field, fallbackMessage) {
-        const name = String(field.name || '').toLowerCase();
-        const id = String(field.id || '').toLowerCase();
-
-        if (
-            name.indexOf('password') > -1 ||
-            name.indexOf('pw') > -1 ||
-            id.indexOf('password') > -1 ||
-            id.indexOf('pw') > -1
-        ) {
-            return '비밀번호가 올바르지 않습니다.';
-        }
-
-        if (
-            name.indexOf('id') > -1 ||
-            name.indexOf('email') > -1 ||
-            id.indexOf('id') > -1 ||
-            id.indexOf('email') > -1
-        ) {
-            return '아이디가 올바르지 않습니다.';
-        }
-
-        return fallbackMessage || '입력값을 다시 확인해 주세요.';
+        return fallbackMessage || '아이디 또는 비밀번호가 올바르지 않습니다.';
     }
 
     function getLoginFailFields(form) {
@@ -1264,17 +1165,12 @@
             const id = (field.id || '').toLowerCase();
 
             return (
-                type === 'password' ||
                 type === 'email' ||
                 type === 'text' ||
                 name.indexOf('email') > -1 ||
                 name.indexOf('id') > -1 ||
-                name.indexOf('pw') > -1 ||
-                name.indexOf('password') > -1 ||
                 id.indexOf('email') > -1 ||
-                id.indexOf('id') > -1 ||
-                id.indexOf('pw') > -1 ||
-                id.indexOf('password') > -1
+                id.indexOf('id') > -1
             );
         });
     }
@@ -1287,20 +1183,14 @@
         if (form.id === 'loginForm') {
             removeLoginSummary(form);
 
-            const loginFieldNames = normalizeLoginFieldNames(fieldNames, message, responseData);
-
-            targetFields = findFieldsByNames(form, loginFieldNames);
-
-            if (targetFields.length === 0) {
-                targetFields = findFieldsByNames(form, ['id', 'email', 'mEmail', 'loginId']);
-            }
+            targetFields = findFieldsByNames(form, ['id', 'email', 'mEmail', 'loginId']);
 
             if (targetFields.length === 0) {
                 targetFields = getLoginFailFields(form).slice(0, 1);
             }
 
             targetFields.forEach(function (field) {
-                setFieldError(field, getLoginFieldMessage(field, message));
+                setFieldError(field, message || '아이디 또는 비밀번호가 올바르지 않습니다.');
             });
 
             removeLoginSummary(form);
@@ -1323,7 +1213,14 @@
             setFieldError(field, message || '입력값을 다시 확인해 주세요.');
         });
 
-        showInlineSummary(form, message || '입력한 정보를 다시 확인해 주세요.');
+        if (form.id !== 'signupForm') {
+            showInlineSummary(form, message || '입력한 정보를 다시 확인해 주세요.');
+        } else {
+            form.querySelectorAll('.auth-invalid-summary').forEach(function (summary) {
+                summary.remove();
+            });
+        }
+
         shakeFields(targetFields);
 
         if (targetFields[0]) {
@@ -1425,7 +1322,8 @@
                     const failMessage = data.message || options.failMessage || '요청 처리에 실패했습니다.';
 
                     if (options.inlineFail) {
-                        markInvalidFields(form, failMessage, data.fields || options.invalidFieldNames || [], data);
+                        const failFields = data.fields || (data.field ? [data.field] : options.invalidFieldNames || []);
+                        markInvalidFields(form, failMessage, failFields, data);
                         return;
                     }
 
