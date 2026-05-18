@@ -1,53 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
     <title>지출메이트</title>
-
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/home.css?v=3">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/auth-modal.css?v=4">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/auth-modal-terms-addition.css?v=4">
+    <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
 </head>
 <body>
 
-<header class="site-header">
-    <h1 class="site-logo">지출메이트</h1>
-
-    <div class="header-action-area"
-         id="headerActionArea"
-         data-server-login="${not empty sessionScope.loginUser}">
-
-        <a href="#"
-           class="auth-link"
-           id="headerAuthLink"
-           data-auth-open="login">
-            로그인 / 회원가입
-        </a>
-
-        <a href="${pageContext.request.contextPath}/mypage"
-           class="user-profile-link"
-           id="headerProfileLink"
-           aria-label="마이페이지로 이동">
-            <span class="user-avatar" id="userAvatarInitial">
-                <c:choose>
-                    <c:when test="${not empty sessionScope.loginUser.nickname}">
-                        ${fn:substring(sessionScope.loginUser.nickname, 0, 1)}
-                    </c:when>
-                    <c:when test="${not empty sessionScope.loginUser.name}">
-                        ${fn:substring(sessionScope.loginUser.name, 0, 1)}
-                    </c:when>
-                    <c:otherwise>M</c:otherwise>
-                </c:choose>
-            </span>
-        </a>
-    </div>
-</header>
+<%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
 
 <main>
-
     <section class="hero-section">
         <div class="hero-bg"></div>
         <div class="opening-box" aria-hidden="true"></div>
@@ -149,28 +111,24 @@
             </article>
         </div>
     </section>
-
 </main>
 
 <div class="floating-buttons">
-    <button type="button" class="floating-btn ai-btn" aria-label="AI 멘토링">
+    <button type="button" class="floating-btn ai-btn" aria-label="AI 멘토링" data-auth-required="true">
         <img src="${pageContext.request.contextPath}/images/ai_modal.jpg?v=1" alt="AI 멘토링">
     </button>
 
-    <button type="button" class="floating-btn chat-btn" aria-label="1대1 질의응답">
+    <button type="button" class="floating-btn chat-btn" aria-label="1대1 질의응답" data-auth-required="true">
         <span>···</span>
     </button>
 </div>
 
-<footer class="footer">
-    <p>© 지출메이트</p>
-</footer>
-
-
+<%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
 
 <%@ include file="/WEB-INF/views/common/modal/authModal.jspf" %>
 
-<script src="${pageContext.request.contextPath}/js/auth-modal.js"></script>
-<script src="${pageContext.request.contextPath}/js/pages/index.js?v=3"></script>
+<%@ include file="/WEB-INF/views/common/include/scripts.jspf" %>
+<script src="${pageContext.request.contextPath}/js/pages/index.js?v=4"></script>
+
 </body>
 </html>

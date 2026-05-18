@@ -8,112 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const fanSection = document.querySelector(".fan-card-section");
     const fanCardWrap = document.querySelector(".fan-card-wrap");
 
-    const headerActionArea = document.getElementById("headerActionArea");
-    const userAvatarInitial = document.getElementById("userAvatarInitial");
-
     let ticking = false;
-
-    function getStoredLoginState() {
-        try {
-            const raw = localStorage.getItem("jichulmateLoginState");
-            return raw ? JSON.parse(raw) : null;
-        } catch (error) {
-            return null;
-        }
-    }
-
-    function setStoredLoginState(payload) {
-        try {
-            localStorage.setItem("jichulmateLoginState", JSON.stringify(payload));
-        } catch (error) {
-            console.error("로그인 상태 저장 실패:", error);
-        }
-    }
-
-    function clearStoredLoginState() {
-        try {
-            localStorage.removeItem("jichulmateLoginState");
-        } catch (error) {
-            console.error("로그인 상태 삭제 실패:", error);
-        }
-    }
-
-    function getInitialCharacter(text) {
-        if (!text || typeof text !== "string") {
-            return "M";
-        }
-
-        const trimmed = text.trim();
-
-        if (!trimmed) {
-            return "M";
-        }
-
-        return trimmed.charAt(0).toUpperCase();
-    }
-
-    function applyLoggedInUi(displayName) {
-        if (!headerActionArea) {
-            return;
-        }
-
-        headerActionArea.classList.remove("is-logged-out");
-        headerActionArea.classList.add("is-logged-in");
-
-        if (userAvatarInitial) {
-            userAvatarInitial.textContent = getInitialCharacter(displayName);
-        }
-    }
-
-    function applyLoggedOutUi() {
-        if (!headerActionArea) {
-            return;
-        }
-
-        headerActionArea.classList.remove("is-logged-in");
-        headerActionArea.classList.add("is-logged-out");
-
-        if (userAvatarInitial) {
-            userAvatarInitial.textContent = "M";
-        }
-    }
-
-    function initializeHeaderAuthState() {
-        if (!headerActionArea) {
-            return;
-        }
-
-        const serverLogin = headerActionArea.dataset.serverLogin === "true";
-        const storedLogin = getStoredLoginState();
-
-        if (serverLogin) {
-            headerActionArea.classList.add("is-logged-in");
-            headerActionArea.classList.remove("is-logged-out");
-            return;
-        }
-
-        if (storedLogin && storedLogin.isLoggedIn) {
-            applyLoggedInUi(storedLogin.displayName || "Mate");
-            return;
-        }
-
-        applyLoggedOutUi();
-    }
-
-    function markClientLoggedIn(displayName) {
-        const payload = {
-            isLoggedIn: true,
-            displayName: displayName || "Mate"
-        };
-
-        setStoredLoginState(payload);
-        applyLoggedInUi(payload.displayName);
-    }
-
-    function markClientLoggedOut() {
-        clearStoredLoginState();
-        applyLoggedOutUi();
-    }
 
     function updateHeaderState() {
         if (!header || !heroSection) {
@@ -198,7 +93,11 @@ document.addEventListener("DOMContentLoaded", function () {
         ticking = true;
     }
 
-    window.addEventListener("load", function () {
+    function startOpeningAnimation() {
+        if (document.body.classList.contains("is-opening-loaded")) {
+            return;
+        }
+
         document.body.classList.add("is-opening-loaded");
 
         window.setTimeout(function () {
@@ -207,7 +106,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         updateHeaderState();
         updateCards();
-    });
+    }
+
+    if (document.readyState === "complete") {
+        startOpeningAnimation();
+    } else {
+        window.addEventListener("load", startOpeningAnimation);
+    }
 
     window.addEventListener("scroll", handleScroll, { passive: true });
 
@@ -216,17 +121,6 @@ document.addEventListener("DOMContentLoaded", function () {
         updateCards();
     });
 
-    window.addEventListener("jichulmate:auth-success", function (event) {
-        const detail = event.detail || {};
-        const displayName = detail.displayName || detail.nickname || detail.name || "Mate";
-        markClientLoggedIn(displayName);
-    });
-
-    window.addEventListener("jichulmate:logout", function () {
-        markClientLoggedOut();
-    });
-
-    initializeHeaderAuthState();
     updateHeaderState();
     updateCards();
 

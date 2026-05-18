@@ -46,6 +46,8 @@ public class AuthApiController {
 
             User user = loginUser.get();
 
+
+            session.setAttribute("loginUser", user);
             session.setAttribute("loginUserId", user.getUserId());
             session.setAttribute("loginId", user.getLoginId());
             session.setAttribute("nickname", user.getNickname());
@@ -57,6 +59,13 @@ public class AuthApiController {
             body.put("redirectTo", "/");
             body.put("nickname", user.getNickname());
             body.put("role", user.getRole());
+
+            Map<String, Object> userBody = new LinkedHashMap<>();
+            userBody.put("userId", user.getUserId());
+            userBody.put("loginId", user.getLoginId());
+            userBody.put("nickname", user.getNickname());
+            userBody.put("role", user.getRole());
+            body.put("user", userBody);
 
             return ResponseEntity.ok(body);
 
@@ -86,7 +95,7 @@ public class AuthApiController {
             Map<String, Object> body = new LinkedHashMap<>();
             body.put("ok", true);
             body.put("message", "회원가입이 완료되었습니다.");
-            body.put("redirectTo", "/");
+//            body.put("redirectTo", "/");
 
             return ResponseEntity.ok(body);
 
@@ -201,6 +210,23 @@ public class AuthApiController {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("ok", true);
         body.put("message", "로그아웃되었습니다.");
+
+        return body;
+    }
+
+    @GetMapping("/api/auth/status")
+    public Map<String, Object> status(HttpSession session) {
+        Map<String, Object> body = new LinkedHashMap<>();
+
+        Object loginUser = session.getAttribute("loginUser");
+        Object loginUserId = session.getAttribute("loginUserId");
+
+        boolean loggedIn = loginUser != null || loginUserId != null;
+
+        body.put("ok", true);
+        body.put("loggedIn", loggedIn);
+        body.put("nickname", session.getAttribute("nickname"));
+        body.put("role", session.getAttribute("role"));
 
         return body;
     }

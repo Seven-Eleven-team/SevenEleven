@@ -250,17 +250,6 @@
         }
 
         const serverLogin = header.area.dataset.serverLogin === 'true';
-        const navigationType = getNavigationType();
-
-        if (serverLogin && navigationType === 'reload') {
-            forceLogoutAndResetHeader();
-            return;
-        }
-
-        if (serverLogin && sessionStorage.getItem(AUTH_ACTIVE_KEY) !== 'true') {
-            forceLogoutAndResetHeader();
-            return;
-        }
 
         if (serverLogin) {
             setHeaderLoggedIn(null, null);

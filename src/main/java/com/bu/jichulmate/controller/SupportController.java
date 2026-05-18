@@ -1,16 +1,13 @@
 package com.bu.jichulmate.controller;
 
-import org.springframework.ui.Model;
 import com.bu.jichulmate.dto.support.InquiryCreateRequest;
 import com.bu.jichulmate.service.SupportService;
+import com.bu.jichulmate.util.SessionUtils;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,25 +16,53 @@ public class SupportController {
 
     private final SupportService supportService;
 
+    /**
+     * 고객센터 메인
+     * URL: /support
+     * View: /WEB-INF/views/support/support.jsp
+     */
+    @GetMapping
+    public String supportMain() {
+        return "support/support";
+    }
+
+    /**
+     * 문의 목록
+     * URL: /support/qna
+     * View: /WEB-INF/views/support/qna.jsp
+     */
     @GetMapping("/qna")
-    public String qna(Model model){
-        Long userId = 1L;
+    public String qna(HttpSession session, Model model) {
+        Long userId = SessionUtils.getLoginUserId(session);
         model.addAttribute("qnas", supportService.getMyInquiries(userId));
         return "support/qna";
     }
 
+    /**
+     * 문의 작성 페이지
+     * URL: /support/qna/write
+     * View: /WEB-INF/views/support/qnaForm.jsp
+     */
     @GetMapping("/qna/write")
     public String writePage() {
-        return "support/write";
+        return "support/qnaForm";
     }
 
+    /**
+     * 문의 등록
+     * URL: /support/qna
+     */
     @PostMapping("/qna")
-    public String create(InquiryCreateRequest request){
-        Long userId = 1L;
+    public String create(InquiryCreateRequest request, HttpSession session) {
+        Long userId = SessionUtils.getLoginUserId(session);
         supportService.createInquiry(userId, request);
         return "redirect:/support/qna";
     }
 
+    /**
+     * FAQ 또는 상담 유형 답변 조회
+     * URL: /support/type?type=1
+     */
     @GetMapping("/type")
     @ResponseBody
     public String getAnswer(@RequestParam int type) {
