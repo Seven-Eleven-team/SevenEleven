@@ -30,6 +30,10 @@
                             id="signupEmail"
                             name="mEmail"
                             autocomplete="email"
+                            inputmode="email"
+                            maxlength="100"
+                            pattern="^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+                            data-field="mEmail"
                             placeholder="이메일을 입력해 주세요"
                             required
                     >
@@ -40,6 +44,7 @@
                             type="text"
                             id="signupNickname"
                             name="mNickname"
+                            data-field="mNickname"
                             autocomplete="nickname"
                             placeholder="닉네임을 입력해 주세요"
                             required
@@ -53,13 +58,15 @@
                                 id="signupPassword"
                                 name="mPw"
                                 autocomplete="new-password"
+                                minlength="8"
+                                data-field="mPw"
                                 placeholder="비밀번호를 입력해 주세요"
                                 required
                         >
                     </div>
 
                     <label class="label" for="signupGender">성별</label>
-                    <select class="input" id="signupGender" name="mGender" required>
+                    <select class="input" id="signupGender" name="mGender" data-field="mGender" required>
                         <option value="">선택</option>
                         <option value="F">여성</option>
                         <option value="M">남성</option>
@@ -72,6 +79,7 @@
                             type="date"
                             id="signupBirthDate"
                             name="mBirthDate"
+                            data-field="mBirthDate"
                             required
                     >
 

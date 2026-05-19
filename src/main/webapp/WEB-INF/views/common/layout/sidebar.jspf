@@ -1,11 +1,27 @@
-<nav class="sidebar">
+<%@ page pageEncoding="UTF-8" %>
+
+<nav class="sidebar" aria-label="사이드 메뉴">
     <ul>
-        <li><a href="/expense"> 지출관리 </a> </li>
-        <li><a href="/subscription"> OTT 구독 </a> </li>
-        <li><a href="/dashboard"> 지출통계 </a> </li>
-        <li><a href="/board"> 게시판 </a> </li>
-        <li><a href="/support"> 고객센터 </a> </li>
-        <li><a href="/party"> 판매자 등록 </a> </li>
-        <li><a href="/logout"> 로그아웃 </a> </li>
+        <li>
+            <a href="${pageContext.request.contextPath}/expense" data-auth-required="true">지출관리</a>
+        </li>
+        <li>
+            <a href="${pageContext.request.contextPath}/subscription" data-auth-required="true">OTT 구독</a>
+        </li>
+        <li>
+            <a href="${pageContext.request.contextPath}/dashboard" data-auth-required="true">지출통계</a>
+        </li>
+        <li>
+            <a href="${pageContext.request.contextPath}/board">게시판</a>
+        </li>
+        <li>
+            <a href="${pageContext.request.contextPath}/support">고객센터</a>
+        </li>
+        <li>
+            <a href="${pageContext.request.contextPath}/party" data-auth-required="true">판매자 등록</a>
+        </li>
+        <li>
+            <a href="#" id="sidebarLogoutButton">로그아웃</a>
+        </li>
     </ul>
 </nav>

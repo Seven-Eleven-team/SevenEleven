@@ -8,115 +8,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const fanSection = document.querySelector(".fan-card-section");
     const fanCardWrap = document.querySelector(".fan-card-wrap");
 
-    const headerActionArea = document.getElementById("headerActionArea");
-    const userAvatarInitial = document.getElementById("userAvatarInitial");
+    const globalMenuToggle = document.getElementById("globalMenuToggle");
+    const globalMenuPanel = document.getElementById("globalMenuPanel");
+    const globalMenuBackdrop = document.getElementById("globalMenuBackdrop");
+    const globalMenuClose = document.getElementById("globalMenuClose");
 
     let ticking = false;
 
-    function getStoredLoginState() {
-        try {
-            const raw = localStorage.getItem("jichulmateLoginState");
-            return raw ? JSON.parse(raw) : null;
-        } catch (error) {
-            return null;
-        }
-    }
-
-    function setStoredLoginState(payload) {
-        try {
-            localStorage.setItem("jichulmateLoginState", JSON.stringify(payload));
-        } catch (error) {
-            console.error("로그인 상태 저장 실패:", error);
-        }
-    }
-
-    function clearStoredLoginState() {
-        try {
-            localStorage.removeItem("jichulmateLoginState");
-        } catch (error) {
-            console.error("로그인 상태 삭제 실패:", error);
-        }
-    }
-
-    function getInitialCharacter(text) {
-        if (!text || typeof text !== "string") {
-            return "M";
-        }
-
-        const trimmed = text.trim();
-
-        if (!trimmed) {
-            return "M";
-        }
-
-        return trimmed.charAt(0).toUpperCase();
-    }
-
-    function applyLoggedInUi(displayName) {
-        if (!headerActionArea) {
-            return;
-        }
-
-        headerActionArea.classList.remove("is-logged-out");
-        headerActionArea.classList.add("is-logged-in");
-
-        if (userAvatarInitial) {
-            userAvatarInitial.textContent = getInitialCharacter(displayName);
-        }
-    }
-
-    function applyLoggedOutUi() {
-        if (!headerActionArea) {
-            return;
-        }
-
-        headerActionArea.classList.remove("is-logged-in");
-        headerActionArea.classList.add("is-logged-out");
-
-        if (userAvatarInitial) {
-            userAvatarInitial.textContent = "M";
-        }
-    }
-
-    function initializeHeaderAuthState() {
-        if (!headerActionArea) {
-            return;
-        }
-
-        const serverLogin = headerActionArea.dataset.serverLogin === "true";
-        const storedLogin = getStoredLoginState();
-
-        if (serverLogin) {
-            headerActionArea.classList.add("is-logged-in");
-            headerActionArea.classList.remove("is-logged-out");
-            return;
-        }
-
-        if (storedLogin && storedLogin.isLoggedIn) {
-            applyLoggedInUi(storedLogin.displayName || "Mate");
-            return;
-        }
-
-        applyLoggedOutUi();
-    }
-
-    function markClientLoggedIn(displayName) {
-        const payload = {
-            isLoggedIn: true,
-            displayName: displayName || "Mate"
-        };
-
-        setStoredLoginState(payload);
-        applyLoggedInUi(payload.displayName);
-    }
-
-    function markClientLoggedOut() {
-        clearStoredLoginState();
-        applyLoggedOutUi();
-    }
-
     function updateHeaderState() {
         if (!header || !heroSection) {
+            if (header) {
+                header.classList.add("is-solid");
+            }
             return;
         }
 
@@ -127,6 +30,70 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             header.classList.remove("is-solid");
         }
+    }
+
+    function openGlobalMenu() {
+        if (!globalMenuPanel || !globalMenuBackdrop || !globalMenuToggle) {
+            return;
+        }
+
+        document.body.classList.add("global-menu-open");
+        globalMenuPanel.classList.add("is-open");
+        globalMenuBackdrop.classList.add("is-open");
+
+        globalMenuPanel.setAttribute("aria-hidden", "false");
+        globalMenuBackdrop.setAttribute("aria-hidden", "false");
+        globalMenuToggle.setAttribute("aria-expanded", "true");
+    }
+
+    function closeGlobalMenu() {
+        if (!globalMenuPanel || !globalMenuBackdrop || !globalMenuToggle) {
+            return;
+        }
+
+        document.body.classList.remove("global-menu-open");
+        globalMenuPanel.classList.remove("is-open");
+        globalMenuBackdrop.classList.remove("is-open");
+
+        globalMenuPanel.setAttribute("aria-hidden", "true");
+        globalMenuBackdrop.setAttribute("aria-hidden", "true");
+        globalMenuToggle.setAttribute("aria-expanded", "false");
+    }
+
+    function bindGlobalMenu() {
+        if (globalMenuToggle) {
+            globalMenuToggle.addEventListener("click", function () {
+                const isOpen = globalMenuPanel && globalMenuPanel.classList.contains("is-open");
+
+                if (isOpen) {
+                    closeGlobalMenu();
+                } else {
+                    openGlobalMenu();
+                }
+            });
+        }
+
+        if (globalMenuClose) {
+            globalMenuClose.addEventListener("click", closeGlobalMenu);
+        }
+
+        if (globalMenuBackdrop) {
+            globalMenuBackdrop.addEventListener("click", closeGlobalMenu);
+        }
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") {
+                closeGlobalMenu();
+            }
+        });
+
+        document.addEventListener("click", function (event) {
+            const menuLink = event.target.closest(".global-menu-nav a");
+
+            if (menuLink) {
+                closeGlobalMenu();
+            }
+        });
     }
 
     function clamp(value, min, max) {
@@ -198,7 +165,11 @@ document.addEventListener("DOMContentLoaded", function () {
         ticking = true;
     }
 
-    window.addEventListener("load", function () {
+    function startOpeningAnimation() {
+        if (document.body.classList.contains("is-opening-loaded")) {
+            return;
+        }
+
         document.body.classList.add("is-opening-loaded");
 
         window.setTimeout(function () {
@@ -207,7 +178,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
         updateHeaderState();
         updateCards();
-    });
+    }
+
+    bindGlobalMenu();
+
+    if (document.readyState === "complete") {
+        startOpeningAnimation();
+    } else {
+        window.addEventListener("load", startOpeningAnimation);
+    }
 
     window.addEventListener("scroll", handleScroll, { passive: true });
 
@@ -216,17 +195,6 @@ document.addEventListener("DOMContentLoaded", function () {
         updateCards();
     });
 
-    window.addEventListener("jichulmate:auth-success", function (event) {
-        const detail = event.detail || {};
-        const displayName = detail.displayName || detail.nickname || detail.name || "Mate";
-        markClientLoggedIn(displayName);
-    });
-
-    window.addEventListener("jichulmate:logout", function () {
-        markClientLoggedOut();
-    });
-
-    initializeHeaderAuthState();
     updateHeaderState();
     updateCards();
 

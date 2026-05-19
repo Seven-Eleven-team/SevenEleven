@@ -1,294 +1,706 @@
-/* --- 1. 기본 초기화 --- */
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
-body { background-color: #f4f7f9; color: #333; overflow-y: scroll; }
 
-/* --- 2. 상단 헤더 --- */
-.top-nav {
-    background-color: #1e2d4d; color: white; height: 70px;
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 0 40px; position: sticky; top: 0; z-index: 100;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Pretendard', sans-serif;
 }
-.logo { font-size: 22px; font-weight: bold; cursor: pointer; }
 
-/* --- 3. 메인 레이아웃 --- */
-.container {
-    display: flex;
-    width: 1397px;
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    background-color: #f4f7f9;
+    color: #222;
+    overflow-y: auto;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font-family: inherit;
+}
+
+/* =========================
+   2. 마이페이지 전용 body
+========================= */
+
+.mypage-body {
+    min-height: 100vh;
+    background-color: #f4f7f9;
+}
+
+/*
+   header.jspf가 fixed / sticky 구조여도
+   본문이 너무 위로 붙지 않게 여백 확보
+*/
+.mypage-body .site-header,
+.mypage-body .top-nav {
+    z-index: 2000;
+}
+
+/* =========================
+   3. 마이페이지 전체 레이아웃
+========================= */
+
+.mypage-container {
+    width: min(1397px, calc(100% - 40px));
     margin: 0 auto;
-    padding: 40px 0;
-    gap: 57px;
+    padding: 70px 0 70px;
+    display: flex;
+    align-items: stretch;
     justify-content: flex-start;
-    align-items: flex-start;
+    gap: 26px;
 }
 
-/* --- 4. 사이드바 --- */
+/* =========================
+   4. 사이드바
+========================= */
+
 .sidebar {
-    width: 253px; height: 832px; background: white; border: 1px solid #dbdbdb;
-    border-radius: 20px; display: flex; flex-direction: column;
-    justify-content: center; flex-shrink: 0;
-}
-.sidebar ul { list-style: none; padding: 0; margin: 0; width: 100%; }
-.sidebar ul li a {
-    display: block; width: 100%; padding: 22px 0;
-    text-align: center; text-decoration: none !important;
-    color: #555 !important; font-size: 16px;
-}
-/* 대시보드 활성화 색상 (빨간색) */
-.sidebar ul li.active a { color: #ff4d4d !important; font-weight: bold !important; }
-
-/* --- 5. 대시보드 메인 콘텐츠 --- */
-.dashboard {
-    width: 1087px;
-    height: 832px;
-    display: flex; flex-direction: column;
-    gap: 30px;
+    width: 253px;
+    min-height: 832px;
+    background: #ffffff;
+    border: 1px solid #cfcfcf;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     flex-shrink: 0;
 }
 
-/* 내 정보 카드 */
-.profile-combined-card {
-    background: white; border: 1px solid #dbdbdb; border-radius: 20px;
-    display: flex; padding: 30px; gap: 40px; height: 380px; flex-shrink: 0;
-}
-.info-side { flex: 1.2; }
-.card-title-center { text-align: center; margin-bottom: 20px; font-size: 18px; font-weight: bold; }
-.info-body { display: flex; gap: 30px; }
-.profile-img-box { width: 150px; height: 180px; background: #eee; border-radius: 15px; overflow: hidden; }
-.profile-img-box img { width: 100%; height: 100%; object-fit: cover; }
-.edit-info-btn { width: 150px; margin-top: 10px; padding: 8px; background: #1e2d4d; color: white; border: none; border-radius: 8px; cursor: pointer; }
-
-.text-area { flex: 1; display: flex; flex-direction: column; }
-.info-row { display: flex; align-items: center; padding: 15px 0; border-bottom: 1px solid #dbdbdb; }
-.info-row span { width: 80px; font-weight: bold; }
-.withdraw-container { display: flex; justify-content: flex-end; margin-top: auto; }
-.withdraw-link { font-size: 13px; color: #333; text-decoration: underline; font-weight: bold; cursor: pointer; }
-
-/* 대표 계좌 카드 */
-/* ========================= */
-
-.single-account-box{
-
-    border:2px solid #1e2d4d;
-
-    border-radius:20px;
-
-    background:#f8fafc;
-
-    padding:28px 24px;
-
-    height:220px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    justify-content:space-between;
+.sidebar ul {
+    list-style: none;
+    width: 100%;
+    padding: 0;
+    margin: 0;
 }
 
-/* 상단 */
-
-.account-top{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:16px;
-}
-
-/* 은행 로고 */
-
-.main-bank-logo{
-
-    width:60px;
-    height:60px;
-
-    border-radius:50%;
-
-    background:#2563eb;
-
-    color:white;
-
-    display:flex;
-
-    justify-content:center;
-    align-items:center;
-
-    font-size:24px;
-
-    font-weight:700;
-}
-
-/* 은행 정보 */
-
-.main-bank-info{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:5px;
-}
-
-.main-bank-info strong{
-
-    font-size:18px;
-
-    color:#222;
-}
-
-.main-bank-info span{
-
-    font-size:14px;
-
-    color:#666;
-}
-
-/* 안내 문구 */
-
-.account-notice{
-
-    font-size:14px;
-
-    line-height:1.6;
-
-    color:#666;
-
-    background:white;
-
-    border-radius:12px;
-
-    padding:14px 16px;
-
-    border:1px solid #e5e7eb;
-}
-
-/* 버튼 */
-
-.change-account-btn{
-
-    width:100%;
-
-    height:48px;
-
-    border:none;
-
-    border-radius:12px;
-
-    background:#1e2d4d;
-
-    color:white;
-
-    font-size:14px;
-
-    font-weight:600;
-
-    cursor:pointer;
-
-    transition:0.2s;
-}
-
-.change-account-btn:hover{
-
-    opacity:0.92;
-}
-
-/* --- 6. 하단 구독 & 목표 --- */
-.bottom-row { display: flex; gap: 30px; flex: 1; min-height: 0; }
-.card {
-    background: white; border-radius: 20px; border: 1px solid #dbdbdb;
-    padding: 25px; flex: 1; display: flex; flex-direction: column;
-}
-.card-title { font-size: 18px; font-weight: bold; text-align: center; padding-bottom: 15px; margin-bottom: 20px; border-bottom: 2px solid #000; }
-
-.sub-item {
-    display: flex; align-items: center; padding: 15px 0; border-bottom: 1px solid #eee;
+.sidebar ul li {
     width: 100%;
 }
-.sub-info { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+
+.sidebar ul li a {
+    display: block;
+    width: 100%;
+    padding: 22px 0;
+    text-align: center;
+    color: #111 !important;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none !important;
+    transition: color 0.2s ease, font-weight 0.2s ease;
+}
+
+.sidebar ul li a:hover {
+    color: #ff4d4d !important;
+}
+
+.sidebar ul li.active a,
+.sidebar ul li.active-red a {
+    color: #ff4d4d !important;
+    font-weight: 700 !important;
+}
+
+/* =========================
+   5. 대시보드 메인 영역
+========================= */
+
+.dashboard {
+    width: calc(100% - 253px - 26px);
+    min-height: 832px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    flex: 1;
+    min-width: 0;
+}
+
+/* =========================
+   6. 내 정보 카드
+========================= */
+
+.profile-combined-card {
+    width: 100%;
+    min-height: 360px;
+    background: #ffffff;
+    border: 1px solid #cfcfcf;
+    border-radius: 20px;
+    padding: 30px 58px 28px;
+    display: flex;
+    gap: 52px;
+    flex-shrink: 0;
+}
+
+.info-side {
+    flex: 1.15;
+    min-width: 0;
+}
+
+.alert-side {
+    flex: 0.85;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-title-center {
+    text-align: center;
+    margin-bottom: 18px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #111;
+}
+
+.info-body {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+}
+
+.profile-section {
+    width: 190px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.profile-img-box {
+    width: 190px;
+    height: 238px;
+    background: #f0f0f0;
+    overflow: hidden;
+}
+
+.profile-img-box img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.edit-info-btn {
+    width: 190px;
+    height: 30px;
+    margin-top: 14px;
+    border: none;
+    border-radius: 14px;
+    background: #173456;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.edit-info-btn:hover {
+    opacity: 0.92;
+}
+
+.text-area {
+    flex: 1;
+    min-height: 282px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 56px;
+}
+
+.info-row {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    align-items: center;
+    padding: 0 0 24px;
+    border-bottom: none;
+    font-size: 16px;
+}
+
+.info-row span {
+    font-weight: 600;
+    color: #111;
+}
+
+.info-row strong {
+    font-weight: 500;
+    color: #111;
+}
+
+.withdraw-container {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.withdraw-link {
+    display: inline-block;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #111;
+    font-size: 14px;
+    color: #111;
+    cursor: pointer;
+}
+
+/* =========================
+   7. 입금 계좌 카드
+========================= */
+
+.single-account-box {
+    width: 100%;
+    min-height: 220px;
+    border: 2px solid #1e2d4d;
+    border-radius: 20px;
+    background: #f8fafc;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.account-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.main-bank-logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #2563eb;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.main-bank-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.main-bank-info strong {
+    font-size: 18px;
+    color: #222;
+}
+
+.main-bank-info span {
+    font-size: 14px;
+    color: #666;
+}
+
+.account-notice {
+    margin: 16px 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #666;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 14px 16px;
+    border: 1px solid #e5e7eb;
+}
+
+.change-account-btn {
+    width: 100%;
+    height: 48px;
+    border: none;
+    border-radius: 12px;
+    background: #1e2d4d;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.change-account-btn:hover {
+    opacity: 0.92;
+}
+
+/* =========================
+   8. 하단 카드 영역
+========================= */
+
+.bottom-row {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1.7fr 1fr;
+    gap: 26px;
+    flex: 1;
+    min-height: 450px;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 20px;
+    border: 1px solid #cfcfcf;
+    padding: 28px 36px;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.card-title {
+    position: relative;
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+    border-bottom: 2px solid #222;
+    font-size: 18px;
+    font-weight: 700;
+    color: #111;
+}
+
+.card-title::after {
+    content: "전체 보기>";
+    position: absolute;
+    right: 0;
+    bottom: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #111;
+}
+
+/* =========================
+   9. 내 구독 카드
+========================= */
+
+.sub-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.sub-item {
+    width: 100%;
+    min-height: 116px;
+    display: grid;
+    grid-template-columns: 72px 1fr 92px;
+    align-items: center;
+    gap: 22px;
+    padding: 20px 0;
+    border-bottom: 1px solid #333;
+}
+
+.sub-item:last-child {
+    border-bottom: 1px solid #333;
+}
+
+.sub-icon {
+    width: 64px;
+    height: 64px;
+    background-color: #ffffff;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    flex-shrink: 0;
+}
+
+.sub-icon.gpt {
+    background-image: url('/images/GPTLogo.png');
+}
+
+.sub-icon.youtube {
+    background-image: url('/images/YoutubeLogo.png');
+}
+
+.sub-icon.netflix {
+    background-image: url('/images/NetflixLogo.png');
+}
+
+.sub-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    gap: 18px;
+}
+
+.sub-info strong {
+    font-size: 21px;
+    font-weight: 700;
+    color: #111;
+}
+
+.sub-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    font-size: 16px;
+    color: #111;
+    text-align: right;
+}
+
 .cancel-link {
-    margin-left: auto; font-size: 13px; text-decoration: underline;
-    cursor: pointer; color: #999; white-space: nowrap;
+    justify-self: end;
+    align-self: center;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #111;
+    font-size: 15px;
+    color: #111;
+    cursor: pointer;
+    white-space: nowrap;
 }
-.sub-meta { display: flex; flex-direction: column; gap: 5px; font-size: 14px; color: #666; }
 
-.sub-icon { width: 60px; height: 60px; background-color: #fff; background-position: center; background-repeat: no-repeat; flex-shrink: 0; margin-right: 20px; }
-.sub-icon.gpt { background-image: url('/images/GPTLogo.png'); background-size: 100% 100%; }
-.sub-icon.youtube { background-image: url('/images/YoutubeLogo.png'); background-size: 100%; }
+/* =========================
+   10. 소비 목표 카드
+========================= */
 
-/* --- 그래프 애니메이션 & 색상 전환 --- */
-.progress-bg { width: 100%; height: 35px; background: #e9ecef; border-radius: 20px; overflow: hidden; margin-top: 15px; }
+.goal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 34px;
+    padding-top: 4px;
+}
+
+.goal-item p {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #111;
+}
+
+.progress-bg {
+    width: 100%;
+    height: 42px;
+    background: #cbd8e2;
+    border-radius: 9px;
+    overflow: hidden;
+}
+
 .progress-bar {
-    height: 100%; border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; width: 0;
-    transition: width 1.5s cubic-bezier(0.1, 0.7, 0.1, 1), background-color 1.5s ease;
-}
-.bg-red { background-color: #ff8a80 !important; }
-.bg-yellow { background-color: #fde047 !important; }
-.bg-green { background-color: #a3e635 !important; }
-
-/* --- 7. 모달 팝업 공통 스타일 (회원탈퇴 & 해지안내 통합) --- */
-.modal-overlay, .cancel-modal-overlay {
-    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center;
-}
-
-.modal-content, .cancel-modal-content {
-    background: white; border-radius: 20px; text-align: center; position: relative;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    height: 100%;
+    width: 0;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #111;
+    font-size: 16px;
+    font-weight: 600;
+    transition:
+            width 1.5s cubic-bezier(0.1, 0.7, 0.1, 1),
+            background-color 1.5s ease;
 }
 
-/* 회원탈퇴 모달 전용 사이즈 */
-.modal-content { width: 400px; padding: 30px; }
+.bg-red {
+    background-color: #ff5b5f !important;
+}
 
-/* 해지안내 모달 전용 사이즈 (이미지 시안 반영) */
-.cancel-modal-content { padding: 60px 100px; min-width: 450px; }
-.cancel-modal-content p { font-size: 26px; font-weight: bold; color: #333; margin: 0; }
+.bg-yellow {
+    background-color: #fff875 !important;
+}
 
-/* [중요] X 버튼 스타일 통일 */
-.close-btn, .cancel-close-x {
+.bg-green {
+    background-color: #82f955 !important;
+}
+
+/* =========================
+   11. 모달 팝업
+========================= */
+
+.modal-overlay,
+.cancel-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.45);
+    z-index: 5000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content,
+.cancel-modal-content {
+    background: #ffffff;
+    border-radius: 20px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+}
+
+.modal-content {
+    width: 400px;
+    padding: 30px;
+}
+
+.cancel-modal-content {
+    min-width: 450px;
+    padding: 60px 100px;
+}
+
+.cancel-modal-content p {
+    font-size: 26px;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+}
+
+.close-btn,
+.cancel-close-x {
     position: absolute;
     top: 20px;
     right: 25px;
     font-size: 24px;
-    font-weight: bold;
+    font-weight: 700;
     color: #555;
     cursor: pointer;
     line-height: 1;
-    transition: color 0.2s;
 }
-.close-btn:hover, .cancel-close-x:hover { color: #000; }
 
-/* 회원탈퇴 버튼 */
+.close-btn:hover,
+.cancel-close-x:hover {
+    color: #000;
+}
+
 .leave-btn {
-    margin-top: 20px; background: #1e2d4d; color: white; border: none;
-    padding: 10px 30px; border-radius: 8px; cursor: pointer; font-weight: bold;
+    margin-top: 20px;
+    background: #1e2d4d;
+    color: #ffffff;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
 }
 
-/* --- 페이지 등장 애니메이션 --- */
-.dashboard, .mypost-main, .question-main, .manage-container, .alarm-main, .report-main {
-    animation: fadeUp 0.7s ease;
+/* =========================
+   12. 등장 애니메이션
+========================= */
+
+.dashboard,
+.mypost-main,
+.question-main,
+.manage-container,
+.alarm-main,
+.report-main {
+    animation: fadeUp 0.45s ease;
 }
+
 @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(25px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-/* 입금 계좌 영역 */
-.alert-side{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    justify-content:flex-start;
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* 카드 제목 */
-.card-title-center{
-    text-align:center;
-    margin-bottom:20px;
-    font-size:20px;
-    font-weight:700;
-    color:#222;
+/* =========================
+   13. 반응형 보정
+========================= */
+
+@media (max-width: 1280px) {
+    .mypage-container {
+        width: calc(100% - 32px);
+        gap: 20px;
+    }
+
+    .sidebar {
+        width: 230px;
+    }
+
+    .dashboard {
+        width: calc(100% - 230px - 20px);
+    }
+
+    .profile-combined-card {
+        padding: 28px 36px;
+        gap: 32px;
+    }
+
+    .bottom-row {
+        grid-template-columns: 1.5fr 1fr;
+        gap: 20px;
+    }
 }
-.sub-icon.netflix {
-    background-image: url('/images/NetflixLogo.png');
-    background-size: 100% 100%;
+
+@media (max-width: 1024px) {
+    .mypage-container {
+        flex-direction: column;
+        padding-top: 40px;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-height: auto;
+        padding: 18px 0;
+    }
+
+    .sidebar ul {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .sidebar ul li a {
+        padding: 12px 0;
+        font-size: 14px;
+    }
+
+    .dashboard {
+        width: 100%;
+    }
+
+    .profile-combined-card {
+        flex-direction: column;
+    }
+
+    .bottom-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .mypage-container {
+        width: calc(100% - 24px);
+    }
+
+    .sidebar ul {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .profile-combined-card {
+        padding: 24px;
+    }
+
+    .info-body {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .text-area {
+        width: 100%;
+        padding-top: 20px;
+        min-height: auto;
+    }
+
+    .info-row {
+        grid-template-columns: 100px 1fr;
+    }
+
+    .sub-item {
+        grid-template-columns: 56px 1fr;
+    }
+
+    .cancel-link {
+        grid-column: 2;
+        justify-self: start;
+    }
+
+    .sub-info {
+        grid-template-columns: 1fr;
+    }
+
+    .sub-meta {
+        text-align: left;
+    }
 }

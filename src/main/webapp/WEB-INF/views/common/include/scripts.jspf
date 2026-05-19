@@ -1,2 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
-<script src="/js/auth-modal.js"></script>
+
+<script src="${pageContext.request.contextPath}/js/nav-wave.js?v=1"></script>
+<script src="${pageContext.request.contextPath}/js/auth-modal.js?v=5"></script>
+<script src="${pageContext.request.contextPath}/js/auth-guard.js?v=1"></script>

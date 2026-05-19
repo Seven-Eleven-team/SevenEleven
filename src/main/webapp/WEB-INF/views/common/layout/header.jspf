@@ -1,9 +1,43 @@
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css">
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+
 <header class="site-header">
-    <button class="hamburger-btn"> ☰ </button>
-    <a href="/"><h1 class="site-logo">지출메이트</h1></a>
-    <div class="header-action-area">
-        <a href="/auth/login" class="auth-link"> 로그인/회원가입 </a>
+    <button type="button" class="hamburger-btn" aria-label="메뉴 열기">☰</button>
+
+    <a href="${pageContext.request.contextPath}/" class="site-logo-link">
+        <h1 class="site-logo">지출메이트</h1>
+    </a>
+
+    <div class="header-action-area
+                ${not empty sessionScope.loginUser ? 'is-logged-in' : 'is-logged-out'}"
+         id="headerActionArea"
+         data-server-login="${not empty sessionScope.loginUser}">
+
+        <a href="#"
+           class="auth-link"
+           id="headerAuthLink"
+           data-auth-open="login">
+            로그인 / 회원가입
+        </a>
+
+        <a href="${pageContext.request.contextPath}/mypage"
+           class="user-profile-link"
+           id="headerProfileLink"
+           data-auth-required="true"
+           aria-label="마이페이지로 이동">
+            <span class="user-avatar" id="userAvatarInitial">
+                <c:choose>
+                    <c:when test="${not empty sessionScope.loginUser.nickname}">
+                        ${fn:substring(sessionScope.loginUser.nickname, 0, 1)}
+                    </c:when>
+                    <c:when test="${not empty sessionScope.nickname}">
+                        ${fn:substring(sessionScope.nickname, 0, 1)}
+                    </c:when>
+                    <c:otherwise>M</c:otherwise>
+                </c:choose>
+            </span>
+        </a>
     </div>
 </header>
-<script src="${pageContext.request.contextPath}/js/nav-wave.js"></script>
+
+<%@ include file="/WEB-INF/views/common/layout/sidebar.jspf" %>

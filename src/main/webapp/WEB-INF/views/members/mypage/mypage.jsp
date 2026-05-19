@@ -13,7 +13,7 @@
     <title>지출메이트 - 마이페이지</title>
 
     <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/css/style.css">
+          href="${pageContext.request.contextPath}/css/mypage.css?v=1">
 
     <style>
 
@@ -61,11 +61,11 @@
 
 </head>
 
-<body>
+<body class="mypage-body">
 
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
 
-<div class="container">
+<div class="mypage-container">
 
     <%@ include file="/WEB-INF/views/common/layout/sidebar.jspf" %>
 

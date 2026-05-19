@@ -20,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MyPageService {
+
     private final UserRepository userRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final GoalRepository goalRepository;
@@ -35,16 +36,28 @@ public class MyPageService {
     public MyPageSummaryResponse getMyPageSummary(Long userId) {
         User user = getUser(userId);
 
-        List<Subscription> activeSubscriptions = subscriptionRepository.findByUserAndStatus(user, "ACTIVE");
-        SavingGoal currentGoal = goalRepository.findTopByUserUserIdOrderByIdDesc(userId).orElse(null);
-        Account primaryAccount = accountRepository.findByUserAndIsPrimary(user, "Y").orElse(null);
+        List<Subscription> activeSubscriptions =
+                subscriptionRepository.findByUserAndStatus(user, "ACTIVE");
 
-        boolean isSeller = partySellerRepository.findByUserId(userId).isPresent();
-        long unreadNotiCount = notificationLogRepository.countByUserAndIsSuccess(user, "N");
+        SavingGoal currentGoal =
+                goalRepository.findTopByUserUserIdOrderByIdDesc(userId).orElse(null);
+
+        Account primaryAccount =
+                accountRepository.findByUserAndIsPrimary(user, "Y").orElse(null);
+
+        boolean isSeller =
+                partySellerRepository.findByUserId(userId).isPresent();
+
+        long unreadNotiCount =
+                notificationLogRepository.countByUserAndIsSuccess(user, "N");
 
         List<MyPageSummaryResponse.GoalSummary> goalList = new ArrayList<>();
+
         if (currentGoal != null) {
-            int rate = currentGoal.getTargetAmount() > 0 ? (int) ((double) currentGoal.getSavedAmount() / currentGoal.getTargetAmount() * 100) : 0;
+            int rate = currentGoal.getTargetAmount() > 0
+                    ? (int) ((double) currentGoal.getSavedAmount() / currentGoal.getTargetAmount() * 100)
+                    : 0;
+
             goalList.add(MyPageSummaryResponse.GoalSummary.builder()
                     .goalId(currentGoal.getId())
                     .goalName(currentGoal.getGoalName())
@@ -62,7 +75,13 @@ public class MyPageService {
                 .birthDate(user.getBirthDate())
                 .role(user.getRole())
                 .sellerRegistered(isSeller)
-                .emailNotify(user.isEmailNotify())
+
+                // DB 2.0 기준:
+                // 기존 EMAIL_NOTIFY → 현재 IS_NOTI_ENABLED
+                // MyPageSummaryResponse의 emailNotify 필드는 유지하되,
+                // User 엔티티의 isNotiEnabled 값을 boolean으로 변환해서 넣는다.
+                .emailNotify(isNotificationEnabled(user))
+
                 .activeSubscriptionCount(activeSubscriptions.size())
                 .unreadNotificationCount((int) unreadNotiCount)
                 .goals(goalList)
@@ -71,17 +90,11 @@ public class MyPageService {
                 .build();
     }
 
-    // =========================================================================
-    // ★ 컨트롤러 에러 1번 해결: private을 public으로 열어주어 컨트롤러가 호출 가능해집니다!
-    // =========================================================================
     public User getUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
     }
 
-    // =========================================================================
-    // ★ 컨트롤러 에러 2번 해결: 컨트롤러가 찾던 '구독 목록 가져오기' 기능을 새로 만들었습니다!
-    // =========================================================================
     public Page<Subscription> getMySubscriptionList(Long userId, Pageable pageable) {
         User user = getUser(userId);
         return subscriptionRepository.findByUserOrderByCreatedAtDesc(user, pageable);
@@ -90,10 +103,9 @@ public class MyPageService {
     public Page<Account> getAccountList(Long userId, Pageable pageable) {
         User user = getUser(userId);
 
-        // 1. 리포지토리에서 List 형태로 데이터를 가져옵니다.
-        List<Account> accounts = accountRepository.findByUserOrderByIsPrimaryDescCreatedAtDesc(user);
+        List<Account> accounts =
+                accountRepository.findByUserOrderByIsPrimaryDescCreatedAtDesc(user);
 
-        // 2. 가져온 List를 PageImpl 객체를 사용해 Page 형태로 변환하여 반환합니다.
         return new PageImpl<>(accounts, pageable, accounts.size());
     }
 
@@ -113,6 +125,7 @@ public class MyPageService {
         if (!post.getSeller().getUserId().equals(userId)) {
             throw new UnauthorizedException(ErrorCode.ACCESS_DENIED);
         }
+
         return post;
     }
 
@@ -124,6 +137,7 @@ public class MyPageService {
         if (!post.getSeller().getUserId().equals(userId)) {
             throw new UnauthorizedException(ErrorCode.ACCESS_DENIED);
         }
+
         post.setStatus("FULL");
         partyRepository.save(post);
     }
@@ -131,27 +145,36 @@ public class MyPageService {
     @Transactional
     public void withdrawUser(Long userId, String password) {
         User user = getUser(userId);
+
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new ValidationException(ErrorCode.PASSWORD_MISMATCH);
         }
+
         user.setAccountStatus("WITHDRAWN");
         userRepository.save(user);
     }
 
-    // ★ 추가: 컨트롤러의 프로필 업데이트 에러 방지용
     @Transactional
     public void updateProfile(Long userId, UserUpdateRequest request) {
         User user = getUser(userId);
+
         user.setNickname(request.getNickname());
         user.setLoginId(request.getLoginId());
         user.setGender(request.getGender());
         user.setBirthDate(request.getBirthDate());
+
         userRepository.save(user);
     }
 
-    // ★ 추가: 컨트롤러의 이미지 업로드 에러 방지용
     @Transactional
     public String updateProfileImage(Long userId, MultipartFile file) throws IOException {
-        return "/display?fileName=" + file.getOriginalFilename(); // 실제 저장 로직에 맞게 사용
+        // DB 2.0 USERS 테이블에는 PROFILE_IMAGE 컬럼이 없다.
+        // 그래서 여기서는 User 엔티티에 저장하지 않고, 임시 반환만 유지한다.
+        // 실제 이미지 저장 기능을 살리려면 ATTACHMENTS 또는 별도 PROFILE_IMAGE 테이블 기준으로 다시 연결해야 한다.
+        return "/display?fileName=" + file.getOriginalFilename();
+    }
+
+    private boolean isNotificationEnabled(User user) {
+        return "Y".equalsIgnoreCase(user.getIsNotiEnabled());
     }
 }
