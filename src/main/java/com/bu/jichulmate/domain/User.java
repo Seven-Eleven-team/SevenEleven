@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "USERS")
 public class User {
-
+//aaaaaa
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSeq")
     @SequenceGenerator(
