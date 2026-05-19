@@ -1,6 +1,6 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<c:set var="menu" value="mysales"/>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -11,18 +11,18 @@
     <title>지출메이트 - 내 판매 목록</title>
 
     <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/css/style.css">
+          href="${pageContext.request.contextPath}/css/mypage.css?v=1">
 
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/css/sales.css">
 
 </head>
 
-<body>
+<body class="mypage-body">
 
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
 
-<div class="container">
+<div class="mypage-container">
 
     <%@ include file="/WEB-INF/views/common/layout/sidebar.jspf" %>
 

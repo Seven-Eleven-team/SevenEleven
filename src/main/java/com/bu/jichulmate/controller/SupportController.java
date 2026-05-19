@@ -60,7 +60,7 @@ public class SupportController {
     }
 
     /**
-     * FAQ 또는 상담 유형 답변 조회
+     * 기존 타입 기반 답변 API
      * URL: /support/type?type=1
      */
     @GetMapping("/type")

@@ -1,7 +1,9 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<html>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<!DOCTYPE html>
+<html lang="ko">
 <head>
     <title>문의 작성</title>
+    <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
     <style>
         body {
             font-family: Arial;
@@ -33,7 +35,7 @@
     </style>
 </head>
 <body>
-
+<%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
 <div class="container">
 
     <h2>문의 글 작성</h2>
@@ -51,6 +53,12 @@
     </form>
 
 </div>
+
+<%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
+
+<%@ include file="/WEB-INF/views/common/modal/authModal.jspf" %>
+
+<%@ include file="/WEB-INF/views/common/include/scripts.jspf" %>
 
 </body>
 </html>

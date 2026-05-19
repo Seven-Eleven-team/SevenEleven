@@ -1,5 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<html>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<!DOCTYPE html>
+<html lang="ko">
 <head>
     <title>문의 완료</title>
     <style>

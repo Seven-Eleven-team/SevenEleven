@@ -15,6 +15,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.bu.jichulmate.util.SessionUtils;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -47,11 +48,14 @@ public class AuthApiController {
             User user = loginUser.get();
 
 
-            session.setAttribute("loginUser", user);
-            session.setAttribute("loginUserId", user.getUserId());
-            session.setAttribute("loginId", user.getLoginId());
-            session.setAttribute("nickname", user.getNickname());
-            session.setAttribute("role", user.getRole());
+            SessionUtils.setLoginUser(
+                    session,
+                    user,
+                    user.getUserId(),
+                    user.getLoginId(),
+                    user.getNickname(),
+                    user.getRole()
+            );
 
             Map<String, Object> body = new LinkedHashMap<>();
             body.put("ok", true);

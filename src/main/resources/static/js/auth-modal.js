@@ -217,29 +217,38 @@
         authNavigationGuardBound = true;
 
         document.addEventListener('click', function (event) {
-            const profileLink = event.target.closest('#headerProfileLink');
+            const navigationTarget = event.target.closest('a[href], button[onclick*="location"]');
 
-            if (profileLink) {
+            if (!navigationTarget) {
+                return;
+            }
+
+            const href = navigationTarget.getAttribute('href');
+
+            if (
+                href &&
+                href !== '#' &&
+                !href.startsWith('#') &&
+                !href.startsWith('javascript:')
+            ) {
+                allowAuthNavigation = true;
+                return;
+            }
+
+            if (navigationTarget.id === 'headerProfileLink') {
                 allowAuthNavigation = true;
             }
         });
 
-        window.addEventListener('pagehide', function () {
-            const header = getHeaderElements();
-            const isLoggedIn =
-                sessionStorage.getItem(AUTH_ACTIVE_KEY) === 'true' ||
-                (header.area && header.area.dataset.serverLogin === 'true');
-
-            if (!isLoggedIn) {
-                return;
-            }
-
-            if (allowAuthNavigation) {
-                return;
-            }
-
-            requestServerLogout();
-        });
+        /*
+         * 자동 로그아웃 제거:
+         * 기존에는 pagehide 이벤트에서 requestServerLogout()을 호출했다.
+         * 이 방식은 뒤로가기, 새로고침, 고객센터 이동, 마이페이지 이동 시에도
+         * /auth/logout을 호출해서 세션을 끊는 문제가 있었다.
+         *
+         * 따라서 이 함수에서는 페이지 이동을 감지하더라도 로그아웃을 실행하지 않는다.
+         * 로그아웃은 사용자가 명시적으로 로그아웃 버튼을 눌렀을 때만 처리한다.
+         */
     }
 
     function initializeAuthSessionState() {
