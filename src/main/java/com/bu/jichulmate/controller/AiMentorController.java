@@ -1,11 +1,14 @@
 package com.bu.jichulmate.controller;
 
+import com.bu.jichulmate.domain.AiChatLog;
 import com.bu.jichulmate.dto.ai.FeedbackResponse;
 import com.bu.jichulmate.service.AiMentorService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,21 +17,27 @@ public class AiMentorController {
 
     private final AiMentorService aiMentorService;
 
-    // 프론트(JS)에서 보내는 JSON 데이터를 받기 위한 임시 그릇
     @Data
     public static class ChatRequest {
+        private Long userId; // ★ 추가: 유저 구분용 식별자
         private String message;
-        private String flavor; // "mild", "medium", "spicy"
+        private String flavor;
     }
 
+    // 1. 실시간 채팅 및 저장
     @PostMapping("/chat")
     public ResponseEntity<FeedbackResponse> chatWithMentor(@RequestBody ChatRequest request) {
-        // 프론트에서 넘어온 맛(flavor)이 없으면 기본 중간맛으로 세팅
         String flavor = request.getFlavor() != null ? request.getFlavor() : "medium";
 
-        // Service에 일 시키기
-        FeedbackResponse response = aiMentorService.getChatFeedback(request.getMessage(), flavor);
-
+        // Service 단에 userId를 함께 넘겨서 DB 작업 진행
+        FeedbackResponse response = aiMentorService.getChatFeedback(request.getUserId(), request.getMessage(), flavor);
         return ResponseEntity.ok(response);
+    }
+
+    // 2. ★ 추가: 모달창이 켜질 때 예전 대화 기록 싹 긁어오는 API
+    @GetMapping("/history/{userId}")
+    public ResponseEntity<List<AiChatLog>> getHistory(@PathVariable("userId") Long userId) {
+        List<AiChatLog> history = aiMentorService.getChatHistory(userId);
+        return ResponseEntity.ok(history);
     }
 }
