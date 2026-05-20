@@ -1,30 +1,62 @@
 package com.bu.jichulmate.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.*;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    @Value("${file.upload.dir}")
+    private String uploadDir;
+
     /**
      * 정적 리소스 매핑
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler(
-                        "/css/**",
-                        "/js/**",
-                        "/images/**",
-                        "/img/**",
-                        "/favicon.ico"
-                )
+
+        /*
+         * CSS 정적 리소스
+         * /css/home.css -> classpath:/static/css/home.css
+         */
+        registry.addResourceHandler("/css/**")
+                .addResourceLocations("classpath:/static/css/");
+
+        /*
+         * JS 정적 리소스
+         * /js/pages/community-form.js -> classpath:/static/js/pages/community-form.js
+         */
+        registry.addResourceHandler("/js/**")
+                .addResourceLocations("classpath:/static/js/");
+
+        /*
+         * 이미지 정적 리소스 + 업로드 이미지 리소스
+         *
+         * 1순위: C:/upload/ 같은 로컬 업로드 폴더
+         * 2순위: src/main/resources/static/images/
+         *
+         * FileService에서 ATTACHMENTS.FILE_PATH를
+         * /images/저장파일명 형태로 저장하니까
+         * 이 매핑이 꼭 필요함.
+         */
+        registry.addResourceHandler("/images/**")
                 .addResourceLocations(
-                        "classpath:/static/css/",
-                        "classpath:/static/js/",
-                        "classpath:/static/images/",
-                        "classpath:/static/img/",
-                        "classpath:/static/"
+                        "file:///" + uploadDir,
+                        "classpath:/static/images/"
                 );
+
+        /*
+         * img 폴더 정적 리소스
+         */
+        registry.addResourceHandler("/img/**")
+                .addResourceLocations("classpath:/static/img/");
+
+        /*
+         * favicon
+         */
+        registry.addResourceHandler("/favicon.ico")
+                .addResourceLocations("classpath:/static/");
     }
 
     /**
@@ -42,6 +74,16 @@ public class WebConfig implements WebMvcConfigurer {
                         "/subscription/**",
                         "/subscriptions/**",
                         "/party/**",
+
+                        /*
+                         * 커뮤니티는 목록/상세는 공개로 둘 수 있고,
+                         * 글쓰기/수정/삭제/내 글만 로그인 필요로 잡는 게 자연스러움.
+                         */
+                        "/community/write",
+                        "/community/edit/**",
+                        "/community/delete/**",
+                        "/community/my",
+
                         "/support/qna/**",
                         "/ai/**",
                         "/mentor/**"
