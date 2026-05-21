@@ -2,6 +2,8 @@ package com.bu.jichulmate.service;
 
 import com.bu.jichulmate.domain.Attachment;
 import com.bu.jichulmate.domain.Board;
+import com.bu.jichulmate.domain.BoardComment;
+import com.bu.jichulmate.repository.BoardCommentRepository;
 import com.bu.jichulmate.repository.CommunityBoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -38,6 +40,7 @@ public class CommunityService {
     );
 
     private final CommunityBoardRepository communityBoardRepository;
+    private final BoardCommentRepository boardCommentRepository;
     private final FileService fileService;
 
     @Transactional(readOnly = true)
@@ -76,6 +79,12 @@ public class CommunityService {
     @Transactional(readOnly = true)
     public List<Attachment> findAttachments(Long boardId) {
         return fileService.findFiles(ATTACH_REF_TABLE, boardId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<BoardComment> findComments(Long boardId) {
+        findCommunityPost(boardId);
+        return boardCommentRepository.findActiveCommentsByBoardId(boardId);
     }
 
     @Transactional
@@ -157,6 +166,45 @@ public class CommunityService {
         fileService.deleteFilesWithPhysicalFile(ATTACH_REF_TABLE, boardId);
     }
 
+    @Transactional
+    public BoardComment createComment(Long boardId, Long loginUserId, String content) {
+        if (loginUserId == null) {
+            throw new IllegalStateException("로그인이 필요합니다.");
+        }
+
+        Board board = findCommunityPost(boardId);
+
+        validateComment(content);
+
+        BoardComment comment = BoardComment.builder()
+                .boardId(board.getBoardId())
+                .userId(loginUserId)
+                .content(content.trim())
+                .isDeleted("N")
+                .build();
+
+        return boardCommentRepository.save(comment);
+    }
+
+    @Transactional
+    public void deleteComment(Long boardId, Long commentId, Long loginUserId) {
+        if (loginUserId == null) {
+            throw new IllegalStateException("로그인이 필요합니다.");
+        }
+
+        findCommunityPost(boardId);
+
+        BoardComment comment = boardCommentRepository.findActiveComment(commentId, boardId)
+                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+
+        if (!comment.isOwner(loginUserId)) {
+            throw new IllegalStateException("댓글 삭제 권한이 없습니다.");
+        }
+
+        comment.setIsDeleted("Y");
+        boardCommentRepository.save(comment);
+    }
+
     public String normalizeCategory(String category) {
         if (category == null || category.trim().isEmpty()) {
             return CATEGORY_FREE;
@@ -204,6 +252,16 @@ public class CommunityService {
 
         if (content.trim().length() > 4000) {
             throw new IllegalArgumentException("내용은 4000자 이하로 입력해 주세요.");
+        }
+    }
+
+    private void validateComment(String content) {
+        if (content == null || content.trim().isEmpty()) {
+            throw new IllegalArgumentException("댓글 내용을 입력해 주세요.");
+        }
+
+        if (content.trim().length() > 1000) {
+            throw new IllegalArgumentException("댓글은 1000자 이하로 입력해 주세요.");
         }
     }
 }

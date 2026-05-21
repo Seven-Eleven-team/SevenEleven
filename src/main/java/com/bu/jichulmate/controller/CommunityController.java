@@ -2,6 +2,7 @@ package com.bu.jichulmate.controller;
 
 import com.bu.jichulmate.domain.Attachment;
 import com.bu.jichulmate.domain.Board;
+import com.bu.jichulmate.domain.BoardComment;
 import com.bu.jichulmate.service.CommunityService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -136,6 +137,7 @@ public class CommunityController {
 
             Board post = communityService.findCommunityPost(boardId);
             List<Attachment> attachments = communityService.findAttachments(boardId);
+            List<BoardComment> comments = communityService.findComments(boardId);
 
             Long loginUserId = getLoginUserId(session);
             boolean owner = post.isOwner(loginUserId);
@@ -144,6 +146,8 @@ public class CommunityController {
 
             model.addAttribute("post", post);
             model.addAttribute("attachments", attachments);
+            model.addAttribute("comments", comments);
+            model.addAttribute("loginUserId", loginUserId);
             model.addAttribute("owner", owner);
             model.addAttribute("category", category);
             model.addAttribute("categoryLabel", communityService.getCategoryLabel(category));
@@ -153,6 +157,54 @@ public class CommunityController {
             ra.addFlashAttribute("msg", e.getMessage());
             return "redirect:/community";
         }
+    }
+
+    @PostMapping("/detail/{boardId}/comments")
+    public String createComment(
+            @PathVariable Long boardId,
+            @RequestParam String content,
+            HttpSession session,
+            RedirectAttributes ra
+    ) {
+        Long loginUserId = getLoginUserId(session);
+
+        if (loginUserId == null) {
+            ra.addFlashAttribute("msg", "로그인이 필요합니다.");
+            return "redirect:/auth/login";
+        }
+
+        try {
+            communityService.createComment(boardId, loginUserId, content);
+            ra.addFlashAttribute("msg", "댓글이 등록되었습니다.");
+        } catch (Exception e) {
+            ra.addFlashAttribute("msg", e.getMessage());
+        }
+
+        return "redirect:/community/detail/" + boardId;
+    }
+
+    @PostMapping("/detail/{boardId}/comments/{commentId}/delete")
+    public String deleteComment(
+            @PathVariable Long boardId,
+            @PathVariable Long commentId,
+            HttpSession session,
+            RedirectAttributes ra
+    ) {
+        Long loginUserId = getLoginUserId(session);
+
+        if (loginUserId == null) {
+            ra.addFlashAttribute("msg", "로그인이 필요합니다.");
+            return "redirect:/auth/login";
+        }
+
+        try {
+            communityService.deleteComment(boardId, commentId, loginUserId);
+            ra.addFlashAttribute("msg", "댓글이 삭제되었습니다.");
+        } catch (Exception e) {
+            ra.addFlashAttribute("msg", e.getMessage());
+        }
+
+        return "redirect:/community/detail/" + boardId;
     }
 
     @GetMapping("/edit/{boardId}")

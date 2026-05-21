@@ -14,16 +14,31 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class FileService {
 
+    private static final Set<String> ALLOWED_IMAGE_EXTENSIONS = Set.of(
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".gif",
+            ".webp"
+    );
+
     private final AttachmentRepository attachmentRepository;
 
     @Value("${file.upload.dir}")
     private String uploadDir;
+
+    @Value("${file.upload.max-size:10485760}")
+    private long maxFileSize;
+
+    @Value("${file.upload.max-count:5}")
+    private int maxFileCount;
 
     @Transactional
     public Attachment uploadFile(MultipartFile file, String refTable, Long refId) throws IOException {
@@ -31,11 +46,7 @@ public class FileService {
             return null;
         }
 
-        String contentType = file.getContentType();
-
-        if (contentType == null || !contentType.startsWith("image/")) {
-            throw new IllegalArgumentException("이미지 파일만 업로드할 수 있습니다.");
-        }
+        validateImageFile(file);
 
         String orgFileName = StringUtils.cleanPath(file.getOriginalFilename());
 
@@ -43,20 +54,16 @@ public class FileService {
             orgFileName = "upload-image";
         }
 
-        String extension = "";
-        int dotIndex = orgFileName.lastIndexOf(".");
-
-        if (dotIndex >= 0) {
-            extension = orgFileName.substring(dotIndex);
-        }
-
+        String extension = getExtension(orgFileName);
         String savedFileName = UUID.randomUUID() + extension;
         String normalizedUploadDir = resolveUploadDir();
 
-        File dest = new File(normalizedUploadDir + savedFileName);
+        File dest = new File(normalizedUploadDir, savedFileName);
 
-        if (!dest.getParentFile().exists()) {
-            dest.getParentFile().mkdirs();
+        File parentDir = dest.getParentFile();
+
+        if (parentDir != null && !parentDir.exists()) {
+            parentDir.mkdirs();
         }
 
         file.transferTo(dest);
@@ -84,11 +91,19 @@ public class FileService {
             return result;
         }
 
-        for (MultipartFile file : files) {
-            if (file == null || file.isEmpty()) {
-                continue;
-            }
+        List<MultipartFile> validFiles = new ArrayList<>();
 
+        for (MultipartFile file : files) {
+            if (file != null && !file.isEmpty()) {
+                validFiles.add(file);
+            }
+        }
+
+        if (validFiles.size() > maxFileCount) {
+            throw new IllegalArgumentException("이미지는 최대 " + maxFileCount + "장까지 업로드할 수 있습니다.");
+        }
+
+        for (MultipartFile file : validFiles) {
             Attachment attachment = uploadFile(file, refTable, refId);
 
             if (attachment != null) {
@@ -116,7 +131,7 @@ public class FileService {
 
         for (Attachment attachment : files) {
             try {
-                File physicalFile = new File(normalizedUploadDir + attachment.getSavedFileName());
+                File physicalFile = new File(normalizedUploadDir, attachment.getSavedFileName());
 
                 if (physicalFile.exists()) {
                     physicalFile.delete();
@@ -126,6 +141,44 @@ public class FileService {
         }
 
         attachmentRepository.deleteByRefTableAndRefId(refTable, refId);
+    }
+
+    private void validateImageFile(MultipartFile file) {
+        String contentType = file.getContentType();
+
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new IllegalArgumentException("이미지 파일만 업로드할 수 있습니다.");
+        }
+
+        if (file.getSize() > maxFileSize) {
+            throw new IllegalArgumentException("이미지는 1장당 10MB 이하로 업로드해 주세요.");
+        }
+
+        String orgFileName = StringUtils.cleanPath(file.getOriginalFilename());
+
+        if (orgFileName == null || orgFileName.isBlank()) {
+            return;
+        }
+
+        String extension = getExtension(orgFileName).toLowerCase();
+
+        if (!ALLOWED_IMAGE_EXTENSIONS.contains(extension)) {
+            throw new IllegalArgumentException("jpg, jpeg, png, gif, webp 형식의 이미지만 업로드할 수 있습니다.");
+        }
+    }
+
+    private String getExtension(String fileName) {
+        if (fileName == null || fileName.isBlank()) {
+            return "";
+        }
+
+        int dotIndex = fileName.lastIndexOf(".");
+
+        if (dotIndex < 0) {
+            return "";
+        }
+
+        return fileName.substring(dotIndex);
     }
 
     private String resolveUploadDir() {

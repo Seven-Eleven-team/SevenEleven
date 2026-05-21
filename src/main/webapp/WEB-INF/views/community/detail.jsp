@@ -31,25 +31,6 @@
 
                 <div class="board-detail-actions">
                     <button type="button" class="board-report-btn">신고</button>
-
-                    <a href="${pageContext.request.contextPath}/community?category=${category}"
-                       class="board-light-btn">
-                        목록
-                    </a>
-
-                    <c:if test="${owner}">
-                        <a href="${pageContext.request.contextPath}/community/edit/${post.boardId}"
-                           class="board-submit-btn"
-                           data-auth-required="true">
-                            수정
-                        </a>
-
-                        <form method="post"
-                              action="${pageContext.request.contextPath}/community/delete/${post.boardId}"
-                              onsubmit="return confirm('정말 삭제하시겠습니까?');">
-                            <button type="submit" class="board-delete-btn">삭제</button>
-                        </form>
-                    </c:if>
                 </div>
             </header>
 
@@ -113,20 +94,74 @@
         <section class="board-comment-card">
             <div class="board-comment-head">
                 <h2>댓글</h2>
-                <p>댓글 기능 연결 전 화면 구성 영역입니다.</p>
+                <p>총 ${fn:length(comments)}개의 댓글이 있습니다.</p>
             </div>
 
-            <div class="board-comment-form">
-                <input type="text"
-                       placeholder="댓글을 입력하세요."
-                       aria-label="댓글 입력">
+            <c:choose>
+                <c:when test="${not empty loginUserId}">
+                    <form class="board-comment-form"
+                          method="post"
+                          action="${pageContext.request.contextPath}/community/detail/${post.boardId}/comments">
+                        <input type="text"
+                               name="content"
+                               maxlength="1000"
+                               placeholder="댓글을 입력하세요."
+                               aria-label="댓글 입력"
+                               required>
 
-                <button type="button" class="board-submit-btn">등록</button>
-            </div>
+                        <button type="submit" class="board-submit-btn">등록</button>
+                    </form>
+                </c:when>
 
-            <div class="board-comment-empty">
-                아직 등록된 댓글이 없습니다.
-            </div>
+                <c:otherwise>
+                    <div class="board-comment-login-guide">
+                        댓글을 작성하려면 로그인이 필요합니다.
+                    </div>
+                </c:otherwise>
+            </c:choose>
+
+            <c:choose>
+                <c:when test="${not empty comments}">
+                    <div class="board-comment-list">
+                        <c:forEach var="comment" items="${comments}">
+                            <article class="board-comment-item">
+                                <div class="board-comment-avatar">
+                                    <c:choose>
+                                        <c:when test="${not empty comment.writerName}">
+                                            ${fn:substring(comment.writerName, 0, 1)}
+                                        </c:when>
+                                        <c:otherwise>M</c:otherwise>
+                                    </c:choose>
+                                </div>
+
+                                <div class="board-comment-body">
+                                    <div class="board-comment-meta">
+                                        <strong>${comment.writerName}</strong>
+                                        <span>${comment.createdAtText}</span>
+                                    </div>
+
+                                    <p>${comment.content}</p>
+                                </div>
+
+                                <c:if test="${comment.userId eq loginUserId}">
+                                    <form method="post"
+                                          action="${pageContext.request.contextPath}/community/detail/${post.boardId}/comments/${comment.commentId}/delete"
+                                          class="board-comment-delete-form"
+                                          onsubmit="return confirm('댓글을 삭제하시겠습니까?');">
+                                        <button type="submit" class="board-comment-delete-btn">삭제</button>
+                                    </form>
+                                </c:if>
+                            </article>
+                        </c:forEach>
+                    </div>
+                </c:when>
+
+                <c:otherwise>
+                    <div class="board-comment-empty">
+                        아직 등록된 댓글이 없습니다.
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </section>
     </section>
 </main>
