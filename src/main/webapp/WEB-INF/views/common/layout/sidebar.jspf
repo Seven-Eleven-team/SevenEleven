@@ -1,5 +1,4 @@
 <%@ page pageEncoding="UTF-8" %>
-
 <nav class="sidebar" aria-label="사이드 메뉴">
     <ul>
         <li>
@@ -20,12 +19,10 @@
         <li>
             <a href="${pageContext.request.contextPath}/party" data-auth-required="true">판매자 등록</a>
         </li>
-        <li>
-            <a href="${pageContext.request.contextPath}/auth/logout"
-               id="sidebarLogoutButton"
-               data-logout="true">
-                로그아웃
-            </a>
-        </li>
     </ul>
+    <div class="sidebar-logout">
+        <a href="/" id="sidebarLogoutButton">
+            <i class="bi bi-box-arrow-right"></i>
+            로그아웃</a>
+    </div>
 </nav>

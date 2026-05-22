@@ -56,7 +56,7 @@ public class SupportController {
     public String create(InquiryCreateRequest request, HttpSession session) {
         Long userId = SessionUtils.getLoginUserId(session);
         supportService.createInquiry(userId, request);
-        return "redirect:/support/qna";
+        return "redirect:/support";
     }
 
     /**
