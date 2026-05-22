@@ -1,8 +1,6 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<c:set var="menu" value="mypage"/>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%-- 톰캣 11버전(스프링부트 3.x)에 맞춘 필수 태그라이브러리 선언 (중복 선언 방지용) --%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -124,6 +122,7 @@
             <div class="alert-message error">${errorMessage}</div>
         </c:if>
 
+    <main class="dashboard" style"flex: 1;">
         <section class="profile-combined-card">
 
             <!-- 내 정보 -->
@@ -245,8 +244,6 @@
 <!-- 기존 모달들 -->
 <div id="modalOverlay" class="modal-overlay">...</div>
 <div id="cancelModalOverlay" class="cancel-modal-overlay">...</div>
-
-<%@ include file="/WEB-INF/views/common/include/scripts.jspf" %>
 
 <script>
 // ==================== 은행 자동 감지 ====================

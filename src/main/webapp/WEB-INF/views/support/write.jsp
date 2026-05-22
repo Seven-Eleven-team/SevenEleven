@@ -53,7 +53,7 @@
     </form>
 
 </div>
-
+<%@ include file="/WEB-INF/views/common/layout/floatingBtn.jspf" %>
 <%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
 
 <%@ include file="/WEB-INF/views/common/modal/authModal.jspf" %>

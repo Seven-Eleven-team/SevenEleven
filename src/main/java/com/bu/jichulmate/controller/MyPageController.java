@@ -33,7 +33,7 @@ public class MyPageController {
     /**
      * 마이페이지 메인
      */
-    @GetMapping
+    @GetMapping({"", "/", "/mypage"})
     public String myPage(HttpSession session, Model model) {
         Long userId = SessionUtils.getLoginUserId(session);
 

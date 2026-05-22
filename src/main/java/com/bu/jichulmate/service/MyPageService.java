@@ -105,8 +105,22 @@ public class MyPageService {
     }
 
     public Page<Board> getMyBoardList(Long userId, Pageable pageable) {
-        User user = getUser(userId);
-        return boardRepository.findByUserAndIsDeletedOrderByCreatedAtDesc(user, "N", pageable);
+        /*
+         * 기존 코드:
+         * boardRepository.findByUserAndIsDeletedOrderByCreatedAtDesc(user, "N", pageable)
+         *
+         * 현재 BoardRepository는 userId 기준 메서드를 가지고 있으므로,
+         * Board.USER_ID 컬럼과 직접 매칭되는 userId 기준 조회로 통일한다.
+         *
+         * getUser(userId)는 회원 존재 여부 검증을 위해 유지한다.
+         */
+        getUser(userId);
+
+        return boardRepository.findByUserIdAndIsDeletedOrderByCreatedAtDesc(
+                userId,
+                "N",
+                pageable
+        );
     }
 
     public Page<PartyPost> getMyPartyList(Long userId, Pageable pageable) {
