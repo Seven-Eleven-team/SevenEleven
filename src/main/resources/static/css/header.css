@@ -118,3 +118,136 @@
     font-size: 16px;
     opacity: 0.7;
 }
+
+.footer {
+    background: #193b60;
+    color: #f9f7f7;
+    width: 100%;
+}
+
+.footer-nav {
+    border-bottom: 1px solid rgba(249, 247, 247, 0.2);
+    padding: 14px 0;
+}
+
+.footer-nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+.footer-nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-nav-links a {
+    font-size: 13px;
+    color: rgba(249, 247, 247, 0.7);
+    text-decoration: none;
+}
+
+.footer-nav-links a:hover {
+    color: #f9f7f7;
+}
+
+.footer-body {
+    padding: 32px 0 0;
+}
+
+.footer-body-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px 24px;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 48px;
+}
+
+.footer-brand-logo {
+    font-size: 22px;
+    font-weight: 900;
+    color: #f9f7f7;
+    margin-bottom: 10px;
+}
+
+.footer-brand-desc {
+    font-size: 13px;
+    color: rgba(249, 247, 247, 0.6);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.footer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-info-row {
+    font-size: 13px;
+    color: rgba(249, 247, 247, 0.7);
+}
+
+.footer-info-row strong {
+    color: #f9f7f7;
+}
+
+.footer-contact {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: rgba(249, 247, 247, 0.7);
+}
+
+.footer-contact a {
+    color: rgba(249, 247, 247, 0.7);
+    text-decoration: underline;
+}
+
+.footer-contact a:hover {
+    color: #f9f7f7;
+}
+
+.footer-sns {
+    display: flex;
+    gap: 12px;
+}
+
+.footer-sns a {
+    color: rgba(249, 247, 247, 0.7);
+    font-size: 18px;
+    text-decoration: none;
+}
+
+.footer-sns a:hover {
+    color: #f9f7f7;
+}
+
+.footer-bottombar {
+    background: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid rgba(249, 247, 247, 0.1);
+    padding: 12px 0;
+}
+
+.footer-bottombar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-copy {
+    font-size: 12px;
+    color: rgba(249, 247, 247, 0.5);
+    margin: 0;
+}
+
+.footer-note {
+    font-size: 12px;
+    color: rgba(249, 247, 247, 0.4);
+    margin: 0;
+}
