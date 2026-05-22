@@ -21,6 +21,7 @@
         </div>
     </div>
 </main>
+<%@ include file="/WEB-INF/views/common/layout/floatingBtn.jspf" %>
 <%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
 </body>
 </html>

@@ -1,15 +1,18 @@
-<div class="faq-modal">
-    <div class="faq-chat-area" id="faqChatArea">
-        <!-- 첫 메시지 -->
-        <div class="faq-bot-msg">
-            <p>문제의 유형을 번호로 남겨주세요.</p>
-            <ul class="faq-list" id="faqList">
-                <!-- js로 채울예정 -->
-            </ul>
+<%@ page pageEncoding="UTF-8" %>
+
+<div class="faq-widget" id="faqWidget">
+    <div class="faq-modal" id="faqModal">
+        <div class="faq-modal-header">
+            <span>문제의 유형을 번호로 남겨주세요</span>
         </div>
-    </div>
-    <div class="faq-input-area">
-        <input class="faq-input" type="text" placeholder="문의 내용을 입력하세요.">
-        <button class="faq-send-btn"><i class="bi bi-arrow-up-circle"></i></button>
+        <div class="faq-chat-area" id="faqChatArea">
+            <ul id="faqList"></ul>
+        </div>
+        <div class="faq-input-area">
+            <input class="faq-input" id="faqInput" type="text" placeholder="번호를 입력하세요.">
+            <button class="faq-send-btn" id="faqSendBtn">
+                <i class="bi bi-arrow-up-circle"></i>
+            </button>
+        </div>
     </div>
 </div>
