@@ -70,18 +70,13 @@ public class MyPageService {
         return MyPageSummaryResponse.builder()
                 .userId(user.getUserId())
                 .loginId(user.getLoginId())
+                .email(user.getLoginId())           // ← 수정 완료 (getEmail → getLoginId)
                 .nickname(user.getNickname())
                 .gender(user.getGender())
                 .birthDate(user.getBirthDate())
                 .role(user.getRole())
                 .sellerRegistered(isSeller)
-
-                /*
-                 * DB 2.0 기준:
-                 * 기존 EMAIL_NOTIFY 컬럼이 아니라 현재 USERS.IS_NOTI_ENABLED 값을 사용한다.
-                 */
                 .emailNotify(isNotificationEnabled(user))
-
                 .activeSubscriptionCount(activeSubscriptions.size())
                 .unreadNotificationCount((int) unreadNotiCount)
                 .goals(goalList)

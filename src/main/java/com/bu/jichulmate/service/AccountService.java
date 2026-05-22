@@ -1,26 +1,32 @@
 package com.bu.jichulmate.service;
 
-import com.bu.jichulmate.domain.*;
-import com.bu.jichulmate.dto.mypage.*;
-import com.bu.jichulmate.exception.*;
-import com.bu.jichulmate.repository.*;
+import com.bu.jichulmate.domain.Account;
+import com.bu.jichulmate.domain.User;
+import com.bu.jichulmate.dto.mypage.AccountRegisterRequest;
+import com.bu.jichulmate.exception.BusinessException;
+import com.bu.jichulmate.exception.ErrorCode;
+import com.bu.jichulmate.exception.NotFoundException;
+import com.bu.jichulmate.repository.AccountRepository;
+import com.bu.jichulmate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class AccountService {
+
     private static final int MAX_ACCOUNTS = 5;
+
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
 
     public List<Account> getAccountsByUser(Long userId) {
         User user = findUser(userId);
-        // ★ 수정: deleted 제거된 리포지토리 메서드 호출
         return accountRepository.findByUserOrderByIsPrimaryDescCreatedAtDesc(user);
     }
 
@@ -31,21 +37,26 @@ public class AccountService {
         if (accountRepository.countByUser(user) >= MAX_ACCOUNTS) {
             throw new BusinessException(ErrorCode.ACCOUNT_LIMIT_EXCEEDED);
         }
+
         if (accountRepository.existsByAccountNumber(request.getAccountNumber())) {
             throw new BusinessException(ErrorCode.ACCOUNT_DUPLICATE);
         }
 
-        // ★ 수정: boolean을 "Y"/"N"으로 변환하여 저장
-        String isPrimary = (request.isPrimary() || accountRepository.countByUser(user) == 0) ? "Y" : "N";
-        if ("Y".equals(isPrimary)) {
+        // 대표 계좌 처리
+        String isPrimary = "N";
+        if (request.isPrimary() || accountRepository.countByUser(user) == 0) {
+            isPrimary = "Y";
             accountRepository.clearAllPrimary(user);
         }
 
+        // @CreationTimestamp가 엔티티에 있지만 명시적으로도 설정 (이중 안전장치)
         Account account = Account.builder()
                 .user(user)
                 .bankName(request.getBankName())
                 .accountNumber(request.getAccountNumber())
                 .isPrimary(isPrimary)
+                .createdAt(LocalDateTime.now())   // ← 명시적 설정
+                .updatedAt(LocalDateTime.now())   // ← 명시적 설정
                 .build();
 
         accountRepository.save(account);
@@ -56,14 +67,15 @@ public class AccountService {
         User user = findUser(userId);
         Account account = findAccountByIdAndUser(accountId, user);
 
-        // ★ 수정: 하드 딜리트로 변경 (설계서에 deleted 컬럼 없음)
         accountRepository.delete(account);
 
+        // 삭제한 계좌가 대표계좌였다면 새 대표계좌 지정
         if ("Y".equals(account.getIsPrimary())) {
-            accountRepository.findByUserOrderByIsPrimaryDescCreatedAtDesc(user).stream()
-                    .findFirst()
+            accountRepository.findByUserOrderByIsPrimaryDescCreatedAtDesc(user)
+                    .stream().findFirst()
                     .ifPresent(a -> {
                         a.setIsPrimary("Y");
+                        a.setUpdatedAt(LocalDateTime.now());
                         accountRepository.save(a);
                     });
         }
@@ -76,11 +88,13 @@ public class AccountService {
 
         accountRepository.clearAllPrimary(user);
         account.setIsPrimary("Y");
+        account.setUpdatedAt(LocalDateTime.now());
         accountRepository.save(account);
     }
 
     private User findUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
     }
 
     private Account findAccountByIdAndUser(Long accountId, User user) {
