@@ -1,189 +1,193 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="menu" value="myque"/>
+
+<c:set var="menu" value="inquiries"/>
+
 <!DOCTYPE html>
 <html lang="ko">
 
 <head>
 
-    <meta charset="UTF-8">
+    <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
 
     <title>지출메이트 - 내 문의</title>
 
-    <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
-
+    <!-- 공통 마이페이지 css -->
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/css/mypage.css?v=1">
 
+    <!-- 현재 페이지 css -->
     <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/css/myquestion.css">
+          href="${pageContext.request.contextPath}/css/myque.css">
 
     <style>
+
+        /* 1. 마이페이지 공통 레이아웃 틀 고정 (사이드바 + 메인 정렬) */
+               .mypage-container {
+                   display: flex !important;
+                   flex-direction: row !important;
+                   align-items: stretch !important;
+                   gap: 26px !important;
+                   max-width: 1200px;
+                   margin: 0 auto;
+                   padding: 40px 0;
+               }
+
+               /* 2. 공통 사이드바 크기 및 위아래 중앙 가로막 정렬 스타일링 */
+               .mypage-sidebar {
+                   width: 250px !important;
+                   min-width: 250px !important;
+                   height: auto !important;
+                   align-self: stretch !important;
+                   background: #ffffff !important;
+                   border: 1px solid #dddddd !important;
+                   border-radius: 20px !important;
+                   padding: 0 !important;
+                   display: flex !important;
+                   align-items: center !important;
+               }
+               .mypage-sidebar ul {
+                   display: flex !important;
+                   flex-direction: column !important;
+                   justify-content: center !important;
+                   list-style: none !important;
+                   padding: 0 !important;
+                   margin: 0 !important;
+                   width: 100% !important;
+               }
+               .mypage-sidebar li {
+                   width: 100% !important;
+                   display: block !important;
+               }
+               .mypage-sidebar li a {
+                   display: flex !important;
+                   justify-content: center !important;
+                   align-items: center !important;
+                   width: 100% !important;
+                   height: 55px !important;
+                   padding: 0 !important;
+                   line-height: 1 !important;
+                   text-align: center !important;
+                   font-size: 16px !important;
+                   font-weight: 500 !important;
+                   color: #111111 !important;
+                   transition: all 0.2s ease !important;
+               }
+               .mypage-sidebar li a:hover {
+                   background: #fafafa !important;
+                   color: #ff4d4d !important;
+               }
+               .mypage-sidebar li.active a {
+                   color: #ff4d4d !important;
+                   font-weight: 700 !important;
+               }
+
+        /* =========================
+           메인 영역
+        ========================= */
+        .question-main{
+            flex:1;
+        }
 
         /* =========================
            문의 상세 팝업
         ========================= */
-
         .question-modal-overlay{
-
             display:none;
-
             position:fixed;
-
             top:0;
             left:0;
-
             width:100%;
             height:100%;
-
             background:rgba(0,0,0,0.35);
-
             z-index:3000;
-
             justify-content:center;
             align-items:center;
         }
 
         .question-modal-content{
-
             width:780px;
-
             background:#f5f5f5;
-
             border-radius:18px;
-
             padding:22px 20px 30px;
-
             position:relative;
-
             border:1px solid #bdbdbd;
         }
 
         .question-close-btn{
-
             position:absolute;
-
             top:12px;
             right:18px;
-
             font-size:30px;
-
             font-weight:bold;
-
             cursor:pointer;
-
             color:#111;
         }
 
         .question-detail-title{
-
             font-size:22px;
-
             font-weight:700;
-
             color:#111;
-
             margin-bottom:12px;
         }
 
         .question-divider{
-
             width:100%;
-
             height:1px;
-
             background:#8f8f8f;
-
             margin-bottom:20px;
         }
 
         .question-box{
-
             width:100%;
-
             min-height:180px;
-
             border:1px solid #c7c7c7;
-
             border-radius:16px;
-
             background:white;
-
             padding:16px;
-
             margin-bottom:20px;
-
             font-size:16px;
-
             color:#333;
-
             line-height:1.8;
         }
 
         .answer-box{
-
             width:100%;
-
             min-height:180px;
-
             border:1px solid #c7c7c7;
-
             border-radius:16px;
-
             background:white;
-
             padding:16px;
-
             font-size:16px;
-
             color:#333;
-
             line-height:1.8;
         }
 
         .confirm-btn{
-
             width:115px;
-
             height:42px;
-
             border:none;
-
             border-radius:14px;
-
             background:#1e2d4d;
-
             color:white;
-
             font-size:16px;
-
             font-weight:700;
-
             cursor:pointer;
-
             margin-top:20px;
-
             float:right;
         }
 
         .confirm-btn:hover{
-
             opacity:0.92;
         }
 
-        /* 제목 클릭 */
-
         .question-title-link{
-
             cursor:pointer;
-
             transition:0.2s;
         }
 
         .question-title-link:hover{
-
             color:#1e2d4d;
-
             text-decoration:underline;
         }
 
@@ -197,7 +201,7 @@
 
 <div class="mypage-container">
 
-    <%@ include file="/WEB-INF/views/common/layout/sidebar.jspf" %>
+    <%@ include file="/WEB-INF/views/members/mypage/mypage-sidebar.jspf" %>
 
     <!-- 메인 -->
     <main class="question-main">
@@ -231,7 +235,7 @@
 
             </div>
 
-            <!-- 문의 1 -->
+            <!-- 문의 -->
             <div class="table-row">
 
                 <div class="col-no">
@@ -267,7 +271,7 @@
 
             </div>
 
-            <!-- 문의 2 -->
+            <!-- 문의 -->
             <div class="table-row">
 
                 <div class="col-no">
@@ -313,11 +317,9 @@
             <div class="empty-line"></div>
             <div class="empty-line"></div>
 
-            <!-- 페이지 -->
+            <!-- 페이지네이션 -->
             <div class="pagination">
-
                 1
-
             </div>
 
         </section>
@@ -326,19 +328,15 @@
 
 </div>
 
-<!-- =========================
-     문의 상세 팝업
-========================= -->
-
-<div id="questionModal"
-     class="question-modal-overlay">
+<!-- 문의 팝업 -->
+<div id="questionModal" class="question-modal-overlay">
 
     <div class="question-modal-content">
 
         <span class="question-close-btn"
               onclick="closeQuestionModal()">
 
-            x
+            &times;
 
         </span>
 
@@ -384,9 +382,7 @@
     function openQuestionModal(title, question, answer){
 
         document.getElementById('modalTitle').innerText = title;
-
         document.getElementById('modalQuestion').innerText = question;
-
         document.getElementById('modalAnswer').innerText = answer;
 
         document.getElementById('questionModal').style.display = 'flex';
@@ -404,10 +400,8 @@
         const modal = document.getElementById('questionModal');
 
         if(event.target === modal){
-
             closeQuestionModal();
         }
-
     });
 
 </script>
