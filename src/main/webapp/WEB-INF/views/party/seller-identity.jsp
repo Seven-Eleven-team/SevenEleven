@@ -9,17 +9,16 @@
     <style>
         body { background: #e8e8e8; min-height: 100vh; display: flex; flex-direction: column; }
         .site-header { opacity: 1 !important; transform: translateY(0) !important; background: rgba(25, 59, 96, 0.96) !important; }
-        .footer { height: 90px !important; min-height: 90px !important; }
-        .page-wrap { padding: 2.5rem 1.5rem; max-width: 850px; width: 100%; margin: 0 auto; padding-top: calc(74px + 3rem); flex: 1; display: flex; flex-direction: column; }
+        .footer { height: 130px !important; }
+        .page-wrap { padding: 2rem 1.5rem; max-width: 900px; width: 100%; margin: 0 auto; padding-top: calc(74px + 2rem); flex: 1; box-sizing: border-box; }
         .breadcrumb { font-size: 12px; color: #666; margin-bottom: 1rem; }
-        .card { background: #f0f0f0; border-radius: 16px; padding: 3.5rem; min-height: 450px; box-shadow: 0 4px 14px rgba(0,0,0,0.06); width: 100%; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; }
-        .card-title { text-align: center; font-size: 24px; font-weight: 600; margin-bottom: 2rem; color: #1a1a1a; }
-        .inner-box { background: #e0e0e0; border-radius: 8px; padding: 2rem; flex: 1; display: flex; flex-direction: column; justify-content: center; margin-bottom: 2rem; }
-        .inner-box p { font-weight: 500; font-size: 16px; margin-bottom: 1.5rem; color: #333; }
-        .check-label { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer; font-size: 15px; color: #333; }
-        .check-label input { width: 16px; height: 16px; }
-        .btn-row { display: flex; justify-content: center; gap: 1rem; }
-        .btn-dark { background: #1e3a5f; color: #fff; border: none; border-radius: 30px; padding: 12px 50px; font-size: 15px; cursor: pointer; }
+        .card { background: #f0f0f0; border-radius: 12px; padding: 1.5rem 2rem; }
+        .card-title { text-align: center; font-size: 20px; font-weight: 500; margin-bottom: 1.5rem; color: #1a1a1a; }
+        .inner-box { background: #e0e0e0; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
+        .inner-box p { font-weight: 500; margin-bottom: 1rem; color: #333; }
+        .check-label { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; cursor: pointer; font-size: 14px; color: #333; }
+        .btn-row { display: flex; justify-content: center; gap: 1rem; margin-top: 2rem; }
+        .btn-dark { background: #1e3a5f; color: #fff; border: none; border-radius: 30px; padding: 10px 40px; font-size: 15px; cursor: pointer; }
     </style>
 </head>
 <body>

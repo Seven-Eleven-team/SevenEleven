@@ -7,10 +7,16 @@
     <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
     <title>판매자 등록</title>
     <style>
-        body { background: #e8e8e8; }
+        /* body에 min-height와 display: flex를 주어
+           화면이 커지더라도 푸터가 항상 바닥에 고정되도록 제어합니다.
+        */
+        body { background: #e8e8e8; min-height: 100vh; display: flex; flex-direction: column; margin: 0; }
         .site-header { opacity: 1 !important; transform: translateY(0) !important; background: rgba(25, 59, 96, 0.96) !important; }
         .footer { height: 130px !important; }
-        .page-wrap { padding: 2rem 1.5rem; max-width: 900px; margin: 0 auto; padding-top: calc(74px + 2rem); }
+
+        /* flex: 1을 부여하여 남은 여백 공간을 page-wrap이 전부 차지하도록 합니다. */
+        .page-wrap { padding: 2rem 1.5rem; max-width: 900px; width: 100%; margin: 0 auto; padding-top: calc(74px + 2rem); flex: 1; box-sizing: border-box; }
+
         .breadcrumb { font-size: 12px; color: #666; margin-bottom: 1rem; }
         .card { background: #f0f0f0; border-radius: 12px; padding: 1.5rem 2rem; }
         .card-title { text-align: center; font-size: 20px; font-weight: 500; margin-bottom: 1.5rem; color: #1a1a1a; }
@@ -171,6 +177,7 @@
         setTimeout(function() { t.classList.remove('on'); }, 3000);
     }
 
+    // [기존 코드 동일 유지]
     function chkName() {
         const v = document.getElementById('name').value;
         const ok = /^[가-힣]+$/.test(v) || /^[a-zA-Z]+$/.test(v);

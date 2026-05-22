@@ -7,17 +7,17 @@
     <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
     <title>OTT 판매 확인</title>
     <style>
-        body { background: #e8e8e8; }
+        body { background: #e8e8e8; min-height: 100vh; display: flex; flex-direction: column; }
         .site-header { opacity: 1 !important; transform: translateY(0) !important; background: rgba(25, 59, 96, 0.96) !important; }
-        .footer { height: 90px !important; min-height: 90px !important; padding-top: 12px !important; padding-bottom: 12px !important; }
-        .page-wrap { padding: 2.5rem 1.5rem; max-width: 850px; margin: 0 auto; padding-top: calc(74px + 3rem); min-height: calc(100vh - 180px); }
-        .breadcrumb { font-size: 13px; color: #666; margin-bottom: 1.2rem; }
-        .card { background: #f0f0f0; border-radius: 16px; padding: 3rem 3.5rem; box-shadow: 0 4px 14px rgba(0,0,0,0.06); text-align: center; }
-        .card-title { font-size: 24px; font-weight: 600; margin-bottom: 1rem; color: #1a1a1a; }
-        .card-sub { font-size: 15px; color: #555; margin-bottom: 2.5rem; line-height: 1.6; }
-        .btn-row { display: flex; justify-content: center; gap: 1.2rem; margin-top: 1rem; }
-        .btn-dark { background: #1e3a5f; color: #fff; border: none; border-radius: 30px; padding: 13px 50px; font-size: 16px; cursor: pointer; }
-        .btn-outline { background: #fff; border: 1px solid #ccc; border-radius: 30px; padding: 13px 50px; font-size: 16px; cursor: pointer; color: #333; }
+        .footer { height: 130px !important; }
+        .page-wrap { padding: 2rem 1.5rem; max-width: 900px; width: 100%; margin: 0 auto; padding-top: calc(74px + 2rem); flex: 1; box-sizing: border-box; }
+        .breadcrumb { font-size: 12px; color: #666; margin-bottom: 1rem; }
+        .card { background: #f0f0f0; border-radius: 12px; padding: 1.5rem 2rem; box-shadow: 0 4px 14px rgba(0,0,0,0.06); text-align: center; }
+        .card-title { font-size: 20px; font-weight: 500; margin-bottom: 1rem; color: #1a1a1a; }
+        .card-sub { font-size: 14px; color: #555; margin-bottom: 2.5rem; line-height: 1.6; }
+        .btn-row { display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; }
+        .btn-dark { background: #1e3a5f; color: #fff; border: none; border-radius: 30px; padding: 10px 40px; font-size: 15px; cursor: pointer; }
+        .btn-outline { background: #fff; border: 1px solid #ccc; border-radius: 30px; padding: 10px 40px; font-size: 15px; cursor: pointer; color: #333; }
         .btn-dark:hover { background: #162d4a; }
     </style>
 </head>
