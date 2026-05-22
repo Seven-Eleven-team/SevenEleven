@@ -11,7 +11,7 @@
             <a href="${pageContext.request.contextPath}/dashboard" data-auth-required="true">지출통계</a>
         </li>
         <li>
-            <a href="${pageContext.request.contextPath}/board">게시판</a>
+            <a href="${pageContext.request.contextPath}/community">게시판</a>
         </li>
         <li>
             <a href="${pageContext.request.contextPath}/support">고객센터</a>

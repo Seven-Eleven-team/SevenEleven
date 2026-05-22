@@ -4,3 +4,4 @@
 <%@ include file="/WEB-INF/views/common/modal/signupModal.jspf" %>
 <%@ include file="/WEB-INF/views/common/modal/findPasswordModal.jspf" %>
 <%@ include file="/WEB-INF/views/common/modal/loginRequiredModal.jspf" %>
+<%@ include file="/WEB-INF/views/common/modal/ai-mentor.jspf" %>
