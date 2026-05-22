@@ -78,7 +78,6 @@ src/main/webapp/WEB-INF/views
 │   ├── 📄 noticeDetail.jsp                    (공지 상세)
 │   ├── 📄 faq.jsp                             (FAQ 목록)
 │   ├── 📄 faqDetail.jsp                       (FAQ 상세)
-│   ├── 📄 qna.jsp                             (문의 목록)
 │   ├── 📄 qnaDetail.jsp                       (문의 상세)
 │   ├── 📄 qnaForm.jsp                         (문의 작성)
 │   ├── 📄 qnaEdit.jsp                         (문의 수정)

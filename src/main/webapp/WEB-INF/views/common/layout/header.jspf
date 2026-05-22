@@ -1,5 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <header class="site-header">
     <button type="button" class="hamburger-btn" aria-label="메뉴 열기">☰</button>
@@ -41,3 +42,4 @@
 </header>
 
 <%@ include file="/WEB-INF/views/common/layout/sidebar.jspf" %>
+<script>document.querySelector('.site-header')?.classList.add('is-solid');</script>

@@ -1,0 +1,9 @@
+<%@ page pageEncoding="UTF-8" %>
+<div class="floating-buttons">
+    <button type="button" class="floating-btn ai-btn" aria-label="AI 멘토링" data-auth-required="true">
+        <img src="${pageContext.request.contextPath}/images/ai_modal.jpg?v=1" alt="AI 멘토링">
+    </button>
+    <button type="button" class="floating-btn chat-btn" id="faqOpenBtn" aria-label="1대1 질의응답">
+        <i class="bi bi-chat-dots" style="font-size: 28px; color: #4b8df7;"></i>
+    </button>
+</div>
