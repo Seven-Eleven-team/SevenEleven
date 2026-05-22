@@ -18,7 +18,7 @@
             <a href="${pageContext.request.contextPath}/support">고객센터</a>
         </li>
         <li>
-            <a href="${pageContext.request.contextPath}/party" data-auth-required="true">판매자 등록</a>
+            <a href="${pageContext.request.contextPath}/party/seller-identity" data-auth-required="true">판매자 등록</a>
         </li>
         <li>
             <a href="#" id="sidebarLogoutButton">로그아웃</a>

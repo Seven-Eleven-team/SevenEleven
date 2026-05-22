@@ -4,6 +4,7 @@ import com.bu.jichulmate.dto.party.SellerRequest;
 import com.bu.jichulmate.dto.party.SellerResponse;
 import com.bu.jichulmate.service.MailService;
 import com.bu.jichulmate.service.PartySellerService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,5 +49,21 @@ public class PartySellerController {
     @GetMapping("/sellers")
     public ResponseEntity<List<SellerResponse>> getAllSellers() {
         return ResponseEntity.ok(partySellerService.getAllSellers());
+    }
+
+    @PostMapping("/sellers/verify-password")
+    public ResponseEntity<String> verifyPassword(
+            @RequestBody Map<String, String> body,
+            HttpSession session) {
+        Long userId = (Long) session.getAttribute("loginUserId");
+        if (userId == null) return ResponseEntity.status(401).body("로그인이 필요합니다.");
+        boolean result = partySellerService.verifyPassword(userId, body.get("password"));
+        if (result) return ResponseEntity.ok("인증되었습니다!");
+        return ResponseEntity.badRequest().body("비밀번호를 잘못 입력하셨습니다.");
+    }
+
+    @GetMapping("/sellers/profile/{userId}")
+    public ResponseEntity<Map<String, Object>> getSellerProfile(@PathVariable Long userId) {
+        return ResponseEntity.ok(partySellerService.getSellerProfile(userId));
     }
 }
