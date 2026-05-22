@@ -679,17 +679,6 @@ body.is-opening-loaded .floating-btn:hover {
     padding-bottom: 10px;
 }
 
-/* FOOTER */
-.footer {
-    height: 260px;
-    background: #193b60;
-    color: #f9f7f7;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-}
-
 /* RESPONSIVE */
 @media (min-width: 1920px) {
     .site-logo {

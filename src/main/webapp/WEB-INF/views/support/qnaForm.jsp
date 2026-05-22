@@ -15,7 +15,7 @@
             <textarea class="qnaForm-content" name="content" placeholder="문의 내용을 입력해주세요"></textarea>
             <div class="qnaForm-btns">
                 <button class="qnaForm-btn-prev" type="button" onclick="history.back()">이전으로</button>
-                <button class="qnaForm-btn-submit" type="submit">작성완료</button>
+                <button class="qnaForm-btn-submit" type="submit" onclick="return validateForm()">작성완료</button>
             </div>
         </form>
     </div>
@@ -26,17 +26,16 @@
 <%@ include file="/WEB-INF/views/common/include/scripts.jspf" %>
 <script src="${pageContext.request.contextPath}/js/pages/faq.js"></script>
 <script>
-    document.querySelector('.qnaForm-btn-submit').addEventListener('click', function(e) {
-        e.preventDefault();
-        const title = document.querySelector('.qnaForm-title').value.trim();
-        const content = document.querySelector('.qnaForm-content').value.trim();
+    function validateForm() {
+    const title = document.querySelector('.qnaForm-title').value.trim();
+    const content = document.querySelector('.qnaForm-content').value.trim();
 
-        if (title === '') { alert('제목을 입력해주세요.'); return; }
-        if (content === '') { alert('내용을 입력해주세요.'); return; }
+    if (title === '') { alert('제목을 입력해주세요.'); return false; }
+    if (content === '') { alert('내용을 입력해주세요.'); return false; }
 
-        alert('작성이 완료되었습니다.');
-        document.querySelector('form').submit();
-    });
+    alert('작성이 완료되었습니다.');
+    return true;
+}
 </script>
 </body>
 </html>
