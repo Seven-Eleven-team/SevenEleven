@@ -1,0 +1,35 @@
+<%@ page pageEncoding="UTF-8" %>
+
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/ai-mentor.css">
+
+<div id="ai-mentor-modal" class="ai-mentor-drawer">
+
+    <div class="drawer-fixed-header">
+        <div class="close-btn-wrap">
+            <button id="ai-modal-close" class="drawer-close-btn">&times;</button>
+        </div>
+        <div class="chat-main-title">나만의 AI 멘토링</div>
+        <div class="chat-divider"></div>
+    </div>
+
+    <div class="drawer-body">
+        <div class="chat-date-display" id="ai-chat-date"></div>
+
+        <div id="ai-chat-scroller">
+        </div>
+    </div>
+
+    <div class="drawer-footer">
+        <form id="ai-chat-form" class="chat-input-container" onsubmit="return false;">
+            <input type="text" id="ai-chat-input" placeholder="채팅을 입력해주세요" autocomplete="off" required>
+
+            <button type="submit" class="chat-send-submit-btn" aria-label="전송">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 19V5M5 12l7-7 7 7"/>
+                </svg>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script src="${pageContext.request.contextPath}/js/pages/ai-mentor.js"></script>

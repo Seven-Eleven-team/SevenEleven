@@ -1,11 +1,16 @@
 package com.bu.jichulmate.controller;
 
 import com.bu.jichulmate.dto.ai.FeedbackResponse;
+import com.bu.jichulmate.dto.ai.AiChatHistoryResponse;
 import com.bu.jichulmate.service.AiMentorService;
+import com.bu.jichulmate.util.SessionUtils; // ★ 팀 표준 세션 유틸리티 import 추가!
+import jakarta.servlet.http.HttpSession;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,21 +19,42 @@ public class AiMentorController {
 
     private final AiMentorService aiMentorService;
 
-    // 프론트(JS)에서 보내는 JSON 데이터를 받기 위한 임시 그릇
     @Data
     public static class ChatRequest {
         private String message;
-        private String flavor; // "mild", "medium", "spicy"
     }
 
+    /**
+     * AI 금융 멘토와 대화를 나누고 답변을 받는 API
+     * POST /api/v1/ai/chat
+     */
     @PostMapping("/chat")
-    public ResponseEntity<FeedbackResponse> chatWithMentor(@RequestBody ChatRequest request) {
-        // 프론트에서 넘어온 맛(flavor)이 없으면 기본 중간맛으로 세팅
-        String flavor = request.getFlavor() != null ? request.getFlavor() : "medium";
+    public ResponseEntity<FeedbackResponse> chatWithMentor(
+            @RequestBody ChatRequest request,
+            HttpSession session) {
 
-        // Service에 일 시키기
-        FeedbackResponse response = aiMentorService.getChatFeedback(request.getMessage(), flavor);
+        // ★ 수정됨: 엉뚱한 "userId" 대신, 팀 표준 SessionUtils를 사용해 안전하게 ID 추출!
+        Long userId = SessionUtils.getLoginUserId(session);
+
+        // 멘토 서비스에 유저 ID와 메시지를 전달하여 대화 처리
+        FeedbackResponse response = aiMentorService.getChatFeedback(userId, request.getMessage());
 
         return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 과거 채팅 이력을 순서대로 조회하는 API
+     * GET /api/v1/ai/history
+     */
+    @GetMapping("/history")
+    public ResponseEntity<List<AiChatHistoryResponse>> getChatHistory(HttpSession session) {
+
+        // ★ 수정됨: 팀 표준 SessionUtils 사용
+        Long userId = SessionUtils.getLoginUserId(session);
+
+        // 서비스로부터 대화 내역 List 획득
+        List<AiChatHistoryResponse> history = aiMentorService.getChatHistory(userId);
+
+        return ResponseEntity.ok(history);
     }
 }

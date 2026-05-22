@@ -1,113 +1,302 @@
-/* 플로팅 버튼 */
-#ai-mentor-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 1000;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    transition: transform 0.3s;
-}
-#ai-mentor-btn:hover { transform: scale(1.1); }
-#ai-mentor-btn img { width: 100%; border-radius: 50%; }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap');
 
-/* 채팅 모달창 */
-#ai-mentor-modal {
+/* ==========================================================================
+   [AI 금융멘토] 우측 고정 로봇 버튼 및 슬라이드 Drawer 패널 스타일
+   ========================================================================== */
+
+/* 1. 우측 하단 로봇 이미지 고정 버튼 */
+.ai-robot-trigger-btn {
     position: fixed;
-    bottom: 90px;
-    right: 20px;
-    width: 350px;
-    height: 500px;
-    background: white;
-    border-radius: 15px;
+    bottom: 40px;
+    right: 40px;
+    width: 65px;
+    height: 65px;
+    background-image: url('/images/ai_modal.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 999;
+}
+
+.ai-robot-trigger-btn:hover {
+    transform: scale(1.1);
+}
+
+/* 2. AI 멘토 슬라이드 모달 Drawer UI */
+.ai-mentor-drawer {
+    position: fixed;
+    top: 0;
+    right: -840px;
+    width: 833px;
+    height: 1024px;
+    max-height: 100vh;
+    background-color: #ffffff;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-left: 1px solid #e5e7eb;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.08);
+    transition: right 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 9999;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    z-index: 1001;
-    overflow: hidden;
 }
-.hidden { display: none !important; }
 
-/* 헤더 스타일 */
-.ai-modal-header {
-    background: white;
-    padding: 15px;
-    border-bottom: 1px solid #eee;
+.ai-mentor-drawer.open {
+    right: 0;
+}
+
+/* 3. 스크롤 시 상단에 고정되는 헤더 영역 */
+.drawer-fixed-header {
+    width: 100%;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
+    background-color: #ffffff;
+    border-top-left-radius: 20px;
+    padding: 10px 30px 0;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    z-index: 10;
 }
-.header-content h4 { margin: 0; font-size: 16px; color: #333; }
-.current-date { font-size: 11px; color: #999; }
 
-/* 맛 선택 영역 */
-.ai-flavor-selector {
-    padding: 10px;
-    background: #f9f9f9;
+.close-btn-wrap {
+    width: 100%;
     display: flex;
-    justify-content: space-around;
-    font-size: 12px;
+    justify-content: flex-end;
 }
 
-/* 채팅창 몸통 */
-.ai-modal-body {
+.drawer-close-btn {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.drawer-close-btn:hover {
+    color: #4b5563;
+}
+
+.chat-main-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 100%;
+    color: #112D4E;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.chat-divider {
+    width: 100%;
+    height: 0px;
+    border: none;
+    border-top: 1px solid #3F72AF;
+    margin-bottom: 0px;
+}
+
+/* 4. 스크롤 되는 바디 영역 */
+.drawer-body {
     flex: 1;
-    padding: 15px;
+    padding: 20px 30px;
     overflow-y: auto;
-    background: #f5f6f7;
+    background-color: #ffffff;
     display: flex;
     flex-direction: column;
-    gap: 10px;
 }
 
-/* 말풍선 공통 */
-.chat-bubble {
-    max-width: 80%;
-    padding: 10px 14px;
-    border-radius: 15px;
-    font-size: 13px;
-    line-height: 1.4;
+/* ★ 신규 추가: 커스텀 스크롤바 디자인 (웹킷 기반 브라우저 전용) */
+.drawer-body::-webkit-scrollbar {
+    width: 8px; /* 스크롤바 너비를 얇게 설정 */
 }
 
-/* AI 말풍선 (왼쪽, 진한 색) */
-.ai-bubble {
-    align-self: flex-start;
-    background: #4A76A8;
-    color: white;
-    border-bottom-left-radius: 2px;
+.drawer-body::-webkit-scrollbar-track {
+    background: transparent; /* 트랙(바탕)은 투명하게 */
 }
 
-/* 사용자 말풍선 (오른쪽, 연한 색) */
-.user-bubble {
-    align-self: flex-end;
-    background: #E1E9F2;
-    color: #333;
-    border-bottom-right-radius: 2px;
+.drawer-body::-webkit-scrollbar-thumb {
+    background-color: #DBE2EF; /* 유저 말풍선 색상과 동일한 연한 블루 */
+    border-radius: 10px; /* 둥근 모서리 */
 }
 
-/* 푸터(입력창) */
-.ai-modal-footer {
-    padding: 10px;
+.drawer-body::-webkit-scrollbar-thumb:hover {
+    background-color: #3F72AF; /* 마우스 올렸을 때 멘토 말풍선 색상으로 진해짐 */
+}
+
+.chat-date-display {
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #9ca3af;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 25px;
+}
+
+#ai-chat-scroller {
     display: flex;
-    gap: 5px;
-    background: white;
-    border-top: 1px solid #eee;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
 }
-#ai-chat-input {
-    flex: 1;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    padding: 8px 15px;
-    font-size: 13px;
+
+/* 5. 동적 말풍선 및 아바타 레이아웃 */
+.chat-message-item {
+    display: flex;
+    gap: 12px;
+    max-width: 75%;
 }
-#send-btn {
-    background: none;
-    border: 1px solid #ddd;
+
+.chat-message-item.user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.chat-message-item.mentor {
+    align-self: flex-start;
+}
+
+.mentor-avatar {
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    width: 35px;
-    height: 35px;
+    background-image: url('/images/ai_modal.jpg');
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+    border: 1px solid #e5e7eb;
+}
+
+.message-bubble {
+    padding: 14px 18px;
+    border-radius: 20px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.6;
+    word-break: break-word;
+}
+
+.user .message-bubble {
+    background-color: #DBE2EF;
+    color: #112D4E;
+    border-top-right-radius: 4px;
+}
+
+.mentor .message-bubble {
+    background-color: #3F72AF;
+    color: #F9F7F7;
+    border-top-left-radius: 4px;
+}
+
+/* 6. 하단 고정 메시지 입력창 */
+.drawer-footer {
+    padding: 20px 30px;
+    background-color: #ffffff;
+    border-bottom-left-radius: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.chat-input-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 740px;
+    height: 70px;
+    border: 3px solid #3F72AF;
+    border-radius: 20px;
+    background-color: #ffffff;
+    padding: 0 15px 0 25px;
+    box-sizing: border-box;
+}
+
+.chat-input-container input {
+    flex: 1;
+    height: 100%;
+    border: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: #000000;
+    outline: none;
+    padding: 0;
+    margin-right: 15px;
+}
+
+.chat-input-container input::placeholder {
+    color: #939393;
+    font-size: 15px;
+}
+
+.chat-send-submit-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid #112D4E;
+    background-color: transparent;
+    color: #112D4E;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    padding: 0;
+}
+
+.chat-send-submit-btn:hover {
+    background-color: #112D4E;
+    color: #ffffff;
+}
+
+/* =========================================================
+   ★ 신규 추가: 타이핑 애니메이션 (로딩 인디케이터)
+   ========================================================= */
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 16px 22px;
+    min-height: 24px; /* 말풍선이 찌그러지지 않게 최소 높이 보장 */
+}
+
+.typing-indicator span {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    background-color: #F9F7F7; /* 멘토 글자색(흰색)과 동일하게 매칭 */
+    border-radius: 50%;
+    animation: typingBounce 1.4s infinite ease-in-out both;
+}
+
+/* 점들이 순서대로 뛰도록 딜레이(지연 시간) 설정 */
+.typing-indicator span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0s;
+}
+
+/* 커졌다 작아지는 바운스 키프레임 애니메이션 */
+@keyframes typingBounce {
+    0%, 80%, 100% {
+        transform: scale(0);
+    }
+    40% {
+        transform: scale(1);
+    }
 }
