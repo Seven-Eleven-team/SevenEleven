@@ -4,541 +4,772 @@
 ========================================================= */
 
 /* =========================
-   1. 메인 콘텐츠 및 탭
+   메인 콘텐츠
 ========================= */
 
-.manage-content {
-    width: 100%;
-    min-height: 832px;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-}
+.manage-content{
 
-.page-title {
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 25px;
-    color: #222;
-}
+    flex:1;
 
-.tab-menu {
-    display: flex;
-    gap: 30px;
-    margin-bottom: 20px;
-}
+    width:100%;
+    min-width:0;
 
-.tab {
-    padding: 10px 5px;
-    font-weight: 700;
-    color: #999;
-    cursor: pointer;
-    position: relative;
-    font-size: 18px;
-}
-
-.tab.active {
-    color: #ff4d4d !important;
-}
-
-.tab.active::before {
-    content: "";
-    position: absolute;
-    top: -2px;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background-color: #ff4d4d;
-}
-
-.tab-content {
-    display: none;
-    width: 100%;
-}
-
-.tab-content.active {
-    display: block;
+    display:flex;
+    flex-direction:column;
 }
 
 /* =========================
-   2. 구독 중 카드형 레이아웃
+   페이지 제목
 ========================= */
 
-.manage-grid {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 26px;
-    align-items: stretch;
+.page-title{
+
+    font-size:32px;
+    font-weight:700;
+
+    color:#111;
+
+    margin-bottom:24px;
+}
+
+/* =========================
+   탭 메뉴
+========================= */
+
+.tab-menu{
+
+    display:flex;
+
+    gap:30px;
+
+    margin-bottom:24px;
+}
+
+.tab{
+
+    position:relative;
+
+    padding:10px 4px;
+
+    font-size:18px;
+    font-weight:700;
+
+    color:#999;
+
+    cursor:pointer;
+
+    transition:0.2s;
+}
+
+.tab.active{
+
+    color:#ff4d4d;
+}
+
+.tab.active::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:-2px;
+    left:0;
+
+    width:100%;
+    height:3px;
+
+    border-radius:999px;
+
+    background:#ff4d4d;
+}
+
+.tab-content{
+    display:none;
+}
+
+.tab-content.active{
+    display:block;
+}
+
+/* =========================
+   구독 관리 레이아웃
+========================= */
+
+.manage-grid{
+
+    width:100%;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:28px;
+
+    align-items:stretch;
 }
 
 .manage-left,
-.manage-right {
-    width: 100%;
-    min-width: 0;
+.manage-right{
+
+    width:100%;
+    min-width:0;
 }
+
+/* =========================
+   공통 카드
+========================= */
 
 .sub-manage-card,
-.detail-card {
-    width: 100%;
-    min-height: 714px;
-    background: #ffffff;
-    border: 1px solid #dbdbdb;
-    border-radius: 20px;
-    padding: 30px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
-}
+.detail-card,
+.history-card{
 
-.sub-manage-card {
-    justify-content: space-between;
-}
+    width:100%;
 
-/* =========================
-   3. 구독 카드 헤더
-========================= */
+    background:white;
 
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 20px;
-    gap: 16px;
-}
+    border:1px solid #dbdbdb;
+    border-radius:24px;
 
-.service-info {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    min-width: 0;
-}
+    box-shadow:0 4px 15px rgba(0,0,0,0.04);
 
-.service-info h3 {
-    font-size: 18px;
-    color: #333;
-    margin: 0;
-}
+    padding:32px;
 
-.order-num {
-    font-size: 12px;
-    color: #999;
-    margin-top: 2px;
-}
-
-.sub-logo-small {
-    width: 45px;
-    height: 45px;
-    object-fit: contain;
-    flex-shrink: 0;
-}
-
-.card-btns {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    margin-top: -3px;
-    flex-shrink: 0;
-}
-
-.btn-extend {
-    width: 100px;
-    height: 36px;
-    background-color: #1e2d4d !important;
-    color: #ffffff !important;
-    border: none !important;
-    border-radius: 18px;
-    font-weight: 700;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-cancel {
-    width: 100px;
-    height: 36px;
-    background-color: #ffffff !important;
-    color: #666666 !important;
-    border: 1px solid #dbdbdb !important;
-    border-radius: 18px;
-    font-weight: 700;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-extend:hover {
-    background-color: #2c3e66 !important;
-}
-
-.btn-cancel:hover {
-    background-color: #f9f9f9 !important;
-    border-color: #c9c9c9 !important;
+    box-sizing:border-box;
 }
 
 /* =========================
-   4. 주문 로그 박스
+   구독 관리 카드
 ========================= */
 
-.order-log-box {
-    background-color: #f8f9fa;
-    border: 1px solid #eeeeee;
-    border-radius: 12px;
-    padding: 18px;
-    margin-top: 20px;
+.sub-manage-card,
+.detail-card{
+
+    min-height:714px;
+
+    display:flex;
+    flex-direction:column;
 }
 
-.log-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: #333;
-    margin-bottom: 12px;
-}
-
-.log-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.log-table td {
-    font-size: 13px;
-    color: #666;
-    padding: 7px 0;
-}
-
-.log-table .text-right {
-    text-align: right;
-    font-weight: 600;
-    color: #444;
+.sub-manage-card{
+    justify-content:space-between;
 }
 
 /* =========================
-   5. 주문 내역 리스트형
+   히스토리 카드
 ========================= */
 
-.history-card {
-    width: 100%;
-    min-height: 714px;
-    background: #ffffff;
-    border: 1px solid #dbdbdb;
-    border-radius: 20px;
-    padding: 40px;
-    box-sizing: border-box;
-}
-
-.history-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 25px 0;
-    gap: 20px;
-}
-
-.history-left {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    min-width: 0;
-}
-
-.history-info {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.history-info strong {
-    font-size: 17px;
-    color: #333;
-}
-
-.history-info span {
-    font-size: 13px;
-    color: #888;
-}
-
-.history-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 35px;
-    flex-shrink: 0;
-}
-
-.order-code {
-    font-size: 13px;
-    font-weight: 700;
-    color: #333;
-}
-
-.btn-re-sub {
-    width: 110px;
-    height: 38px;
-    background-color: #1e2d4d !important;
-    color: #ffffff !important;
-    border: none !important;
-    border-radius: 19px;
-    font-weight: 700;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-re-sub:hover {
-    opacity: 0.92;
-}
-
-.history-divider {
-    border: none;
-    border-top: 1px solid #eeeeee;
-    margin: 0;
+.history-card{
+    min-height:714px;
 }
 
 /* =========================
-   6. 상태 추적기 / 상세 정보
+   카드 헤더
 ========================= */
 
-.status-tracker {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background: #f8f9fa;
-    padding: 25px 15px;
-    border-radius: 15px;
-    margin: 25px 0;
+.card-header{
+
+    display:flex;
+
+    justify-content:space-between;
+    align-items:flex-start;
+
+    gap:16px;
+
+    margin-bottom:24px;
 }
 
-.status-step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+.service-info{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    min-width:0;
 }
 
-.step-icon {
-    width: 40px;
-    height: 40px;
-    object-fit: contain;
+.sub-logo-small{
+
+    width:48px;
+    height:48px;
+
+    object-fit:contain;
+
+    flex-shrink:0;
 }
 
-.step-text {
-    font-size: 13px;
-    font-weight: 700;
-    color: #999;
+.service-info h3{
+
+    font-size:18px;
+    font-weight:700;
+
+    color:#333;
+}
+
+.order-num{
+
+    margin-top:4px;
+
+    font-size:12px;
+
+    color:#999;
+}
+
+/* =========================
+   버튼
+========================= */
+
+.card-btns{
+
+    display:flex;
+    flex-direction:column;
+
+    gap:10px;
+
+    flex-shrink:0;
+}
+
+.btn-extend,
+.btn-cancel,
+.btn-re-sub,
+.view-terms{
+
+    border:none;
+
+    cursor:pointer;
+
+    transition:0.2s;
+
+    font-weight:700;
+}
+
+.btn-extend,
+.btn-re-sub,
+.view-terms{
+
+    background:#1e2d4d;
+    color:white;
+}
+
+.btn-extend{
+
+    width:100px;
+    height:36px;
+
+    border-radius:18px;
+
+    font-size:13px;
+}
+
+.btn-cancel{
+
+    width:100px;
+    height:36px;
+
+    border-radius:18px;
+
+    border:1px solid #dbdbdb;
+
+    background:white;
+
+    color:#666;
+
+    font-size:13px;
+}
+
+.btn-re-sub{
+
+    width:110px;
+    height:38px;
+
+    border-radius:19px;
+
+    font-size:13px;
+}
+
+.view-terms{
+
+    width:100%;
+
+    padding:15px;
+
+    border-radius:12px;
+
+    margin-top:20px;
+
+    font-size:15px;
+}
+
+.btn-extend:hover,
+.btn-re-sub:hover,
+.view-terms:hover{
+
+    opacity:0.92;
+}
+
+.btn-cancel:hover{
+
+    background:#fafafa;
+}
+
+/* =========================
+   주문 로그
+========================= */
+
+.order-log-box{
+
+    margin-top:20px;
+
+    background:#f8f9fa;
+
+    border:1px solid #eeeeee;
+    border-radius:14px;
+
+    padding:20px;
+}
+
+.log-title{
+
+    font-size:14px;
+    font-weight:700;
+
+    color:#333;
+
+    margin-bottom:14px;
+}
+
+.log-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+}
+
+.log-table td{
+
+    padding:7px 0;
+
+    font-size:13px;
+
+    color:#666;
+}
+
+.log-table .text-right{
+
+    text-align:right;
+
+    color:#444;
+
+    font-weight:600;
+}
+
+/* =========================
+   주문 내역
+========================= */
+
+.history-item{
+
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    gap:20px;
+
+    padding:25px 0;
+}
+
+.history-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    min-width:0;
+}
+
+.history-info{
+
+    display:flex;
+    flex-direction:column;
+
+    gap:5px;
+}
+
+.history-info strong{
+
+    font-size:17px;
+
+    color:#333;
+}
+
+.history-info span{
+
+    font-size:13px;
+
+    color:#888;
+}
+
+.history-right{
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:flex-end;
+
+    gap:35px;
+
+    flex-shrink:0;
+}
+
+.order-code{
+
+    font-size:13px;
+    font-weight:700;
+
+    color:#333;
+}
+
+.history-divider{
+
+    border:none;
+
+    border-top:1px solid #eeeeee;
+}
+
+/* =========================
+   상태 추적기
+========================= */
+
+.status-tracker{
+
+    display:flex;
+
+    justify-content:space-around;
+    align-items:center;
+
+    background:#f8f9fa;
+
+    border-radius:16px;
+
+    padding:25px 15px;
+
+    margin:25px 0;
+}
+
+.status-step{
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.step-icon{
+
+    width:40px;
+    height:40px;
+
+    object-fit:contain;
+}
+
+.step-text{
+
+    font-size:13px;
+    font-weight:700;
+
+    color:#999;
 }
 
 .status-step.active .step-text,
-.status-step.done .step-text {
-    color: #1e2d4d;
+.status-step.done .step-text{
+
+    color:#1e2d4d;
 }
 
-.status-arrow img {
-    width: 16px;
-    opacity: 0.3;
-}
+.status-arrow img{
 
-.status-msg-box {
-    background: #f1f3f7;
-    padding: 15px;
-    text-align: center;
-    border-radius: 12px;
-    font-weight: 700;
-    color: #1e2d4d;
-    margin-bottom: 20px;
-}
+    width:16px;
 
-.description-box {
-    border: 1px solid #eeeeee;
-    background: #fafafa;
-    padding: 20px;
-    border-radius: 12px;
-    font-size: 13.5px;
-    color: #666;
-    line-height: 1.6;
-}
-
-.detail-info-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: auto;
-}
-
-.detail-info-table th {
-    text-align: left;
-    padding: 12px 0;
-    color: #888;
-    font-weight: 400;
-    border-bottom: 1px solid #f9f9f9;
-}
-
-.detail-info-table td {
-    text-align: right;
-    padding: 12px 0;
-    font-weight: 700;
-    border-bottom: 1px solid #f9f9f9;
-}
-
-.view-terms {
-    width: 100%;
-    padding: 15px;
-    background-color: #1e2d4d;
-    color: #ffffff;
-    border: none;
-    border-radius: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    margin-top: 20px;
-}
-
-.view-terms:hover {
-    opacity: 0.92;
+    opacity:0.3;
 }
 
 /* =========================
-   7. 이용약관 팝업
+   상태 메세지
 ========================= */
 
-.terms-modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.35);
-    z-index: 5000;
-    justify-content: center;
-    align-items: center;
-}
+.status-msg-box{
 
-.terms-modal-content {
-    width: 420px;
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 26px 28px 22px;
-    position: relative;
-    animation: termsFade 0.25s ease;
-}
+    background:#f1f3f7;
 
-@keyframes termsFade {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
-    }
+    border-radius:12px;
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+    padding:15px;
 
-.terms-close-btn {
-    position: absolute;
-    top: 18px;
-    right: 20px;
-    font-size: 22px;
-    font-weight: 700;
-    cursor: pointer;
-    color: #444;
-}
+    text-align:center;
 
-.terms-title {
-    text-align: center;
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 14px;
-    color: #111;
-}
+    font-weight:700;
 
-.terms-divider {
-    width: 100%;
-    height: 1px;
-    background: #999;
-    margin-bottom: 18px;
-}
+    color:#1e2d4d;
 
-.terms-text {
-    min-height: 260px;
-    font-size: 15px;
-    line-height: 2;
-    color: #222;
-}
-
-.terms-text p {
-    margin-bottom: 18px;
-}
-
-.terms-bottom-line {
-    width: 100%;
-    height: 1px;
-    background: #999;
-    margin: 8px 0 26px;
-}
-
-.terms-confirm-btn {
-    display: block;
-    margin: 0 auto;
-    width: 120px;
-    height: 42px;
-    border: none;
-    border-radius: 14px;
-    background: #1e2d4d;
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.terms-confirm-btn:hover {
-    opacity: 0.92;
+    margin-bottom:20px;
 }
 
 /* =========================
-   8. 반응형
+   설명 박스
 ========================= */
 
-@media (max-width: 1024px) {
-    .manage-grid {
-        grid-template-columns: 1fr;
+.description-box{
+
+    border:1px solid #eeeeee;
+    border-radius:12px;
+
+    background:#fafafa;
+
+    padding:20px;
+
+    font-size:13.5px;
+
+    color:#666;
+
+    line-height:1.7;
+}
+
+/* =========================
+   상세 정보 테이블
+========================= */
+
+.detail-info-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:auto;
+}
+
+.detail-info-table th{
+
+    text-align:left;
+
+    padding:12px 0;
+
+    color:#888;
+
+    font-weight:400;
+
+    border-bottom:1px solid #f3f3f3;
+}
+
+.detail-info-table td{
+
+    text-align:right;
+
+    padding:12px 0;
+
+    font-weight:700;
+
+    border-bottom:1px solid #f3f3f3;
+}
+
+/* =========================
+   약관 팝업
+========================= */
+
+.terms-modal-overlay{
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    background:rgba(0,0,0,0.35);
+
+    z-index:5000;
+
+    justify-content:center;
+    align-items:center;
+}
+
+.terms-modal-content{
+
+    width:420px;
+
+    background:white;
+
+    border-radius:24px;
+
+    padding:28px 30px 24px;
+
+    position:relative;
+
+    animation:termsFade 0.25s ease;
+}
+
+@keyframes termsFade{
+
+    from{
+        opacity:0;
+        transform:translateY(15px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.terms-close-btn{
+
+    position:absolute;
+
+    top:18px;
+    right:20px;
+
+    font-size:22px;
+    font-weight:700;
+
+    color:#444;
+
+    cursor:pointer;
+}
+
+.terms-title{
+
+    text-align:center;
+
+    font-size:22px;
+    font-weight:700;
+
+    color:#111;
+
+    margin-bottom:14px;
+}
+
+.terms-divider,
+.terms-bottom-line{
+
+    width:100%;
+    height:1px;
+
+    background:#999;
+}
+
+.terms-divider{
+    margin-bottom:18px;
+}
+
+.terms-bottom-line{
+    margin:8px 0 26px;
+}
+
+.terms-text{
+
+    min-height:260px;
+
+    font-size:15px;
+
+    color:#222;
+
+    line-height:2;
+}
+
+.terms-text p{
+    margin-bottom:18px;
+}
+
+.terms-confirm-btn{
+
+    display:block;
+
+    margin:0 auto;
+
+    width:120px;
+    height:42px;
+
+    border:none;
+    border-radius:14px;
+
+    background:#1e2d4d;
+    color:white;
+
+    font-size:15px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:0.2s;
+}
+
+.terms-confirm-btn:hover{
+    opacity:0.92;
+}
+
+/* =========================
+   반응형
+========================= */
+
+@media (max-width:1024px){
+
+    .manage-grid{
+
+        grid-template-columns:1fr;
     }
 
     .history-card,
     .sub-manage-card,
-    .detail-card {
-        min-height: auto;
+    .detail-card{
+
+        min-height:auto;
     }
 }
 
-@media (max-width: 768px) {
-    .tab-menu {
-        gap: 18px;
-        flex-wrap: wrap;
+@media (max-width:768px){
+
+    .tab-menu{
+
+        gap:18px;
+
+        flex-wrap:wrap;
     }
 
-    .history-item {
-        flex-direction: column;
-        align-items: flex-start;
+    .history-item{
+
+        flex-direction:column;
+
+        align-items:flex-start;
     }
 
-    .history-right {
-        width: 100%;
-        align-items: flex-start;
-        gap: 16px;
+    .history-right{
+
+        width:100%;
+
+        align-items:flex-start;
+
+        gap:16px;
     }
 
-    .card-header {
-        flex-direction: column;
+    .card-header{
+
+        flex-direction:column;
     }
 
-    .card-btns {
-        flex-direction: row;
-        margin-top: 0;
+    .card-btns{
+
+        flex-direction:row;
     }
 
-    .terms-modal-content {
-        width: calc(100% - 32px);
+    .terms-modal-content{
+
+        width:calc(100% - 32px);
     }
 }

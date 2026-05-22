@@ -1,125 +1,116 @@
 /* =========================================================
-   myque.css
-   마이페이지 > 내 문의 전용 스타일
+   myquestion.css
+   마이페이지 > 내 문의 전용 스타일 (통일성 보정본)
 ========================================================= */
 
 .question-main {
+    flex: 1;
     width: 100%;
-    min-height: 832px;
+    min-width: 0;
     display: flex;
     flex-direction: column;
-    min-width: 0;
 }
 
 .page-title {
     font-size: 32px;
     font-weight: 700;
-    color: #222;
-    margin-bottom: 20px;
+    color: #111;
+    margin-bottom: 24px;
+    line-height: 1.2;
 }
 
+/* ⚡ 규격 통일: 높이 760px, 라운드 24px, 패딩 30px 35px, 그림자 추가 */
 .question-card {
     width: 100%;
-    min-height: 760px;
-    background: #ffffff;
+    height: 760px;
+    background: white;
     border: 1px solid #dbdbdb;
-    border-radius: 20px;
-    padding: 25px 35px;
+    border-radius: 24px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    padding: 30px 35px;
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
 }
 
+/* ⚡ 테이블 헤더 높이 52px 및 라인 스타일 통일 */
 .table-header {
     display: flex;
     align-items: center;
-    height: 45px;
-    border-top: 1px solid #999;
-    border-bottom: 1px solid #999;
+    height: 52px;
+    border-top: 1px solid #dcdcdc;
+    border-bottom: 1px solid #dcdcdc;
     font-size: 13px;
+    font-weight: 700;
     color: #222;
+    background: #fafafa;
+    box-sizing: border-box;
 }
 
+/* ⚡ 데이터 행 높이 62px 및 부드러운 회색 선(#eeeeee) 통일 */
 .table-row {
     display: flex;
     align-items: center;
-    height: 60px;
-    border-bottom: 1px solid #999;
+    height: 62px;
+    border-bottom: 1px solid #eeeeee;
     font-size: 13px;
     color: #222;
+    transition: 0.2s;
+    box-sizing: border-box;
+}
+.table-row:hover {
+    background: #fcfcfc;
 }
 
 .empty-line {
-    height: 60px;
-    border-bottom: 1px solid #999;
+    height: 62px;
+    border-bottom: 1px solid #eeeeee;
+    box-sizing: border-box;
 }
 
-.col-no {
-    width: 80px;
-    text-align: center;
-    flex-shrink: 0;
-}
+/* 컬럼 정렬 일치 */
+.col-no { width: 80px; text-align: center; flex-shrink: 0; }
+.col-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 15px; }
+.col-answer { width: 120px; text-align: center; flex-shrink: 0; }
+.col-date { width: 140px; text-align: center; flex-shrink: 0; color: #888; }
+.col-manage { width: 120px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
 
-.col-title {
-    flex: 1;
-    min-width: 0;
-}
-
-.col-answer {
-    width: 120px;
-    text-align: center;
-    flex-shrink: 0;
-}
-
-.col-date {
-    width: 140px;
-    text-align: center;
-    flex-shrink: 0;
-}
-
-.col-manage {
-    width: 120px;
-    display: flex;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
+/* 답변 완료 강조색 (빨간색 톤 매칭) */
 .complete {
     color: #ff4d4d;
-    font-weight: 600;
+    font-weight: 700;
 }
 
+/* 삭제 버튼 알약 모양 규격 일치시킴 */
 .delete-btn {
-    background: #1e2d4d;
-    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 74px;
+    height: 34px;
+    padding: 0 14px;
     border: none;
-    border-radius: 20px;
-    padding: 7px 16px;
+    border-radius: 999px;
+    background: #1e2d4d;
+    color: white;
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
+    transition: 0.2s;
 }
+.delete-btn:hover { opacity: 0.92; }
 
-.delete-btn:hover {
-    opacity: 0.92;
-}
-
+/* 페이지네이션 정렬 및 폰트 통일 */
 .pagination {
     margin-top: auto;
+    padding-top: 28px;
     text-align: center;
-    padding-top: 25px;
-    font-size: 12px;
-    color: #555;
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
 }
-
-@media (max-width: 1024px) {
-    .question-card {
-        padding: 22px 24px;
-        overflow-x: auto;
-    }
-
-    .question-card > .table-header,
-    .question-card > .table-row,
-    .question-card > .empty-line {
-        min-width: 720px;
-    }
+.mypage-sidebar-fixed li.active a {
+    color: #ff4d4d !important;        /* 텍스트를 빨간색으로 변경 */
+    font-weight: 700 !important;       /* 글씨를 두껍고 진하게 변경 */
+    background: #fff5f5 !important;    /* 바탕색을 연한 핑크빛으로 변경 */
 }

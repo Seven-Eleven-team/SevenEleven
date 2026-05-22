@@ -1,0 +1,100 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+
+<style>
+    /* 부모 컨테이너 정렬 강제 고정 */
+    .mypage-container, .container {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: flex-start !important;
+        gap: 26px !important;
+        width: 100% !important;
+        max-width: 1200px !important;
+        margin: 0 auto !important;
+        padding: 40px 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 1. ⚡ 사이드바 크기 밸런스 조정 (아랫단 높이를 맞추기 위해 내부 상하 여백 확대) */
+    .mypage-sidebar-fixed {
+        width: 250px !important;
+        min-width: 250px !important;
+        max-width: 250px !important;
+        flex-shrink: 0 !important;
+        height: 845px !important;
+        background: #ffffff !important;
+        border: 1px solid #dddddd !important;
+        border-radius: 20px !important;
+        padding: 30px 0 !important;         /* 💡 상하 패딩을 기존 15px에서 30px로 키워 세로 볼륨감을 주었습니다 */
+        box-shadow: 0 4px 15px rgba(0,0,0,0.04) !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 우측 본문 영역 규격 강제 */
+    .mypost-main, .manage-container, .question-main, .report-main, .dashboard, main {
+        flex: 1 !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 내부 스타일 */
+    .mypage-sidebar-fixed ul {
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100% !important;
+
+            /* ⚡ 845px 높이 안에서 메뉴들을 위아래로 균등하게 찢어발기는 무적 공식 */
+            height: 100% !important;              /* 부모 높이를 다 쓰겠다고 선언 */
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important; /* 💡 항목들 사이의 여백을 위아래 똑같이 분배 */
+        }
+
+        .mypage-sidebar-fixed li {
+            width: 100% !important;
+            margin-bottom: 0 !important; /* 공간을 자동으로 나누므로 마진은 0으로 리셋 */
+        }
+
+    .mypage-sidebar-fixed li:last-child {
+        margin-bottom: 0 !important;
+    }
+
+    /* 2. ⚡ 항목 높이 및 완전한 위아래 수직 중앙 정렬 설정 */
+    .mypage-sidebar-fixed li a {
+        display: flex !important;
+        align-items: center !important;       /* 💡 위아래 수직 기준 정중앙 정렬 */
+        justify-content: center !important;     /* 좌우 기준 중앙 정렬 */
+        width: 100% !important;
+        height: 60px !important;              /* 💡 기존 55px에서 60px로 늘려 텍스트 상하 공간 확보 */
+        line-height: 1 !important;            /* 💡 브라우저 기본 폰트 줄간격을 초기화하여 텍스트 쏠림 방지 */
+        font-size: 16px !important;
+        font-weight: 500 !important;
+        color: #111111 !important;
+        text-decoration: none !important;
+        transition: all 0.2s ease !important;
+        box-sizing: border-box !important;
+    }
+
+    .mypage-sidebar-fixed li a:hover {
+        background: #fafafa !important;
+        color: #ff4d4d !important;
+    }
+
+    .mypage-sidebar-fixed li.active a {
+        color: #ff4d4d !important;
+        font-weight: 700 !important;
+        background: #fff5f5 !important;
+    }
+</style>
+
+<aside class="mypage-sidebar-fixed">
+    <ul>
+        <li class="${menu == 'mypage' ? 'active' : ''}"><a href="/mypage">대시보드</a></li>
+        <li class="${menu == 'subscriptions' ? 'active' : ''}"><a href="/mypage/subscriptions">내 구독 관리</a></li>
+        <li class="${menu == 'posts' ? 'active' : ''}"><a href="/mypage/posts">내 게시글 보기</a></li>
+        <li class="${menu == 'questions' ? 'active' : ''}"><a href="/mypage/questions">내 문의</a></li>
+        <li class="${menu == 'reports' ? 'active' : ''}"><a href="/mypage/reports">내 신고 목록</a></li>
+        <li class="${menu == 'alarm' ? 'active' : ''}"><a href="/mypage/alarm">알림</a></li>
+        <li class="${menu == 'sales' ? 'active' : ''}"><a href="/mypage/sales">내 판매 목록</a></li>
+    </ul>
+</aside>

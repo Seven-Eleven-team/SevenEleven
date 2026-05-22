@@ -1,4 +1,8 @@
+@charset "UTF-8";
 
+/* ==========================================
+   1. 기본 초기화 및 공통 스타일
+   ========================================== */
 * {
     margin: 0;
     padding: 0;
@@ -6,256 +10,134 @@
     font-family: 'Pretendard', sans-serif;
 }
 
-html,
-body {
-    width: 100%;
-    min-height: 100%;
+/* ==========================================
+   2. 마이페이지 전체 레이아웃 (틀 고정 및 충돌 차단)
+   ========================================== */
+/* 다른 페이지들의 .mypage-container 구조와 완벽히 일치하도록 통일 */
+.container {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    gap: 26px !important;       /* 사이드바와 메인 콘텐츠 사이의 간격 통일 */
+    width: 100% !important;     /* 고정 너비를 풀고 유연하게 반응 */
+    max-width: 1200px !important; /* 전체 최대 너비 고정 */
+    margin: 0 auto !important;
+    padding: 40px 0 !important;
 }
 
-body {
-    background-color: #f4f7f9;
-    color: #222;
-    overflow-y: auto;
-}
-
-a {
-    color: inherit;
-    text-decoration: none;
-}
-
-button {
-    font-family: inherit;
-}
-
-/* =========================
-   2. 마이페이지 전용 body
-========================= */
-
-.mypage-body {
-    min-height: 100vh;
-    background-color: #f4f7f9;
-}
-
-/*
-   header.jspf가 fixed / sticky 구조여도
-   본문이 너무 위로 붙지 않게 여백 확보
-*/
-.mypage-body .site-header,
-.mypage-body .top-nav {
-    z-index: 2000;
-}
-
-/* =========================
-   3. 마이페이지 전체 레이아웃
-========================= */
-
-.mypage-container {
-    width: min(1397px, calc(100% - 40px));
-    margin: 0 auto;
-    padding: 70px 0 70px;
-    display: flex;
-    align-items: stretch;
-    justify-content: flex-start;
-    gap: 26px;
-}
-
-/* =========================
-   4. 사이드바
-========================= */
-
-.sidebar {
-    width: 253px;
-    min-height: 832px;
-    background: #ffffff;
-    border: 1px solid #cfcfcf;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.sidebar ul {
-    list-style: none;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar ul li {
-    width: 100%;
-}
-
-.sidebar ul li a {
-    display: block;
-    width: 100%;
-    padding: 22px 0;
-    text-align: center;
-    color: #111 !important;
-    font-size: 16px;
-    font-weight: 500;
-    text-decoration: none !important;
-    transition: color 0.2s ease, font-weight 0.2s ease;
-}
-
-.sidebar ul li a:hover {
-    color: #ff4d4d !important;
-}
-
-.sidebar ul li.active a,
-.sidebar ul li.active-red a {
-    color: #ff4d4d !important;
-    font-weight: 700 !important;
-}
-
-/* =========================
-   5. 대시보드 메인 영역
-========================= */
-
+/* 대시보드 메인 콘텐츠 영역 (사이드바 오른쪽 본문) */
 .dashboard {
-    width: calc(100% - 253px - 26px);
-    min-height: 832px;
+    flex: 1 !important;        /* 다른 페이지의 <main style="flex:1;">과 크기 완전 통일 */
+    min-width: 0 !important;   /* 본문 내부 요소가 사이드바를 밀어내지 못하도록 방어 */
     display: flex;
     flex-direction: column;
-    gap: 22px;
-    flex: 1;
-    min-width: 0;
+    gap: 30px;
+    height: auto !important;   /* 고정 높이를 풀고 컨텐츠에 맞게 늘어나도록 수정 */
 }
 
-/* =========================
-   6. 내 정보 카드
-========================= */
-
+/* ==========================================
+   3. 상단 프로필 & 계좌 복합 카드 (기존 디자인 100% 보존)
+   ========================================== */
 .profile-combined-card {
-    width: 100%;
-    min-height: 360px;
-    background: #ffffff;
-    border: 1px solid #cfcfcf;
+    background: white;
+    border: 1px solid #dbdbdb;
     border-radius: 20px;
-    padding: 30px 58px 28px;
     display: flex;
-    gap: 52px;
-    flex-shrink: 0;
+    padding: 30px;
+    gap: 40px;
+    min-height: 380px;        /* height 고정 대신 min-height로 변경하여 유연성 확보 */
 }
 
+/* 내 정보 섹션 (좌측) */
 .info-side {
-    flex: 1.15;
-    min-width: 0;
-}
-
-.alert-side {
-    flex: 0.85;
-    min-width: 300px;
-    display: flex;
-    flex-direction: column;
+    flex: 1.2;
 }
 
 .card-title-center {
     text-align: center;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
     font-size: 20px;
     font-weight: 700;
-    color: #111;
+    color: #222;
 }
 
 .info-body {
     display: flex;
-    align-items: flex-start;
-    gap: 32px;
-}
-
-.profile-section {
-    width: 190px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-shrink: 0;
+    gap: 30px;
 }
 
 .profile-img-box {
-    width: 190px;
-    height: 238px;
-    background: #f0f0f0;
+    width: 150px;
+    height: 180px;
+    background: #eee;
+    border-radius: 15px;
     overflow: hidden;
 }
 
 .profile-img-box img {
     width: 100%;
     height: 100%;
-    display: block;
     object-fit: cover;
 }
 
 .edit-info-btn {
-    width: 190px;
-    height: 30px;
-    margin-top: 14px;
+    width: 150px;
+    margin-top: 10px;
+    padding: 8px;
+    background: #1e2d4d;
+    color: white;
     border: none;
-    border-radius: 14px;
-    background: #173456;
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 500;
+    border-radius: 8px;
     cursor: pointer;
 }
 
-.edit-info-btn:hover {
-    opacity: 0.92;
-}
-
+/* 텍스트 정보 표기 영역 */
 .text-area {
     flex: 1;
-    min-height: 282px;
     display: flex;
     flex-direction: column;
-    padding-top: 56px;
 }
 
 .info-row {
-    display: grid;
-    grid-template-columns: 130px 1fr;
+    display: flex;
     align-items: center;
-    padding: 0 0 24px;
-    border-bottom: none;
-    font-size: 16px;
+    padding: 15px 0;
+    border-bottom: 1px solid #dbdbdb;
 }
 
 .info-row span {
-    font-weight: 600;
-    color: #111;
-}
-
-.info-row strong {
-    font-weight: 500;
-    color: #111;
+    width: 80px;
+    font-weight: bold;
 }
 
 .withdraw-container {
-    margin-top: auto;
     display: flex;
     justify-content: flex-end;
+    margin-top: auto;
 }
 
 .withdraw-link {
-    display: inline-block;
-    padding-bottom: 4px;
-    border-bottom: 1px solid #111;
-    font-size: 14px;
-    color: #111;
+    font-size: 13px;
+    color: #333;
+    text-decoration: underline;
+    font-weight: bold;
     cursor: pointer;
 }
 
-/* =========================
-   7. 입금 계좌 카드
-========================= */
+/* 입금 계좌 섹션 (우측) */
+.alert-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
 
 .single-account-box {
-    width: 100%;
-    min-height: 220px;
     border: 2px solid #1e2d4d;
     border-radius: 20px;
     background: #f8fafc;
-    padding: 24px;
+    padding: 28px 24px;
+    height: 220px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -272,7 +154,7 @@ button {
     height: 60px;
     border-radius: 50%;
     background: #2563eb;
-    color: #ffffff;
+    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -297,11 +179,10 @@ button {
 }
 
 .account-notice {
-    margin: 16px 0;
     font-size: 14px;
     line-height: 1.6;
     color: #666;
-    background: #ffffff;
+    background: white;
     border-radius: 12px;
     padding: 14px 16px;
     border: 1px solid #e5e7eb;
@@ -313,216 +194,152 @@ button {
     border: none;
     border-radius: 12px;
     background: #1e2d4d;
-    color: #ffffff;
+    color: white;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
+    transition: 0.2s;
 }
 
 .change-account-btn:hover {
     opacity: 0.92;
 }
 
-/* =========================
-   8. 하단 카드 영역
-========================= */
-
+/* ==========================================
+   4. 하단 2열 구조 (내 구독 & 소비 목표)
+   ========================================== */
 .bottom-row {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1.7fr 1fr;
-    gap: 26px;
+    display: flex;
+    gap: 30px;
     flex: 1;
-    min-height: 450px;
+    min-height: 0;
 }
 
 .card {
-    background: #ffffff;
+    background: white;
     border-radius: 20px;
-    border: 1px solid #cfcfcf;
-    padding: 28px 36px;
+    border: 1px solid #dbdbdb;
+    padding: 25px;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    min-width: 0;
 }
 
 .card-title {
-    position: relative;
-    padding-bottom: 12px;
-    margin-bottom: 18px;
-    border-bottom: 2px solid #222;
     font-size: 18px;
-    font-weight: 700;
-    color: #111;
+    font-weight: bold;
+    text-align: center;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #000;
 }
 
-.card-title::after {
-    content: "전체 보기>";
-    position: absolute;
-    right: 0;
-    bottom: 12px;
-    font-size: 13px;
-    font-weight: 500;
-    color: #111;
-}
-
-/* =========================
-   9. 내 구독 카드
-========================= */
-
-.sub-list {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
+/* 내 구독 목록 스타일 */
 .sub-item {
-    width: 100%;
-    min-height: 116px;
-    display: grid;
-    grid-template-columns: 72px 1fr 92px;
+    display: flex;
     align-items: center;
-    gap: 22px;
-    padding: 20px 0;
-    border-bottom: 1px solid #333;
-}
-
-.sub-item:last-child {
-    border-bottom: 1px solid #333;
-}
-
-.sub-icon {
-    width: 64px;
-    height: 64px;
-    background-color: #ffffff;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
-    flex-shrink: 0;
-}
-
-.sub-icon.gpt {
-    background-image: url('/images/GPTLogo.png');
-}
-
-.sub-icon.youtube {
-    background-image: url('/images/YoutubeLogo.png');
-}
-
-.sub-icon.netflix {
-    background-image: url('/images/NetflixLogo.png');
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    width: 100%;
 }
 
 .sub-info {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
-    gap: 18px;
-}
-
-.sub-info strong {
-    font-size: 21px;
-    font-weight: 700;
-    color: #111;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
 }
 
 .sub-meta {
     display: flex;
     flex-direction: column;
-    gap: 18px;
-    font-size: 16px;
-    color: #111;
-    text-align: right;
+    gap: 5px;
+    font-size: 14px;
+    color: #666;
 }
 
 .cancel-link {
-    justify-self: end;
-    align-self: center;
-    padding-bottom: 4px;
-    border-bottom: 1px solid #111;
-    font-size: 15px;
-    color: #111;
+    margin-left: auto;
+    font-size: 13px;
+    text-decoration: underline;
     cursor: pointer;
+    color: #999;
     white-space: nowrap;
 }
 
-/* =========================
-   10. 소비 목표 카드
-========================= */
-
-.goal-list {
-    display: flex;
-    flex-direction: column;
-    gap: 34px;
-    padding-top: 4px;
+.sub-icon {
+    width: 60px;
+    height: 60px;
+    background-color: #fff;
+    background-position: center;
+    background-repeat: no-repeat;
+    flex-shrink: 0;
+    margin-right: 20px;
 }
 
-.goal-item p {
-    margin-bottom: 10px;
-    font-size: 16px;
-    font-weight: 500;
-    color: #111;
+.sub-icon.gpt {
+    background-image: url('../images/GPTLogo.png');
+    background-size: 100% 100%;
 }
 
+.sub-icon.youtube {
+    background-image: url('../images/YoutubeLogo.png');
+    background-size: 100%;
+}
+
+.sub-icon.netflix {
+    background-image: url('../images/NetflixLogo.png');
+    background-size: 100% 100%;
+}
+
+/* 개인 소비 목표 그래프 */
 .progress-bg {
     width: 100%;
-    height: 42px;
-    background: #cbd8e2;
-    border-radius: 9px;
+    height: 35px;
+    background: #e9ecef;
+    border-radius: 20px;
     overflow: hidden;
+    margin-top: 15px;
 }
 
 .progress-bar {
     height: 100%;
-    width: 0;
-    border-radius: 9px;
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #111;
-    font-size: 16px;
-    font-weight: 600;
-    transition:
-            width 1.5s cubic-bezier(0.1, 0.7, 0.1, 1),
-            background-color 1.5s ease;
+    color: white;
+    font-weight: bold;
+    width: 0;
+    transition: width 1.5s cubic-bezier(0.1, 0.7, 0.1, 1), background-color 1.5s ease;
 }
 
-.bg-red {
-    background-color: #ff5b5f !important;
-}
+.bg-red { background-color: #ff8a80 !important; }
+.bg-yellow { background-color: #fde047 !important; }
+.bg-green { background-color: #a3e635 !important; }
 
-.bg-yellow {
-    background-color: #fff875 !important;
-}
-
-.bg-green {
-    background-color: #82f955 !important;
-}
-
-/* =========================
-   11. 모달 팝업
-========================= */
-
-.modal-overlay,
-.cancel-modal-overlay {
+/* ==========================================
+   5. 모달 팝업 스타일
+   ========================================== */
+.modal-overlay, .cancel-modal-overlay {
     display: none;
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.45);
-    z-index: 5000;
+    background: rgba(0,0,0,0.5);
+    z-index: 2000;
     justify-content: center;
     align-items: center;
 }
 
-.modal-content,
-.cancel-modal-content {
-    background: #ffffff;
+.modal-content, .cancel-modal-content {
+    background: white;
     border-radius: 20px;
     text-align: center;
     position: relative;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
 .modal-content {
@@ -531,176 +348,63 @@ button {
 }
 
 .cancel-modal-content {
-    min-width: 450px;
     padding: 60px 100px;
+    min-width: 450px;
 }
 
 .cancel-modal-content p {
     font-size: 26px;
-    font-weight: 700;
+    font-weight: bold;
     color: #333;
     margin: 0;
 }
 
-.close-btn,
-.cancel-close-x {
+.close-btn, .cancel-close-x {
     position: absolute;
     top: 20px;
     right: 25px;
     font-size: 24px;
-    font-weight: 700;
+    font-weight: bold;
     color: #555;
     cursor: pointer;
     line-height: 1;
+    transition: color 0.2s;
 }
 
-.close-btn:hover,
-.cancel-close-x:hover {
+.close-btn:hover, .cancel-close-x:hover {
     color: #000;
 }
 
 .leave-btn {
     margin-top: 20px;
     background: #1e2d4d;
-    color: #ffffff;
+    color: white;
     border: none;
     padding: 10px 30px;
     border-radius: 8px;
     cursor: pointer;
-    font-weight: 700;
+    font-weight: bold;
 }
 
-/* =========================
-   12. 등장 애니메이션
-========================= */
-
-.dashboard,
-.mypost-main,
-.question-main,
-.manage-container,
-.alarm-main,
-.report-main {
-    animation: fadeUp 0.45s ease;
+/* ==========================================
+   6. 컴포넌트 등장 트랜지션 (Fade Up)
+   ========================================== */
+.dashboard, .mypost-main, .question-main, .manage-container, .alarm-main, .report-main {
+    animation: fadeUp 0.7s ease;
 }
 
 @keyframes fadeUp {
     from {
         opacity: 0;
-        transform: translateY(18px);
+        transform: translateY(25px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-/* =========================
-   13. 반응형 보정
-========================= */
-
-@media (max-width: 1280px) {
-    .mypage-container {
-        width: calc(100% - 32px);
-        gap: 20px;
-    }
-
-    .sidebar {
-        width: 230px;
-    }
-
-    .dashboard {
-        width: calc(100% - 230px - 20px);
-    }
-
-    .profile-combined-card {
-        padding: 28px 36px;
-        gap: 32px;
-    }
-
-    .bottom-row {
-        grid-template-columns: 1.5fr 1fr;
-        gap: 20px;
-    }
-}
-
-@media (max-width: 1024px) {
-    .mypage-container {
-        flex-direction: column;
-        padding-top: 40px;
-    }
-
-    .sidebar {
-        width: 100%;
-        min-height: auto;
-        padding: 18px 0;
-    }
-
-    .sidebar ul {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-    }
-
-    .sidebar ul li a {
-        padding: 12px 0;
-        font-size: 14px;
-    }
-
-    .dashboard {
-        width: 100%;
-    }
-
-    .profile-combined-card {
-        flex-direction: column;
-    }
-
-    .bottom-row {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 768px) {
-    .mypage-container {
-        width: calc(100% - 24px);
-    }
-
-    .sidebar ul {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .profile-combined-card {
-        padding: 24px;
-    }
-
-    .info-body {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .text-area {
-        width: 100%;
-        padding-top: 20px;
-        min-height: auto;
-    }
-
-    .info-row {
-        grid-template-columns: 100px 1fr;
-    }
-
-    .sub-item {
-        grid-template-columns: 56px 1fr;
-    }
-
-    .cancel-link {
-        grid-column: 2;
-        justify-self: start;
-    }
-
-    .sub-info {
-        grid-template-columns: 1fr;
-    }
-
-    .sub-meta {
-        text-align: left;
+    .mypage-sidebar-fixed li.active a {
+        color: #ff4d4d !important;        /* 텍스트를 빨간색으로 변경 */
+        font-weight: 700 !important;       /* 글씨를 두껍고 진하게 변경 */
+        background: #fff5f5 !important;    /* 바탕색을 연한 핑크빛으로 변경 */
     }
 }

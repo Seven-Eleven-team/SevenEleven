@@ -32,7 +32,7 @@ public class MyPageController {
      * URL: /mypage
      * View: /WEB-INF/views/members/mypage/mypage.jsp
      */
-    @GetMapping
+    @GetMapping({"", "/", "/mypage"})
     public String myPage(HttpSession session, Model model) {
         Long userId = SessionUtils.getLoginUserId(session);
 

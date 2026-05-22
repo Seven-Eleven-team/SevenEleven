@@ -22,7 +22,7 @@
 
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
 
-<div class="mypage-container">
+<div class="container">
 
     <%@ include file="/WEB-INF/views/common/layout/sidebar.jspf" %>
 
