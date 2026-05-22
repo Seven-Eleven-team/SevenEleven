@@ -70,18 +70,13 @@ public class MyPageService {
         return MyPageSummaryResponse.builder()
                 .userId(user.getUserId())
                 .loginId(user.getLoginId())
+                .email(user.getLoginId())           // ← 수정 완료 (getEmail → getLoginId)
                 .nickname(user.getNickname())
                 .gender(user.getGender())
                 .birthDate(user.getBirthDate())
                 .role(user.getRole())
                 .sellerRegistered(isSeller)
-
-                // DB 2.0 기준:
-                // 기존 EMAIL_NOTIFY → 현재 IS_NOTI_ENABLED
-                // MyPageSummaryResponse의 emailNotify 필드는 유지하되,
-                // User 엔티티의 isNotiEnabled 값을 boolean으로 변환해서 넣는다.
                 .emailNotify(isNotificationEnabled(user))
-
                 .activeSubscriptionCount(activeSubscriptions.size())
                 .unreadNotificationCount((int) unreadNotiCount)
                 .goals(goalList)
@@ -168,9 +163,6 @@ public class MyPageService {
 
     @Transactional
     public String updateProfileImage(Long userId, MultipartFile file) throws IOException {
-        // DB 2.0 USERS 테이블에는 PROFILE_IMAGE 컬럼이 없다.
-        // 그래서 여기서는 User 엔티티에 저장하지 않고, 임시 반환만 유지한다.
-        // 실제 이미지 저장 기능을 살리려면 ATTACHMENTS 또는 별도 PROFILE_IMAGE 테이블 기준으로 다시 연결해야 한다.
         return "/display?fileName=" + file.getOriginalFilename();
     }
 
