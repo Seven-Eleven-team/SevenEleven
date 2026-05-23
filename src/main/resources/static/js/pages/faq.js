@@ -95,25 +95,7 @@ if (faqModal) {
         faqChatArea.scrollTop = faqChatArea.scrollHeight;
     }
 
-    setTimeout(function() {
-        const aiFloatingBtn = document.querySelector('.ai-btn');
-        if (aiFloatingBtn) {
-            aiFloatingBtn.addEventListener('click', function() {
-                const headerActionArea = document.getElementById('headerActionArea');
-                const isLoggedIn = headerActionArea &&
-                    (headerActionArea.dataset.serverLogin === 'true' ||
-                     headerActionArea.classList.contains('is-logged-in'));
 
-                if (!isLoggedIn) {
-                    const loginBtn = document.querySelector('[data-auth-open="login"]');
-                    if (loginBtn) loginBtn.click();
-                    return;
-                }
-
-                alert('준비중입니다.');
-            });
-        }
-    }, 500);
 
     const supportQnaBtn = document.getElementById('supportQnaBtn');
     if (supportQnaBtn) {
