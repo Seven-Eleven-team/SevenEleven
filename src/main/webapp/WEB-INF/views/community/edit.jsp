@@ -17,6 +17,12 @@
     <section class="board-form-wrap">
         <h1 class="board-page-title">게시글 수정</h1>
 
+        <c:if test="${not empty userAgeCategoryLabel}">
+            <p class="board-guide-text">
+                내 나이대 게시판: ${userAgeCategoryLabel} 게시판
+            </p>
+        </c:if>
+
         <form method="post"
               action="${pageContext.request.contextPath}/community/edit/${post.boardId}"
               enctype="multipart/form-data"
@@ -28,11 +34,11 @@
                 <select id="category" name="category" required>
                     <option value="FREE" ${category == 'FREE' ? 'selected' : ''}>자유게시판</option>
                     <option value="SECRET" ${category == 'SECRET' ? 'selected' : ''}>비밀게시판</option>
-                    <option value="TEENS" ${category == 'TEENS' ? 'selected' : ''}>10대 게시판</option>
-                    <option value="TWENTIES" ${category == 'TWENTIES' ? 'selected' : ''}>20대 게시판</option>
-                    <option value="THIRTIES" ${category == 'THIRTIES' ? 'selected' : ''}>30대 게시판</option>
-                    <option value="FORTIES" ${category == 'FORTIES' ? 'selected' : ''}>40대 게시판</option>
-                    <option value="FIFTIES" ${category == 'FIFTIES' ? 'selected' : ''}>50대 이상 게시판</option>
+                    <option value="TEENS" ${category == 'TEENS' ? 'selected' : ''} ${userAgeCategory != 'TEENS' and category != 'TEENS' ? 'disabled' : ''}>10대 게시판</option>
+                    <option value="TWENTIES" ${category == 'TWENTIES' ? 'selected' : ''} ${userAgeCategory != 'TWENTIES' and category != 'TWENTIES' ? 'disabled' : ''}>20대 게시판</option>
+                    <option value="THIRTIES" ${category == 'THIRTIES' ? 'selected' : ''} ${userAgeCategory != 'THIRTIES' and category != 'THIRTIES' ? 'disabled' : ''}>30대 게시판</option>
+                    <option value="FORTIES" ${category == 'FORTIES' ? 'selected' : ''} ${userAgeCategory != 'FORTIES' and category != 'FORTIES' ? 'disabled' : ''}>40대 게시판</option>
+                    <option value="FIFTIES" ${category == 'FIFTIES' ? 'selected' : ''} ${userAgeCategory != 'FIFTIES' and category != 'FIFTIES' ? 'disabled' : ''}>50대 이상 게시판</option>
                 </select>
             </div>
 

@@ -16,6 +16,7 @@ public interface CommunityBoardRepository extends JpaRepository<Board, Long> {
             value = """
                 SELECT b
                 FROM Board b
+                LEFT JOIN FETCH b.user
                 WHERE b.boardType = :category
                   AND b.isDeleted = 'N'
                   AND (
@@ -49,6 +50,7 @@ public interface CommunityBoardRepository extends JpaRepository<Board, Long> {
             value = """
                 SELECT b
                 FROM Board b
+                LEFT JOIN FETCH b.user
                 WHERE b.boardType = :category
                   AND b.isDeleted = 'N'
                   AND (
@@ -82,6 +84,7 @@ public interface CommunityBoardRepository extends JpaRepository<Board, Long> {
             value = """
                 SELECT b
                 FROM Board b
+                LEFT JOIN FETCH b.user
                 WHERE b.boardType IN :categories
                   AND b.isDeleted = 'N'
                   AND b.userId = :userId
@@ -104,6 +107,7 @@ public interface CommunityBoardRepository extends JpaRepository<Board, Long> {
     @Query("""
         SELECT b
         FROM Board b
+        LEFT JOIN FETCH b.user
         WHERE b.boardId = :boardId
           AND b.boardType IN :categories
           AND b.isDeleted = 'N'
