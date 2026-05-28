@@ -3,12 +3,15 @@
     bottom: 120px;
     right: 20px;
     z-index: 9999;
+    width: 28vw;
+    min-width: 320px;
+    max-width: 500px;
 }
 
 .faq-modal {
-    width: 502px;
-    aspect-ratio: 502 / 729; /* 같은 비율 유지하면서 크기 조정 */
-    max-width: 100%;
+    width: 100%;
+    aspect-ratio: 502 / 729;
+    max-height: calc(100vh - 104px);
     background: #ffffff;
     border-radius: 20px;
     border: 1px solid #000000;
@@ -25,12 +28,14 @@
     display: flex;
     justify-content: center;    /* 가운데 정렬 */
     align-items: center;
-    padding: 16px 20px;
+    padding: 24px 10px;
     background: #ffffff;
-    color: #193b60;
-    font-weight: bold;
+    color: #000000;
+    font-size: 20px;
+    font-weight: 400;
     border-radius: 16px 16px 0 0;
-    border-bottom: 1px solid #3F72AF; /* 구분선 */
+    border-bottom: 2px solid #3F72AF; /* 구분선 */
+    margin: 0 50px; /* 양쪽 여백 */
 }
 
 .faq-close-btn {
@@ -147,8 +152,10 @@
     border: none;
     border-radius: 10px;
     padding: 10px 14px;
-    font-size: 14px;
+    font-size: 20px;
     cursor: pointer;
+    width: 300px;
+    height: 35px;
 }
 
 .floating-buttons {

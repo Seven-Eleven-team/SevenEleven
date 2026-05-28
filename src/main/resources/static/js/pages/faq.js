@@ -6,20 +6,9 @@ const faqChatArea = document.getElementById('faqChatArea');
 
 if (faqModal) {
 
-    function adjustFaqSize() {
-        const widget = document.getElementById('faqWidget');
-        const scale = Math.min(1, Math.min(window.innerWidth / 1440, window.innerHeight / 1024));
-        widget.style.transform = `scale(${scale})`;
-        widget.style.transformOrigin = 'bottom right';
-    }
-
-    adjustFaqSize();
-    window.addEventListener('resize', adjustFaqSize);
-
     let faqLoaded = false;
 
     function loadFaqList() {
-        console.log('loadFaqList 호출!');
         fetch('/support/api/faqs/questions')
             .then(res => res.json())
             .then(data => {
@@ -33,18 +22,30 @@ if (faqModal) {
             });
     }
 
+    loadFaqList();
+    faqLoaded = true;
+
+
     faqSendBtn.addEventListener('click', function() {
         const input = faqInput.value.trim();
         if (input === '') return;
         addUserMessage(input);
         faqInput.value = '';
         fetch(`/support/api/faqs/chat?input=${input}`)
-            .then(res => res.json())
+            .then(res => res.text())
             .then(data => {
-                const answer = typeof data === 'string' ? data : data.answer;
+                let answer;
+                let showNum = true;
+                try {
+                    const parsed = JSON.parse(data);
+                    answer = parsed.answer || parsed;
+                } catch (e) {
+                    answer = data;
+                    showNum = false;
+                }
                 const row = document.createElement('div');
                 row.className = 'faq-bot-row';
-                row.innerHTML = `<span class="faq-num">${input}.</span><div class="faq-bot-msg">${answer}</div>`;
+                row.innerHTML = `<span class="faq-num">${showNum ? input + '.' : ''}</span><div class="faq-bot-msg">${answer}</div>`;
                 faqChatArea.appendChild(row);
                 faqChatArea.scrollTop = faqChatArea.scrollHeight;
             });
@@ -52,19 +53,18 @@ if (faqModal) {
 
     let resetTimer = null;
 
-    document.addEventListener('click', function(e) {
-        const chatBtn = document.querySelector('.chat-btn');
-        if (!faqModal.contains(e.target) &&
-            !faqOpenBtn?.contains(e.target) &&
-            !(chatBtn && chatBtn.contains(e.target)) &&
-            !e.target.closest('#faqOpenBtn')) {    // 추가
+document.addEventListener('click', function(e) {
+    const chatBtn = document.querySelector('.chat-btn');
+    if (!faqModal.contains(e.target) && !(chatBtn && chatBtn.contains(e.target))) {
+        if (faqModal.classList.contains('open')) {
             faqModal.classList.remove('open');
             resetTimer = setTimeout(function() {
                 faqChatArea.innerHTML = '';
                 faqLoaded = false;
             }, 90000);
         }
-    });
+    }
+});
 
     document.addEventListener('click', function(e) {
         if (e.target.closest('#faqOpenBtn')) {
@@ -74,7 +74,9 @@ if (faqModal) {
                 clearTimeout(resetTimer);
                 resetTimer = null;
             }
-            if (faqModal.classList.contains('open')) {
+            if (faqModal.classList.contains('open') && !faqLoaded) {
+                loadFaqList();
+                faqLoaded = true;
             }
         }
     });
@@ -103,6 +105,22 @@ if (faqModal) {
             e.stopPropagation();
             faqModal.classList.toggle('open');
             if (faqModal.classList.contains('open') && !faqLoaded) {
+            }
+        });
+    }
+
+    const chatBtn = document.querySelector('.chat-btn');
+    if (chatBtn) {
+        chatBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            faqModal.classList.toggle('open');
+            if (resetTimer) {
+                clearTimeout(resetTimer);
+                resetTimer = null;
+            }
+            if (faqModal.classList.contains('open') && !faqLoaded) {
+                loadFaqList();
+                faqLoaded = true;
             }
         });
     }

@@ -5,13 +5,14 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/community.css">
+    <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
     <title>${post.title} | 지출메이트 게시판</title>
 </head>
 <body class="community-body">
 
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
+<script>document.querySelector('.site-header')?.classList.add('is-solid');</script>
 <%@ include file="/WEB-INF/views/common/include/flash-message.jspf" %>
 
 <main class="community-page">

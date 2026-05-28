@@ -16,70 +16,6 @@ body {
     color: #111111;
 }
 
-body.community-body .site-header {
-    position: relative;
-    z-index: 1000;
-    height: 94px;
-    background: #12365a;
-    color: #ffffff;
-    display: grid;
-    grid-template-columns: 120px 1fr 220px;
-    align-items: center;
-    padding: 0 32px;
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: none !important;
-    animation: none !important;
-    pointer-events: auto !important;
-}
-
-body.community-body .hamburger-btn {
-    width: 54px;
-    height: 48px;
-    border: 0;
-    background: transparent;
-    padding: 0;
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-    opacity: 1 !important;
-    visibility: visible !important;
-    pointer-events: auto !important;
-}
-
-.hamburger-btn span {
-    width: 48px;
-    height: 2px;
-    background: rgba(255, 255, 255, 0.92);
-    border-radius: 999px;
-}
-
-.site-logo-link {
-    justify-self: center;
-    color: #ffffff;
-    text-decoration: none;
-}
-
-.site-logo {
-    margin: 0;
-    font-size: 34px;
-    font-weight: 900;
-    letter-spacing: -0.04em;
-}
-
-.header-action-area {
-    justify-self: end;
-}
-
-.auth-link {
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: 700;
-    text-decoration: none;
-}
-
 .user-profile-link {
     display: none;
     text-decoration: none;
@@ -107,11 +43,11 @@ body.community-body .hamburger-btn {
 
 body.community-body .sidebar {
     position: fixed;
-    top: 94px;
+    top: 74px;
     left: 0;
     z-index: 999;
     width: 240px;
-    height: calc(100vh - 94px);
+    height: calc(100vh - 74px);
     padding: 22px 18px;
     background: rgba(18, 54, 90, 0.98);
     transform: translateX(-100%);
@@ -194,6 +130,7 @@ body.community-body .footer p {
 .community-page {
     min-height: calc(100vh - 94px);
     padding: 42px 0 44px;
+    padding-top: 94px;
     background: #ffffff;
 }
 
@@ -891,14 +828,6 @@ body.community-body .footer p {
 }
 
 @media (max-width: 900px) {
-    body.community-body .site-header {
-        grid-template-columns: 80px 1fr 150px;
-        padding: 0 18px;
-    }
-
-    .site-logo {
-        font-size: 26px;
-    }
 
     .board-list-wrap,
     .board-form-wrap,

@@ -6,27 +6,17 @@ document.addEventListener('DOMContentLoaded', function () {
         hamburgerBtn.addEventListener('click', function (event) {
             event.stopPropagation();
             sidebar.classList.toggle('open');
+
+            const header = document.querySelector('.site-header');
+                header.classList.toggle('is-locked', sidebar.classList.contains('open'));
         });
 
         document.addEventListener('click', function (event) {
             if (!sidebar.contains(event.target) && !hamburgerBtn.contains(event.target)) {
                 sidebar.classList.remove('open');
-            }
-        });
-    }
 
-    const chatBtn = document.querySelector('.chat-btn');
-    const faqModal = document.querySelector('.faq-modal');
-
-    if (chatBtn && faqModal) {
-        chatBtn.addEventListener('click', function (event) {
-            event.stopPropagation();
-            faqModal.classList.toggle('open');
-        });
-
-        document.addEventListener('click', function (event) {
-            if (!faqModal.contains(event.target) && !chatBtn.contains(event.target)) {
-                faqModal.classList.remove('open');
+                const header = document.querySelector('.site-header');
+                header.classList.remove('is-locked');
             }
         });
     }
@@ -56,34 +46,6 @@ document.addEventListener('DOMContentLoaded', function () {
         div.className = 'faq-bot-msg';
         div.textContent = text;
         faqChatArea.appendChild(div);
-    }
-
-    if (faqList) {
-        fetch('/support/api/faqs/questions')
-            .then(function (response) {
-                if (!response.ok) {
-                    throw new Error('FAQ 질문 목록 조회 실패');
-                }
-
-                return response.json();
-            })
-            .then(function (questions) {
-                questions.forEach(function (question, index) {
-                    const li = document.createElement('li');
-                    li.textContent = (index + 1) + '. ';
-
-                    const btn = document.createElement('button');
-                    btn.type = 'button';
-                    btn.className = 'faq-question-btn';
-                    btn.textContent = question;
-
-                    li.appendChild(btn);
-                    faqList.appendChild(li);
-                });
-            })
-            .catch(function (error) {
-                console.warn('[nav-wave] FAQ 질문 목록 조회 실패:', error);
-            });
     }
 
     if (faqInput && faqSendBtn && faqChatArea) {
