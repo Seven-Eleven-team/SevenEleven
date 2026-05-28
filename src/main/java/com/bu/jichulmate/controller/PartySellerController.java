@@ -4,6 +4,7 @@ import com.bu.jichulmate.dto.party.SellerRequest;
 import com.bu.jichulmate.dto.party.SellerResponse;
 import com.bu.jichulmate.service.MailService;
 import com.bu.jichulmate.service.PartySellerService;
+import com.bu.jichulmate.util.SessionUtils;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,8 +56,13 @@ public class PartySellerController {
     public ResponseEntity<String> verifyPassword(
             @RequestBody Map<String, String> body,
             HttpSession session) {
-        Long userId = (Long) session.getAttribute("loginUserId");
-        if (userId == null) return ResponseEntity.status(401).body("로그인이 필요합니다.");
+        // [수정] SessionUtils.getLoginUserId() 사용으로 타입 변환 안전하게 처리
+        Long userId;
+        try {
+            userId = SessionUtils.getLoginUserId(session);
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body("로그인이 필요합니다.");
+        }
         boolean result = partySellerService.verifyPassword(userId, body.get("password"));
         if (result) return ResponseEntity.ok("인증되었습니다!");
         return ResponseEntity.badRequest().body("비밀번호를 잘못 입력하셨습니다.");

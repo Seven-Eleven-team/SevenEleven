@@ -32,4 +32,9 @@ public class PartyViewController {
     public String sellerProfile() {
         return "party/seller-profile";
     }
+
+    @GetMapping("/form")
+    public String partyForm() {
+        return "party/form";
+    }
 }

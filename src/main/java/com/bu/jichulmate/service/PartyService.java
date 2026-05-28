@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -24,23 +25,34 @@ public class PartyService {
 
     @Transactional
     public PartyDetailResponse createPost(PartyPostRequest request) {
-        PartySeller seller = partySellerRepository.findByUserId(request.getSellerId())
-                .orElseThrow(() -> new RuntimeException("판매자 정보를 찾을 수 없습니다."));
+        List<PartySeller> sellers = partySellerRepository.findByUserId(request.getSellerId());
+        if (sellers.isEmpty()) {
+            throw new RuntimeException("판매자 정보를 찾을 수 없습니다.");
+        }
+        PartySeller seller = sellers.get(0);
 
         SubscriptionMaster service = subscriptionMasterRepository.findById(request.getServiceId())
                 .orElseThrow(() -> new RuntimeException("서비스 정보를 찾을 수 없습니다."));
 
-        PartyPost post = PartyPost.builder()
-                .seller(seller)
-                .service(service)
-                .shareId(request.getShareId())
-                .sharePassword(request.getSharePassword())
-                .monthlyPrice(request.getMonthlyPrice())
-                .description(request.getDescription())
-                .status("WAITING")
-                .build();
+        // 시퀀스로 ID 채번
+        Long partyId = partyPostRepository.getNextSequenceValue();
 
-        PartyPost saved = partyPostRepository.save(post);
+        // 네이티브 SQL로 직접 INSERT
+        partyPostRepository.insertDirect(
+                partyId,
+                seller.getId(),
+                request.getServiceId(),
+                request.getShareId(),
+                request.getSharePassword(),
+                request.getMonthlyPrice(),
+                LocalDateTime.now(),
+                service.getServiceCategory(),
+                seller.getUserId(),
+                request.getDescription()
+        );
+
+        PartyPost saved = partyPostRepository.findById(partyId)
+                .orElseThrow(() -> new RuntimeException("등록 실패"));
         return toResponse(saved);
     }
 
