@@ -31,24 +31,28 @@ if (faqModal) {
         if (input === '') return;
         addUserMessage(input);
         faqInput.value = '';
-        fetch(`/support/api/faqs/chat?input=${input}`)
-            .then(res => res.text())
-            .then(data => {
-                let answer;
-                let showNum = true;
-                try {
-                    const parsed = JSON.parse(data);
-                    answer = parsed.answer || parsed;
-                } catch (e) {
-                    answer = data;
-                    showNum = false;
-                }
-                const row = document.createElement('div');
-                row.className = 'faq-bot-row';
-                row.innerHTML = `<span class="faq-num">${showNum ? input + '.' : ''}</span><div class="faq-bot-msg">${answer}</div>`;
-                faqChatArea.appendChild(row);
-                faqChatArea.scrollTop = faqChatArea.scrollHeight;
-            });
+        fetch('/support/api/faqs/chat', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ input: input })
+        })
+        .then(res => res.text())       // ← 추가
+        .then(data => {                // ← 추가
+            let answer;
+            let showNum = true;
+            try {
+                const parsed = JSON.parse(data);
+                answer = parsed.answer || parsed;
+            } catch (e) {
+                answer = data;
+                showNum = false;
+            }
+            const row = document.createElement('div');
+            row.className = 'faq-bot-row';
+            row.innerHTML = `<span class="faq-num">${showNum ? input + '.' : ''}</span><div class="faq-bot-msg">${answer}</div>`;
+            faqChatArea.appendChild(row);
+            faqChatArea.scrollTop = faqChatArea.scrollHeight;
+        });
     });
 
     let resetTimer = null;
@@ -118,6 +122,9 @@ document.addEventListener('click', function(e) {
                 clearTimeout(resetTimer);
                 resetTimer = null;
             }
+            if (faqModal.classList.contains('open')) {
+                        faqInput.focus();
+                    }
             if (faqModal.classList.contains('open') && !faqLoaded) {
                 loadFaqList();
                 faqLoaded = true;
