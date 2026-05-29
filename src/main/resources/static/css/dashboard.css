@@ -1,261 +1,345 @@
 /* ======================================= */
-/* 공통 및 대시보드 레이아웃 */
+/* 공통 레이아웃 */
 /* ======================================= */
 body { font-family: 'Pretendard', sans-serif; margin: 0; background-color: #F0F5F9; color: #1E2022; }
 
 /* 헤더 */
 .main-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 50px; background: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
-.logo { font-size: 22px; font-weight: bold; color: #112D4E; } /* 로고 - 딥 네이비 */
+.logo { font-size: 22px; font-weight: bold; color: #112D4E; }
 .nav-links { display: flex; gap: 30px; }
 .nav-links a { text-decoration: none; color: #52616B; font-weight: 500; font-size: 15px; }
-.nav-links a.active { color: #3F72AF; font-weight: 700; } /* 메인 블루 */
+.nav-links a.active { color: #3F72AF; font-weight: 700; }
 
-/* 메인 대시보드 (1단 레이아웃으로 깔끔하게 정렬) */
+/* ======================================= */
+/* ★ 초대형 화면 반응형 대시보드 메인 레이아웃   */
+/* ======================================= */
 .dashboard-container {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 0 20px;
+    max-width: 1300px; /* 기존 고정값에서 탈피하여 화면 크기에 맞춰 95% 비율로 대폭 확장 */
+    margin: 0 auto;
+    padding: 100px 20px 50px 20px;
+    box-sizing: border-box;
+}
+
+/* 상단 액션 버튼 그룹 */
+.top-action-bar { display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 25px; }
+.btn-primary { background: #3F72AF; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+.btn-primary:hover { background: #112D4E; }
+.btn-secondary { background: #DBE2EF; color: #112D4E; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+.btn-secondary:hover { background: #C9D6DF; }
+
+/* 상단 요약 카드 */
+.summary-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+.summary-card { background: white; padding: 25px 20px; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); border: 1px solid #EAECEF; display: flex; flex-direction: column; gap: 12px; }
+.sc-title { font-size: 14px; color: #52616B; font-weight: 600; }
+.sc-value { font-size: 26px; font-weight: 800; color: #112D4E; white-space: nowrap; }
+
+/* 탭 메뉴 */
+.dashboard-tabs { display: flex; gap: 30px; border-bottom: 1px solid #EAECEF; margin-bottom: 30px; }
+.dashboard-tabs .tab { padding: 10px 5px; font-size: 16px; font-weight: 600; color: #8DAED9; cursor: pointer; position: relative; }
+.dashboard-tabs .tab.active { color: #112D4E; }
+.dashboard-tabs .tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 3px; background: #3F72AF; border-radius: 3px 3px 0 0; }
+
+/* 카테고리 분석 카드 대형 연출 무대 */
+.analysis-card { background: white; padding: 45px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #EAECEF; margin-bottom: 30px; }
+.analysis-grid {
     display: flex;
-    flex-direction: column; /* 위에서 아래로 차곡차곡 쌓임 */
-    gap: 30px;
+    gap: 0;
+    margin-top: 25px;
+    align-items: center; /* 원형 그래프와 프로그레스 리스트의 세로 높이 축을 중앙으로 고정 정렬 */
+    flex-wrap: wrap;
 }
 
-/* ======================================= */
-/* ★ 1. 가로형 목표 배너 카드 디자인 */
-/* ======================================= */
-.horizontal-goal-card {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 25px 30px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    border: 2px solid #DBE2EF;
-}
-
-.goal-header-row {
+/* 왼쪽 대형 차트 전용관 */
+.analysis-left {
+    flex: 1.3; /* 좌우 밸런스를 시원시원하게 분할 */
+    min-width: 450px;
+    padding-right: 60px;
+    box-sizing: border-box;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start; /* 위쪽 기준으로 양옆 정렬 */
-    margin-bottom: 20px;
-}
-
-.goal-title-area h3 { margin: 0 0 6px 0; font-size: 14px; color: #52616B; }
-.goal-name { font-size: 20px; font-weight: bold; color: #112D4E; display: block; }
-
-/* 오른쪽 정렬을 위한 공간 */
-.goal-right-area {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-/* 목표 등록 버튼 */
-.goal-edit-btn {
-    background: #DBE2EF;
-    color: #112D4E;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-}
-.goal-edit-btn:hover { background: #C9D6DF; }
-
-.goal-text-area { text-align: right; }
-.current-text { font-size: 18px; font-weight: 800; color: #3F72AF; }
-.target-text { font-size: 14px; color: #52616B; font-weight: 500; }
-
-.horizontal-progress-wrapper { width: 100%; }
-
-.horizontal-progress-bar {
-    width: 100%; height: 18px; background: #F0F5F9;
-    border-radius: 9px; overflow: hidden; position: relative;
-}
-
-.horizontal-progress-fill {
-    height: 100%; background: #3F72AF;
-    border-radius: 9px; transition: width 0.5s ease-in-out;
-}
-
-.progress-labels {
-    display: flex; justify-content: space-between; margin-top: 10px;
-    font-size: 13px; font-weight: 600; color: #C9D6DF;
-}
-
-.percent-highlight { color: #3F72AF; font-weight: 800; font-size: 14px; }
-
-/* ======================================= */
-/* ★ 2. 통계 카드 및 제목 옆 버튼 */
-/* ======================================= */
-.stats-card { background: #ffffff; border-radius: 16px; padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); width: 100%; box-sizing: border-box; }
-.card-header h2 { margin: 0; font-size: 20px; color: #112D4E; }
-
-/* 제목과 지출입력 버튼을 양옆으로 배치 */
-.action-header {
-    display: flex;
-    justify-content: space-between;
+    justify-content: center; /* 도화지 정중앙 배치 */
     align-items: center;
 }
 
-.header-add-btn {
-    background-color: #3F72AF;
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 14px;
-    cursor: pointer;
-    transition: 0.2s;
+/* 짱짱하고 미려하게 쭉 늘어나는 중앙 가로구분선 */
+.analysis-divider {
+    width: 1px;
+    background-color: #EAECEF;
+    align-self: stroke; /* 부모 그리드 높이에 맞춰 끝까지 쭉 늘어남 */
+    height: 430px;
 }
-.header-add-btn:hover { background-color: #112D4E; }
 
-.toggle-container { display: inline-flex; background-color: #F9F7F7; border-radius: 8px; padding: 4px; margin-top: 15px; }
+/* 오른쪽 대형 상세 분석실 */
+.analysis-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 400px;
+    padding-left: 60px;
+    box-sizing: border-box;
+}
+.analysis-title { font-size: 20px; font-weight: bold; color: #112D4E; margin: 0; }
+
+/* 필터 토글 버튼 */
+.toggle-container { display: inline-flex; background-color: #F9F7F7; border-radius: 8px; padding: 4px; margin-bottom: 20px; }
 .toggle-btn { border: none; background: transparent; padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 600; color: #52616B; cursor: pointer; }
 .toggle-btn.active { background-color: #ffffff; color: #1E2022; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
-.chart-container { position: relative; height: 350px; width: 100%; margin-top: 20px; }
-.summary-box { background: #F9F7F7; border: 1px solid #C9D6DF; border-radius: 12px; padding: 16px; margin-top: 20px; text-align: center; color: #52616B; font-size: 15px; }
-.chart-footer-text { text-align: center; color: #52616B; font-size: 14px; margin-top: 15px; }
-
-
-/* ======================================= */
-/* 바텀 시트 및 모달 공통 */
-/* ======================================= */
-.modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex; align-items: flex-end; justify-content: center; z-index: 1000;
+/* ★ 메인 하이라이트: 도화지 컨테이너 스케일 자체를 거대하게 키움 */
+.chart-container {
+    position: relative;
+    height: 480px; /* 도화지 크기 자체를 확실하게 상향조정 */
+    width: 100%;
+    max-width: 480px; /* 정원이 찌그러지지 않도록 맥스폭 한계선 지정 */
 }
 
-.bottom-sheet {
-    background: #ffffff;
-    border-radius: 24px 24px 0 0;
-    padding: 30px 30px 40px;
-    box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
-    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
+/* 우측 상세 분석 리스트 (대화면 전용 패딩 확장) */
+/* 이전에 전체 복사하셨던 dashboard.css에서 아래 3가지 클래스 구역만 찾아서 덮어써 주시면 됩니다! */
 
-.wide-sheet {
-    width: 100%; max-width: 750px;
-    max-height: 90vh;
+/* 1. 우측 리스트 항목 간의 간격을 좀 더 널찍하게 벌림 */
+.detail-list {
+    display: flex;
+    flex-direction: column;
+    gap: 26px; /* 기존 24px에서 자잘한 여백 확대 */
     overflow-y: auto;
+    max-height: 380px;
+    padding-right: 10px;
 }
 
-/* 목표 설정 버튼 (작고 세련되게) */
-.goal-edit-btn {
+/* 2. 카테고리 텍스트 이름 및 우측 금액 % 글씨 크기 대폭 상향 */
+.detail-item-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px; /* 기존 14px에서 16px로 아주 큼직하게 변경 */
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: #1E2022;
+}
+
+/* 3. 연한 회색 배경 프로그레스 바 자체 두께감 볼륨 업 */
+.progress-bg {
     background: #F0F5F9;
-    color: #3F72AF;
-    border: 1px solid #DBE2EF;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 11px;
+    height: 16px; /* ★ 기존 10px에서 16px로 두껍고 듬직하게 확장! */
+    border-radius: 8px;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* 4. 채워지는 파란색 실질 게이지 바 두께도 세트로 두껍게 조절 */
+.progress-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.5s ease;
+}
+/* 가장 많은 지출 강조 박스 */
+.most-spent-box { background: #F4F8FB; border-radius: 10px; padding: 20px; margin-top: 25px; font-size: 15px; font-weight: 600; color: #3F72AF; border: 1px solid #DBE2EF; }
+
+/* 📱 완벽한 모바일 디바이스 반응형 미디어 쿼리 */
+@media (max-width: 1150px) {
+    .summary-cards { grid-template-columns: repeat(2, 1fr); }
+    .analysis-divider { display: none; }
+    .analysis-left { padding-right: 0; border-bottom: 1px solid #EAECEF; padding-bottom: 40px; }
+    .analysis-right { padding-left: 0; padding-top: 40px; }
+    .analysis-grid { flex-direction: column; }
+    .analysis-left, .analysis-right { max-width: 100%; min-width: 100%; }
+}
+@media (max-width: 520px) {
+    .summary-cards { grid-template-columns: 1fr; }
+    .main-header { padding: 15px 20px; flex-direction: column; gap: 15px; }
+}
+
+/* 모달창 스타일 레이어 (기존 안전 유지) */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); display: flex; align-items: flex-end; justify-content: center; z-index: 1000; }
+.bottom-sheet { background: #ffffff; border-radius: 24px 24px 0 0; padding: 30px 30px 40px; box-shadow: 0 -10px 40px rgba(0,0,0,0.1); animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+.wide-sheet { width: 100%; max-width: 750px; max-height: 90vh; overflow-y: auto; }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+.modal-header h3 { margin: 0; font-size: 20px; color: #112D4E; }
+.close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #52616B; }
+.modal-tabs { display: flex; gap: 10px; margin-bottom: 25px; }
+.tab-btn { flex: 1; padding: 14px; border: none; background: #F9F7F7; border-radius: 12px; font-size: 15px; font-weight: bold; color: #52616B; cursor: pointer; transition: 0.2s; }
+.tab-btn.active { background: #DBE2EF; color: #3F72AF; }
+.section-title { font-size: 14px; font-weight: bold; color: #52616B; margin-bottom: 12px; }
+.category-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 25px; }
+.cat-box { padding: 12px 4px; background: #F9F7F7; border: 1px solid #C9D6DF; border-radius: 10px; font-size: 13px; font-weight: 600; color: #1E2022; text-align: center; cursor: pointer; transition: 0.2s; word-break: keep-all; }
+.cat-box.active { background: #3F72AF; color: #ffffff; border-color: #3F72AF; }
+.entered-section { margin-bottom: 25px; }
+.entered-list-container { background: #F9F7F7; border: 1px solid #C9D6DF; border-radius: 12px; min-height: 120px; max-height: 250px; overflow-y: auto; padding: 15px 20px; }
+.empty-list { text-align: center; color: #52616B; font-size: 14px; margin-top: 40px; }
+.list-group-title { font-size: 13px; font-weight: bold; color: #52616B; margin: 15px 0 8px 0; border-bottom: 1px solid #C9D6DF; padding-bottom: 5px; }
+.list-group-title:first-child { margin-top: 0; }
+.list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #C9D6DF; }
+.list-item:last-child { border-bottom: none; }
+.item-left { display: flex; align-items: center; gap: 12px; }
+.item-icon { width: 36px; height: 36px; border-radius: 50%; background: #3F72AF; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.item-details { display: flex; flex-direction: column; gap: 4px; text-align: left; }
+.item-title { font-size: 14px; font-weight: bold; color: #1E2022; }
+.item-subtitle { font-size: 12px; color: #52616B; }
+.item-right .item-amount { font-size: 15px; font-weight: bold; }
+.bottom-input-row { display: flex; gap: 15px; margin-bottom: 15px; align-items: center; }
+.amount-wrapper { flex: 2; display: flex; align-items: center; background: #F9F7F7; border: 1px solid #C9D6DF; border-radius: 12px; padding: 10px 15px; }
+.currency-label { font-size: 14px; font-weight: bold; color: #52616B; margin-right: 15px; white-space: nowrap; }
+.bottom-amount-input { flex: 1; background: transparent; border: none; font-size: 20px; font-weight: bold; color: #112D4E; outline: none; text-align: right; }
+.bottom-amount-input::placeholder { color: #C9D6DF; }
+.add-to-list-btn { flex: 1; padding: 18px; background: #112D4E; color: #ffffff; border: none; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; }
+.final-save-btn { width: 100%; padding: 18px; background: #3F72AF; color: #ffffff; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; }
+.large-input.full-input { width: 100%; box-sizing: border-box; padding: 16px; font-size: 16px; border: 1px solid #C9D6DF; border-radius: 12px; font-weight: normal; margin-bottom: 25px; text-align: left; background: #F9F7F7; color: #1E2022; }
+.edit-cat { background: #F9F7F7; color: #1E2022; border: 1px solid #C9D6DF; }
+.edit-cat.active { background: #3F72AF; color: #ffffff; border-color: #3F72AF; }
+.modal-actions { display: flex; gap: 10px; width: 100%; }
+.delete-btn { flex: 1; padding: 15px; background: #F9F7F7; color: #e57373; border: 1px solid #e57373; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; }
+.primary-btn { flex: 2; padding: 15px; background: #3F72AF; color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; width: 100%; }
+
+/* ======================================= */
+/* ★ PC 대화면 전용: 모달창 중앙 정렬 디자인 변경 */
+/* ======================================= */
+@media (min-width: 1151px) {
+    /* 1. 밑바닥 정렬(flex-end)을 화면 정중앙(center) 정렬로 변경 */
+    .modal-overlay {
+        align-items: center;
+    }
+
+    /* 2. 바텀시트 전용 라운딩을 사방 라운딩으로 고급스럽게 수정 */
+    .modal-content.bottom-sheet {
+        border-radius: 20px; /* 밑바닥 전용 각진 모서리를 둥글게 파괴 */
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15); /* 조금 더 입체감 있는 그림자 */
+        animation: modalScaleUp 0.35s cubic-bezier(0.16, 1, 0.3, 1); /* 아래서 위로 올라오는 애니메이션 대신 부드럽게 커지는 효과 */
+        padding: 40px; /* 내부 여백을 널찍하게 두어 시원하게 연출 */
+    }
+}
+
+/* 정중앙에서 부드럽게 샥- 커지면서 등장하는 모던 팝업 애니메이션 정의 */
+@keyframes modalScaleUp {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ======================================= */
+/* ★ 목표 설정 팝업창 전용 황금 비율 사이즈 */
+/* ======================================= */
+#goalRegistrationModal .modal-content {
+    max-width: 550px !important; /* 지출 입력창(750px)보다 슬림하게 잡아주어 퍼져 보이지 않게 함 */
+    padding: 40px 40px 45px !important; /* 상하좌우 여백을 넉넉히 주어 답답하지 않고 모던하게 연출 */
+}
+
+/* 일반 목표 추가 버튼을 우측 끝에 딱 맞게 정렬 */
+#goalRegistrationModal .btn-secondary {
+    padding: 8px 16px;
+    font-size: 13px;
+    border-radius: 8px;
+}
+
+/* ======================================= */
+/* ★ 커스텀 확인 팝업창 전용 디자인 */
+/* ======================================= */
+.confirm-content {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 30px;
+    width: 100%;
+    max-width: 320px; /* 기존 모달들보다 훨씬 작고 귀엽게 */
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    animation: modalScaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.confirm-title {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #112D4E;
+}
+.confirm-message {
+    margin: 0 0 25px 0;
+    font-size: 14px;
+    color: #52616B;
+    line-height: 1.5;
+}
+.confirm-actions {
+    display: flex;
+    gap: 10px;
+}
+.btn-cancel {
+    flex: 1;
+    padding: 12px;
+    background: #F9F7F7;
+    color: #52616B;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
     font-weight: bold;
     cursor: pointer;
     transition: 0.2s;
 }
-.goal-edit-btn:hover {
-    background: #DBE2EF;
-    color: #112D4E;
+.btn-cancel:hover { background: #EAECEF; }
+
+.btn-danger {
+    flex: 1;
+    padding: 12px;
+    background: #e57373;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
 }
-
-@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-.modal-header h3 { margin: 0; font-size: 20px; color: #112D4E; }
-.close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #52616B; }
-
-.modal-tabs { display: flex; gap: 10px; margin-bottom: 25px; }
-.tab-btn { flex: 1; padding: 14px; border: none; background: #F9F7F7; border-radius: 12px; font-size: 15px; font-weight: bold; color: #52616B; cursor: pointer; transition: 0.2s; }
-.tab-btn.active { background: #DBE2EF; color: #3F72AF; }
-
-.section-title { font-size: 14px; font-weight: bold; color: #52616B; margin-bottom: 12px; }
-
-/* 5x2 카테고리 박스 */
-.category-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
-    margin-bottom: 25px;
-}
-.cat-box {
-    padding: 12px 4px;
-    background: #F9F7F7; border: 1px solid #C9D6DF; border-radius: 10px;
-    font-size: 13px; font-weight: 600; color: #1E2022;
-    text-align: center; cursor: pointer; transition: 0.2s;
-    word-break: keep-all;
-}
-.cat-box.active { background: #3F72AF; color: #ffffff; border-color: #3F72AF; }
-
-/* 입력된 내역 리스트 영역 */
-.entered-section { margin-bottom: 25px; }
-.entered-list-container {
-    background: #F9F7F7; border: 1px solid #C9D6DF; border-radius: 12px; min-height: 120px; max-height: 250px;
-    overflow-y: auto; padding: 15px 20px;
-}
-.empty-list { text-align: center; color: #52616B; font-size: 14px; margin-top: 40px; }
-
-.list-group-title {
-    font-size: 13px; font-weight: bold; color: #52616B;
-    margin: 15px 0 8px 0; border-bottom: 1px solid #C9D6DF; padding-bottom: 5px;
-}
-.list-group-title:first-child { margin-top: 0; }
-
-.list-item {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 12px 0; border-bottom: 1px solid #C9D6DF;
-}
-.list-item:last-child { border-bottom: none; }
-
-.item-left { display: flex; align-items: center; gap: 12px; }
-.item-icon {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: #3F72AF; color: #ffffff;
-    display: flex; align-items: center; justify-content: center; font-size: 16px;
-}
-.item-details { display: flex; flex-direction: column; gap: 4px; text-align: left; }
-.item-title { font-size: 14px; font-weight: bold; color: #1E2022; }
-.item-subtitle { font-size: 12px; color: #52616B; }
-
-.item-right .item-amount { font-size: 15px; font-weight: bold; }
-
-/* 하단 금액 입력 & 추가/저장 버튼 */
-.bottom-input-row { display: flex; gap: 15px; margin-bottom: 15px; align-items: center; }
-.amount-wrapper {
-    flex: 2; display: flex; align-items: center; background: #F9F7F7;
-    border: 1px solid #C9D6DF; border-radius: 12px; padding: 10px 15px;
-}
-.currency-label { font-size: 14px; font-weight: bold; color: #52616B; margin-right: 15px; white-space: nowrap; }
-.bottom-amount-input {
-    flex: 1; background: transparent; border: none; font-size: 20px;
-    font-weight: bold; color: #112D4E; outline: none; text-align: right;
-}
-.bottom-amount-input::placeholder { color: #C9D6DF; }
-
-.add-to-list-btn {
-    flex: 1; padding: 18px; background: #112D4E; color: #ffffff;
-    border: none; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer;
-}
-
-.final-save-btn {
-    width: 100%; padding: 18px; background: #3F72AF; color: #ffffff;
-    border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer;
-}
-
-.large-input.full-input {
-    width: 100%; box-sizing: border-box; padding: 16px; font-size: 16px;
-    border: 1px solid #C9D6DF; border-radius: 12px; font-weight: normal;
-    margin-bottom: 25px; text-align: left; background: #F9F7F7; color: #1E2022;
-}
-
+.btn-danger:hover { background: #ef5350; }
 
 /* ======================================= */
-/* 지출 수정 및 삭제 모달 전용 디자인 */
+/* ★ 월별 비교 탭 전용 디자인 */
 /* ======================================= */
-.edit-cat { background: #F9F7F7; color: #1E2022; border: 1px solid #C9D6DF; }
-.edit-cat.active { background: #3F72AF; color: #ffffff; border-color: #3F72AF; }
+.tab-content { display: none; } /* 탭 숨김 처리용 */
 
-.modal-actions { display: flex; gap: 10px; width: 100%; }
-.delete-btn { flex: 1; padding: 15px; background: #F9F7F7; color: #e57373; border: 1px solid #e57373; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; }
-.primary-btn { flex: 2; padding: 15px; background: #3F72AF; color: #ffffff; border: none; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; width: 100%; }
+/* 변화 분석 리스트 (가로 게이지) */
+.change-list { display: flex; flex-direction: column; gap: 25px; max-height: 400px; overflow-y: auto; padding-right: 10px; }
+.change-item { padding-bottom: 20px; border-bottom: 1px solid #F0F5F9; }
+.change-item:last-child { border-bottom: none; padding-bottom: 0; }
+.change-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.c-label { font-weight: bold; font-size: 15px; color: #112D4E; }
+
+/* 얇은 막대기 디자인 */
+.bar-row { display: flex; align-items: center; gap: 15px; margin-bottom: 8px; }
+.bar-label { width: 50px; font-size: 13px; color: #52616B; font-weight: 600; }
+.bar-bg { flex: 1; background: #F0F5F9; height: 10px; border-radius: 5px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 5px; transition: width 0.8s ease; }
+.current-fill { background: #3F72AF; } /* 이번 달 파란색 */
+.last-fill { background: #DBE2EF; } /* 지난 달 회색 */
+.bar-amt { width: 80px; text-align: right; font-size: 13px; font-weight: bold; color: #112D4E; }
+
+/* 5개월 트렌드 리스트 & 배지 */
+.trend-list { display: flex; flex-direction: column; gap: 15px; }
+.trend-item { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; background: #F9F7F7; border-radius: 12px; }
+.trend-month { display: flex; flex-direction: column; gap: 5px; }
+.trend-month strong { font-size: 15px; color: #112D4E; }
+.trend-month span { font-size: 14px; color: #52616B; }
+
+.badge { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; }
+.badge-danger { background: #FFEBEE; color: #e57373; } /* 초과 빨간색 */
+.badge-success { background: #E8F5E9; color: #4caf50; } /* 절감 초록색 */
+.badge-normal { background: #E3F2FD; color: #3F72AF; } /* 유지 파란색 */
+
+/* ======================================= */
+/* ★ 목표 관리 탭 전용 디자인 */
+/* ======================================= */
+.goal-progress-list { display: flex; flex-direction: column; gap: 20px; }
+.goal-progress-item { display: flex; flex-direction: column; }
+.goal-progress-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px; }
+.goal-name-text { font-weight: 700; font-size: 15px; color: #112D4E; }
+.goal-percent-text { font-weight: bold; font-size: 16px; color: #3F72AF; }
+
+.goal-tips-list { display: flex; flex-direction: column; gap: 15px; }
+.tip-box { padding: 18px; border-radius: 12px; font-size: 14px; line-height: 1.5; }
+.tip-box strong { display: block; margin-bottom: 5px; font-size: 14px; }
+.tip-box p { margin: 0; color: #52616B; }
+.tip-success { background: #E8F5E9; border-left: 4px solid #4caf50; }
+.tip-success strong { color: #2e7d32; }
+.tip-warning { background: #FFF8E1; border-left: 4px solid #ffb300; }
+.tip-warning strong { color: #f57f17; }
+.tip-info { background: #E3F2FD; border-left: 4px solid #3F72AF; }
+.tip-info strong { color: #1565c0; }
