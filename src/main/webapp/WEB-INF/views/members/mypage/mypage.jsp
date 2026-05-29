@@ -252,32 +252,26 @@ body.mypage .site-header {
             z-index: 2000;
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(8px);
         }
 
-        .cancel-modal-content {
+        .account-modal-content {
             background: white;
             padding: 50px 80px;
             border-radius: 15px; /* 이미지처럼 둥근 모서리 */
             position: relative;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            animation: modalPop 0.3s ease;
         }
 
-        .cancel-modal-content p {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 0;
-            color: #333;
+        @keyframes modalPop {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        .cancel-close-x {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #333;
+        .close-modal {
+            position: absolute; top: 20px; right: 25px;
+            font-size: 28px; cursor: pointer; color: #aaaaaa;
+            transition: color 0.2s;
         }
     </style>
 </head>
@@ -374,6 +368,7 @@ body.mypage .site-header {
                         </div>
                         <span class="cancel-link" style="cursor:pointer;" onclick="openCancelModal()">해지하기</span>
                     </div>
+                </div>
 
                     <div class="sub-item">
                         <div class="sub-icon youtube"></div>

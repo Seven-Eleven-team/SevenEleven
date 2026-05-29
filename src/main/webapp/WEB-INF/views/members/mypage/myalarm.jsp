@@ -245,7 +245,6 @@
         </section>
 
     </main>
-
 </div>
  <%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
  <script>

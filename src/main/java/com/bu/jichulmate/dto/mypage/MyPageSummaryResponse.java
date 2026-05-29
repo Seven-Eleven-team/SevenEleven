@@ -7,19 +7,25 @@ import java.util.List;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class MyPageSummaryResponse {
     private Long userId;
-    private String loginId; // ★ 이메일 형식의 로그인 아이디
+    private String loginId;            // 이메일 (로그인 ID)
+    private String email;              // ← 추가 (JSP에서 사용)
     private String nickname;
     private String gender;
     private LocalDate birthDate;
     private String profileImage;
     private String role;
+
+    // 추가 정보들
     private boolean sellerRegistered;
     private boolean emailNotify;
     private int activeSubscriptionCount;
     private int unreadNotificationCount;
     private long monthlySubscriptionTotal;
     private String nextBillingDate;
+
+    private List<SubscriptionDetail> subscriptions;
     private List<GoalSummary> goals;
+
     private String primaryBankName;
     private String primaryAccountNumber;
 
