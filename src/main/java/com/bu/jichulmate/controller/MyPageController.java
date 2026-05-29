@@ -29,11 +29,17 @@ public class MyPageController {
 
     private final MyPageService myPageService;
     private final AccountService accountService;
+    /*내정보 수정*/
+    @GetMapping("/editprofile")
+    public String editProfile() {
+
+        return "members/mypage/editprofile";
+    }
 
     /**
      * 마이페이지 메인
      */
-    @GetMapping
+    @GetMapping({"", "/", "/mypage"})
     public String myPage(HttpSession session, Model model) {
         Long userId = SessionUtils.getLoginUserId(session);
 

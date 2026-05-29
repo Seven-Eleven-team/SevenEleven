@@ -20,7 +20,7 @@
 </head>
 <body>
 
-<jsp:include page="/WEB-INF/views/common/header.jsp" />
+<jsp:include page="/WEB-INF/views/common/header.jspf" />
 
   <div style="position:fixed; top:16px; left:16px; z-index:10001;">
     <a href="/" style="padding:10px 12px; border-radius:12px; background:rgba(0,0,0,.04); text-decoration:none; color:inherit; font-weight:800;">홈으로</a>
@@ -30,7 +30,7 @@
     <c:out value="${error}" />
   </div>
 
-  <%@ include file="/WEB-INF/views/common/footer.jspf" %>
+<%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
 
 
 </body>

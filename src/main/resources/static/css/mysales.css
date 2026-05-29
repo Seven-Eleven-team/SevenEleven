@@ -1,158 +1,111 @@
-/* =========================================================
-   mysales.css
-   마이페이지 > 내 판매 목록 전용 스타일
-========================================================= */
+/* 전체 레이아웃 */
+body.mypage-body {
+    margin: 0;
+    padding-top: 78px;
+    background: #f3f6fb;
+}
 
-.sales-main,
-.sales-list-main {
-    width: 100%;
-    min-height: 832px;
+.mypage-container {
     display: flex;
-    flex-direction: column;
-    min-width: 0;
+    gap: 26px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 20px;
 }
 
-.page-title {
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 25px;
-    color: #222;
-}
-
-.sales-header-title {
-    width: 100%;
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #333;
-    color: #222;
-}
-
-.sales-main-box {
-    width: 100%;
-    min-height: 760px;
-    background: #ffffff;
-    border: 1px solid #dbdbdb;
-    border-radius: 20px;
-    position: relative;
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-}
-
-.sales-empty-center {
+.dashboard {
     flex: 1;
+}
+
+/* 제목 */
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 18px;
+}
+
+/* 카드 박스 */
+.card-box {
+    background: #fff;
+    border-radius: 18px;
+    padding: 30px;
+    border: 1px solid #e5e5e5;
+    min-height: 700px;
+}
+
+/* empty 상태 */
+.empty-box {
+    height: 600px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding-bottom: 40px;
-}
-
-.empty-msg {
-    font-size: 42px;
-    font-weight: 700;
-    margin-bottom: 40px;
-    color: #000;
     text-align: center;
 }
 
-.register-btn {
-    background-color: #1e2d4d;
-    color: #ffffff;
-    padding: 18px 60px;
-    border-radius: 15px;
-    font-size: 18px;
-    font-weight: 700;
+.empty-box h1 {
+    font-size: 32px;
+    margin-bottom: 30px;
+}
+
+.primary-btn {
+    background: #1e2d4d;
+    color: #fff;
+    padding: 16px 50px;
+    border-radius: 12px;
     border: none;
     cursor: pointer;
 }
 
-.register-btn:hover {
-    opacity: 0.92;
+/* 테이블 */
+.sales-table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.sales-list-content {
-    padding: 10px 40px 80px;
+.sales-table thead th {
+    text-align: left;
+    font-size: 14px;
+    color: #666;
+    padding: 14px 10px;
+    border-bottom: 1px solid #eaeaea;
 }
 
-.sale-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 25px 0;
-    border-bottom: 1px solid #eeeeee;
-    gap: 20px;
+.sales-table tbody td {
+    padding: 18px 10px;
+    font-size: 15px;
+    border-bottom: 1px solid #f0f0f0;
 }
 
-.item-left-group {
-    display: flex;
-    align-items: center;
-    min-width: 0;
+/* 상태 */
+.status-active {
+    color: #2ecc71;
+    font-weight: 600;
 }
 
-.item-name {
-    width: 160px;
-    font-size: 18px;
-    font-weight: 700;
-    color: #222;
-    flex-shrink: 0;
+.status-stop {
+    color: #ff4d4d;
+    font-weight: 600;
 }
 
-.item-logo-area {
-    width: 120px;
-    margin-right: 30px;
-    flex-shrink: 0;
-}
-
-.item-logo-area img {
-    height: 25px;
-    display: block;
-}
-
-.item-desc-text {
-    font-size: 16px;
-    line-height: 1.8;
-    color: #333;
-    min-width: 0;
-}
-
-.item-right-stat {
-    font-size: 18px;
-    font-weight: 700;
-    color: #000;
-    margin-right: 10px;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-.pagination-area {
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 16px;
-    color: #888;
+/* 버튼 */
+.delete-btn {
+    background: #1f2a44;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 20px;
     cursor: pointer;
+    font-size: 13px;
 }
 
-.sidebar ul li.active-red a {
-    color: #ff4d4d !important;
-    font-weight: 700;
+.delete-btn:hover {
+    opacity: 0.85;
 }
 
-@media (max-width: 1024px) {
-    .sales-main-box {
-        overflow-x: auto;
-    }
-
-    .sales-list-content {
-        min-width: 780px;
-        padding: 10px 30px 80px;
-    }
-
-    .empty-msg {
-        font-size: 34px;
-    }
+/* pagination */
+.pagination {
+    text-align: center;
+    margin-top: 30px;
+    color: #666;
 }
