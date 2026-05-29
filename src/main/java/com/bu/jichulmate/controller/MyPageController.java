@@ -20,7 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;   // ← 추가
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/mypage")
@@ -48,22 +48,16 @@ public class MyPageController {
     }
 
     /**
-     * 새 계좌 등록 화면 (모달용 - 현재는 사용 안 함)
-     */
-    @GetMapping("/accounts/new")
-    public String newAccountForm() {
-        return "members/mypage/mybank";   // 모달 사용 중이므로 나중에 삭제 가능
-    }
-
-    /**
-     * 계좌 등록 처리 (모달 Form 제출 방식)
+     * 계좌 등록 / 수정 처리
      */
     @PostMapping("/accounts")
-    public String registerAccount(
-            @Valid @ModelAttribute AccountRegisterRequest request,   // @RequestBody → @ModelAttribute 변경
+    public String registerOrUpdateAccount(
+            @Valid @ModelAttribute AccountRegisterRequest request,
             BindingResult bindingResult,
+            @RequestParam(value = "mode", defaultValue = "register") String mode,
+            @RequestParam(value = "accountId", required = false) Long accountId,
             HttpSession session,
-            RedirectAttributes redirectAttributes) {                 // RedirectAttributes 추가
+            RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errorMessage",
@@ -74,17 +68,32 @@ public class MyPageController {
         Long userId = SessionUtils.getLoginUserId(session);
 
         try {
-            accountService.registerAccount(userId, request);
-            redirectAttributes.addFlashAttribute("successMessage",
-                    "✅ 계좌가 성공적으로 등록되었습니다.");
+            if ("edit".equals(mode) && accountId != null) {
+                accountService.updateAccount(userId, accountId, request);
+                redirectAttributes.addFlashAttribute("successMessage",
+                        "✅ 계좌가 성공적으로 수정되었습니다.");
+            } else {
+                accountService.registerAccount(userId, request);
+                redirectAttributes.addFlashAttribute("successMessage",
+                        "✅ 계좌가 성공적으로 등록되었습니다.");
+            }
             return "redirect:/mypage";
+
         } catch (BusinessException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/mypage";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "계좌 등록 중 오류가 발생했습니다.");
+            redirectAttributes.addFlashAttribute("errorMessage", "계좌 처리 중 오류가 발생했습니다.");
             return "redirect:/mypage";
         }
+    }
+
+    /**
+     * 새 계좌 등록 화면 (모달용)
+     */
+    @GetMapping("/accounts/new")
+    public String newAccountForm() {
+        return "members/mypage/mybank";
     }
 
     // ==================== 프로필 이미지 업로드 ====================
@@ -93,8 +102,7 @@ public class MyPageController {
     @ResponseBody
     public ResponseEntity<ApiResponse<String>> updateProfileImage(
             @RequestParam("profileImage") MultipartFile file,
-            HttpSession session
-    ) {
+            HttpSession session) {
         try {
             String imageUrl = myPageService.updateProfileImage(SessionUtils.getLoginUserId(session), file);
             return ResponseEntity.ok(ApiResponse.success(imageUrl));
@@ -156,8 +164,7 @@ public class MyPageController {
     public ResponseEntity<ApiResponse<String>> updateProfile(
             @Valid @RequestBody UserUpdateRequest request,
             BindingResult bindingResult,
-            HttpSession session
-    ) {
+            HttpSession session) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest()
                     .body(ApiResponse.error(bindingResult.getAllErrors().get(0).getDefaultMessage()));
