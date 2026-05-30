@@ -253,6 +253,7 @@ function renderCategoryChange() {
 window.onload = function() {
     initChart();
     initComparisonChart();
+    renderCategoryChange();
     if (typeof initGoalChart === 'function') initGoalChart();
 };
 
