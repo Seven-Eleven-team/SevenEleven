@@ -63,12 +63,15 @@ public class DashboardService {
         response.setThisMonthData(thisMonthData);
         response.setLastMonthData(lastMonthData);
 
+        // ★ 에러 수정: user.getUserId()가 아닌 파라미터로 받은 userId를 바로 전달합니다.
         List<SavingGoal> savedGoals = goalRepository.findByUserUserId(userId);
         List<GoalAchievementResponse> goalResponses = new ArrayList<>();
 
         for (SavingGoal goal : savedGoals) {
             GoalAchievementResponse dto = new GoalAchievementResponse();
-            // ★ 에러 원인 해결: getGoalName, getTargetAmount 로 원상복구!
+
+            // 프론트엔드 드롭다운(select)에서 사용할 목표의 고유 ID 값을 담아줍니다.
+            dto.setGoalId(goal.getId());
             dto.setGoalName(goal.getGoalName());
 
             long target = goal.getTargetAmount();
@@ -77,7 +80,7 @@ public class DashboardService {
             int rate = 0;
             if (target > 0) {
                 rate = (int) Math.round(((double) current / target) * 100);
-                if (rate > 100) rate = 100;
+                if (rate > 100) rate = 100; // 최대 100% 제한
             }
             dto.setAchievementRate(rate);
             goalResponses.add(dto);

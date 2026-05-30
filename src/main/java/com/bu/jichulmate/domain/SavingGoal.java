@@ -31,4 +31,8 @@ public class SavingGoal {
     @Builder.Default
     @Column(name = "STATUS", nullable = false, length = 20)
     private String status = "IN_PROGRESS";
+
+    @Builder.Default
+    @Column(name = "IS_FIXED", nullable = false, length = 1)
+    private String isFixed = "N";
 }

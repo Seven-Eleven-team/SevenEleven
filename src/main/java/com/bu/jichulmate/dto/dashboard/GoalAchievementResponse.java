@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class GoalAchievementResponse {
+    private Long goalId;
     private String goalName;      // 목표 이름 (예: 맥북 프로 구매)
     private int achievementRate;  // 달성률 퍼센트 (예: 45)
 
