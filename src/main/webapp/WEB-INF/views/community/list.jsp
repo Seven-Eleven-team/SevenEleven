@@ -42,17 +42,40 @@
                    class="${category == 'FIFTIES' ? 'is-active' : ''}">50대 이상</a>
             </nav>
 
-            <a href="${pageContext.request.contextPath}/community/write?category=${category}"
-               class="board-write-btn"
-               data-auth-required="true">
-                게시글 작성
-            </a>
+            <c:choose>
+                <c:when test="${not empty loginUserId and not canWriteCurrentCategory}">
+                    <span class="board-write-btn is-disabled"
+                          title="${categoryWriteGuideMessage}">
+                        조회 전용
+                    </span>
+                </c:when>
+
+                <c:otherwise>
+                    <a href="${pageContext.request.contextPath}/community/write?category=${category}"
+                       class="board-write-btn"
+                       data-auth-required="true">
+                        게시글 작성
+                    </a>
+                </c:otherwise>
+            </c:choose>
         </div>
+
+        <c:if test="${not empty loginUserId and not empty userAgeCategoryLabel}">
+            <p class="board-guide-text">
+                내 나이대 게시판: ${userAgeCategoryLabel} 게시판
+            </p>
+        </c:if>
+
+        <c:if test="${not empty loginUserId and not empty categoryWriteGuideMessage and not canWriteCurrentCategory}">
+            <p class="board-guide-text board-guide-warning">
+                    ${categoryWriteGuideMessage}
+            </p>
+        </c:if>
 
         <div class="board-header-row">
             <div>순번</div>
             <div>제목</div>
-            <div>ID</div>
+            <div>작성자</div>
             <div>게시일</div>
             <div>조회수</div>
         </div>

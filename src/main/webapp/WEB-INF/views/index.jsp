@@ -12,22 +12,28 @@
 <main>
     <section class="hero-section">
         <div class="hero-bg" aria-hidden="true">
-            <video class="hero-bg-video"
+            <video id="heroBgVideo"
+                   class="hero-bg-video"
                    autoplay
                    muted
                    loop
                    playsinline
                    preload="auto"
                    poster="${pageContext.request.contextPath}/images/main-bg.jpg?v=1">
-                <source src="${pageContext.request.contextPath}/images/main-bg.mp4?v=1" type="video/mp4">
+                <source src="${pageContext.request.contextPath}/images/main-bg.mp4?v=2" type="video/mp4">
             </video>
         </div>
-        <div class="opening-box" aria-hidden="true"></div>
 
-        <div class="hero-title">
+        <div class="hero-title" aria-label="지출메이트 메인 소개">
             <p>모든 서비스를 한눈에</p>
             <p>지출 메이트</p>
         </div>
+
+        <button type="button"
+                class="hero-scroll-cue"
+                aria-label="아래 서비스 영역으로 이동">
+            <span class="hero-scroll-arrow" aria-hidden="true"></span>
+        </button>
     </section>
 
     <section class="scroll-card-section">
