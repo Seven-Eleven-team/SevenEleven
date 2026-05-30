@@ -16,6 +16,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let ticking = false;
 
     function updateHeaderState() {
+        if (header.classList.contains('is-locked')) return;
+
         if (!header || !heroSection) {
             if (header) {
                 header.classList.add("is-solid");

@@ -6,7 +6,6 @@
     <nav class="footer-nav">
         <div class="footer-nav-inner">
             <div class="footer-nav-links">
-                <a href="#">개인정보처리방침</a>
                 <a href="#">이용약관</a>
             </div>
         </div>
@@ -33,8 +32,9 @@
                     <a href="mailto:jiculmate2026@example.com">jiculmate2026@example.com</a>
                 </div>
                 <div class="footer-sns">
-                    <a href="#"><i class="bi bi-instagram"></i></a>
-                    <a href="#"><i class="bi bi-github"></i></a>
+                    <a href="https://github.com/Seven-Eleven-team/SevenEleven" target="_blank">
+                        <i class="bi bi-github"></i>
+                    </a>
                 </div>
             </div>
         </div>

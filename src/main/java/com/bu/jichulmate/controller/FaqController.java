@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/support")
@@ -24,35 +25,30 @@ public class FaqController {
         return "support/faq";
     }
 
-    // FAQ 전체 조회
     @ResponseBody
     @GetMapping("/api/faqs")
     public List<FaqResponse> getFaqs() {
         return faqService.getFaqList();
     }
 
-    // 카테고리별 FAQ 조회
     @ResponseBody
     @GetMapping("/api/faqs/category")
     public List<FaqResponse> getFaqsByCategory(@RequestParam String category) {
         return faqService.getFaqListByCategory(category);
     }
 
-    // 관리자 전체 FAQ 조회
     @ResponseBody
     @GetMapping("/api/admin/faqs")
     public List<FaqResponse> getAllFaqs() {
         return faqService.getAllFaqList();
     }
 
-    // FAQ 등록
     @ResponseBody
     @PostMapping("/api/admin/faqs")
     public ResponseEntity<FaqResponse> createFaq(@RequestBody FaqRequest request) {
         return ResponseEntity.ok(faqService.createFaq(request));
     }
 
-    // FAQ 수정
     @ResponseBody
     @PutMapping("/api/admin/faqs/{faqId}")
     public ResponseEntity<FaqResponse> updateFaq(
@@ -62,7 +58,6 @@ public class FaqController {
         return ResponseEntity.ok(faqService.updateFaq(faqId, request));
     }
 
-    // FAQ 삭제
     @ResponseBody
     @DeleteMapping("/api/admin/faqs/{faqId}")
     public ResponseEntity<Void> deleteFaq(@PathVariable Long faqId) {
@@ -70,19 +65,18 @@ public class FaqController {
         return ResponseEntity.ok().build();
     }
 
-    // 채팅형 FAQ 조회
     @ResponseBody
-    @GetMapping("/api/faqs/chat")
-    public ResponseEntity<?> getFaqByChat(@RequestParam String input) {
+    @PostMapping("/api/faqs/chat")
+    public ResponseEntity<?> getFaqByChat(@RequestBody Map<String, String> body) {
 
-        String trimmed = input.trim();
+        String input = body.getOrDefault("input", "").trim();
 
-        if (!trimmed.matches("\\d+")) {
+        if (!input.matches("\\d+")) {
             return ResponseEntity.badRequest()
                     .body("숫자만 입력해주세요.");
         }
 
-        int index = Integer.parseInt(trimmed);
+        int index = Integer.parseInt(input);
         FaqResponse response = faqService.getFaqByIndex(index);
 
         if (response == null) {
@@ -93,14 +87,12 @@ public class FaqController {
         return ResponseEntity.ok(response);
     }
 
-    // 안내 메시지 조회
     @ResponseBody
     @GetMapping("/api/faqs/guide")
     public ResponseEntity<String> getGuideMessage() {
         return ResponseEntity.ok("추가로 궁금한 내용이 있으시면 번호를 입력해주세요.");
     }
 
-    // 질문만 전체 조회
     @ResponseBody
     @GetMapping("/api/faqs/questions")
     public List<String> getFaqQuestionsOnly() {
@@ -110,7 +102,6 @@ public class FaqController {
                 .toList();
     }
 
-    // 질문만 번호별 조회
     @ResponseBody
     @GetMapping("/api/faqs/questions/{index}")
     public ResponseEntity<?> getFaqQuestionOnly(@PathVariable int index) {
@@ -125,7 +116,6 @@ public class FaqController {
         return ResponseEntity.ok(faq.getQuestion());
     }
 
-    // 답변만 번호별 조회
     @ResponseBody
     @GetMapping("/api/faqs/answers/{index}")
     public ResponseEntity<?> getFaqAnswerOnly(@PathVariable int index) {
