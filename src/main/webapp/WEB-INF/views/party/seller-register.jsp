@@ -7,16 +7,12 @@
     <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
     <title>판매자 등록</title>
     <style>
-        /* body에 min-height와 display: flex를 주어
-           화면이 커지더라도 푸터가 항상 바닥에 고정되도록 제어합니다.
-        */
         body { background: #e8e8e8; min-height: 100vh; display: flex; flex-direction: column; margin: 0; }
         .site-header { opacity: 1 !important; transform: translateY(0) !important; background: rgba(25, 59, 96, 0.96) !important; }
-        .footer { height: 130px !important; }
-
-        /* flex: 1을 부여하여 남은 여백 공간을 page-wrap이 전부 차지하도록 합니다. */
+        .footer { height: auto !important; }
+        body { display: flex; flex-direction: column; min-height: 100vh; }
+        .page-wrap { flex: 1; }
         .page-wrap { padding: 2rem 1.5rem; max-width: 900px; width: 100%; margin: 0 auto; padding-top: calc(74px + 2rem); flex: 1; box-sizing: border-box; }
-
         .breadcrumb { font-size: 12px; color: #666; margin-bottom: 1rem; }
         .card { background: #f0f0f0; border-radius: 12px; padding: 1.5rem 2rem; }
         .card-title { text-align: center; font-size: 20px; font-weight: 500; margin-bottom: 1.5rem; color: #1a1a1a; }
@@ -49,6 +45,8 @@
         .suggest div:hover { background: #f5f5f5; }
         .warn { font-size: 11px; color: #e24b4a; display: none; margin-top: 3px; }
         .warn.on { display: block; }
+        .account-err { font-size: 11px; color: #e24b4a; display: none; margin-top: 3px; }
+        .account-err.on { display: block; }
         .btn-outline { background: #fff; border: 1px solid #ccc; border-radius: 30px; padding: 10px 40px; font-size: 15px; cursor: pointer; color: #333; }
         .btn-dark { background: #1e3a5f; color: #fff; border: none; border-radius: 30px; padding: 10px 40px; font-size: 15px; cursor: pointer; }
         .postcode-layer { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.35); }
@@ -56,14 +54,7 @@
         .postcode-box { position: relative; width: 520px; max-width: 92%; height: 560px; background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
         .postcode-close { position: absolute; right: 10px; top: 8px; z-index: 2; width: 30px; height: 30px; border: none; background: #1e3a5f; color: #fff; border-radius: 50%; font-size: 20px; line-height: 28px; cursor: pointer; }
         .postcode-frame { width: 100%; height: 516px; padding-top: 44px; box-sizing: border-box; }
-        .toast {
-            display: none;
-            text-align: center;
-            color: #e24b4a;
-            font-size: 13px;
-            margin-top: 10px;
-            padding: 8px 0;
-        }
+        .toast { display: none; text-align: center; color: #e24b4a; font-size: 13px; margin-top: 10px; padding: 8px 0; }
         .toast.on { display: block; }
         .btn-row { display: flex; flex-direction: column; align-items: center; gap: 0.8rem; margin-top: 1.2rem; }
         .btn-group { display: flex; gap: 1rem; }
@@ -124,11 +115,11 @@
                     <div onclick="pickBank('신한은행')">신한은행</div>
                     <div onclick="pickBank('우리은행')">우리은행</div>
                     <div onclick="pickBank('하나은행')">하나은행</div>
-                    <div onclick="pickBank('농협')">농협</div>
+                    <div onclick="pickBank('농협은행')">농협은행</div>
                     <div onclick="pickBank('카카오뱅크')">카카오뱅크</div>
                     <div onclick="pickBank('토스뱅크')">토스뱅크</div>
                 </div>
-                <span class="warn" id="account-warn">※ 계좌번호 오입력으로 인한 정산 오류의 책임은 본인에게 있습니다.</span>
+                <span class="account-err" id="account-err"></span>
             </div>
 
             <div class="fg" style="position:relative;">
@@ -170,6 +161,19 @@
     const domains = ['@naver.com','@gmail.com','@daum.net','@kakao.com','@hanmail.net','@nate.com','@icloud.com','@outlook.com','@yahoo.com'];
     const ctx = '${pageContext.request.contextPath}';
 
+    // 은행별 계좌번호 자릿수
+    const bankRules = {
+        '국민은행':   { min: 10, max: 14 },
+        '신한은행':   { min: 11, max: 12 },
+        '우리은행':   { min: 13, max: 13 },
+        '하나은행':   { min: 10, max: 14 },
+        '농협은행':   { min: 11, max: 13 },
+        '카카오뱅크': { min: 13, max: 13 },
+        '토스뱅크':   { min: 12, max: 12 }
+    };
+
+    let selectedBank = '';
+
     function showToast(msg) {
         const t = document.getElementById('toast');
         t.textContent = msg;
@@ -177,7 +181,6 @@
         setTimeout(function() { t.classList.remove('on'); }, 3000);
     }
 
-    // [기존 코드 동일 유지]
     function chkName() {
         const v = document.getElementById('name').value;
         const ok = /^[가-힣]+$/.test(v) || /^[a-zA-Z]+$/.test(v);
@@ -204,10 +207,33 @@
 
     function chkAccount() {
         let v = document.getElementById('account').value.replace(/[^0-9]/g,'');
-        document.getElementById('account').value = v;
-        document.getElementById('account-warn').classList.toggle('on', v.length > 0);
-    }
 
+        // max 자릿수 초과 입력 차단
+        if (selectedBank && bankRules[selectedBank]) {
+            const max = bankRules[selectedBank].max;
+            if (v.length > max) v = v.slice(0, max);
+        }
+
+        document.getElementById('account').value = v;
+
+        const errEl = document.getElementById('account-err');
+        if (!selectedBank || !bankRules[selectedBank]) {
+            errEl.classList.remove('on');
+            return;
+        }
+
+        const rule = bankRules[selectedBank];
+        if (v.length > 0 && (v.length < rule.min || v.length > rule.max)) {
+            if (rule.min === rule.max) {
+                errEl.textContent = selectedBank + ' 계좌번호는 ' + rule.min + '자리를 모두 입력해주세요.';
+            } else {
+                errEl.textContent = selectedBank + ' 계좌번호는 ' + rule.min + '~' + rule.max + '자리를 모두 입력해주세요.';
+            }
+            errEl.classList.add('on');
+        } else {
+            errEl.classList.remove('on');
+        }
+    }
     function chkEmail() {
         const v = document.getElementById('email').value;
         const at = v.indexOf('@');
@@ -263,9 +289,12 @@
     }
 
     function pickBank(name) {
+        selectedBank = name;
         document.getElementById('bank-name').textContent = name;
         document.getElementById('bank-name').classList.add('on');
         document.getElementById('bank-dd').classList.remove('on');
+        // 은행 바꾸면 계좌번호 다시 체크
+        chkAccount();
     }
 
     function openPost() {
@@ -297,7 +326,7 @@
 
     function submitForm() {
         const hasExperience = new URLSearchParams(location.search).get('hasExperience') || 'N';
-        const userId = '${sessionScope.loginUser.userId}';
+        const userId = '${sessionScope.LOGIN_USER_ID}';
 
         const name = document.getElementById('name').value.trim();
         const phone = document.getElementById('phone').value.trim();
@@ -315,6 +344,20 @@
         if (!addr) { showToast('상세주소를 입력해주세요.'); return; }
         if (!bankName || bankName === '은행선택 ▼') { showToast('은행을 선택해주세요.'); return; }
         if (!account) { showToast('계좌번호를 입력해주세요.'); return; }
+
+        // 계좌번호 자릿수 검증
+        if (bankRules[selectedBank]) {
+            const rule = bankRules[selectedBank];
+            if (account.length < rule.min || account.length > rule.max) {
+                if (rule.min === rule.max) {
+                    showToast(selectedBank + ' 계좌번호는 ' + rule.min + '자리를 모두 입력해주세요.');
+                } else {
+                    showToast(selectedBank + ' 계좌번호는 ' + rule.min + '~' + rule.max + '자리를 모두 입력해주세요.');
+                }
+                return;
+            }
+        }
+
         if (!email) { showToast('이메일을 입력해주세요.'); return; }
 
         const data = {

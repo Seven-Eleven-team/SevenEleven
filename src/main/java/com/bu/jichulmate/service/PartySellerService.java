@@ -47,9 +47,11 @@ public class PartySellerService {
     }
 
     public SellerResponse getSeller(Long userId) {
-        PartySeller seller = partySellerRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("판매자를 찾을 수 없습니다."));
-        return new SellerResponse(seller);
+        List<PartySeller> sellers = partySellerRepository.findByUserId(userId);
+        if (sellers.isEmpty()) {
+            throw new RuntimeException("판매자를 찾을 수 없습니다.");
+        }
+        return new SellerResponse(sellers.get(0));
     }
 
     public List<SellerResponse> getAllSellers() {
@@ -59,34 +61,32 @@ public class PartySellerService {
                 .toList();
     }
 
-    // 비밀번호 2차 인증
     public boolean verifyPassword(Long userId, String rawPassword) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
         return passwordEncoder.matches(rawPassword, user.getPassword());
     }
 
-    // 판매자 프로필 조회
     public Map<String, Object> getSellerProfile(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
-        // 사용했던 OTT 내역
-        List<Map<String, String>> usedOttList = subscriptionRepository.findByUserUserId(userId)
+        List<Map<String, Object>> usedOttList = subscriptionRepository.findByUserUserId(userId)
                 .stream()
                 .map(sub -> {
-                    Map<String, String> map = new HashMap<>();
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("serviceId", sub.getParty().getService().getId());
                     map.put("serviceName", sub.getParty().getService().getServiceName());
                     map.put("iconUrl", sub.getParty().getService().getIconUrl());
                     return map;
                 })
                 .toList();
 
-        // 판매했던 OTT 내역
-        List<Map<String, String>> soldOttList = partyPostRepository.findBySellerUserId(userId)
+        List<Map<String, Object>> soldOttList = partyPostRepository.findBySellerUserId(userId)
                 .stream()
                 .map(post -> {
-                    Map<String, String> map = new HashMap<>();
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("serviceId", post.getService().getId());
                     map.put("serviceName", post.getService().getServiceName());
                     map.put("iconUrl", post.getService().getIconUrl());
                     return map;

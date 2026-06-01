@@ -45,8 +45,9 @@ public class MyPageService {
         Account primaryAccount =
                 accountRepository.findByUserAndIsPrimary(user, "Y").orElse(null);
 
+        // [수정] findByUserId가 List 반환으로 변경되었으므로 isEmpty()로 체크
         boolean isSeller =
-                partySellerRepository.findByUserId(userId).isPresent();
+                !partySellerRepository.findByUserId(userId).isEmpty();
 
         long unreadNotiCount =
                 notificationLogRepository.countByUserAndIsSuccess(user, "N");
@@ -70,7 +71,7 @@ public class MyPageService {
         return MyPageSummaryResponse.builder()
                 .userId(user.getUserId())
                 .loginId(user.getLoginId())
-                .email(user.getLoginId())           // ← 수정 완료 (getEmail → getLoginId)
+                .email(user.getLoginId())
                 .nickname(user.getNickname())
                 .gender(user.getGender())
                 .birthDate(user.getBirthDate())
@@ -105,15 +106,6 @@ public class MyPageService {
     }
 
     public Page<Board> getMyBoardList(Long userId, Pageable pageable) {
-        /*
-         * 기존 코드:
-         * boardRepository.findByUserAndIsDeletedOrderByCreatedAtDesc(user, "N", pageable)
-         *
-         * 현재 BoardRepository는 userId 기준 메서드를 가지고 있으므로,
-         * Board.USER_ID 컬럼과 직접 매칭되는 userId 기준 조회로 통일한다.
-         *
-         * getUser(userId)는 회원 존재 여부 검증을 위해 유지한다.
-         */
         getUser(userId);
 
         return boardRepository.findByUserIdAndIsDeletedOrderByCreatedAtDesc(

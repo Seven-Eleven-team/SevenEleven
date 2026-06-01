@@ -9,8 +9,8 @@
     <style>
         body { background: #e8e8e8; min-height: 100vh; display: flex; flex-direction: column; }
         .site-header { opacity: 1 !important; transform: translateY(0) !important; background: rgba(25, 59, 96, 0.96) !important; }
-        .footer { height: 130px !important; }
-        .page-wrap { padding: 2rem 1.5rem; max-width: 900px; width: 100%; margin: 0 auto; padding-top: calc(74px + 2rem); flex: 1; box-sizing: border-box; }
+        .footer { height: auto !important; }
+        .page-wrap { padding: 2rem 1.5rem 3rem; max-width: 900px; width: 100%; margin: 0 auto; padding-top: calc(74px + 2rem); flex: 1; box-sizing: border-box; }
         .breadcrumb { font-size: 12px; color: #666; margin-bottom: 1rem; }
         .card { background: #f0f0f0; border-radius: 12px; padding: 1.5rem 2rem; }
         .card-title { text-align: center; font-size: 20px; font-weight: 500; margin-bottom: 0.5rem; color: #1a1a1a; }
@@ -28,10 +28,36 @@
         .btn-confirm.on { display: block; }
         .btn-row { display: flex; justify-content: center; gap: 1rem; margin-top: 2rem; }
         .btn-outline { background: #fff; border: 1px solid #ccc; border-radius: 30px; padding: 10px 40px; font-size: 15px; cursor: pointer; color: #333; }
+
+        /* 팝업 모달 */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); z-index: 9999; align-items: center; justify-content: center; }
+        .modal-overlay.on { display: flex; }
+        .modal-box { background: #fff; border-radius: 16px; padding: 2rem 2.5rem; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.18); max-width: 360px; width: 90%; }
+        .modal-icon { font-size: 40px; margin-bottom: 0.8rem; }
+        .modal-title { font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 0.5rem; }
+        .modal-desc { font-size: 14px; color: #555; margin-bottom: 1.5rem; line-height: 1.6; }
+        .modal-question { font-size: 14px; color: #333; font-weight: 500; margin-bottom: 1rem; }
+        .modal-btns { display: flex; gap: 0.8rem; justify-content: center; }
+        .modal-btn-yes { background: #1e3a5f; color: #fff; border: none; border-radius: 20px; padding: 8px 28px; font-size: 14px; cursor: pointer; }
+        .modal-btn-no { background: #fff; color: #555; border: 1px solid #ccc; border-radius: 20px; padding: 8px 28px; font-size: 14px; cursor: pointer; }
     </style>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
+
+<%-- 판매자 이력 없음 팝업 --%>
+<div class="modal-overlay" id="no-history-modal">
+    <div class="modal-box">
+        <div class="modal-icon">⚠️</div>
+        <div class="modal-title">판매 등록 이력이 없습니다</div>
+        <div class="modal-desc">아직 판매자로 등록된 이력이 없어요.</div>
+        <div class="modal-question">판매자 등록을 하러 가시겠습니까?</div>
+        <div class="modal-btns">
+            <button class="modal-btn-yes" onclick="goRegister()">예</button>
+            <button class="modal-btn-no" onclick="goMain()">아니요</button>
+        </div>
+    </div>
+</div>
 
 <div class="page-wrap">
     <p class="breadcrumb">판매자 등록</p>
@@ -61,6 +87,7 @@
 
 <script>
     const ctx = '${pageContext.request.contextPath}';
+    const userId = '${sessionScope.LOGIN_USER_ID}';
 
     function verifyPw() {
         const password = document.getElementById('password').value;
@@ -84,7 +111,28 @@
     }
 
     function goProfile() {
-        location.href = ctx + '/party/seller-profile';
+        // 판매자 등록 이력 확인
+        fetch(ctx + '/api/party/sellers/' + userId)
+            .then(function(res) {
+                if (res.ok) {
+                    // 판매자 등록 이력 있음 → 프로필로 이동
+                    location.href = ctx + '/party/seller-profile';
+                } else {
+                    // 판매자 등록 이력 없음 → 팝업
+                    document.getElementById('no-history-modal').classList.add('on');
+                }
+            })
+            .catch(function() {
+                document.getElementById('no-history-modal').classList.add('on');
+            });
+    }
+
+    function goRegister() {
+        location.href = ctx + '/party/seller-register';
+    }
+
+    function goMain() {
+        location.href = ctx + '/';
     }
 </script>
 </body>

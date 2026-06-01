@@ -9,7 +9,9 @@
     <style>
         body { background: #e8e8e8; min-height: 100vh; display: flex; flex-direction: column; }
         .site-header { opacity: 1 !important; transform: translateY(0) !important; background: rgba(25, 59, 96, 0.96) !important; }
-        .footer { height: 130px !important; }
+        .footer { height: auto !important; }
+        body { display: flex; flex-direction: column; min-height: 100vh; }
+        .page-wrap { flex: 1; }
         .page-wrap { padding: 2rem 1.5rem; max-width: 900px; width: 100%; margin: 0 auto; padding-top: calc(74px + 2rem); flex: 1; box-sizing: border-box; }
         .breadcrumb { font-size: 12px; color: #666; margin-bottom: 1rem; }
         .card { background: #f0f0f0; border-radius: 12px; padding: 1.5rem 2rem; box-shadow: 0 4px 14px rgba(0,0,0,0.06); text-align: center; }
