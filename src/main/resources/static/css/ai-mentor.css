@@ -252,14 +252,15 @@
 
 .chat-input-container {
     display: flex;
-    align-items: center;
+    align-items: flex-end; /* ★ center에서 flex-end로 변경: 박스가 위로 늘어나도 전송 버튼은 아래에 예쁘게 고정됩니다 */
     width: 100%;
     max-width: 740px;
-    height: 70px;
+    height: auto;          /* ★ 70px 고정에서 auto로 변경: 내용물(글씨)에 맞춰 박스가 자연스럽게 위로 늘어납니다 */
+    min-height: 70px;      /* ★ 최소 높이: 글씨가 없을 땐 기존처럼 70px을 유지합니다 */
     border: 3px solid #3F72AF;
     border-radius: 20px;
     background-color: #ffffff;
-    padding: 0 15px 0 25px;
+    padding: 10px 15px 10px 25px; /* ★ 위아래 여백을 10px씩 주어서 글씨가 길어져도 테두리에 답답하게 붙지 않게 했습니다 */
     box-sizing: border-box;
 }
 
