@@ -8,6 +8,13 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
+<script>
+    document.querySelector('.site-header')?.classList.add('is-solid');
+    document.body.classList.add('is-header-ready');
+    document.body.classList.add('is-opening-loaded');
+    document.body.classList.add('is-fab-ready');
+</script>
+
 <main class="qnaForm-main">
     <div class="qnaForm-box">
         <form action="${pageContext.request.contextPath}/support/qna" method="post">
