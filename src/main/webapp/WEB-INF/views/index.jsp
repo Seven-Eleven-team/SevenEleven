@@ -45,11 +45,10 @@
                         <span class="feature-label">AI MENTORING</span>
                         <h2>AI 멘토링</h2>
                         <p>
-                            사용자의 소비 패턴과 지출 흐름을 분석해<br>
-                            더 나은 자산 관리 방향을 제안합니다.
+                            AI가 내 소비 패턴을 분석해<br>
+                            맞춤형 절약 조언을 제공합니다
                         </p>
                     </div>
-
                     <div class="feature-icon-wrap">
                         <img src="${pageContext.request.contextPath}/images/ai_modal.jpg?v=2"
                              alt="AI 멘토링"
@@ -61,14 +60,13 @@
             <article class="service-card card-02">
                 <div class="card-content feature-card">
                     <div class="feature-text">
-                        <span class="feature-label">Q&A SERVICE</span>
-                        <h2>1:1 질의응답</h2>
+                        <span class="feature-label">DASHBOARD</span>
+                        <h2>대시보드</h2>
                         <p>
-                            지출 관리와 서비스 이용 중 궁금한 내용을<br>
-                            빠르게 질문하고 답변을 확인할 수 있습니다.
+                            카테고리별 지출 현황과 월별 흐름을<br>
+                            한 화면에서 한눈에 확인합니다
                         </p>
                     </div>
-
                     <div class="feature-icon-wrap chat-icon-shape">
                         <span>···</span>
                     </div>
@@ -78,14 +76,13 @@
             <article class="service-card card-03">
                 <div class="card-content feature-card">
                     <div class="feature-text">
-                        <span class="feature-label">SUBSCRIPTION</span>
-                        <h2>구독 관리</h2>
+                        <span class="feature-label">OTT SHARING</span>
+                        <h2>OTT 공유</h2>
                         <p>
-                            구독 서비스의 결제일, 연장, 해지 알림을<br>
-                            한눈에 확인하고 관리할 수 있습니다.
+                            구독 서비스를 함께 나눠 쓰고<br>
+                            매달 고정 지출을 절반으로 줄입니다
                         </p>
                     </div>
-
                     <div class="feature-icon-wrap subscription-icon">
                         <span>₩</span>
                     </div>
@@ -105,24 +102,29 @@
             <article class="fan-card fan-card-left">
                 <h3>AI 멘토링</h3>
                 <p>
-                    사용자의 소비 패턴과 지출 흐름을 분석해<br>
-                    더 나은 자산 관리 방향을 제안합니다.
+                    내 지출 데이터를 AI가 꼼꼼하게 분석해드립니다.<br>
+                    이번 달 어디서 돈이 새고 있는지 바로 짚어드리고,<br>
+                    소비 패턴에 맞는 절약 방법을 구체적인 수치로 안내해드려요.<br>
+                    단순한 기록을 넘어 AI와 함께 더 똑똑한 소비 습관을 만들어 보세요.
                 </p>
             </article>
 
             <article class="fan-card fan-card-center">
-                <h3>구독 관리</h3>
+                <h3>대시보드</h3>
                 <p>
-                    구독 서비스를 결제할 수 있고, 연장, 해지 알림을<br>
-                    한 눈에 확인하고 관리할 수 있습니다.
+                    카테고리별 지출 현황, 월별 소비 흐름, 예산 달성률을 한눈에 볼 수 있어요.<br>
+                    매달 나가는 고정 지출이 얼마인지 바로 확인할 수 있고,<br>
+                    복잡한 가계부 없이도 내 돈의 흐름을 깔끔하게 정리해서 보여드려요.
                 </p>
             </article>
 
             <article class="fan-card fan-card-right">
-                <h3>1:1 질의응답</h3>
+                <h3>OTT 구독 공유</h3>
                 <p>
-                    지출 관리와 서비스 이용 중 궁금한 내용을<br>
-                    빠르게 질문하고 답변을 확인할 수 있습니다.
+                    넷플릭스, 유튜브 프리미엄 등 16개 서비스를 함께 나눠 쓸 수 있어요.<br>
+                    정식 구독료보다 훨씬 저렴한 가격으로 원하는 서비스를 이용해 보세요.<br>
+                    믿을 수 있는 메이트를 플랫폼에서 안전하게 찾을 수 있어요.<br>
+                    복잡한 절차 없이 간편하게 구독 비용을 줄여보세요.
                 </p>
             </article>
         </div>
