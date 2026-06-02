@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,10 +30,14 @@ public class MyPageController {
 
     private final MyPageService myPageService;
     private final AccountService accountService;
-    /*내정보 수정*/
-    @GetMapping("/editprofile")
-    public String editProfile() {
 
+    /* [내 정보 수정 페이지] */
+    @GetMapping("/editprofile")
+    public String editProfile(HttpSession session) {
+        // 로그인 체크: ID가 없으면 메인으로 리다이렉트
+        if (SessionUtils.getLoginUserId(session) == null) {
+            return "redirect:/";
+        }
         return "members/mypage/editprofile";
     }
 
@@ -42,6 +47,11 @@ public class MyPageController {
     @GetMapping({"", "/", "/mypage"})
     public String myPage(HttpSession session, Model model) {
         Long userId = SessionUtils.getLoginUserId(session);
+
+        // 로그인 체크
+        if (userId == null) {
+            return "redirect:/";
+        }
 
         model.addAttribute("summary", myPageService.getMyPageSummary(userId));
         model.addAttribute("accounts", accountService.getAccountsByUser(userId));
@@ -65,13 +75,17 @@ public class MyPageController {
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
+        // 로그인 체크
+        Long userId = SessionUtils.getLoginUserId(session);
+        if (userId == null) {
+            return "redirect:/";
+        }
+
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errorMessage",
                     bindingResult.getAllErrors().get(0).getDefaultMessage());
             return "redirect:/mypage";
         }
-
-        Long userId = SessionUtils.getLoginUserId(session);
 
         try {
             if ("edit".equals(mode) && accountId != null) {
@@ -98,7 +112,10 @@ public class MyPageController {
      * 새 계좌 등록 화면 (모달용)
      */
     @GetMapping("/accounts/new")
-    public String newAccountForm() {
+    public String newAccountForm(HttpSession session) {
+        if (SessionUtils.getLoginUserId(session) == null) {
+            return "redirect:/";
+        }
         return "members/mypage/mybank";
     }
 
@@ -109,6 +126,13 @@ public class MyPageController {
     public ResponseEntity<ApiResponse<String>> updateProfileImage(
             @RequestParam("profileImage") MultipartFile file,
             HttpSession session) {
+
+        // API 응답은 401 Unauthorized 상태코드를 전달
+        if (SessionUtils.getLoginUserId(session) == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ApiResponse.error("로그인이 필요합니다."));
+        }
+
         try {
             String imageUrl = myPageService.updateProfileImage(SessionUtils.getLoginUserId(session), file);
             return ResponseEntity.ok(ApiResponse.success(imageUrl));
@@ -117,43 +141,64 @@ public class MyPageController {
         }
     }
 
-    // ==================== 나머지 메서드들 ====================
+    // ==================== 나머지 마이페이지 메뉴들 ====================
 
     @GetMapping("/alarm")
-    public String myAlarm() {
+    public String myAlarm(HttpSession session) {
+        if (SessionUtils.getLoginUserId(session) == null) {
+            return "redirect:/";
+        }
         return "members/mypage/myalarm";
     }
 
     @GetMapping("/posts")
     public String myPosts(@PageableDefault(size = 10) Pageable pageable, HttpSession session, Model model) {
         Long userId = SessionUtils.getLoginUserId(session);
+        if (userId == null) {
+            return "redirect:/";
+        }
         model.addAttribute("boards", myPageService.getMyBoardList(userId, pageable));
         return "members/mypage/mypost";
     }
 
     @GetMapping("/questions")
-    public String myQuestions() {
+    public String myQuestions(HttpSession session) {
+        if (SessionUtils.getLoginUserId(session) == null) {
+            return "redirect:/";
+        }
         return "members/mypage/myque";
     }
 
     @GetMapping("/reports")
-    public String myReports() {
+    public String myReports(HttpSession session) {
+        if (SessionUtils.getLoginUserId(session) == null) {
+            return "redirect:/";
+        }
         return "members/mypage/myreport";
     }
 
     @GetMapping("/sales")
-    public String mySales() {
+    public String mySales(HttpSession session) {
+        if (SessionUtils.getLoginUserId(session) == null) {
+            return "redirect:/";
+        }
         return "members/mypage/mysales";
     }
 
     @GetMapping("/sales/list")
-    public String mySalesList() {
+    public String mySalesList(HttpSession session) {
+        if (SessionUtils.getLoginUserId(session) == null) {
+            return "redirect:/";
+        }
         return "members/mypage/mysaleslist";
     }
 
     @GetMapping("/subscriptions")
     public String mySubscriptions(@PageableDefault(size = 5) Pageable pageable, HttpSession session, Model model) {
         Long userId = SessionUtils.getLoginUserId(session);
+        if (userId == null) {
+            return "redirect:/";
+        }
         model.addAttribute("subscriptions", myPageService.getMySubscriptionList(userId, pageable));
         return "members/mypage/mysub";
     }
@@ -161,6 +206,9 @@ public class MyPageController {
     @GetMapping("/profile")
     public String profileUpdatePage(HttpSession session, Model model) {
         Long userId = SessionUtils.getLoginUserId(session);
+        if (userId == null) {
+            return "redirect:/";
+        }
         model.addAttribute("user", myPageService.getUser(userId));
         return "members/mypage/profile";
     }
@@ -171,6 +219,12 @@ public class MyPageController {
             @Valid @RequestBody UserUpdateRequest request,
             BindingResult bindingResult,
             HttpSession session) {
+
+        if (SessionUtils.getLoginUserId(session) == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ApiResponse.error("로그인이 필요합니다."));
+        }
+
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest()
                     .body(ApiResponse.error(bindingResult.getAllErrors().get(0).getDefaultMessage()));
@@ -187,6 +241,9 @@ public class MyPageController {
     @GetMapping("/boards")
     public String myBoards(@PageableDefault(size = 10) Pageable pageable, HttpSession session, Model model) {
         Long userId = SessionUtils.getLoginUserId(session);
+        if (userId == null) {
+            return "redirect:/";
+        }
         model.addAttribute("boards", myPageService.getMyBoardList(userId, pageable));
         return "members/mypage/mypost";
     }
@@ -194,6 +251,9 @@ public class MyPageController {
     @GetMapping("/parties")
     public String myParties(@PageableDefault(size = 5) Pageable pageable, HttpSession session, Model model) {
         Long userId = SessionUtils.getLoginUserId(session);
+        if (userId == null) {
+            return "redirect:/";
+        }
         model.addAttribute("parties", myPageService.getMyPartyList(userId, pageable));
         return "members/mypage/mysaleslist";
     }
@@ -201,8 +261,14 @@ public class MyPageController {
     @PostMapping("/withdraw")
     @ResponseBody
     public ResponseEntity<ApiResponse<String>> withdraw(@RequestParam String password, HttpSession session) {
+        Long userId = SessionUtils.getLoginUserId(session);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ApiResponse.error("로그인이 필요합니다."));
+        }
+
         try {
-            myPageService.withdrawUser(SessionUtils.getLoginUserId(session), password);
+            myPageService.withdrawUser(userId, password);
             session.invalidate();
             return ResponseEntity.ok(ApiResponse.success("회원 탈퇴가 완료되었습니다."));
         } catch (BusinessException e) {
