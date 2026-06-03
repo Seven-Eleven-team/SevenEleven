@@ -51,7 +51,7 @@ src/main/webapp/WEB-INF/views
 ├── 📂 subscription                             (구독 관리)
 │   ├── 📄 list.jsp                            (구독 목록)
 │   ├── 📄 form.jsp                            (구독 등록 / 수정)
-│   └── 📄 detail.jsp                          (구독 상세 / 해지 URL)
+│   └── 📄 detail.jsp                             (구독 상세 / 해지 URL)
 │
 ├── 📂 party                                    (구독 파티 모집)
 │   ├── 📄 list.jsp                            (파티 모집 글 목록)
