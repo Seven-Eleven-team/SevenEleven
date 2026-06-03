@@ -1,113 +1,353 @@
-/* 플로팅 버튼 */
-#ai-mentor-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 1000;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    transition: transform 0.3s;
-}
-#ai-mentor-btn:hover { transform: scale(1.1); }
-#ai-mentor-btn img { width: 100%; border-radius: 50%; }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap');
 
-/* 채팅 모달창 */
-#ai-mentor-modal {
+/* ==========================================================================
+   [AI 금융멘토] 우측 고정 로봇 버튼 및 슬라이드 Drawer 패널 스타일
+   ========================================================================== */
+
+/* 1. 우측 하단 로봇 이미지 고정 버튼 */
+.ai-robot-trigger-btn {
     position: fixed;
-    bottom: 90px;
-    right: 20px;
-    width: 350px;
-    height: 500px;
-    background: white;
-    border-radius: 15px;
+    bottom: 40px;
+    right: 40px;
+    width: 65px;
+    height: 65px;
+    background-image: url('/images/ai_modal.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 999;
+}
+
+.ai-robot-trigger-btn:hover {
+    transform: scale(1.1);
+}
+
+/* 2. AI 멘토 슬라이드 모달 Drawer UI (확대/축소 및 반응형 완벽 대응) */
+.ai-mentor-drawer {
+    position: fixed;
+    top: 0;
+    /* 숨길 때도 고정 픽셀이 아닌 100% 비율로 숨겨서 해상도 대응 */
+    right: -100%;
+
+    /* ★ 핵심: 833px 고정이 아니라 화면을 꽉 채우되, 최대치만 833px로 제한 */
+    width: 100%;
+    max-width: 833px;
+
+    /* 높이도 고정 픽셀(1024px)을 버리고 화면 높이(100vh)에 딱 맞춤 */
+    height: 100%;
+    max-height: 100vh;
+
+    background-color: #ffffff;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-left: 1px solid #e5e7eb;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.08);
+    transition: right 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 9999;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    z-index: 1001;
-    overflow: hidden;
 }
-.hidden { display: none !important; }
 
-/* 헤더 스타일 */
-.ai-modal-header {
-    background: white;
-    padding: 15px;
-    border-bottom: 1px solid #eee;
+.ai-mentor-drawer.open {
+    right: 0;
+}
+
+/* 3. 스크롤 시 상단에 고정되는 헤더 영역 */
+.drawer-fixed-header {
+    width: 100%;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
+    background-color: #ffffff;
+    border-top-left-radius: 20px;
+    padding: 10px 30px 0;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    z-index: 10;
 }
-.header-content h4 { margin: 0; font-size: 16px; color: #333; }
-.current-date { font-size: 11px; color: #999; }
 
-/* 맛 선택 영역 */
-.ai-flavor-selector {
-    padding: 10px;
-    background: #f9f9f9;
+.close-btn-wrap {
+    width: 100%;
     display: flex;
-    justify-content: space-around;
-    font-size: 12px;
+    justify-content: flex-end;
 }
 
-/* 채팅창 몸통 */
-.ai-modal-body {
+/* 3. 모달 상단 타이틀 바 헤더 (닫기 버튼) */
+.drawer-close-btn {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #9ca3af;
+    cursor: pointer;
+
+    /* 회전이 부드럽게 먹히도록 inline-block 설정 */
+    display: inline-block;
+
+    /* 로그인 모달과 동일한 애니메이션 속도(0.22s) 적용 */
+    transition: color 0.2s ease, transform 0.22s ease;
+}
+
+.drawer-close-btn:hover {
+    color: #4b5563;
+
+    /* 로그인 모달 효과: 시계방향 90도 회전 및 1.06배 확대 */
+    transform: rotate(90deg) scale(1.06);
+}
+
+/* 클릭(Active) 시 로그인 모달처럼 살짝 작아지는 텐션 효과 추가 */
+.drawer-close-btn:active {
+    transform: rotate(90deg) scale(0.96);
+}
+
+.chat-main-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 100%;
+    color: #112D4E;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.chat-divider {
+    width: 100%;
+    height: 0px;
+    border: none;
+    border-top: 1px solid #3F72AF;
+    margin-bottom: 0px;
+}
+
+/* 4. 스크롤 되는 바디 영역 */
+.drawer-body {
     flex: 1;
-    padding: 15px;
+    padding: 20px 30px;
     overflow-y: auto;
-    background: #f5f6f7;
+    background-color: #ffffff;
     display: flex;
     flex-direction: column;
-    gap: 10px;
 }
 
-/* 말풍선 공통 */
-.chat-bubble {
-    max-width: 80%;
-    padding: 10px 14px;
-    border-radius: 15px;
-    font-size: 13px;
-    line-height: 1.4;
+.drawer-body::-webkit-scrollbar {
+    width: 8px;
+}
+.drawer-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+.drawer-body::-webkit-scrollbar-thumb {
+    background-color: #DBE2EF;
+    border-radius: 10px;
+}
+.drawer-body::-webkit-scrollbar-thumb:hover {
+    background-color: #3F72AF;
 }
 
-/* AI 말풍선 (왼쪽, 진한 색) */
-.ai-bubble {
-    align-self: flex-start;
-    background: #4A76A8;
-    color: white;
-    border-bottom-left-radius: 2px;
+.chat-date-display {
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #9ca3af;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 25px;
 }
 
-/* 사용자 말풍선 (오른쪽, 연한 색) */
-.user-bubble {
-    align-self: flex-end;
-    background: #E1E9F2;
-    color: #333;
-    border-bottom-right-radius: 2px;
-}
-
-/* 푸터(입력창) */
-.ai-modal-footer {
-    padding: 10px;
+#ai-chat-scroller {
     display: flex;
-    gap: 5px;
-    background: white;
-    border-top: 1px solid #eee;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
 }
-#ai-chat-input {
-    flex: 1;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    padding: 8px 15px;
-    font-size: 13px;
+
+/* 5. 동적 말풍선 및 아바타 레이아웃 */
+.chat-message-item {
+    display: flex;
+    gap: 12px;
+    max-width: 75%;
 }
-#send-btn {
-    background: none;
-    border: 1px solid #ddd;
+
+.chat-message-item.user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.chat-message-item.mentor {
+    align-self: flex-start;
+}
+
+.mentor-avatar {
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    width: 35px;
-    height: 35px;
+    background-image: url('/images/ai_modal.jpg');
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+    border: 1px solid #e5e7eb;
+}
+
+.message-bubble {
+    padding: 14px 18px;
+    border-radius: 20px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.6;
+    word-break: break-word;
+}
+
+.user .message-bubble {
+    background-color: #DBE2EF;
+    color: #112D4E;
+    border-top-right-radius: 4px;
+}
+
+.mentor .message-bubble {
+    background-color: #3F72AF;
+    color: #F9F7F7;
+    border-top-left-radius: 4px;
+}
+
+/* 로딩 애니메이션 */
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 16px 22px;
+    min-height: 24px;
+}
+
+.typing-indicator span {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    background-color: #F9F7F7;
+    border-radius: 50%;
+    animation: typingBounce 1.4s infinite ease-in-out both;
+}
+
+.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0s; }
+
+@keyframes typingBounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
+/* 6. 하단 고정 메시지 입력창 */
+.drawer-footer {
+    padding: 20px 30px;
+    background-color: #ffffff;
+    border-bottom-left-radius: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.chat-input-container {
+    display: flex;
+    align-items: flex-end; /* ★ center에서 flex-end로 변경: 박스가 위로 늘어나도 전송 버튼은 아래에 예쁘게 고정됩니다 */
+    width: 100%;
+    max-width: 740px;
+    height: auto;          /* ★ 70px 고정에서 auto로 변경: 내용물(글씨)에 맞춰 박스가 자연스럽게 위로 늘어납니다 */
+    min-height: 70px;      /* ★ 최소 높이: 글씨가 없을 땐 기존처럼 70px을 유지합니다 */
+    border: 3px solid #3F72AF;
+    border-radius: 20px;
+    background-color: #ffffff;
+    padding: 10px 15px 10px 25px; /* ★ 위아래 여백을 10px씩 주어서 글씨가 길어져도 테두리에 답답하게 붙지 않게 했습니다 */
+    box-sizing: border-box;
+}
+
+.chat-input-container input {
+    flex: 1;
+    height: 100%;
+    border: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: #000000;
+    outline: none;
+    padding: 0;
+    margin-right: 15px;
+}
+
+.chat-input-container input::placeholder {
+    color: #939393;
+    font-size: 15px;
+}
+
+.chat-send-submit-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid #112D4E;
+    background-color: transparent;
+    color: #112D4E;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    padding: 0;
+}
+
+.chat-send-submit-btn:hover {
+    background-color: #112D4E;
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   ★ 신규 추가: 반응형 (Responsive) 디자인
+   ========================================================================== */
+
+/* 태블릿/작은 화면 (최대 1024px) */
+@media (max-width: 1024px) {
+    .ai-mentor-drawer {
+        width: 100%; /* 화면 꽉 차게 변경 */
+        right: -100%; /* 숨길 때도 100%로 변경 */
+        border-radius: 0; /* 화면 가득 찰 때는 둥근 모서리 제거 */
+        border-left: none;
+    }
+    .drawer-fixed-header {
+        border-top-left-radius: 0;
+    }
+    .drawer-footer {
+        border-bottom-left-radius: 0;
+    }
+    .chat-message-item {
+        max-width: 85%; /* 화면이 좁아지니 말풍선 너비 상향 */
+    }
+}
+
+/* 모바일 화면 (최대 768px) */
+@media (max-width: 768px) {
+    .drawer-header {
+        padding: 10px 15px 0; /* 좌우 여백 축소 */
+    }
+    .drawer-body {
+        padding: 15px; /* 본문 여백 축소 */
+    }
+    .drawer-footer {
+        padding: 15px; /* 입력창 주변 여백 축소 */
+    }
+    .chat-input-container {
+        height: 60px; /* 모바일에서는 입력창 높이를 살짝 줄임 */
+        border-width: 2px; /* 테두리도 조금 얇게 */
+    }
+    .chat-message-item {
+        max-width: 90%;
+    }
+    .ai-robot-trigger-btn {
+        width: 55px; /* 플로팅 버튼 크기도 살짝 줄임 */
+        height: 55px;
+        bottom: 20px;
+        right: 20px;
+    }
 }

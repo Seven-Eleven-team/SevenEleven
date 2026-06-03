@@ -27,7 +27,6 @@ public class MyPageService {
     private final AccountRepository accountRepository;
     private final BoardRepository boardRepository;
     private final InquiryRepository inquiryRepository;
-    private final ReportRepository reportRepository;
     private final NotificationLogRepository notificationLogRepository;
     private final PartyRepository partyRepository;
     private final PartySellerRepository partySellerRepository;
@@ -46,7 +45,7 @@ public class MyPageService {
                 accountRepository.findByUserAndIsPrimary(user, "Y").orElse(null);
 
         boolean isSeller =
-                partySellerRepository.findByUserId(userId).isPresent();
+                !partySellerRepository.findByUserId(userId).isEmpty();
 
         long unreadNotiCount =
                 notificationLogRepository.countByUserAndIsSuccess(user, "N");
@@ -70,7 +69,7 @@ public class MyPageService {
         return MyPageSummaryResponse.builder()
                 .userId(user.getUserId())
                 .loginId(user.getLoginId())
-                .email(user.getLoginId())           // ← 수정 완료 (getEmail → getLoginId)
+                .email(user.getLoginId())
                 .nickname(user.getNickname())
                 .gender(user.getGender())
                 .birthDate(user.getBirthDate())
@@ -104,9 +103,14 @@ public class MyPageService {
         return new PageImpl<>(accounts, pageable, accounts.size());
     }
 
+    // ★ 수정된 부분: isDeleted 관련 로직("N" 전달 부분) 완전 제거
     public Page<Board> getMyBoardList(Long userId, Pageable pageable) {
-        User user = getUser(userId);
-        return boardRepository.findByUserAndIsDeletedOrderByCreatedAtDesc(user, "N", pageable);
+        getUser(userId);
+
+        return boardRepository.findByUserIdOrderByCreatedAtDesc(
+                userId,
+                pageable
+        );
     }
 
     public Page<PartyPost> getMyPartyList(Long userId, Pageable pageable) {

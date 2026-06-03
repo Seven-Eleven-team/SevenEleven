@@ -54,9 +54,11 @@ public class SupportController {
      */
     @PostMapping("/qna")
     public String create(InquiryCreateRequest request, HttpSession session) {
+        System.out.println("=== 문의 등록 요청 들어옴 ===");
+        System.out.println("title: " + request.getTitle());
         Long userId = SessionUtils.getLoginUserId(session);
         supportService.createInquiry(userId, request);
-        return "redirect:/support/qna";
+        return "redirect:/support";
     }
 
     /**

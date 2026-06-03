@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .sidebar {
     position: fixed;
     top: 74px;
@@ -7,6 +8,8 @@
     background: #193b60;
     transition: left 0.3s ease;
     z-index: 1000;
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebar.open {
@@ -36,7 +39,16 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 74px;
+    background: rgba(25, 59, 96, 0.96);
+    z-index: 1000;
+    opacity: 1 !important;
+    animation: none !important;
+    transform: translateY(0) !important;
 }
 
 .site-logo {
@@ -46,20 +58,43 @@
     transform: translateX(-50%) translateY(-50%);
     color: #f9f7f7;
     font-size: 28px;
+    letter-spacing: -0.02em;
+    font-weight: 800;
 }
 
-.hamburger-btn {
-    background: none;
+.site-header .hamburger-btn {
+    background: transparent;
     border: none;
+    box-shadow: none;
     cursor: pointer;
     font-size: 24px;
     color: #f9f7f7;
     z-index: 1100;
     position: relative;
+    left: auto;
+    top: auto;
+    bottom: auto;
+    transform: none;
+    padding: 0;
+    margin: 0;
+    height: 74px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+}
+
+.site-header .hamburger-btn span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: #f9f7f7;
+    border-radius: 999px;
 }
 
 .auth-link {
-    color : #f9f7f7;
+    color: #f9f7f7;
     text-decoration: none;
 }
 
@@ -69,4 +104,172 @@
 
 .auth-link:hover {
     color: #4b8df7;
+}
+
+.sidebar-logout {
+    margin-top: auto;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sidebar-logout a {
+    color: #f9f7f7;
+    text-decoration: none;
+    font-size: 14px;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sidebar-logout a:hover {
+    opacity: 1;
+}
+
+.sidebar-logout i {
+    color: #f9f7f7;
+    font-size: 16px;
+    opacity: 0.7;
+}
+
+.footer {
+    background: #193b60;
+    color: #f9f7f7;
+    width: 100%;
+}
+
+.footer-nav {
+    border-bottom: 1px solid rgba(249, 247, 247, 0.2);
+    padding: 14px 0;
+}
+
+.footer-nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+.footer-nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-nav-links a {
+    font-size: 13px;
+    color: rgba(249, 247, 247, 0.7);
+    text-decoration: none;
+}
+
+.footer-nav-links a:hover {
+    color: #f9f7f7;
+}
+
+.footer-body {
+    padding: 32px 0 0;
+}
+
+.footer-body-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px 24px;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 48px;
+}
+
+.footer-brand-logo {
+    font-size: 22px;
+    font-weight: 900;
+    color: #f9f7f7;
+    margin-bottom: 10px;
+}
+
+.footer-brand-desc {
+    font-size: 13px;
+    color: rgba(249, 247, 247, 0.6);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.footer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-info-row {
+    font-size: 13px;
+    color: rgba(249, 247, 247, 0.7);
+}
+
+.footer-info-row strong {
+    color: #f9f7f7;
+}
+
+.footer-contact {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: rgba(249, 247, 247, 0.7);
+}
+
+.footer-contact a {
+    color: rgba(249, 247, 247, 0.7);
+    text-decoration: underline;
+}
+
+.footer-contact a:hover {
+    color: #f9f7f7;
+}
+
+.footer-sns {
+    display: flex;
+    gap: 12px;
+}
+
+.footer-sns a {
+    color: rgba(249, 247, 247, 0.7);
+    font-size: 18px;
+    text-decoration: none;
+}
+
+.footer-sns a:hover {
+    color: #f9f7f7;
+}
+
+.footer-bottombar {
+    background: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid rgba(249, 247, 247, 0.1);
+    padding: 12px 0;
+}
+
+.footer-bottombar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-copy {
+    font-size: 12px;
+    color: rgba(249, 247, 247, 0.5);
+    margin: 0;
+}
+
+.footer-note {
+    font-size: 12px;
+    color: rgba(249, 247, 247, 0.4);
+    margin: 0;
+}
+
+.site-header.is-locked {
+    background: rgba(25, 59, 96, 0.96);
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
 }

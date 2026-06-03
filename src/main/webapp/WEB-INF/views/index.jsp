@@ -11,13 +11,29 @@
 
 <main>
     <section class="hero-section">
-        <div class="hero-bg"></div>
-        <div class="opening-box" aria-hidden="true"></div>
+        <div class="hero-bg" aria-hidden="true">
+            <video id="heroBgVideo"
+                   class="hero-bg-video"
+                   autoplay
+                   muted
+                   loop
+                   playsinline
+                   preload="auto"
+                   poster="${pageContext.request.contextPath}/images/main-bg.jpg?v=1">
+                <source src="${pageContext.request.contextPath}/images/main-bg.mp4?v=2" type="video/mp4">
+            </video>
+        </div>
 
-        <div class="hero-title">
+        <div class="hero-title" aria-label="지출메이트 메인 소개">
             <p>모든 서비스를 한눈에</p>
             <p>지출 메이트</p>
         </div>
+
+        <button type="button"
+                class="hero-scroll-cue"
+                aria-label="아래 서비스 영역으로 이동">
+            <span class="hero-scroll-arrow" aria-hidden="true"></span>
+        </button>
     </section>
 
     <section class="scroll-card-section">
@@ -35,9 +51,9 @@
                     </div>
 
                     <div class="feature-icon-wrap">
-                        <img src="${pageContext.request.contextPath}/images/ai_modal.jpg?v=1"
+                        <img src="${pageContext.request.contextPath}/images/ai_modal.jpg?v=2"
                              alt="AI 멘토링"
-                             class="feature-icon">
+                             class="feature-icon ai-mentoring-icon">
                     </div>
                 </div>
             </article>
@@ -115,7 +131,9 @@
 
 <div class="floating-buttons">
     <button type="button" class="floating-btn ai-btn" aria-label="AI 멘토링" data-auth-required="true">
-        <img src="${pageContext.request.contextPath}/images/ai_modal.jpg?v=1" alt="AI 멘토링">
+        <img src="${pageContext.request.contextPath}/images/ai_modal.jpg?v=2"
+             alt="AI 멘토링"
+             class="ai-mentoring-icon">
     </button>
 
     <button type="button" class="floating-btn chat-btn" aria-label="1대1 질의응답" data-auth-required="true">
@@ -126,8 +144,10 @@
 <%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
 
 <%@ include file="/WEB-INF/views/common/modal/authModal.jspf" %>
+<%@ include file="/WEB-INF/views/common/modal/faqModal.jspf" %>
 
 <%@ include file="/WEB-INF/views/common/include/scripts.jspf" %>
+<script src="${pageContext.request.contextPath}/js/pages/faq.js"></script>
 <script src="${pageContext.request.contextPath}/js/pages/index.js?v=4"></script>
 
 </body>

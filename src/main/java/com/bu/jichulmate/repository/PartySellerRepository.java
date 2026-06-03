@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PartySellerRepository extends JpaRepository<PartySeller, Long> {
-    Optional<PartySeller> findByUserId(Long userId);
+    List<PartySeller> findByUserId(Long userId);
     List<PartySeller> findAll();
 }
