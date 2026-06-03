@@ -251,21 +251,46 @@
          */
     }
 
+//    function initializeAuthSessionState() {
+//        const header = getHeaderElements();
+//
+//        if (!header.area) {
+//            return;
+//        }
+//
+//        const serverLogin = header.area.dataset.serverLogin === 'true';
+//
+//        if (serverLogin) {
+//            setHeaderLoggedIn(null, null);
+//        } else {
+//            setHeaderLoggedOut();
+//        }
+//    }
+
     function initializeAuthSessionState() {
-        const header = getHeaderElements();
-
-        if (!header.area) {
-            return;
+            // ★ 화면 HTML만 믿지 말고, 백엔드 서버에 직접 진짜 로그인 상태인지 물어봅니다!
+            fetch(getApiUrl('/api/auth/status'), {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' }
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                if (data.ok && data.loggedIn) {
+                    // 백엔드가 "로그인 맞음!" 하면 화면을 무조건 로그인 상태로 렌더링
+                    sessionStorage.setItem('jichulmate:auth-active', 'true');
+                    setHeaderLoggedIn(data, null);
+                } else {
+                    // 서버도 로그아웃이라고 하면 그때 화면을 로그아웃으로 렌더링
+                    sessionStorage.removeItem('jichulmate:auth-active');
+                    setHeaderLoggedOut();
+                }
+            })
+            .catch(function(error) {
+                console.error('[auth-modal] 서버 세션 상태 확인 오류:', error);
+            });
         }
-
-        const serverLogin = header.area.dataset.serverLogin === 'true';
-
-        if (serverLogin) {
-            setHeaderLoggedIn(null, null);
-        } else {
-            setHeaderLoggedOut();
-        }
-    }
 
     function getOverlay(type) {
         const id = modalMap[type];
@@ -1346,6 +1371,11 @@
                     window.dispatchEvent(new CustomEvent(options.eventName, {
                         detail: data
                     }));
+                }
+
+                if (form.id === 'loginForm') {
+                    window.location.href = '/'; // 로그인 폼이면 뒤도 돌아보지 말고 무조건 메인으로 강제 새로고침!
+                    return;
                 }
 
                 showResultMessage({
