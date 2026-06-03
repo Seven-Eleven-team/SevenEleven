@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface BoardCommentRepository extends JpaRepository<BoardComment, Long> {
 
@@ -15,20 +14,10 @@ public interface BoardCommentRepository extends JpaRepository<BoardComment, Long
         FROM BoardComment c
         LEFT JOIN FETCH c.user
         WHERE c.boardId = :boardId
-          AND c.isDeleted = 'N'
         ORDER BY c.commentId ASC
     """)
-    List<BoardComment> findActiveCommentsByBoardId(@Param("boardId") Long boardId);
+    List<BoardComment> findByBoardId(@Param("boardId") Long boardId);
 
-    @Query("""
-        SELECT c
-        FROM BoardComment c
-        WHERE c.commentId = :commentId
-          AND c.boardId = :boardId
-          AND c.isDeleted = 'N'
-    """)
-    Optional<BoardComment> findActiveComment(
-            @Param("commentId") Long commentId,
-            @Param("boardId") Long boardId
-    );
+    // Service에서 기본 JpaRepository의 findById를 쓰도록 변경했기 때문에
+    // 불필요한 findActiveComment 메서드는 깔끔하게 지웠습니다.
 }

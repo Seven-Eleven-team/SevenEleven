@@ -38,15 +38,15 @@ public class Subscription {
     @Column(name = "END_DATE", nullable = false)
     private LocalDate endDate;
 
-    @Column(name = "NEXT_PAY_DATE")
-    private LocalDate nextPayDate;
-
     @Builder.Default
     @Column(name = "STATUS", nullable = false)
     private String status = "ACTIVE";
 
     @Column(name = "CREATED_AT", updatable = false)
     private LocalDateTime createdAt;
+
+    @Column(name = "SERIAL_CODE", nullable = false, unique = true, length = 50)
+    private String serialCode;
 
     @PrePersist
     protected void onCreate() {
