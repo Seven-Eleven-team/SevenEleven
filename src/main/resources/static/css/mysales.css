@@ -1,97 +1,86 @@
 /* =========================================================
-   mysales.css
+   mysales.css (REFORMED)
    마이페이지 > 내 판매 목록 전용 스타일
 ========================================================= */
 
-.sales-main,
-.sales-list-main {
-    width: 100%;
-    min-height: 832px;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-}
-
-.page-title {
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 25px;
-    color: #222;
-}
-
-.sales-header-title {
-    width: 100%;
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #333;
-    color: #222;
+.sales-main {
+    align-items: center;
 }
 
 .sales-main-box {
     width: 100%;
+    max-width: 1100px;
     min-height: 760px;
-    background: #ffffff;
-    border: 1px solid #dbdbdb;
-    border-radius: 20px;
-    position: relative;
-    margin-top: 10px;
     display: flex;
     flex-direction: column;
-}
-
-.sales-empty-center {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-bottom: 40px;
-}
-
-.empty-msg {
-    font-size: 42px;
-    font-weight: 700;
-    margin-bottom: 40px;
-    color: #000;
-    text-align: center;
-}
-
-.register-btn {
-    background-color: #1e2d4d;
-    color: #ffffff;
-    padding: 18px 60px;
-    border-radius: 15px;
-    font-size: 18px;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
-}
-
-.register-btn:hover {
-    opacity: 0.92;
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 18px;
 }
 
 .sales-list-content {
-    padding: 10px 40px 80px;
+    flex: 1;              /* ⭐ 이거 없으면 내용 안 펴짐 */
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px 25px 90px;
 }
 
+/* 제목 */
+.page-title {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 25px;
+    color: #222;
+    width: 100%;
+    max-width: 1100px;
+}
+
+/* 내부 타이틀 */
+.sales-header-title {
+    font-size: 20px;
+    font-weight: 800;
+    padding: 20px 25px;
+    border-bottom: 1px solid #eee;
+    color: #222;
+}
+
+/* 리스트 영역 */
+.sales-list-content {
+    padding: 20px 25px 90px;
+}
+
+/* ⭐ 리스트 아이템 -> 카드 느낌 */
 .sale-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 25px 0;
-    border-bottom: 1px solid #eeeeee;
-    gap: 20px;
+
+    padding: 18px 16px;
+    margin-bottom: 12px;
+
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+
+    transition: all 0.2s ease;
+    background: #fff;
 }
 
+.sale-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+    border-color: #e6e6e6;
+}
+
+/* 왼쪽 영역 */
 .item-left-group {
     display: flex;
     align-items: center;
+    gap: 18px;
     min-width: 0;
 }
 
+/* 상품명 */
 .item-name {
     width: 160px;
     font-size: 18px;
@@ -100,59 +89,95 @@
     flex-shrink: 0;
 }
 
+/* 로고 */
 .item-logo-area {
-    width: 120px;
-    margin-right: 30px;
+    width: 110px;
     flex-shrink: 0;
 }
 
 .item-logo-area img {
-    height: 25px;
-    display: block;
+    height: 28px;
+    object-fit: contain;
 }
 
+/* 설명 */
 .item-desc-text {
-    font-size: 16px;
-    line-height: 1.8;
-    color: #333;
+    font-size: 15px;
+    color: #444;
+    line-height: 1.6;
     min-width: 0;
 }
 
+/* 오른쪽 값 */
 .item-right-stat {
     font-size: 18px;
-    font-weight: 700;
-    color: #000;
-    margin-right: 10px;
+    font-weight: 800;
+    color: #111;
     white-space: nowrap;
-    flex-shrink: 0;
 }
 
-.pagination-area {
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
+/* 빈 화면 */
+.sales-empty-center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.empty-msg {
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 30px;
+}
+
+/* 버튼 */
+.register-btn {
+    background-color: #1e2d4d;
+    color: #fff;
+    padding: 16px 50px;
+    border-radius: 12px;
     font-size: 16px;
-    color: #888;
+    font-weight: 700;
+    border: none;
     cursor: pointer;
 }
 
+.register-btn:hover {
+    opacity: 0.9;
+}
+
+/* ⭐ 페이지네이션 (absolute 제거 → 안정형) */
+.pagination-area {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    font-size: 15px;
+    color: #888;
+}
+
+/* 사이드바 active */
 .sidebar ul li.active-red a {
     color: #ff4d4d !important;
     font-weight: 700;
 }
 
+/* 반응형 */
 @media (max-width: 1024px) {
     .sales-main-box {
-        overflow-x: auto;
+        max-width: 100%;
+        margin: 10px;
     }
 
-    .sales-list-content {
-        min-width: 780px;
-        padding: 10px 30px 80px;
+    .sale-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
     }
 
-    .empty-msg {
-        font-size: 34px;
+    .item-name {
+        width: auto;
     }
 }
