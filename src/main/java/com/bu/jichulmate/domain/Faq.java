@@ -15,9 +15,6 @@ public class Faq {
     @Column(name = "FAQ_ID")
     private Long faqId;
 
-    @Column(name = "CATEGORY", nullable = false, length = 50)
-    private String category;
-
     @Column(name = "QUESTION", nullable = false, length = 200)
     private String question;
 
@@ -27,8 +24,6 @@ public class Faq {
     @Column(name = "SORT_ORDER", nullable = false)
     private Integer sortOrder;
 
-    @Column(name = "IS_ACTIVE", nullable = false, length = 1)
-    private String isActive;
 
     @Column(name = "CREATED_AT", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -36,17 +31,14 @@ public class Faq {
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
-        if (this.isActive == null) this.isActive = "Y";
         if (this.sortOrder == null) this.sortOrder = 1;
     }
 
     // ★ FaqService의 에러를 해결해주는 핵심 비즈니스 로직 메서드!
     // 이것은 DB 컬럼이 아니라 자바 객체 내부의 데이터를 변경하는 기능입니다.
-    public void update(String category, String question, String answer, Integer sortOrder, String isActive) {
-        this.category = category;
+    public void update(String question, String answer, Integer sortOrder) {
         this.question = question;
         this.answer = answer;
         this.sortOrder = sortOrder;
-        this.isActive = isActive;
     }
 }

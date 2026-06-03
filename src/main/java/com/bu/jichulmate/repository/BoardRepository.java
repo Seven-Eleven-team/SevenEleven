@@ -9,14 +9,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-    Page<Board> findByUserIdAndIsDeletedOrderByCreatedAtDesc(
+    // isDeleted 조건 제거
+    Page<Board> findByUserIdOrderByCreatedAtDesc(
             Long userId,
-            String isDeleted,
             Pageable pageable
     );
 
-    Page<Board> findByIsDeletedOrderByCreatedAtDesc(
-            String isDeleted,
+    // 전체 게시글 조회 (isDeleted 조건 제거)
+    Page<Board> findAllByOrderByCreatedAtDesc(
             Pageable pageable
     );
 }

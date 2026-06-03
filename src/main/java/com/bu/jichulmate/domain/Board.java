@@ -17,16 +17,9 @@ public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_boards_gen")
-    @SequenceGenerator(
-            name = "seq_boards_gen",
-            sequenceName = "SEQ_BOARDS",
-            allocationSize = 1
-    )
-    @Column(name = "ID")
+    @SequenceGenerator(name = "seq_boards_gen", sequenceName = "SEQ_BOARDS", allocationSize = 1)
+    @Column(name = "BOARD_ID") // ID에서 BOARD_ID로 수정
     private Long boardId;
-
-    @Column(name = "BOARD_ID", nullable = false, updatable = false)
-    private Long dbBoardId;
 
     @Column(name = "USER_ID", nullable = false)
     private Long userId;
@@ -48,18 +41,6 @@ public class Board {
     @Column(name = "VIEWS_COUNT", nullable = false)
     private Long viewsCount = 0L;
 
-    @Builder.Default
-    @Column(name = "LIKES_COUNT", nullable = false)
-    private Long likesCount = 0L;
-
-    @Builder.Default
-    @Column(name = "IS_DELETED", nullable = false, length = 1)
-    private String isDeleted = "N";
-
-    @Builder.Default
-    @Column(name = "DELETED", nullable = false)
-    private Integer deleted = 0;
-
     @Column(name = "CREATED_AT", updatable = false)
     private LocalDateTime createdAt;
 
@@ -77,8 +58,6 @@ public class Board {
 
     @PrePersist
     public void prePersist() {
-        syncBoardColumns();
-        syncDeletedColumns();
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -94,51 +73,17 @@ public class Board {
             viewsCount = 0L;
         }
 
-        if (likesCount == null) {
-            likesCount = 0L;
-        }
     }
 
     @PreUpdate
     public void preUpdate() {
-        syncBoardColumns();
-        syncDeletedColumns();
-
         updatedAt = LocalDateTime.now();
 
         if (viewsCount == null) {
             viewsCount = 0L;
         }
-
-        if (likesCount == null) {
-            likesCount = 0L;
-        }
     }
 
-
-    private void syncBoardColumns() {
-        if (boardId != null && dbBoardId == null) {
-            dbBoardId = boardId;
-        }
-    }
-
-    private void syncDeletedColumns() {
-        if (isDeleted == null || isDeleted.isBlank()) {
-            isDeleted = "N";
-        }
-
-        if ("Y".equalsIgnoreCase(isDeleted)) {
-            isDeleted = "Y";
-            deleted = 1;
-        } else {
-            isDeleted = "N";
-            deleted = 0;
-        }
-
-        if (deleted == null) {
-            deleted = 0;
-        }
-    }
 
     public boolean isOwner(Long loginUserId) {
         return loginUserId != null && userId != null && userId.equals(loginUserId);

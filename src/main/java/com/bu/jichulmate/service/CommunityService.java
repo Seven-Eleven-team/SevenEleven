@@ -109,7 +109,9 @@ public class CommunityService {
     @Transactional(readOnly = true)
     public List<BoardComment> findComments(Long boardId) {
         Board board = findCommunityPost(boardId);
-        List<BoardComment> comments = boardCommentRepository.findActiveCommentsByBoardId(boardId);
+
+        // ★ 수정됨: findActiveCommentsByBoardId -> findByBoardId 로 변경
+        List<BoardComment> comments = boardCommentRepository.findByBoardId(boardId);
 
         if (isSecretCategory(board.getBoardType())) {
             applySecretCommentDisplayInfo(board, comments);
@@ -136,14 +138,13 @@ public class CommunityService {
         validateWritableCategory(userId, normalizedCategory);
         validate(title, content);
 
+        // ★ 수정됨: likesCount, isDeleted 필드 제거
         Board board = Board.builder()
                 .userId(userId)
                 .boardType(normalizedCategory)
                 .title(title.trim())
                 .content(content.trim())
                 .viewsCount(0L)
-                .likesCount(0L)
-                .isDeleted("N")
                 .build();
 
         Board savedBoard = communityBoardRepository.save(board);
@@ -201,8 +202,8 @@ public class CommunityService {
             throw new IllegalStateException("삭제 권한이 없습니다.");
         }
 
-        board.setIsDeleted("Y");
-        communityBoardRepository.save(board);
+        // ★ 수정됨: 상태값 변경이 아닌 실제 DB 삭제로 변경
+        communityBoardRepository.delete(board);
 
         fileService.deleteFilesWithPhysicalFile(ATTACH_REF_TABLE, boardId);
     }
@@ -218,11 +219,11 @@ public class CommunityService {
         validateCommentWritable(board, loginUserId);
         validateComment(content);
 
+        // ★ 수정됨: isDeleted 필드 제거
         BoardComment comment = BoardComment.builder()
                 .boardId(board.getBoardId())
                 .userId(loginUserId)
                 .content(content.trim())
-                .isDeleted("N")
                 .build();
 
         return boardCommentRepository.save(comment);
@@ -236,15 +237,16 @@ public class CommunityService {
 
         findCommunityPost(boardId);
 
-        BoardComment comment = boardCommentRepository.findActiveComment(commentId, boardId)
+        // ★ 수정됨: findActiveComment -> findById 로 일반 조회
+        BoardComment comment = boardCommentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
 
         if (!comment.isOwner(loginUserId)) {
             throw new IllegalStateException("댓글 삭제 권한이 없습니다.");
         }
 
-        comment.setIsDeleted("Y");
-        boardCommentRepository.save(comment);
+        // ★ 수정됨: 상태값 변경이 아닌 실제 DB 삭제로 변경
+        boardCommentRepository.delete(comment);
     }
 
     public String normalizeCategory(String category) {

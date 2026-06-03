@@ -1,15 +1,11 @@
 package com.bu.jichulmate.repository;
 
-import com.bu.jichulmate.domain.Faq; // ★ Faq 엔티티 위치를 알려주는 핵심 한 줄!
+import com.bu.jichulmate.domain.Faq;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 public interface FaqRepository extends JpaRepository<Faq, Long> {
-
-    List<Faq> findByIsActiveOrderBySortOrderAsc(String isActive);
-
-    List<Faq> findByIsActiveAndCategoryOrderBySortOrderAsc(String isActive, String category);
-
+    // 노출 순서(sortOrder) 오름차순으로 전체 FAQ 조회
     List<Faq> findAllByOrderBySortOrderAsc();
 }
