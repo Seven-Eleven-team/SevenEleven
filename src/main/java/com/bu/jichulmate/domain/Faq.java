@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Table(name = "FAQS")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Faq {
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_faqs_gen")
     @SequenceGenerator(name = "seq_faqs_gen", sequenceName = "SEQ_FAQS", allocationSize = 1)
@@ -21,11 +20,11 @@ public class Faq {
     @Column(name = "ANSWER", nullable = false, length = 4000)
     private String answer;
 
-    @Column(name = "SORT_ORDER", nullable = false)
+    @Column(name = "SORT_ORDER") // nullable = false 제거
     private Integer sortOrder;
 
 
-    @Column(name = "CREATED_AT", nullable = false, updatable = false)
+    @Column(name = "CREATED_AT", updatable = false)
     private LocalDateTime createdAt;
 
     @PrePersist

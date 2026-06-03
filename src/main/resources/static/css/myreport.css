@@ -114,3 +114,6 @@
     font-weight: 700 !important;       /* 글씨를 두껍고 진하게 변경 */
     background: #fff5f5 !important;    /* 바탕색을 연한 핑크빛으로 변경 */
 }
+.mypage-container{
+    margin-top:20px;
+}

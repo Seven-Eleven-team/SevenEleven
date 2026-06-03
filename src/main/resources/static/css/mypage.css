@@ -35,6 +35,55 @@
     height: auto !important;   /* 고정 높이를 풀고 컨텐츠에 맞게 늘어나도록 수정 */
 }
 
+.site-logo-link {
+    text-decoration: none;
+}
+
+.site-logo {
+    font-size: 28px;
+    font-weight: 700;
+    color: #111111;
+    margin: 0;
+}
+
+.header-action-area {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.auth-link {
+    text-decoration: none;
+    color: #111111;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.user-profile-link {
+    text-decoration: none;
+}
+
+.user-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #ff4d4d;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: bold;
+}
+
+.hamburger-btn {
+    border: none;
+    background: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
 /* ==========================================
    3. 상단 프로필 & 계좌 복합 카드 (기존 디자인 100% 보존)
    ========================================== */
@@ -150,8 +199,8 @@
 }
 
 .main-bank-logo {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     background: #2563eb;
     color: white;
@@ -407,4 +456,17 @@
         font-weight: 700 !important;       /* 글씨를 두껍고 진하게 변경 */
         background: #fff5f5 !important;    /* 바탕색을 연한 핑크빛으로 변경 */
     }
+    /*풋터*/
+    .site-footer {
+        width: 100%;
+        padding: 30px;
+        background: #111111;
+        color: white;
+        text-align: center;
+        margin-top: 60px;
+    }
+.mypage-container{
+    margin-top:20px;
+}
+
 }

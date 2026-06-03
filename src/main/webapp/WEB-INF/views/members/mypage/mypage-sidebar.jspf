@@ -89,7 +89,7 @@
 
 <aside class="mypage-sidebar-fixed">
     <ul>
-        <li class="${menu == 'mypage' ? 'active' : ''}"><a href="/mypage">대시보드</a></li>
+        <li class="${menu == 'mypage' ? 'active' : ''}"><a href="/mypage">내 정보</a></li>
         <li class="${menu == 'subscriptions' ? 'active' : ''}"><a href="/mypage/subscriptions">내 구독 관리</a></li>
         <li class="${menu == 'posts' ? 'active' : ''}"><a href="/mypage/posts">내 게시글 보기</a></li>
         <li class="${menu == 'questions' ? 'active' : ''}"><a href="/mypage/questions">내 문의</a></li>
