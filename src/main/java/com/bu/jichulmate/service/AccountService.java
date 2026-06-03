@@ -42,24 +42,47 @@ public class AccountService {
             throw new BusinessException(ErrorCode.ACCOUNT_DUPLICATE);
         }
 
-        // 대표 계좌 처리
-        String isPrimary = "N";
-        if (request.isPrimary() || accountRepository.countByUser(user) == 0) {
-            isPrimary = "Y";
-            accountRepository.clearAllPrimary(user);
-        }
+        String isPrimary = determineIsPrimary(user, request.isPrimary());
 
-        // @CreationTimestamp가 엔티티에 있지만 명시적으로도 설정 (이중 안전장치)
         Account account = Account.builder()
                 .user(user)
                 .bankName(request.getBankName())
                 .accountNumber(request.getAccountNumber())
                 .isPrimary(isPrimary)
-                .createdAt(LocalDateTime.now())   // ← 명시적 설정
-                .updatedAt(LocalDateTime.now())   // ← 명시적 설정
                 .build();
 
         accountRepository.save(account);
+    }
+
+    @Transactional
+    public void updateAccount(Long userId, Long accountId, AccountRegisterRequest request) {
+        User user = findUser(userId);
+        Account account = findAccountByIdAndUser(accountId, user);
+
+        // 계좌번호가 변경된 경우에만 중복 체크
+        if (!account.getAccountNumber().equals(request.getAccountNumber()) &&
+                accountRepository.existsByAccountNumber(request.getAccountNumber())) {
+            throw new BusinessException(ErrorCode.ACCOUNT_DUPLICATE);
+        }
+
+        String newIsPrimary = determineIsPrimary(user, request.isPrimary());
+
+        account.setBankName(request.getBankName());
+        account.setAccountNumber(request.getAccountNumber());
+        account.setIsPrimary(newIsPrimary);
+        account.setUpdatedAt(LocalDateTime.now());
+
+        accountRepository.save(account);
+    }
+
+    private String determineIsPrimary(User user, boolean requestedPrimary) {
+        long accountCount = accountRepository.countByUser(user);
+
+        if (requestedPrimary || accountCount == 0) {
+            accountRepository.clearAllPrimary(user);
+            return "Y";
+        }
+        return "N";
     }
 
     @Transactional
@@ -67,29 +90,20 @@ public class AccountService {
         User user = findUser(userId);
         Account account = findAccountByIdAndUser(accountId, user);
 
+        boolean wasPrimary = "Y".equals(account.getIsPrimary());
+
         accountRepository.delete(account);
 
-        // 삭제한 계좌가 대표계좌였다면 새 대표계좌 지정
-        if ("Y".equals(account.getIsPrimary())) {
+        // 대표 계좌를 삭제한 경우 새 대표 계좌 지정
+        if (wasPrimary) {
             accountRepository.findByUserOrderByIsPrimaryDescCreatedAtDesc(user)
                     .stream().findFirst()
-                    .ifPresent(a -> {
-                        a.setIsPrimary("Y");
-                        a.setUpdatedAt(LocalDateTime.now());
-                        accountRepository.save(a);
+                    .ifPresent(next -> {
+                        next.setIsPrimary("Y");
+                        next.setUpdatedAt(LocalDateTime.now());
+                        accountRepository.save(next);
                     });
         }
-    }
-
-    @Transactional
-    public void setPrimaryAccount(Long userId, Long accountId) {
-        User user = findUser(userId);
-        Account account = findAccountByIdAndUser(accountId, user);
-
-        accountRepository.clearAllPrimary(user);
-        account.setIsPrimary("Y");
-        account.setUpdatedAt(LocalDateTime.now());
-        accountRepository.save(account);
     }
 
     private User findUser(Long userId) {

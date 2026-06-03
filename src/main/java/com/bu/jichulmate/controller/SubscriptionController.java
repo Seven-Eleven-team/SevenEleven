@@ -32,5 +32,12 @@ public class SubscriptionController {
         subscriptionService.createSubscription(userId, request);
 
         return "subscription/success";
+
+    }
+
+    //ott
+    @GetMapping("/ott")
+    public String ottPage() {
+        return "subscription/ott";
     }
 }

@@ -1,0 +1,461 @@
+/* ================================
+   editprofile.css
+================================ */
+
+/* 전체 배경 */
+body.mypage {
+    background: #f4f4f4;
+}
+
+/* 메인 영역 */
+.profile-page {
+
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    padding: 70px 0 100px;
+}
+
+/* 카드 */
+.profile-card {
+
+    width: 920px;
+
+    background: #ffffff;
+
+    border-radius: 0;
+
+    padding: 70px 90px;
+
+    box-sizing: border-box;
+}
+
+/* 제목 */
+.inner-title {
+
+    text-align: center;
+
+    font-size: 32px;
+    font-weight: 700;
+
+    color: #111;
+
+    margin-bottom: 55px;
+}
+
+/* 프로필 이미지 */
+.profile-img-area {
+
+    display: flex;
+    justify-content: center;
+
+    margin-bottom: 70px;
+}
+
+.profile-circle {
+
+    width: 140px;
+    height: 140px;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    background: #ddd;
+}
+
+.profile-circle img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+/* 폼 */
+.edit-form {
+
+    width: 100%;
+
+    display: flex;
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    gap: 22px 50px;
+}
+
+/* 컬럼 */
+.form-column {
+
+    width: 330px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 22px;
+}
+
+/* 입력 박스 */
+.input-item {
+
+    width: 100%;
+
+    border: 1px solid #d9d9d9;
+    border-radius: 18px;
+
+    padding: 18px 16px;
+
+    box-sizing: border-box;
+
+    background: white;
+}
+
+/* 라벨 */
+.input-item label {
+
+    display: block;
+
+    font-size: 15px;
+    color: #b1b1b1;
+
+    margin-bottom: 10px;
+}
+
+/* input */
+.input-item input {
+
+    width: 100%;
+    height: 34px;
+
+    border: none;
+    border-bottom: 1px solid #555;
+
+    outline: none;
+
+    font-size: 16px;
+
+    background: transparent;
+
+    box-sizing: border-box;
+}
+
+/* 계좌 row */
+.account-row {
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+/* 은행 버튼 */
+.bank-btn {
+
+    min-width: 78px;
+    height: 30px;
+
+    border: none;
+    border-radius: 20px;
+
+    background: #243864;
+    color: white;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    flex-shrink: 0;
+}
+
+/* 계좌 input */
+.account-input {
+
+    flex: 1;
+}
+
+/* 버튼 영역 */
+.form-btns {
+
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 70px;
+}
+
+/* 공통 버튼 */
+.form-btns button {
+
+    width: 135px;
+    height: 46px;
+
+    border: none;
+    border-radius: 24px;
+
+    font-size: 18px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+/* 이전 버튼 */
+.btn-gray {
+
+    background: #e5e5ea;
+
+    color: #111;
+}
+
+.btn-gray:hover {
+
+    background: #d6d6dc;
+}
+
+/* 완료 버튼 */
+.btn-navy {
+
+    background: #243864;
+
+    color: white;
+}
+
+.btn-navy:hover {
+
+    background: #314b85;
+}
+
+/* 반응형 */
+@media (max-width: 1000px) {
+
+    .profile-card {
+
+        width: 95%;
+
+        padding: 50px 30px;
+    }
+
+    .edit-form {
+
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-column {
+
+        width: 100%;
+        max-width: 420px;
+    }
+}
+/* =========================
+   은행 선택 모달
+========================= */
+
+.bank-modal {
+
+    display: none;
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0,0,0,0.4);
+
+    z-index: 99999;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.bank-modal-content {
+
+    width: 420px;
+
+    background: white;
+
+    border-radius: 24px;
+
+    padding: 30px;
+
+    box-sizing: border-box;
+}
+
+.bank-modal-header {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+.bank-modal-header h3 {
+
+    font-size: 24px;
+    margin: 0;
+}
+
+.close-bank-modal {
+
+    font-size: 28px;
+
+    cursor: pointer;
+}
+
+.bank-list {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 14px;
+}
+
+.bank-list button {
+
+    height: 50px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 14px;
+
+    background: white;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.bank-list button:hover {
+
+    background: #243864;
+    color: white;
+}
+/* 프로필 업로드 */
+
+.profile-upload{
+
+    position:relative;
+
+    cursor:pointer;
+
+    transition:0.2s;
+}
+
+.profile-upload:hover{
+
+    transform:scale(1.03);
+}
+
+.profile-overlay{
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    border-radius:50%;
+
+    background:rgba(0,0,0,0.45);
+
+    color:white;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:14px;
+    font-weight:600;
+
+    opacity:0;
+
+    transition:0.2s;
+}
+
+.profile-upload:hover .profile-overlay{
+
+    opacity:1;
+}
+/* AI 멘토 성향 select (업그레이드 버전) */
+ .mentor-select {
+
+     width: 100%;
+     height: 42px;
+
+     border: none;
+     border-bottom: 1px solid #cfcfcf;
+
+     font-size: 15px;
+     font-weight: 500;
+
+     padding: 0 8px;
+
+     outline: none;
+
+     background: transparent;
+
+     cursor: pointer;
+
+     appearance: none;
+     -webkit-appearance: none;
+     -moz-appearance: none;
+
+     transition: 0.2s;
+
+     color: #333;
+ }
+
+ /* hover */
+ .mentor-select:hover {
+     border-bottom: 1px solid #243864;
+ }
+
+ /* focus */
+ .mentor-select:focus {
+     border-bottom: 2px solid #243864;
+ }
+
+ /* 드롭다운 화살표 커스텀 */
+ .input-item {
+     position: relative;
+ }
+
+ /* 화살표 추가 */
+ .input-item select {
+     padding-right: 30px;
+ }
+
+ .input-item::after {
+
+     content: "⌄";
+
+     position: absolute;
+
+     right: 18px;
+     top: 50%;
+
+     transform: translateY(10px);
+
+     font-size: 16px;
+
+     color: #777;
+
+     pointer-events: none;
+ }
