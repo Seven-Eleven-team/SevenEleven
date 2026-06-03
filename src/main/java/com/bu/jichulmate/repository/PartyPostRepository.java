@@ -23,11 +23,11 @@ public interface PartyPostRepository extends JpaRepository<PartyPost, Long> {
         INSERT INTO PARTY_POSTS (
             PARTY_ID, SELLER_ID, SERVICE_ID, SHARE_ID, SHARE_PASSWORD,
             MONTHLY_PRICE, TOTAL_SLOTS, OCCUPIED_SLOTS, STATUS,
-            CREATED_AT, ID, DELETED, OTT_CATEGORY, HOST_USER_ID, DESCRIPTION
+            CREATED_AT, DESCRIPTION
         ) VALUES (
             :partyId, :sellerId, :serviceId, :shareId, :sharePassword,
             :monthlyPrice, 4, 0, 'WAITING',
-            :createdAt, :partyId, 0, :ottCategory, :hostUserId, :description
+            :createdAt, :description
         )
     """, nativeQuery = true)
     void insertDirect(
@@ -38,8 +38,6 @@ public interface PartyPostRepository extends JpaRepository<PartyPost, Long> {
             @Param("sharePassword") String sharePassword,
             @Param("monthlyPrice") Integer monthlyPrice,
             @Param("createdAt") LocalDateTime createdAt,
-            @Param("ottCategory") String ottCategory,
-            @Param("hostUserId") Long hostUserId,
             @Param("description") String description
     );
 }

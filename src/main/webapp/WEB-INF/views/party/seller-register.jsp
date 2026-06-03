@@ -161,7 +161,6 @@
     const domains = ['@naver.com','@gmail.com','@daum.net','@kakao.com','@hanmail.net','@nate.com','@icloud.com','@outlook.com','@yahoo.com'];
     const ctx = '${pageContext.request.contextPath}';
 
-    // 은행별 계좌번호 자릿수
     const bankRules = {
         '국민은행':   { min: 10, max: 14 },
         '신한은행':   { min: 11, max: 12 },
@@ -207,21 +206,16 @@
 
     function chkAccount() {
         let v = document.getElementById('account').value.replace(/[^0-9]/g,'');
-
-        // max 자릿수 초과 입력 차단
         if (selectedBank && bankRules[selectedBank]) {
             const max = bankRules[selectedBank].max;
             if (v.length > max) v = v.slice(0, max);
         }
-
         document.getElementById('account').value = v;
-
         const errEl = document.getElementById('account-err');
         if (!selectedBank || !bankRules[selectedBank]) {
             errEl.classList.remove('on');
             return;
         }
-
         const rule = bankRules[selectedBank];
         if (v.length > 0 && (v.length < rule.min || v.length > rule.max)) {
             if (rule.min === rule.max) {
@@ -234,6 +228,7 @@
             errEl.classList.remove('on');
         }
     }
+
     function chkEmail() {
         const v = document.getElementById('email').value;
         const at = v.indexOf('@');
@@ -293,7 +288,6 @@
         document.getElementById('bank-name').textContent = name;
         document.getElementById('bank-name').classList.add('on');
         document.getElementById('bank-dd').classList.remove('on');
-        // 은행 바꾸면 계좌번호 다시 체크
         chkAccount();
     }
 
@@ -328,6 +322,12 @@
         const hasExperience = new URLSearchParams(location.search).get('hasExperience') || 'N';
         const userId = '${sessionScope.LOGIN_USER_ID}';
 
+        // [추가] 로그인 체크
+        if (!userId || userId === 'null' || userId === '') {
+            showToast('로그인이 필요합니다.');
+            return;
+        }
+
         const name = document.getElementById('name').value.trim();
         const phone = document.getElementById('phone').value.trim();
         const birth = document.getElementById('birth').value.trim();
@@ -342,10 +342,9 @@
         if (!birth || birth.length !== 8) { showToast('생년월일 8자리를 입력해주세요.'); return; }
         if (!zip) { showToast('우편번호를 검색해주세요.'); return; }
         if (!addr) { showToast('상세주소를 입력해주세요.'); return; }
-        if (!bankName || bankName === '은행선택 ▼') { showToast('은행을 선택해주세요.'); return; }
+        if (!selectedBank) { showToast('은행을 선택해주세요.'); return; }
         if (!account) { showToast('계좌번호를 입력해주세요.'); return; }
 
-        // 계좌번호 자릿수 검증
         if (bankRules[selectedBank]) {
             const rule = bankRules[selectedBank];
             if (account.length < rule.min || account.length > rule.max) {
@@ -361,7 +360,8 @@
         if (!email) { showToast('이메일을 입력해주세요.'); return; }
 
         const data = {
-            userId: userId ? parseInt(userId) : 1,
+            // [수정] 세션 userId 직접 사용
+            userId: parseInt(userId),
             name: name,
             birthDate: birth.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
             phone: phone,
