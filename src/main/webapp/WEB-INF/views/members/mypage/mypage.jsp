@@ -15,6 +15,159 @@
     <title>지출메이트 - 대시보드</title>
     <link rel="stylesheet" href="/css/mypage.css?v=2">
     <style>
+    /* =========================
+       계좌 카드 UI (안정 버전)
+    ========================= */
+
+    .alert-side {
+        width: 100%;
+        max-width: 360px;
+
+        background: #fff;
+        border: 1px solid #e6e6e6;
+        border-radius: 16px;
+
+        padding: 20px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+
+        box-sizing: border-box;
+    }
+
+    /* 제목 */
+    .card-title-center {
+        font-size: 18px;
+        font-weight: 800;
+        text-align: center;
+        margin-bottom: 18px;
+        color: #222;
+    }
+
+    /* 내부 */
+    .single-account-box {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    /* 카드 */
+    .account-info-card {
+        background: #f9fafc;
+        border: 1px solid #eee;
+        border-radius: 12px;
+
+        padding: 16px;
+
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        min-height: 100px; /* ⭐ 높이 흔들림 방지 */
+        box-sizing: border-box;
+    }
+
+    /* 상단 */
+    .account-top {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    /* 은행 원형 로고 */
+    .main-bank-logo {
+        width: 42px;
+        height: 42px;
+
+        border-radius: 50%;
+        background: #1e2d4d;
+        color: #fff;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-weight: 800;
+        font-size: 16px;
+
+        flex-shrink: 0;
+    }
+
+    /* 은행 정보 */
+    .main-bank-info {
+        display: flex;
+        flex-direction: column;
+
+        flex: 1;
+        min-width: 0; /* ⭐ 텍스트 깨짐 방지 핵심 */
+    }
+
+    .main-bank-info strong {
+        font-size: 15px;
+        font-weight: 800;
+        color: #222;
+    }
+
+    /* 계좌번호 */
+    .main-bank-info span {
+        font-size: 13px;
+        color: #666;
+        margin-top: 2px;
+
+        white-space: nowrap;      /* ⭐ 한 줄 유지 */
+        overflow: hidden;         /* 넘치면 숨김 */
+        text-overflow: ellipsis;  /* ... 처리 */
+
+        display: block;
+    }
+
+    /* 안내 문구 */
+    .account-notice {
+        font-size: 12px;
+        color: #888;
+        line-height: 1.4;
+    }
+
+    /* 버튼 공통 */
+    .change-account-btn,
+    .add-account-btn {
+        width: 100%;
+        padding: 10px 12px;
+
+        border-radius: 10px;
+        border: none;
+
+        font-size: 14px;
+        font-weight: 700;
+
+        cursor: pointer;
+    }
+
+    /* 변경 버튼 */
+    .change-account-btn {
+        background: #1e2d4d;
+        color: #fff;
+    }
+
+    .change-account-btn:hover {
+        opacity: 0.9;
+    }
+
+    /* 추가 버튼 */
+    .add-account-btn {
+        background: #ff4d4d;
+        color: #fff;
+    }
+
+    .add-account-btn:hover {
+        opacity: 0.9;
+    }
+
+    /* 없을 때 */
+    .no-account {
+        text-align: center;
+        font-size: 14px;
+        color: #777;
+        margin-bottom: 10px;
+    }
         .footer { width: 100%; background: #243864; color: white; padding: 40px 0; margin-top: 60px; }
         body.mypage { padding-top: 78px; min-height: 100vh; display: flex; flex-direction: column; }
         .mypage-container { flex: 1; }

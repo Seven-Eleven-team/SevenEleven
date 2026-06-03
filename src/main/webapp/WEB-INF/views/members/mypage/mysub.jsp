@@ -318,7 +318,7 @@
 
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
 
-<div class="container">
+<div class="mypage-container">
 
     <%@ include file="/WEB-INF/views/members/mypage/mypage-sidebar.jspf" %>
 
@@ -347,7 +347,7 @@
                                 </div>
                                 <div class="card-btns">
                                     <button class="btn-extend">연장하기</button>
-                                    <button class="btn-cancel">해지하기</button>
+                                    <button class="btn-cancel">취소하기</button>
                                 </div>
                             </div>
 
@@ -363,13 +363,7 @@
                                     <img src="${pageContext.request.contextPath}/images/icon-delivery.png" alt="배송중" class="step-icon">
                                     <span class="step-text">배송중</span>
                                 </div>
-                                <div class="status-arrow">
-                                    <img src="${pageContext.request.contextPath}/images/arrow-right.png" alt="다음">
-                                </div>
-                                <div class="status-step">
-                                    <img src="${pageContext.request.contextPath}/images/icon-check.png" alt="사용가능" class="step-icon">
-                                    <span class="step-text">사용가능</span>
-                                </div>
+
                             </div>
 
                             <div class="order-log-box">
@@ -407,11 +401,22 @@
                             </div>
                         </div>
 
-                        <div class="status-msg-box">입금확인 전/내용 정보 확인바람</div>
-                        <div class="description-box">
-                            <p>대한민국에서 유일하게 결제 가능한 서비스를 제공하며, 안전하고 불법적인 우려 없이 이용 가능합니다.</p>
-                            <p style="margin-top:10px;">GPT-4 및 유료 기능을 저렴하게 이용할 수 있도록 돕습니다.</p>
-                        </div>
+
+                            <div class="order-log-box">
+                                                           <p class="log-title">주문 완료 (501-49141)</p>
+                                                           <table class="log-table">
+                                                               <tr>
+                                                                   <td>계정 충전 정보/확인</td>
+                                                                   <td class="text-right">26.05.14 13:06</td>
+                                                               </tr>
+                                                               <tr>
+                                                                   <td>결제 완료</td>
+                                                                   <td class="text-right success-text">성공</td>
+                                                               </tr>
+                                                           </table>
+                                                       </div>
+                         <button class="view-terms" onclick="openTermsModal()">이용약관 보기</button>
+
 
                         <table class="detail-info-table">
                             <tr>

@@ -251,7 +251,7 @@
 
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
 
-<div class="container">
+<div class="mypage-container">
 
     <!-- ✅ 다른 페이지들과 완전히 동일한 사이드바 include -->
     <%@ include file="/WEB-INF/views/members/mypage/mypage-sidebar.jspf" %>

@@ -1,111 +1,132 @@
-/* 전체 레이아웃 */
-body.mypage-body {
-    margin: 0;
-    padding-top: 78px;
-    background: #f3f6fb;
-}
-
-.mypage-container {
+/* =========================================================
+   mysales.css (REFORMED)
+   마이페이지 > 내 판매 목록 전용 스타일
     display: flex;
-    gap: 26px;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-top: 20px;
-}
+    align-items: center;
+    justify-content: space-between;
 
-.dashboard {
-    flex: 1;
-}
+    padding: 18px 16px;
+    margin-bottom: 12px;
 
-/* 제목 */
-.page-title {
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 18px;
-}
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
 
-/* 카드 박스 */
-.card-box {
+    transition: all 0.2s ease;
     background: #fff;
-    border-radius: 18px;
-    padding: 30px;
-    border: 1px solid #e5e5e5;
-    min-height: 700px;
 }
 
-/* empty 상태 */
-.empty-box {
-    height: 600px;
+.sale-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+    border-color: #e6e6e6;
+}
+
+/* 왼쪽 영역 */
+.item-left-group {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-width: 0;
+}
+
+/* 상품명 */
+.item-name {
+    width: 160px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #222;
+    flex-shrink: 0;
+}
+
+/* 로고 */
+.item-logo-area {
+    width: 110px;
+    flex-shrink: 0;
+}
+
+.item-logo-area img {
+    height: 28px;
+    object-fit: contain;
+}
+
+/* 설명 */
+.item-desc-text {
+    font-size: 15px;
+    color: #444;
+    line-height: 1.6;
+    min-width: 0;
+}
+
+/* 오른쪽 값 */
+.item-right-stat {
+    font-size: 18px;
+    font-weight: 800;
+    color: #111;
+    white-space: nowrap;
+}
+
+/* 빈 화면 */
+.sales-empty-center {
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
 }
 
-.empty-box h1 {
-    font-size: 32px;
+.empty-msg {
+    font-size: 36px;
+    font-weight: 800;
     margin-bottom: 30px;
 }
 
-.primary-btn {
-    background: #1e2d4d;
+/* 버튼 */
+.register-btn {
+    background-color: #1e2d4d;
     color: #fff;
     padding: 16px 50px;
     border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
     border: none;
     cursor: pointer;
 }
 
-/* 테이블 */
-.sales-table {
-    width: 100%;
-    border-collapse: collapse;
+.register-btn:hover {
+    opacity: 0.9;
 }
 
-.sales-table thead th {
-    text-align: left;
-    font-size: 14px;
-    color: #666;
-    padding: 14px 10px;
-    border-bottom: 1px solid #eaeaea;
-}
+/* ⭐ 페이지네이션 (absolute 제거 → 안정형) */
+.pagination-area {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
 
-.sales-table tbody td {
-    padding: 18px 10px;
     font-size: 15px;
-    border-bottom: 1px solid #f0f0f0;
+    color: #888;
 }
 
-/* 상태 */
-.status-active {
-    color: #2ecc71;
-    font-weight: 600;
+/* 사이드바 active */
+.sidebar ul li.active-red a {
+    color: #ff4d4d !important;
+    font-weight: 700;
 }
 
-.status-stop {
-    color: #ff4d4d;
-    font-weight: 600;
-}
+/* 반응형 */
+@media (max-width: 1024px) {
+    .sales-main-box {
+        max-width: 100%;
+        margin: 10px;
+    }
 
-/* 버튼 */
-.delete-btn {
-    background: #1f2a44;
-    color: #fff;
-    border: none;
-    padding: 8px 18px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 13px;
-}
+    .sale-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
 
-.delete-btn:hover {
-    opacity: 0.85;
-}
-
-/* pagination */
-.pagination {
-    text-align: center;
-    margin-top: 30px;
-    color: #666;
+    .item-name {
+        width: auto;
+    }
 }

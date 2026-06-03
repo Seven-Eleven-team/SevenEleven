@@ -242,66 +242,6 @@
                    font-weight: 700 !important;
                }
 
-        /* 1. 마이페이지 공통 레이아웃 틀 고정 (사이드바 + 메인 정렬) */
-               .mypage-container {
-                   display: flex !important;
-                   flex-direction: row !important;
-                   align-items: stretch !important;
-                   gap: 26px !important;
-                   max-width: 1200px;
-                   margin: 0 auto;
-                   padding: 40px 0;
-               }
-
-               /* 2. 공통 사이드바 크기 및 위아래 중앙 가로막 정렬 스타일링 */
-               .mypage-sidebar {
-                   width: 250px !important;
-                   min-width: 250px !important;
-                   height: auto !important;
-                   align-self: stretch !important;
-                   background: #ffffff !important;
-                   border: 1px solid #dddddd !important;
-                   border-radius: 20px !important;
-                   padding: 0 !important;
-                   display: flex !important;
-                   align-items: center !important;
-               }
-               .mypage-sidebar ul {
-                   display: flex !important;
-                   flex-direction: column !important;
-                   justify-content: center !important;
-                   list-style: none !important;
-                   padding: 0 !important;
-                   margin: 0 !important;
-                   width: 100% !important;
-               }
-               .mypage-sidebar li {
-                   width: 100% !important;
-                   display: block !important;
-               }
-               .mypage-sidebar li a {
-                   display: flex !important;
-                   justify-content: center !important;
-                   align-items: center !important;
-                   width: 100% !important;
-                   height: 55px !important;
-                   padding: 0 !important;
-                   line-height: 1 !important;
-                   text-align: center !important;
-                   font-size: 16px !important;
-                   font-weight: 500 !important;
-                   color: #111111 !important;
-                   transition: all 0.2s ease !important;
-               }
-               .mypage-sidebar li a:hover {
-                   background: #fafafa !important;
-                   color: #ff4d4d !important;
-               }
-               .mypage-sidebar li.active a {
-                   color: #ff4d4d !important;
-                   font-weight: 700 !important;
-               }
-
         /* =========================
            메인 영역
         ========================= */

@@ -179,7 +179,7 @@
 <c:set var="menu" value="alarm"/>
 
 
-<div class="container container">
+<div class="mypage-container">
 
     <aside class="sidebar">
             <%@ include file="/WEB-INF/views/members/mypage/mypage-sidebar.jspf" %>

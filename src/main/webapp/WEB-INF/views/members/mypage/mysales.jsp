@@ -185,7 +185,7 @@
 
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
 
-<div class="container">
+<div class="mypage-container">
 
     <!-- 사이드바 -->
     <aside class="mypage-sidebar">
