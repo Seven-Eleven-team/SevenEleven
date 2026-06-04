@@ -1,185 +1,25 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<%-- 💡 현재 활성화된 메뉴를 'report'로 설정하여 사이드바 불빛을 연동합니다. --%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <c:set var="menu" value="reports"/>
 
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <%-- 💡 프로젝트 공통 head (메타 태그 및 Pretendard 폰트 등 포함) --%>
+    <meta charset="UTF-8">
     <title>지출메이트 - 내 신고 목록</title>
 
-    <%-- CSS 파일들 불러오기 --%>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/myreport.css">
+    <!-- 공통 및 전용 CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/mypage.css?v=2">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/myreport.css">
 
     <style>
-      /*풋터*/
-        .footer {
-            width: 100%;
-            background: #243864;
-            color: white;
-            padding: 40px 0;
-            margin-top: 60px;
-        }
-       body.mypage {
-           padding-top: 78px;
+        /* 풋터 및 기본 배경 */
+        .footer { width: 100%; background: #243864; color: white; padding: 40px 0; margin-top: 60px; }
+        body.mypage { padding-top: 78px; min-height: 100vh; display: flex; flex-direction: column; background: #f5f5f5; }
 
-           min-height: 100vh;
-
-           display: flex;
-           flex-direction: column;
-       }
-       .mypage-container {
-           flex: 1;
-       }
-    /*헤더*/
-         /* 마이페이지에서는 로그인 버튼 숨김 */
-         body.mypage .auth-link {
-             display: none !important;
-         }
-         body.mypage .header-action-area {
-             position: absolute !important;
-             right: 36px !important;
-         }
-
-         body.mypage .user-profile-link {
-             display: flex !important;
-         }
-         /* 공통 햄버거 사이드바 */
-         body.mypage nav.sidebar {
-             position: fixed;
-             top: 78px;
-             left: -260px;
-
-             width: 250px;
-             height: calc(100vh - 78px);
-
-             background: white;
-             border-right: 1px solid #ddd;
-
-             transition: all 0.3s ease;
-
-             z-index: 9998;
-
-             padding-top: 20px;
-         }
-
-         body.mypage nav.sidebar.open {
-             left: 0;
-         }
-
-         body.mypage nav.sidebar ul {
-             list-style: none;
-             padding: 0;
-             margin: 0;
-         }
-
-         body.mypage nav.sidebar li {
-             width: 100%;
-         }
-
-         body.mypage nav.sidebar li a {
-             display: flex;
-             align-items: center;
-
-             height: 54px;
-
-             padding: 0 24px;
-
-             color: #222;
-             text-decoration: none;
-             font-size: 16px;
-             font-weight: 500;
-         }
-
-         body.mypage nav.sidebar li a:hover {
-             background: #f5f5f5;
-         }
-
-         /* 마이페이지에서는 공통 사이드 드롭다운 숨김 */
-         body.mypage .sidebar-overlay,
-         body.mypage .sidebar-drawer,
-         body.mypage .sidebar-menu,
-         body.mypage .mobile-sidebar {
-             display: none !important;
-         }
-        /* 공통 헤더 */
-     body.mypage .site-header {
-         position: fixed !important;
-         top: 0 !important;
-         left: 0 !important;
-         width: 100% !important;
-         height: 78px !important;
-         background: #243864 !important;
-
-         display: flex !important;
-         align-items: center !important;
-         justify-content: center !important;
-
-         z-index: 9999 !important;
-     }
-
-        /* 우측 영역 */
-       body.mypage .header-action-area {
-            position: absolute;
-            right: 36px;
-        }
-        body.mypage .site-logo {
-            color: white !important;
-            font-size: 28px !important;
-            font-weight: 800 !important;
-            margin: 0 !important;
-        }
-
-        body.mypage .hamburger-btn {
-            position: absolute !important;
-            left: 36px !important;
-
-            width: 42px !important;
-            height: 42px !important;
-
-            border: none !important;
-            border-radius: 12px !important;
-
-            background: rgba(255,255,255,0.15) !important;
-            color: white !important;
-
-            font-size: 22px !important;
-        }
-
-        body.mypage .header-action-area {
-            position: absolute !important;
-            right: 36px !important;
-        }
-
-        body.mypage .auth-link {
-            color: white !important;
-            text-decoration: none !important;
-        }
-
-        body.mypage .user-profile-link {
-            width: 46px !important;
-            height: 46px !important;
-
-            border-radius: 50% !important;
-            background: white !important;
-
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-
-            text-decoration: none !important;
-        }
-
-        body.mypage .user-avatar {
-            color: #243864 !important;
-            font-weight: 700 !important;
-        }
-
-        /* 1. 마이페이지 공통 레이아웃 틀 고정 (사이드바 + 메인 정렬) */
-        .container {
+        /* 레이아웃 틀 고정 (사이드바 + 메인) */
+        .mypage-container {
             display: flex !important;
             flex-direction: row !important;
             align-items: stretch !important;
@@ -187,221 +27,297 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 40px 0;
+            flex: 1;
         }
 
-        /* =========================
-           신고 상세 팝업 레이아웃 고정
-        ========================= */
-        .report-modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.35);
-            z-index: 3000;
-            justify-content: center;
+        /* 헤더 고정 스타일 */
+        body.mypage .site-header {
+            position: fixed !important; top: 0 !important; left: 0 !important;
+            width: 100% !important; height: 78px !important;
+            background: #243864 !important; display: flex !important;
+            align-items: center !important; justify-content: center !important; z-index: 9999 !important;
+        }
+
+        /* 사이드바 스타일 */
+        .mypage-sidebar {
+            width: 250px !important; min-width: 250px !important; height: auto !important;
+            background: #ffffff !important; border: 1px solid #dddddd !important;
+            border-radius: 20px !important; padding: 0 !important; display: flex !important;
+            align-items: center !important;
+        }
+
+        /* 메인 영역 */
+        .report-main { flex: 1; }
+
+        /* 제목과 버튼을 한 줄로 배치 */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-        }
-
-        .report-modal-content {
-            width: 780px;
-            background: #f5f5f5;
-            border-radius: 18px;
-            padding: 22px 20px 30px;
-            position: relative;
-            border: 1px solid #bdbdbd;
-        }
-
-        .report-close-btn {
-            position: absolute;
-            top: 12px;
-            right: 18px;
-            font-size: 30px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #111;
-        }
-
-        .report-detail-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: #111;
-            margin-bottom: 12px;
-        }
-
-        .report-divider {
-            width: 100%;
-            height: 1px;
-            background: #8f8f8f;
             margin-bottom: 20px;
         }
-
-        .report-box, .answer-box {
-            width: 100%;
-            min-height: 180px;
-            border: 1px solid #c7c7c7;
-            border-radius: 16px;
-            background: white;
-            padding: 16px;
-            margin-bottom: 20px;
-            font-size: 16px;
+        .page-title {
+            font-size: 24px;
+            font-weight: 800;
             color: #333;
-            line-height: 1.8;
+            margin-bottom: 0;
         }
 
-        .confirm-btn {
-            width: 115px;
-            height: 42px;
-            border: none;
-            border-radius: 14px;
-            background: #1e2d4d;
+        /* 필터 버튼 스타일 */
+        .filter-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 0;
+        }
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .filter-btn:hover { background: #f0f0f0; color: #333; }
+        .filter-btn.active {
+            background: #645495;
             color: white;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 20px;
-            float: right;
+            border-color: #645495;
+            font-weight: 600;
         }
 
-        .confirm-btn:hover {
-            opacity: 0.92;
+        /* 테이블 스타일 (네모 박스 제거 버전) */
+        .report-table {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
         }
-
-        /* 제목 클릭 링크 효과 */
-        .report-title-link {
+        .table-header {
+            display: flex;
+            background: white;
+            border-bottom: 1px solid #eee;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            padding: 15px 0;
+        }
+        .table-row {
+            display: flex;
+            background: white;
+            border-bottom: 1px solid #f5f5f5;
+            align-items: center;
+            transition: background 0.2s;
             cursor: pointer;
+            padding: 15px 0;
+        }
+        .table-row:hover { background: #fafafa; }
+
+        /* 컬럼 너비 설정 */
+        .col-no { width: 10%; text-align: center; }
+        .col-title { width: 45%; text-align: left; padding: 0 20px; color: #333; }
+        .col-answer { width: 20%; text-align: center; }
+        .col-date { width: 15%; text-align: center; }
+        .col-manage { width: 10%; display: flex; justify-content: center; }
+
+        /* 상태 표시 스타일 */
+        .status-complete { color: #10b981; font-weight: 600; }
+        .status-pending { color: #f59e0b; font-weight: 600; }
+
+        /* 버튼 스타일 (통일된 보라색) */
+        .btn-action {
+            padding: 6px 12px;
+            border-radius: 15px;
+            border: none;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
             transition: 0.2s;
+            background: #645495;
+            color: white;
         }
+        .btn-action:hover { background: #4f4178; }
+        .btn-delete:hover { background: #ff4d4d; }
 
-        .report-title-link:hover {
-            color: #1e2d4d;
-            text-decoration: underline;
+        /* 데이터 없을 때 */
+        .empty-msg { text-align: center; padding: 60px 0; color: #999; font-size: 15px; }
+
+        /* 페이지네이션 스타일 */
+        .pagination { display: flex; justify-content: center; margin-top: 20px; gap: 5px; }
+        .page-link { padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px;
+                    text-decoration: none; color: #333; font-size: 14px; }
+        .page-link.active { background: #645495; color: white; border-color: #645495; }
+
+        /* 신고 상세 팝업 (통일된 디자인) */
+        .report-modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.45); z-index: 5000; justify-content: center; align-items: center;
+            backdrop-filter: blur(3px);
         }
+        .report-modal-content {
+            width: 700px; background: white; border-radius: 24px; padding: 30px;
+            position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2); animation: modalPop 0.3s ease;
+        }
+        @keyframes modalPop { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .report-close-btn { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; color: #aaa; }
+        .report-detail-title { font-size: 22px; font-weight: 700; color: #111; margin-bottom: 15px; }
+        .report-divider { width: 100%; height: 1px; background: #eee; margin-bottom: 20px; }
+        .report-box, .answer-box {
+            width: 100%; min-height: 120px; border: 1px solid #eef0f2; border-radius: 12px;
+            background: #fcfcfc; padding: 20px; margin-bottom: 20px; font-size: 15px;
+            color: #444; line-height: 1.7; box-sizing: border-box;
+        }
+        .answer-box { background: #f0f4ff; border-color: #dbe2ff; }
+        .confirm-btn {
+            width: 120px; height: 45px; border: none; border-radius: 12px;
+            background: #645495; color: white; font-size: 15px; font-weight: 700;
+            cursor: pointer; float: right; transition: 0.2s;
+        }
+        .confirm-btn:hover { background: #4f4178; }
     </style>
 </head>
 
 <body class="mypage">
 
-<%-- 💡 공통 헤더 include --%>
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
 
-<%-- 다른 페이지들과 완벽히 대칭되는 마이페이지 공통 감싸는 틀 --%>
 <div class="mypage-container">
+    <!-- 사이드바 고정 include -->
+    <aside class="mypage-sidebar">
+        <%@ include file="/WEB-INF/views/members/mypage/mypage-sidebar.jspf" %>
+    </aside>
 
-    <%-- 💡 공통 사이드바 include로 교체 (기존 하드코딩 제거) --%>
-    <%@ include file="/WEB-INF/views/members/mypage/mypage-sidebar.jspf" %>
-
-    <%-- 메인 본문 (style="flex: 1;"을 주어 사이드바 자리를 확실히 양보받음) --%>
-    <main class="report-main" style="flex: 1; min-width: 0;">
-
-        <h1 class="page-title">내 신고 목록</h1>
+    <!-- 메인 본문 -->
+    <main class="report-main">
+        <!-- 제목과 버튼을 한 줄로 배치 -->
+        <div class="page-header">
+            <h1 class="page-title">내 신고 목록</h1>
+            <div class="filter-container">
+                <a href="?filter=all" class="filter-btn ${param.filter == 'all' || empty param.filter ? 'active' : ''}">전체</a>
+                <a href="?filter=completed" class="filter-btn ${param.filter == 'completed' ? 'active' : ''}">답변 완료</a>
+                <a href="?filter=pending" class="filter-btn ${param.filter == 'pending' ? 'active' : ''}">답변 전</a>
+            </div>
+        </div>
 
         <section class="report-card">
+            <div class="report-table">
+                <!-- 테이블 헤더 -->
+                <div class="table-header">
+                    <div class="col-no">순번</div>
+                    <div class="col-title">제목</div>
+                    <div class="col-answer">답변여부</div>
+                    <div class="col-date">신고시각</div>
+                    <div class="col-manage">관리</div>
+                </div>
 
-            <div class="table-header">
-                <div class="col-no">순번</div>
-                <div class="col-title">제목</div>
-                <div class="col-answer">답변여부</div>
-                <div class="col-date">문의시각</div>
-                <div class="col-manage"></div>
+                <!-- ✅ DB 데이터 출력 루프 (하드코딩 제거, DB 연동) -->
+                <c:choose>
+                    <c:when test="${not empty reports and not empty reports.content}">
+                        <c:forEach var="r" items="${reports.content}" varStatus="status">
+                            <div class="table-row">
+                                <div class="col-no">${status.count}</div>
+                                <div class="col-title"
+                                     style="cursor:pointer; color:#1e2d4d; font-weight:500;"
+                                     onclick="openReportModal('${r.title}', '${r.content}', '${r.answerContent}')">
+                                    ${r.title}
+                                </div>
+                                <div class="col-answer">
+                                    <span class="${r.status == 'ANSWERED' ? 'status-complete' : 'status-pending'}">
+                                        ${r.status == 'ANSWERED' ? '답변 완료' : '답변 전'}
+                                    </span>
+                                </div>
+                                <div class="col-date">${r.createdAt}</div>
+                                <div class="col-manage">
+                                    <button type="button" class="btn-action btn-delete" onclick="deleteReport(${r.reportId})">삭제</button>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="empty-msg">신고하신 내역이 없습니다.</div>
+                    </c:otherwise>
+                </c:choose>
             </div>
 
-            <div class="table-row">
-                <div class="col-no">1.</div>
-                <div class="col-title report-title-link"
-                     onclick="openReportModal(
-                        '욕설 신고',
-                        '상대방이 채팅에서 지속적으로 욕설을 사용했습니다.',
-                        '해당 회원에게 경고 조치가 완료되었습니다.'
-                     )">
-                    욕 신고
+            <!-- 페이지네이션 (Page 객체 기반) -->
+            <c:if test="${not empty reports and reports.totalPages > 0}">
+                <div class="pagination">
+                    <c:forEach begin="0" end="${reports.totalPages - 1}" var="i">
+                        <a href="?page=${i + 1}" class="page-link ${reports.number == i ? 'active' : ''}">${i + 1}</a>
+                    </c:forEach>
                 </div>
-                <div class="col-answer">답변 전</div>
-                <div class="col-date">05/04 15:33</div>
-                <div class="col-manage">
-                    <button class="delete-btn">삭제하기</button>
-                </div>
-            </div>
-
-            <div class="table-row">
-                <div class="col-no">2.</div>
-                <div class="col-title report-title-link"
-                     onclick="openReportModal(
-                        '패드립 신고',
-                        '채팅 중 패드립 및 비하 발언을 했습니다.',
-                        '운영진 확인 후 7일 정지 처리되었습니다.'
-                     )">
-                    패드립 신고
-                </div>
-                <div class="col-answer complete">답변 완료</div>
-                <div class="col-date">05/03 19:52</div>
-                <div class="col-manage">
-                    <button class="delete-btn">삭제하기</button>
-                </div>
-            </div>
-
-            <div class="empty-line"></div>
-            <div class="empty-line"></div>
-            <div class="empty-line"></div>
-            <div class="empty-line"></div>
-            <div class="empty-line"></div>
-            <div class="empty-line"></div>
-            <div class="empty-line"></div>
-
-            <div class="pagination">
-                1
-            </div>
-
+            </c:if>
         </section>
-
     </main>
-
 </div>
 
+<!-- 신고 상세 팝업 -->
 <div id="reportModal" class="report-modal-overlay">
     <div class="report-modal-content">
         <span class="report-close-btn" onclick="closeReportModal()">&times;</span>
         <div class="report-detail-title" id="modalTitle">신고 상세 내용</div>
         <div class="report-divider"></div>
+
+        <div style="font-weight:bold; margin-bottom:5px; color:#666;">[신고 내용]</div>
         <div class="report-box" id="modalReport">신고 내용</div>
+
+        <div style="font-weight:bold; margin-bottom:5px; color:#666;">[관리자 답변]</div>
         <div class="answer-box" id="modalAnswer">관리자 답변</div>
+
         <button class="confirm-btn" onclick="closeReportModal()">확인</button>
     </div>
 </div>
- <%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
 
+<%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
 
 <script>
-    // 신고 팝업 열기
     function openReportModal(title, report, answer){
         document.getElementById('modalTitle').innerText = title;
         document.getElementById('modalReport').innerText = report;
-        document.getElementById('modalAnswer').innerText = answer;
+        document.getElementById('modalAnswer').innerText = (answer && answer.trim() !== "") ? answer : "아직 답변이 등록되지 않았습니다.";
         document.getElementById('reportModal').style.display = 'flex';
     }
 
-    // 신고 팝업 닫기
     function closeReportModal(){
         document.getElementById('reportModal').style.display = 'none';
     }
 
-    // 바깥 어두운 배경 클릭 시 팝업 닫기
+    function deleteReport(reportId) {
+        if (confirm("정말로 이 신고 내역을 삭제하시겠습니까?")) {
+            fetch('${pageContext.request.contextPath}/mypage/reports/delete/' + reportId, {
+                method: 'DELETE'
+            })
+            .then(res => {
+                if (res.ok) {
+                    alert("삭제되었습니다.");
+                    location.reload();
+                } else {
+                    alert("삭제에 실패했습니다.");
+                }
+            })
+            .catch(err => alert("서버 오류가 발생했습니다."));
+        }
+    }
+
     window.addEventListener('click', function(event){
         const modal = document.getElementById('reportModal');
         if(event.target === modal){
             closeReportModal();
         }
     });
-       const hamburgerBtn = document.querySelector('.hamburger-btn');
-       const sidebar = document.querySelector('nav.sidebar');
 
-       if (hamburgerBtn && sidebar) {
-           hamburgerBtn.addEventListener('click', function () {
-               sidebar.classList.toggle('open');
-           });
-       }
+    document.addEventListener("DOMContentLoaded", function () {
+        const hamburgerBtn = document.querySelector('.hamburger-btn');
+        const sidebar = document.querySelector('nav.sidebar');
+        if (hamburgerBtn && sidebar) {
+            hamburgerBtn.addEventListener('click', function () {
+                sidebar.classList.toggle('open');
+            });
+        }
+    });
 </script>
 
 </body>
