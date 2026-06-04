@@ -40,4 +40,11 @@ public class SubscriptionController {
     public String ottPage() {
         return "subscription/ott";
     }
+
+    //paymentSuccess
+    @GetMapping("/paymentSuccess")
+    public String paymentSuccess() {
+
+        return "subscription/paymentSuccess";
+    }
 }
