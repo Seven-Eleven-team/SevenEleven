@@ -1,14 +1,18 @@
 package com.bu.jichulmate.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.*;
 
 @Configuration
+@RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
     @Value("${file.upload.dir}")
     private String uploadDir;
+
+    private final AdminCheckInterceptor adminCheckInterceptor;
 
     /**
      * 정적 리소스 매핑
@@ -103,5 +107,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "/support/type",
                         "/support/api/faqs/**"
                 );
+        //  관리자 페이지 권한 체크 인터셉터
+        registry.addInterceptor(adminCheckInterceptor)
+                .addPathPatterns("/admin/**", "/api/admin/**");
     }
 }
