@@ -642,15 +642,15 @@ header .auth-links span {
 
 .payment-buttons button {
 
-    width: 260px;
+    width: 160px;
 
-    height: 70px;
+    height: 50px;
 
     border: none;
 
-    border-radius: 20px;
+    border-radius: 12px;
 
-    font-size: 28px;
+    font-size: 18px;
 
     cursor: pointer;
 

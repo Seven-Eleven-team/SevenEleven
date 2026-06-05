@@ -48,6 +48,9 @@ public class Subscription {
     @Column(name = "CREATED_AT", updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "SERIAL_CODE", nullable = false, unique = true, length = 50)
+    private String serialCode;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();

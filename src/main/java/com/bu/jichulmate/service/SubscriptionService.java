@@ -97,6 +97,10 @@ public class SubscriptionService {
                 "ACTIVE"
         );
 
+        subscription.setSerialCode(
+                "SUB-" + System.currentTimeMillis()
+        );
+
         // 저장
         subscriptionRepository.save(subscription);
     }

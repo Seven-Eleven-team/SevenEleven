@@ -20,6 +20,7 @@
 
 
 </head>
+
 <body>
 
 <header>
@@ -527,6 +528,7 @@
         </div>
         <!-- modal-overlay 끝 -->
 
+
         <div id="paymentModal" class="payment-modal">
 
             <div class="payment-box">
@@ -579,6 +581,24 @@
             </div>
 
         </div>
+<form id="purchaseForm"
+      action="/subscription/ott"
+      method="post">
+
+    <input type="hidden"
+           name="partyId"
+           id="partyId">
+
+    <input type="hidden"
+           name="monthlyFee"
+           id="monthlyFee">
+
+    <input type="hidden"
+           name="periodMonths"
+           id="periodMonths">
+
+</form>
+
 
         <div class="fixed-icons">
 
@@ -1196,6 +1216,29 @@ function updatePriceButtons() {
         const serviceName =
             document.getElementById('detailTitle').innerText;
 
+        let serviceId = 0;
+
+        if(serviceName.includes('넷플릭스')) serviceId = 1;
+        else if(serviceName.includes('유튜브')) serviceId = 2;
+        else if(serviceName.includes('티빙')) serviceId = 3;
+        else if(serviceName.includes('디즈니')) serviceId = 4;
+        else if(serviceName.includes('라프텔')) serviceId = 5;
+        else if(serviceName.includes('웨이브')) serviceId = 6;
+        else if(serviceName.includes('왓챠')) serviceId = 7;
+        else if(serviceName.includes('ChatGPT')) serviceId = 8;
+        else if(serviceName.includes('Gemini')) serviceId = 9;
+        else if(serviceName.includes('Claude')) serviceId = 10;
+        else if(serviceName.includes('CapCut')) serviceId = 11;
+        else if(serviceName.includes('Adobe')) serviceId = 12;
+        else if(serviceName.includes('Duolingo')) serviceId = 13;
+        else if(serviceName.includes('밀리')) serviceId = 14;
+        else if(serviceName.includes('Microsoft')) serviceId = 15;
+        else if(serviceName.includes('폴라리스')) serviceId = 16;
+
+        document.getElementById("partyId").value = serviceId;
+        document.getElementById("monthlyFee").value = selectedPrice;
+        document.getElementById("periodMonths").value = selectedMonth;
+
         document.getElementById('payService').innerText =
             serviceName;
 
@@ -1219,7 +1262,7 @@ function updatePriceButtons() {
 
     function confirmPayment() {
 
-        location.href = "/subscription/paymentSuccess";
+        document.getElementById("purchaseForm").submit();
     }
 
 
