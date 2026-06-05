@@ -7,10 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
+
+    // 상태가 'ACTIVE'이고, 만료일(endDate)이 우리가 지정한 날짜(오늘+3일)와 일치하는 구독 목록 조회
+    List<Subscription> findByEndDateAndStatus(LocalDate endDate, String status);
 
     // 특정 회원 + 상태 조회
     List<Subscription> findByUserAndStatus(
