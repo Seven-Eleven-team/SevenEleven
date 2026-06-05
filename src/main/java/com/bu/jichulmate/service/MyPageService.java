@@ -27,7 +27,6 @@ public class MyPageService {
     private final AccountRepository accountRepository;
     private final BoardRepository boardRepository;
     private final InquiryRepository inquiryRepository;
-    private final ReportRepository reportRepository;
     private final NotificationLogRepository notificationLogRepository;
     private final PartyRepository partyRepository;
     private final PartySellerRepository partySellerRepository;
@@ -45,7 +44,6 @@ public class MyPageService {
         Account primaryAccount =
                 accountRepository.findByUserAndIsPrimary(user, "Y").orElse(null);
 
-        // [수정] findByUserId가 List 반환으로 변경되었으므로 isEmpty()로 체크
         boolean isSeller =
                 !partySellerRepository.findByUserId(userId).isEmpty();
 
@@ -105,12 +103,12 @@ public class MyPageService {
         return new PageImpl<>(accounts, pageable, accounts.size());
     }
 
+    // ★ 수정된 부분: isDeleted 관련 로직("N" 전달 부분) 완전 제거
     public Page<Board> getMyBoardList(Long userId, Pageable pageable) {
         getUser(userId);
 
-        return boardRepository.findByUserIdAndIsDeletedOrderByCreatedAtDesc(
+        return boardRepository.findByUserIdOrderByCreatedAtDesc(
                 userId,
-                "N",
                 pageable
         );
     }

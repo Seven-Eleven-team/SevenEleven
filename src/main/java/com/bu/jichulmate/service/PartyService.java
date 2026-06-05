@@ -31,13 +31,11 @@ public class PartyService {
         }
         PartySeller seller = sellers.get(0);
 
-        SubscriptionMaster service = subscriptionMasterRepository.findById(request.getServiceId())
+        subscriptionMasterRepository.findById(request.getServiceId())
                 .orElseThrow(() -> new RuntimeException("서비스 정보를 찾을 수 없습니다."));
 
-        // 시퀀스로 ID 채번
         Long partyId = partyPostRepository.getNextSequenceValue();
 
-        // 네이티브 SQL로 직접 INSERT
         partyPostRepository.insertDirect(
                 partyId,
                 seller.getId(),
@@ -46,8 +44,6 @@ public class PartyService {
                 request.getSharePassword(),
                 request.getMonthlyPrice(),
                 LocalDateTime.now(),
-                service.getServiceCategory(),
-                seller.getUserId(),
                 request.getDescription()
         );
 

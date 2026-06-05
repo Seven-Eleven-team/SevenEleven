@@ -14,6 +14,12 @@
 <body>
 
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
+<script>
+    document.querySelector('.site-header')?.classList.add('is-solid');
+    document.body.classList.add('is-header-ready');
+    document.body.classList.add('is-opening-loaded');
+    document.body.classList.add('is-fab-ready');
+</script>
 
     <main class="dashboard-container">
 
@@ -258,6 +264,7 @@
                 </div>
         </main>
 
+            <%@ include file="/WEB-INF/views/common/layout/floatingBtn.jspf" %>
             <%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
 
                 <div id="quickEntryModal" class="modal-overlay" style="display: none;">
