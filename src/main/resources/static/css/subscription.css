@@ -357,7 +357,7 @@ html {
 
 /* 헤더 */
 
-header {
+/*header {
     background-color: var(--header-bg);
     color: white;
     height: 60px;
@@ -395,11 +395,12 @@ header .auth-links span {
     cursor: pointer;
     margin-left: 10px;
 }
-
+*/
 /* 메인 */
 
 .main-container {
     display: flex;
+
     height: calc(100vh - 60px);
     width: 100%;
     background-color: transparent;
@@ -716,4 +717,9 @@ header .auth-links span {
 .swiper-slide-active .logo-box {
     transform: scale(1.15);
     transition: all 0.5s ease;
+}
+
+.site-header {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
 }

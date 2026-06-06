@@ -23,15 +23,8 @@
 
 <body>
 
-<header>
-    <div class="menu-icon">☰</div>
 
-    <h1>지출메이트</h1>
-
-    <div class="auth-links">
-        <span>로그인 / 회원가입</span>
-    </div>
-</header>
+<%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
 
 <div class="main-container"
      id="mainContainer">
@@ -1267,6 +1260,11 @@ function updatePriceButtons() {
 
 
 </script>
+
+<script src="${pageContext.request.contextPath}/js/nav-wave.js"></script>
+
+
+
 
 </body>
 </html>

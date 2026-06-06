@@ -6,7 +6,7 @@
             <a href="${pageContext.request.contextPath}/expense" data-auth-required="true">지출관리</a>
         </li>
         <li>
-            <a href="${pageContext.request.contextPath}/subscription" data-auth-required="true">OTT 구독</a>
+            <a href="${pageContext.request.contextPath}/subscription/ott" data-auth-required="true">OTT 구독</a>
         </li>
         <li>
             <a href="${pageContext.request.contextPath}/dashboard" data-auth-required="true">지출통계</a>

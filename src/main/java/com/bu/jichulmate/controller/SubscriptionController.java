@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import jakarta.servlet.http.HttpSession;
+import com.bu.jichulmate.util.SessionUtils;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,12 +25,18 @@ public class SubscriptionController {
 
     // 구독 저장
     @PostMapping("/ott")
-    public String create(SubscriptionCreateRequest request) {
+    public String create(
+            SubscriptionCreateRequest request,
+            HttpSession session
+    ) {
 
-        // TODO : 로그인 연동 후 실제 사용자 ID 적용
-        Long userId = 2L;
+        Long userId =
+                SessionUtils.getLoginUserId(session);
 
-        subscriptionService.createSubscription(userId, request);
+        subscriptionService.createSubscription(
+                userId,
+                request
+        );
 
         return "subscription/paymentSuccess";
     }
