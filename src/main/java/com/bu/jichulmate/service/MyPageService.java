@@ -27,7 +27,6 @@ public class MyPageService {
     private final AccountRepository accountRepository;
     private final BoardRepository boardRepository;
     private final InquiryRepository inquiryRepository;
-    private final ReportRepository reportRepository;
     private final NotificationLogRepository notificationLogRepository;
     private final PartyRepository partyRepository;
     private final PartySellerRepository partySellerRepository;
@@ -46,7 +45,7 @@ public class MyPageService {
                 accountRepository.findByUserAndIsPrimary(user, "Y").orElse(null);
 
         boolean isSeller =
-                partySellerRepository.findByUserId(userId).isPresent();
+                !partySellerRepository.findByUserId(userId).isEmpty();
 
         long unreadNotiCount =
                 notificationLogRepository.countByUserAndIsSuccess(user, "N");
@@ -70,18 +69,13 @@ public class MyPageService {
         return MyPageSummaryResponse.builder()
                 .userId(user.getUserId())
                 .loginId(user.getLoginId())
+                .email(user.getLoginId())
                 .nickname(user.getNickname())
                 .gender(user.getGender())
                 .birthDate(user.getBirthDate())
                 .role(user.getRole())
                 .sellerRegistered(isSeller)
-
-                /*
-                 * DB 2.0 기준:
-                 * 기존 EMAIL_NOTIFY 컬럼이 아니라 현재 USERS.IS_NOTI_ENABLED 값을 사용한다.
-                 */
                 .emailNotify(isNotificationEnabled(user))
-
                 .activeSubscriptionCount(activeSubscriptions.size())
                 .unreadNotificationCount((int) unreadNotiCount)
                 .goals(goalList)
@@ -109,21 +103,12 @@ public class MyPageService {
         return new PageImpl<>(accounts, pageable, accounts.size());
     }
 
+    // ★ 수정된 부분: isDeleted 관련 로직("N" 전달 부분) 완전 제거
     public Page<Board> getMyBoardList(Long userId, Pageable pageable) {
-        /*
-         * 기존 코드:
-         * boardRepository.findByUserAndIsDeletedOrderByCreatedAtDesc(user, "N", pageable)
-         *
-         * 현재 BoardRepository는 userId 기준 메서드를 가지고 있으므로,
-         * Board.USER_ID 컬럼과 직접 매칭되는 userId 기준 조회로 통일한다.
-         *
-         * getUser(userId)는 회원 존재 여부 검증을 위해 유지한다.
-         */
         getUser(userId);
 
-        return boardRepository.findByUserIdAndIsDeletedOrderByCreatedAtDesc(
+        return boardRepository.findByUserIdOrderByCreatedAtDesc(
                 userId,
-                "N",
                 pageable
         );
     }

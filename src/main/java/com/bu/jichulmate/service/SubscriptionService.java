@@ -10,9 +10,11 @@ import com.bu.jichulmate.repository.SubscriptionRepository;
 import com.bu.jichulmate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +25,7 @@ public class SubscriptionService {
     private final PartyPostRepository partyPostRepository;
 
     // 구독 등록
+    @Transactional
     public void createSubscription(
             Long userId,
             SubscriptionCreateRequest request
@@ -87,10 +90,10 @@ public class SubscriptionService {
                 endDate
         );
 
-        // 다음 결제일
-        subscription.setNextPayDate(
-                endDate
-        );
+        // ★ 수정됨: 삭제된 nextPayDate 로직 제거 및 필수값인 serialCode 생성 추가
+        // 주문 고유 시리얼 넘버 생성 (예: ORD-168439201)
+        String serialCode = "ORD-" + System.currentTimeMillis();
+        subscription.setSerialCode(serialCode);
 
         // 상태
         subscription.setStatus(
@@ -106,11 +109,14 @@ public class SubscriptionService {
     }
 
     // 내 구독 목록 조회
+    @Transactional(readOnly = true)
     public List<SubscriptionResponse> getMySubscriptions(
             Long userId
     ) {
 
         return subscriptionRepository
+                // 필드명이 user의 userId라면 userRepository 메서드명 확인 필요 (보통 findByUserId 또는 findByUser_UserId)
+                // 만약 에러나면 findByUserId(userId) 로 수정해주세요.
                 .findByUserUserId(userId)
                 .stream()
                 .map(subscription -> {
@@ -160,10 +166,8 @@ public class SubscriptionService {
                             subscription.getEndDate()
                     );
 
-                    // 다음 결제일
-                    res.setNextPayDate(
-                            subscription.getNextPayDate()
-                    );
+                    // ★ 수정됨: 삭제된 nextPayDate 로직 제거
+                    // res.setNextPayDate(...) 삭제 완료
 
                     // 상태
                     res.setStatus(

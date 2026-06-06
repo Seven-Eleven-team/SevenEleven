@@ -2,8 +2,10 @@ package com.bu.jichulmate.controller;
 
 import com.bu.jichulmate.domain.Category;
 import com.bu.jichulmate.domain.Expense;
+import com.bu.jichulmate.domain.SavingGoal;
 import com.bu.jichulmate.repository.CategoryRepository;
 import com.bu.jichulmate.repository.ExpenseRepository;
+import com.bu.jichulmate.repository.GoalRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,29 +15,30 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 
 @Controller
-@RequiredArgsConstructor // 레포지토리 주입을 위해 추가!
+@RequiredArgsConstructor
 public class ExpenseController {
 
     private final ExpenseRepository expenseRepository;
     private final CategoryRepository categoryRepository;
+    private final GoalRepository goalRepository; // ★ 추가: 목표 데이터를 찾기 위해 주입
 
-    // ==========================================
-    // 1. 기존 화면을 띄워주는 기능
-    // ==========================================
     @GetMapping("/expense/input")
     public String showExpenseForm() {
-        return "expense/form"; // expense/form.jsp 화면을 띄움
+        return "expense/form";
     }
 
-    // ==========================================
-    // 2. 바텀 시트에서 넘어온 지출 데이터를 DB에 저장하는 기능
-    // ==========================================
     @PostMapping("/api/v1/expenses")
-    @ResponseBody // ★ 핵심! 화면(jsp)을 찾지 말고 데이터(글자)만 바로 응답하라는 뜻
+    @ResponseBody
     public ResponseEntity<String> saveExpense(@RequestBody ExpenseRequestDto dto) {
 
         Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 없습니다."));
+
+        // ★ 추가: JS에서 넘겨준 goalId가 있다면 DB에서 목표를 찾아옵니다.
+        SavingGoal savingGoal = null;
+        if (dto.getGoalId() != null) {
+            savingGoal = goalRepository.findById(dto.getGoalId()).orElse(null);
+        }
 
         Expense expense = Expense.builder()
                 .userId(dto.getUserId())
@@ -43,6 +46,7 @@ public class ExpenseController {
                 .amount(dto.getAmount())
                 .expenseDate(dto.getExpenseDate())
                 .isFixed(dto.getIsFixed())
+                .savingGoal(savingGoal) // ★ 추가: 찾은 목표를 지출 내역에 쏙 넣기
                 .build();
 
         expenseRepository.save(expense);
@@ -50,11 +54,6 @@ public class ExpenseController {
         return ResponseEntity.ok("지출 내역 저장 성공!");
     }
 
-
-
-    // ==========================================
-    // 프론트엔드에서 넘어오는 데이터를 담을 DTO 바구니
-    // ==========================================
     @Data
     static class ExpenseRequestDto {
         private Long userId;
@@ -62,6 +61,7 @@ public class ExpenseController {
         private Long amount;
         private LocalDate expenseDate;
         private String isFixed;
+        private Long goalId; // ★ 핵심: 구멍 난 바구니 수리 (목표 ID를 드디어 받을 수 있습니다!)
     }
 
     @Data
@@ -71,9 +71,6 @@ public class ExpenseController {
         private Long itemPrice;
     }
 
-    // ==========================================
-    // ★ 새로 추가: 지출 내역 수정 API
-    // ==========================================
     @PutMapping("/api/v1/expenses/{id}")
     @ResponseBody
     public ResponseEntity<String> updateExpense(@PathVariable Long id, @RequestBody ExpenseRequestDto dto) {
@@ -82,21 +79,23 @@ public class ExpenseController {
         Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("카테고리가 없습니다."));
 
-        // 엔티티 업데이트 (도메인 객체에 update 로직이 있어야 합니다. 없으면 setter 사용)
-        expense.updateExpense(category, dto.getAmount(), dto.getExpenseDate(), dto.getIsFixed());
+        // ★ 추가: 수정할 때 목표가 바뀌었다면 다시 찾아옵니다.
+        SavingGoal savingGoal = null;
+        if (dto.getGoalId() != null) {
+            savingGoal = goalRepository.findById(dto.getGoalId()).orElse(null);
+        }
+
+        // 엔티티 업데이트
+        expense.updateExpense(category, dto.getAmount(), dto.getExpenseDate(), dto.getIsFixed(), savingGoal);
         expenseRepository.save(expense);
 
         return ResponseEntity.ok("지출 내역 수정 완료!");
     }
 
-    // ==========================================
-    // ★ 새로 추가: 지출 내역 삭제 API
-    // ==========================================
     @DeleteMapping("/api/v1/expenses/{id}")
     @ResponseBody
     public ResponseEntity<String> deleteExpense(@PathVariable Long id) {
         expenseRepository.deleteById(id);
         return ResponseEntity.ok("지출 내역 삭제 완료!");
     }
-
 }

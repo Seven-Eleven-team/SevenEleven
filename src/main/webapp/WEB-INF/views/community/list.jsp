@@ -4,13 +4,19 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/community.css">
+    <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
     <title>${categoryLabel} 게시판 | 지출메이트</title>
 </head>
 <body class="community-body">
 
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
+<script>
+    document.querySelector('.site-header')?.classList.add('is-solid');
+    document.body.classList.add('is-header-ready');
+    document.body.classList.add('is-opening-loaded');
+    document.body.classList.add('is-fab-ready');
+</script>
 <%@ include file="/WEB-INF/views/common/include/flash-message.jspf" %>
 
 <main class="community-page">
@@ -41,17 +47,40 @@
                    class="${category == 'FIFTIES' ? 'is-active' : ''}">50대 이상</a>
             </nav>
 
-            <a href="${pageContext.request.contextPath}/community/write?category=${category}"
-               class="board-write-btn"
-               data-auth-required="true">
-                게시글 작성
-            </a>
+            <c:choose>
+                <c:when test="${not empty loginUserId and not canWriteCurrentCategory}">
+                    <span class="board-write-btn is-disabled"
+                          title="${categoryWriteGuideMessage}">
+                        조회 전용
+                    </span>
+                </c:when>
+
+                <c:otherwise>
+                    <a href="${pageContext.request.contextPath}/community/write?category=${category}"
+                       class="board-write-btn"
+                       data-auth-required="true">
+                        게시글 작성
+                    </a>
+                </c:otherwise>
+            </c:choose>
         </div>
+
+        <c:if test="${not empty loginUserId and not empty userAgeCategoryLabel}">
+            <p class="board-guide-text">
+                내 나이대 게시판: ${userAgeCategoryLabel} 게시판
+            </p>
+        </c:if>
+
+        <c:if test="${not empty loginUserId and not empty categoryWriteGuideMessage and not canWriteCurrentCategory}">
+            <p class="board-guide-text board-guide-warning">
+                    ${categoryWriteGuideMessage}
+            </p>
+        </c:if>
 
         <div class="board-header-row">
             <div>순번</div>
             <div>제목</div>
-            <div>ID</div>
+            <div>작성자</div>
             <div>게시일</div>
             <div>조회수</div>
         </div>
@@ -144,9 +173,12 @@
     </section>
 </main>
 
+<%@ include file="/WEB-INF/views/common/layout/floatingBtn.jspf" %>
+<%@ include file="/WEB-INF/views/common/modal/faqModal.jspf" %>
 <%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
 <%@ include file="/WEB-INF/views/common/modal/authModal.jspf" %>
 <%@ include file="/WEB-INF/views/common/include/scripts.jspf" %>
+<script src="${pageContext.request.contextPath}/js/pages/faq.js"></script>
 
 </body>
 </html>

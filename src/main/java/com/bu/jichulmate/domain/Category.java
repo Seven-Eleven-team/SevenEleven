@@ -19,12 +19,9 @@ public class Category {
     @Column(name = "NAME", nullable = false, length = 50)
     private String name;
 
-    @Column(name = "IS_ACTIVE", nullable = false, length = 1)
-    private String isActive = "Y";
 
     @Builder
-    public Category(String name, String isActive) {
+    public Category(String name) {
         this.name = name;
-        this.isActive = isActive;
     }
 }

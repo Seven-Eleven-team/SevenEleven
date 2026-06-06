@@ -16,8 +16,8 @@ public interface CommunityBoardRepository extends JpaRepository<Board, Long> {
             value = """
                 SELECT b
                 FROM Board b
+                LEFT JOIN FETCH b.user
                 WHERE b.boardType = :category
-                  AND b.isDeleted = 'N'
                   AND (
                         :keyword IS NULL
                         OR :keyword = ''
@@ -30,7 +30,6 @@ public interface CommunityBoardRepository extends JpaRepository<Board, Long> {
                 SELECT COUNT(b)
                 FROM Board b
                 WHERE b.boardType = :category
-                  AND b.isDeleted = 'N'
                   AND (
                         :keyword IS NULL
                         OR :keyword = ''
@@ -49,8 +48,8 @@ public interface CommunityBoardRepository extends JpaRepository<Board, Long> {
             value = """
                 SELECT b
                 FROM Board b
+                LEFT JOIN FETCH b.user
                 WHERE b.boardType = :category
-                  AND b.isDeleted = 'N'
                   AND (
                         :keyword IS NULL
                         OR :keyword = ''
@@ -63,7 +62,6 @@ public interface CommunityBoardRepository extends JpaRepository<Board, Long> {
                 SELECT COUNT(b)
                 FROM Board b
                 WHERE b.boardType = :category
-                  AND b.isDeleted = 'N'
                   AND (
                         :keyword IS NULL
                         OR :keyword = ''
@@ -82,8 +80,8 @@ public interface CommunityBoardRepository extends JpaRepository<Board, Long> {
             value = """
                 SELECT b
                 FROM Board b
+                LEFT JOIN FETCH b.user
                 WHERE b.boardType IN :categories
-                  AND b.isDeleted = 'N'
                   AND b.userId = :userId
                 ORDER BY b.boardId DESC
             """,
@@ -91,7 +89,6 @@ public interface CommunityBoardRepository extends JpaRepository<Board, Long> {
                 SELECT COUNT(b)
                 FROM Board b
                 WHERE b.boardType IN :categories
-                  AND b.isDeleted = 'N'
                   AND b.userId = :userId
             """
     )
@@ -104,9 +101,9 @@ public interface CommunityBoardRepository extends JpaRepository<Board, Long> {
     @Query("""
         SELECT b
         FROM Board b
+        LEFT JOIN FETCH b.user
         WHERE b.boardId = :boardId
           AND b.boardType IN :categories
-          AND b.isDeleted = 'N'
     """)
     Board findCommunityPost(
             @Param("boardId") Long boardId,
@@ -119,7 +116,6 @@ public interface CommunityBoardRepository extends JpaRepository<Board, Long> {
         SET b.viewsCount = COALESCE(b.viewsCount, 0) + 1
         WHERE b.boardId = :boardId
           AND b.boardType IN :categories
-          AND b.isDeleted = 'N'
     """)
     int increaseViewCount(
             @Param("boardId") Long boardId,

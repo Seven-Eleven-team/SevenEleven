@@ -43,6 +43,10 @@ public class PartySeller {
     @Column(name = "HAS_EXPERIENCE", nullable = false, length = 1)
     private String hasExperience;
 
+    @Builder.Default
+    @Column(name = "IS_APPROVED", nullable = false, length = 1)
+    private String isApproved = "N";
+
     @Column(name = "CREATED_AT", nullable = false, updatable = false)
     private LocalDate createdAt;
 

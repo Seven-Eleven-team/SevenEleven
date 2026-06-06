@@ -38,9 +38,6 @@ public class Subscription {
     @Column(name = "END_DATE", nullable = false)
     private LocalDate endDate;
 
-    @Column(name = "NEXT_PAY_DATE")
-    private LocalDate nextPayDate;
-
     @Builder.Default
     @Column(name = "STATUS", nullable = false)
     private String status = "ACTIVE";

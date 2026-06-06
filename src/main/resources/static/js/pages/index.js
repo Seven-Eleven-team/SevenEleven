@@ -1,8 +1,16 @@
 document.addEventListener("DOMContentLoaded", function () {
     document.body.classList.add("is-opening-running");
+    document.body.classList.remove(
+        "is-opening-loaded",
+        "is-header-ready",
+        "is-fab-ready",
+        "is-scroll-cue-ready"
+    );
 
     const header = document.querySelector(".site-header");
     const heroSection = document.querySelector(".hero-section");
+    const heroBgVideo = document.querySelector(".hero-bg-video");
+    const heroScrollCue = document.querySelector(".hero-scroll-cue");
     const cardSection = document.querySelector(".scroll-card-section");
     const cards = Array.from(document.querySelectorAll(".service-card"));
     const fanSection = document.querySelector(".fan-card-section");
@@ -13,9 +21,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const globalMenuBackdrop = document.getElementById("globalMenuBackdrop");
     const globalMenuClose = document.getElementById("globalMenuClose");
 
+    const OPENING_TIMING = {
+        headerStart: 2520,
+        fabStart: 3060,
+        scrollCueStart: 3820,
+        openingEnd: 4100
+    };
+
     let ticking = false;
 
     function updateHeaderState() {
+        if (header.classList.contains('is-locked')) return;
+
         if (!header || !heroSection) {
             if (header) {
                 header.classList.add("is-solid");
@@ -96,6 +113,19 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    function bindHeroScrollCue() {
+        if (!heroScrollCue || !cardSection) {
+            return;
+        }
+
+        heroScrollCue.addEventListener("click", function () {
+            cardSection.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        });
+    }
+
     function clamp(value, min, max) {
         return Math.max(min, Math.min(max, value));
     }
@@ -165,6 +195,51 @@ document.addEventListener("DOMContentLoaded", function () {
         ticking = true;
     }
 
+    function waitForHeroVideoReady() {
+        return new Promise(function (resolve) {
+            if (!heroBgVideo) {
+                resolve();
+                return;
+            }
+
+            let isResolved = false;
+
+            function finish() {
+                if (isResolved) {
+                    return;
+                }
+
+                isResolved = true;
+                window.clearTimeout(fallbackTimer);
+
+                heroBgVideo.removeEventListener("loadeddata", finish);
+                heroBgVideo.removeEventListener("canplay", finish);
+                heroBgVideo.removeEventListener("error", finish);
+
+                const playPromise = heroBgVideo.play && heroBgVideo.play();
+
+                if (playPromise && typeof playPromise.catch === "function") {
+                    playPromise.catch(function () {
+                        // muted autoplay가 브라우저 정책으로 막혀도 오프닝은 계속 진행한다.
+                    });
+                }
+
+                resolve();
+            }
+
+            const fallbackTimer = window.setTimeout(finish, 1400);
+
+            if (heroBgVideo.readyState >= 2) {
+                window.requestAnimationFrame(finish);
+                return;
+            }
+
+            heroBgVideo.addEventListener("loadeddata", finish, { once: true });
+            heroBgVideo.addEventListener("canplay", finish, { once: true });
+            heroBgVideo.addEventListener("error", finish, { once: true });
+        });
+    }
+
     function startOpeningAnimation() {
         if (document.body.classList.contains("is-opening-loaded")) {
             return;
@@ -173,20 +248,29 @@ document.addEventListener("DOMContentLoaded", function () {
         document.body.classList.add("is-opening-loaded");
 
         window.setTimeout(function () {
+            document.body.classList.add("is-header-ready");
+        }, OPENING_TIMING.headerStart);
+
+        window.setTimeout(function () {
+            document.body.classList.add("is-fab-ready");
+        }, OPENING_TIMING.fabStart);
+
+        window.setTimeout(function () {
+            document.body.classList.add("is-scroll-cue-ready");
+        }, OPENING_TIMING.scrollCueStart);
+
+        window.setTimeout(function () {
             document.body.classList.remove("is-opening-running");
-        }, 2600);
+        }, OPENING_TIMING.openingEnd);
 
         updateHeaderState();
         updateCards();
     }
 
     bindGlobalMenu();
+    bindHeroScrollCue();
 
-    if (document.readyState === "complete") {
-        startOpeningAnimation();
-    } else {
-        window.addEventListener("load", startOpeningAnimation);
-    }
+    waitForHeroVideoReady().then(startOpeningAnimation);
 
     window.addEventListener("scroll", handleScroll, { passive: true });
 

@@ -4,62 +4,80 @@ import com.bu.jichulmate.domain.PartyPost;
 import com.bu.jichulmate.domain.PartySeller;
 import com.bu.jichulmate.domain.SubscriptionMaster;
 import com.bu.jichulmate.dto.party.PartyPostRequest;
-import com.bu.jichulmate.repository.PartyRepository;
-import com.bu.jichulmate.repository.UserRepository;
+import com.bu.jichulmate.repository.PartyPostRepository;
+import com.bu.jichulmate.repository.PartySellerRepository;
+import com.bu.jichulmate.repository.SubscriptionMasterRepository;
 import com.bu.jichulmate.response.PartyDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class PartyService {
 
-    private final PartyRepository partyRepository;
-    private final UserRepository userRepository;
+    private final PartyPostRepository partyPostRepository;
+    private final PartySellerRepository partySellerRepository;
+    private final SubscriptionMasterRepository subscriptionMasterRepository;
 
+    @Transactional
     public PartyDetailResponse createPost(PartyPostRequest request) {
-        PartySeller seller = new PartySeller();  // seller 객체 사용
-        seller.setUserId(request.getSellerId());
+        List<PartySeller> sellers = partySellerRepository.findByUserId(request.getSellerId());
+        if (sellers.isEmpty()) {
+            throw new RuntimeException("판매자 정보를 찾을 수 없습니다.");
+        }
+        PartySeller seller = sellers.get(0);
 
-        PartyPost post = PartyPost.builder()
-                .seller(seller)                              // hostUser → seller
-                .shareId(request.getShareId())
-                .sharePassword(request.getSharePassword())
-                .monthlyPrice(request.getMonthlyPrice())
-                .description(request.getDescription())
-                .status("WAITING")                           // RECRUITING → WAITING
-                .build();
+        subscriptionMasterRepository.findById(request.getServiceId())
+                .orElseThrow(() -> new RuntimeException("서비스 정보를 찾을 수 없습니다."));
 
-        PartyPost saved = partyRepository.save(post);
+        Long partyId = partyPostRepository.getNextSequenceValue();
+
+        partyPostRepository.insertDirect(
+                partyId,
+                seller.getId(),
+                request.getServiceId(),
+                request.getShareId(),
+                request.getSharePassword(),
+                request.getMonthlyPrice(),
+                LocalDateTime.now(),
+                request.getDescription()
+        );
+
+        PartyPost saved = partyPostRepository.findById(partyId)
+                .orElseThrow(() -> new RuntimeException("등록 실패"));
         return toResponse(saved);
     }
 
     public List<PartyDetailResponse> getAllPosts() {
-        return partyRepository.findAll()
+        return partyPostRepository.findAll()
                 .stream()
-                .filter(post -> !"REJECTED".equals(post.getStatus()))  // isDeleted() 없음
+                .filter(post -> !"REJECTED".equals(post.getStatus()))
                 .map(this::toResponse)
                 .toList();
     }
 
     public List<PartyDetailResponse> getPostsBySeller(Long sellerId) {
-        return partyRepository.findAll()
+        return partyPostRepository.findBySellerUserId(sellerId)
                 .stream()
-                .filter(post -> !"REJECTED".equals(post.getStatus()))  // isDeleted() 없음
-                .filter(post -> post.getSeller() != null)              // getHostUser() → getSeller()
-                .filter(post -> post.getSeller().getUserId().equals(sellerId))
+                .filter(post -> !"REJECTED".equals(post.getStatus()))
                 .map(this::toResponse)
                 .toList();
+    }
+
+    public List<SubscriptionMaster> getAllServices() {
+        return subscriptionMasterRepository.findAll();
     }
 
     private PartyDetailResponse toResponse(PartyPost post) {
         PartyDetailResponse response = new PartyDetailResponse();
         response.setId(post.getId());
-        response.setSellerId(post.getSeller().getUserId());            // getHostUser() → getSeller()
+        response.setSellerId(post.getSeller().getUserId());
         response.setOttCategory(post.getService() != null ?
-                post.getService().getServiceCategory() : null);        // getOttCategory() → getService().getServiceCategory()
+                post.getService().getServiceCategory() : null);
         response.setShareId(post.getShareId());
         response.setSharePassword(post.getSharePassword());
         response.setMonthlyPrice(post.getMonthlyPrice());

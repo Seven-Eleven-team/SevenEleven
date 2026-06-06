@@ -23,9 +23,6 @@ public class SubscriptionMaster {
     @Column(name = "ICON_URL", length = 500)
     private String iconUrl;
 
-    @Column(name = "LOGIN_URL", nullable = false, length = 500)
-    private String loginUrl;
-
     @Column(name = "CANCEL_PATH", nullable = false, length = 500)
     private String cancelPath;
 }

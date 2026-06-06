@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -33,10 +32,6 @@ public class SupportService {
 
         Inquiry inquiry = new Inquiry();
 
-        /*
-         * 현재 Inquiry 엔티티가 user 객체 매핑이 아니라 userId 필드를 쓰는 구조로 보이므로
-         * 기존 setUserId 방식을 유지한다.
-         */
         inquiry.setUserId(user.getUserId());
         inquiry.setTitle(request.getTitle());
         inquiry.setContent(request.getContent());
@@ -65,42 +60,34 @@ public class SupportService {
     }
 
     /**
-     * 활성 FAQ 전체 조회
+     * FAQ 전체 조회 (수정: isActive 조건 제거)
      */
     public List<FaqResponse> getActiveFaqs() {
-        return faqRepository.findByIsActiveOrderBySortOrderAsc("Y")
+        return faqRepository.findAllByOrderBySortOrderAsc()
                 .stream()
                 .map(FaqResponse::new)
                 .toList();
     }
 
     /**
-     * 카테고리별 활성 FAQ 조회
+     * 카테고리별 FAQ 조회 (수정: 카테고리 필드 삭제로 전체 리스트 반환)
      */
     public List<FaqResponse> getActiveFaqsByCategory(String category) {
-        if (category == null || category.isBlank()) {
-            return getActiveFaqs();
-        }
-
-        return faqRepository.findByIsActiveAndCategoryOrderBySortOrderAsc("Y", category)
-                .stream()
-                .map(FaqResponse::new)
-                .toList();
+        return getActiveFaqs();
     }
 
     /**
-     * 메인 우측 FAQ 모달용 질문 목록
+     * 메인 우측 FAQ 모달용 질문 목록 (수정: isActive 조건 제거)
      */
     public List<String> getFaqQuestions() {
-        return faqRepository.findByIsActiveOrderBySortOrderAsc("Y")
+        return faqRepository.findAllByOrderBySortOrderAsc()
                 .stream()
-                .sorted(Comparator.comparing(Faq::getSortOrder))
                 .map(Faq::getQuestion)
                 .toList();
     }
 
     /**
-     * FAQ 채팅형 간단 응답
+     * FAQ 채팅형 간단 응답 (수정: isActive 조건 및 category 검색 조건 제거)
      */
     public String getFaqChatAnswer(String input) {
         String keyword = input == null ? "" : input.trim();
@@ -109,14 +96,13 @@ public class SupportService {
             return "질문 내용을 입력해 주세요.";
         }
 
-        List<Faq> faqs = faqRepository.findByIsActiveOrderBySortOrderAsc("Y");
+        List<Faq> faqs = faqRepository.findAllByOrderBySortOrderAsc();
 
         return faqs.stream()
                 .filter(faq ->
                         faq.getQuestion().contains(keyword)
                                 || keyword.contains(faq.getQuestion())
                                 || faq.getAnswer().contains(keyword)
-                                || faq.getCategory().contains(keyword)
                 )
                 .findFirst()
                 .map(Faq::getAnswer)

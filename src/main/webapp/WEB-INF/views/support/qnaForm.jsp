@@ -2,25 +2,47 @@
 <!doctype html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
     <title>문의작성</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/support-console.css">
 </head>
 <body>
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
-    <main class="qnaForm-main">
-        <div class="qnaForm-box">
-            <input class="qnaForm-title" type="text" placeholder="제목">
+<script>
+    document.querySelector('.site-header')?.classList.add('is-solid');
+    document.body.classList.add('is-header-ready');
+    document.body.classList.add('is-opening-loaded');
+    document.body.classList.add('is-fab-ready');
+</script>
+
+<main class="qnaForm-main">
+    <div class="qnaForm-box">
+        <form action="${pageContext.request.contextPath}/support/qna" method="post">
+            <input class="qnaForm-title" type="text" name="title" placeholder="제목">
             <textarea class="qnaForm-content" name="content" placeholder="문의 내용을 입력해주세요"></textarea>
             <div class="qnaForm-btns">
-                <button class="qnaForm-btn-prev" type="button"> 이전으로 </button>
-                <button class="qnaForm-btn-submit"> 작성완료 </button>
+                <button class="qnaForm-btn-prev" type="button" onclick="history.back()">이전으로</button>
+                <button class="qnaForm-btn-submit" type="submit" onclick="return validateForm()">작성완료</button>
             </div>
-        </div>
-    </main>
+        </form>
+    </div>
+</main>
+<%@ include file="/WEB-INF/views/common/layout/floatingBtn.jspf" %>
+<%@ include file="/WEB-INF/views/common/modal/faqModal.jspf" %>
 <%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
+<%@ include file="/WEB-INF/views/common/include/scripts.jspf" %>
+<script src="${pageContext.request.contextPath}/js/pages/faq.js"></script>
+<script>
+    function validateForm() {
+    const title = document.querySelector('.qnaForm-title').value.trim();
+    const content = document.querySelector('.qnaForm-content').value.trim();
+
+    if (title === '') { alert('제목을 입력해주세요.'); return false; }
+    if (content === '') { alert('내용을 입력해주세요.'); return false; }
+
+    alert('작성이 완료되었습니다.');
+    return true;
+}
+</script>
 </body>
 </html>

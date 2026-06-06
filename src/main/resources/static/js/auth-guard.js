@@ -7,16 +7,21 @@
     }
 
     function isLoggedInByHeader() {
-        const headerActionArea = document.getElementById('headerActionArea');
+            // ★ 세션 스토리지에 로그인 기록이 있으면 화면 껍데기 무시하고 무조건 로그인 상태로 인정!
+            if (sessionStorage.getItem('jichulmate:auth-active') === 'true') {
+                return true;
+            }
 
-        if (!headerActionArea) {
-            return false;
+            const headerActionArea = document.getElementById('headerActionArea');
+
+            if (!headerActionArea) {
+                return false;
+            }
+
+            return headerActionArea.dataset.serverLogin === 'true'
+                || headerActionArea.classList.contains('is-logged-in')
+                || headerActionArea.classList.contains('is-login');
         }
-
-        return headerActionArea.dataset.serverLogin === 'true'
-            || headerActionArea.classList.contains('is-logged-in')
-            || headerActionArea.classList.contains('is-login');
-    }
 
     function openLoginModal() {
         const loginOpenButton = document.querySelector('[data-auth-open="login"]');

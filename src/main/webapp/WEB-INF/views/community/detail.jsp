@@ -5,13 +5,19 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/community.css">
+    <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
     <title>${post.title} | 지출메이트 게시판</title>
 </head>
 <body class="community-body">
 
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
+<script>
+    document.querySelector('.site-header')?.classList.add('is-solid');
+    document.body.classList.add('is-header-ready');
+    document.body.classList.add('is-opening-loaded');
+    document.body.classList.add('is-fab-ready');
+</script>
 <%@ include file="/WEB-INF/views/common/include/flash-message.jspf" %>
 
 <main class="community-page">
@@ -23,13 +29,18 @@
                     <h1>${post.title}</h1>
 
                     <div class="board-detail-meta">
-                        <span>ID: ${post.writerName}</span>
+                        <span>작성자: ${post.writerName}</span>
                         <span>조회: ${post.viewsCount}</span>
                         <span>게시일: ${post.createdAtText}</span>
                     </div>
                 </div>
 
                 <div class="board-detail-actions">
+                    <a href="${pageContext.request.contextPath}/community?category=${category}"
+                       class="board-list-btn">
+                        목록
+                    </a>
+
                     <button type="button" class="board-report-btn">신고</button>
                 </div>
             </header>
@@ -68,13 +79,8 @@
 
                 <aside class="board-content-zone">
                     <div class="board-profile-box">
-                        <div class="board-profile-avatar">
-                            <c:choose>
-                                <c:when test="${not empty post.writerName}">
-                                    ${fn:substring(post.writerName, 0, 1)}
-                                </c:when>
-                                <c:otherwise>M</c:otherwise>
-                            </c:choose>
+                        <div class="board-profile-avatar ${post.avatarClass}">
+                            ${post.avatarText}
                         </div>
 
                         <div>
@@ -98,19 +104,25 @@
             </div>
 
             <c:choose>
-                <c:when test="${not empty loginUserId}">
+                <c:when test="${not empty loginUserId and canComment}">
                     <form class="board-comment-form"
                           method="post"
                           action="${pageContext.request.contextPath}/community/detail/${post.boardId}/comments">
                         <input type="text"
                                name="content"
-                               maxlength="1000"
+                               maxlength="500"
                                placeholder="댓글을 입력하세요."
                                aria-label="댓글 입력"
                                required>
 
                         <button type="submit" class="board-submit-btn">등록</button>
                     </form>
+                </c:when>
+
+                <c:when test="${not empty loginUserId and not canComment}">
+                    <div class="board-comment-login-guide">
+                            ${commentGuideMessage}
+                    </div>
                 </c:when>
 
                 <c:otherwise>
@@ -125,13 +137,8 @@
                     <div class="board-comment-list">
                         <c:forEach var="comment" items="${comments}">
                             <article class="board-comment-item">
-                                <div class="board-comment-avatar">
-                                    <c:choose>
-                                        <c:when test="${not empty comment.writerName}">
-                                            ${fn:substring(comment.writerName, 0, 1)}
-                                        </c:when>
-                                        <c:otherwise>M</c:otherwise>
-                                    </c:choose>
+                                <div class="board-comment-avatar ${comment.avatarClass}">
+                                        ${comment.avatarText}
                                 </div>
 
                                 <div class="board-comment-body">
@@ -166,9 +173,12 @@
     </section>
 </main>
 
+<%@ include file="/WEB-INF/views/common/layout/floatingBtn.jspf" %>
+<%@ include file="/WEB-INF/views/common/modal/faqModal.jspf" %>
 <%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
 <%@ include file="/WEB-INF/views/common/modal/authModal.jspf" %>
 <%@ include file="/WEB-INF/views/common/include/scripts.jspf" %>
+<script src="${pageContext.request.contextPath}/js/pages/faq.js"></script>
 <script src="${pageContext.request.contextPath}/js/pages/community-detail.js"></script>
 
 </body>

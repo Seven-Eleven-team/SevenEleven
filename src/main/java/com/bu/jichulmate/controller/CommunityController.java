@@ -34,9 +34,12 @@ public class CommunityController {
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false, defaultValue = "latest") String sort,
             @RequestParam(required = false, defaultValue = "1") int page,
+            HttpSession session,
             Model model
     ) {
         String normalizedCategory = communityService.normalizeCategory(category);
+        Long loginUserId = getLoginUserId(session);
+
         int safePage = Math.max(page, 1);
 
         Pageable pageable = PageRequest.of(safePage - 1, PAGE_SIZE);
@@ -58,11 +61,18 @@ public class CommunityController {
             );
         }
 
+        String userAgeCategory = communityService.getUserAgeCategory(loginUserId);
+
         model.addAttribute("posts", postPage.getContent());
         model.addAttribute("category", normalizedCategory);
         model.addAttribute("categoryLabel", communityService.getCategoryLabel(normalizedCategory));
         model.addAttribute("keyword", keyword);
         model.addAttribute("sort", sort);
+        model.addAttribute("loginUserId", loginUserId);
+        model.addAttribute("userAgeCategory", userAgeCategory);
+        model.addAttribute("userAgeCategoryLabel", communityService.getCategoryLabel(userAgeCategory));
+        model.addAttribute("canWriteCurrentCategory", communityService.canWriteCategory(loginUserId, normalizedCategory));
+        model.addAttribute("categoryWriteGuideMessage", communityService.getCategoryWriteGuideMessage(loginUserId, normalizedCategory));
 
         addPaginationAttributes(model, postPage, safePage);
 
@@ -85,8 +95,19 @@ public class CommunityController {
 
         String normalizedCategory = communityService.normalizeCategory(category);
 
+        try {
+            communityService.validateWritableCategory(loginUserId, normalizedCategory);
+        } catch (Exception e) {
+            ra.addFlashAttribute("msg", e.getMessage());
+            return "redirect:/community?category=" + normalizedCategory;
+        }
+
+        String userAgeCategory = communityService.getUserAgeCategory(loginUserId);
+
         model.addAttribute("category", normalizedCategory);
         model.addAttribute("categoryLabel", communityService.getCategoryLabel(normalizedCategory));
+        model.addAttribute("userAgeCategory", userAgeCategory);
+        model.addAttribute("userAgeCategoryLabel", communityService.getCategoryLabel(userAgeCategory));
 
         return "community/write";
     }
@@ -143,6 +164,7 @@ public class CommunityController {
             boolean owner = post.isOwner(loginUserId);
 
             String category = communityService.normalizeCategory(post.getBoardType());
+            boolean canComment = communityService.canCommentOnPost(post, loginUserId);
 
             model.addAttribute("post", post);
             model.addAttribute("attachments", attachments);
@@ -151,6 +173,10 @@ public class CommunityController {
             model.addAttribute("owner", owner);
             model.addAttribute("category", category);
             model.addAttribute("categoryLabel", communityService.getCategoryLabel(category));
+            model.addAttribute("secretCategory", communityService.isSecretCategory(category));
+            model.addAttribute("ageCategory", communityService.isAgeCategory(category));
+            model.addAttribute("canComment", canComment);
+            model.addAttribute("commentGuideMessage", communityService.getCommentGuideMessage(post, loginUserId));
 
             return "community/detail";
         } catch (Exception e) {
@@ -231,11 +257,14 @@ public class CommunityController {
 
             List<Attachment> attachments = communityService.findAttachments(boardId);
             String category = communityService.normalizeCategory(post.getBoardType());
+            String userAgeCategory = communityService.getUserAgeCategory(loginUserId);
 
             model.addAttribute("post", post);
             model.addAttribute("attachments", attachments);
             model.addAttribute("category", category);
             model.addAttribute("categoryLabel", communityService.getCategoryLabel(category));
+            model.addAttribute("userAgeCategory", userAgeCategory);
+            model.addAttribute("userAgeCategoryLabel", communityService.getCategoryLabel(userAgeCategory));
 
             return "community/edit";
         } catch (Exception e) {
@@ -366,6 +395,10 @@ public class CommunityController {
     }
 
     private Long getLoginUserId(HttpSession session) {
+        if (session == null) {
+            return null;
+        }
+
         String[] idSessionNames = {
                 "loginUserId",
                 "userId",

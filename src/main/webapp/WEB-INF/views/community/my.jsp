@@ -4,13 +4,19 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/community.css">
+    <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
     <title>내 커뮤니티 글 | 지출메이트</title>
 </head>
 <body class="community-body">
 
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
+<script>
+    document.querySelector('.site-header')?.classList.add('is-solid');
+    document.body.classList.add('is-header-ready');
+    document.body.classList.add('is-opening-loaded');
+    document.body.classList.add('is-fab-ready');
+</script>
 <%@ include file="/WEB-INF/views/common/include/flash-message.jspf" %>
 
 <main class="community-page">
@@ -128,9 +134,12 @@
     </section>
 </main>
 
+<%@ include file="/WEB-INF/views/common/layout/floatingBtn.jspf" %>
+<%@ include file="/WEB-INF/views/common/modal/faqModal.jspf" %>
 <%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
 <%@ include file="/WEB-INF/views/common/modal/authModal.jspf" %>
 <%@ include file="/WEB-INF/views/common/include/scripts.jspf" %>
+<script src="${pageContext.request.contextPath}/js/pages/faq.js"></script>
 
 </body>
 </html>

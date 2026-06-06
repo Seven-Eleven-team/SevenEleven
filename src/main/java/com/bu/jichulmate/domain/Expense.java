@@ -36,24 +36,30 @@ public class Expense {
     @Column(name = "IS_FIXED", nullable = false, length = 1)
     private String isFixed = "N";
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "GOAL_ID") // NULL 허용 (일반 지출일 경우)
+    private SavingGoal savingGoal;
+
     @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;
 
     @Builder
-    public Expense(Long userId, Category category, Long amount, LocalDate expenseDate, String isFixed) {
+    public Expense(Long userId, Category category, Long amount, LocalDate expenseDate, String isFixed, SavingGoal savingGoal) {
         this.userId = userId;
         this.category = category;
         this.amount = amount;
         this.expenseDate = expenseDate;
         this.isFixed = isFixed != null ? isFixed : "N";
+        this.savingGoal = savingGoal; // ★ 추가: 목표 데이터 매핑
     }
 
     // 수정 메서드 (더티 체킹용)
-    public void updateExpense(Category category, Long amount, LocalDate expenseDate, String isFixed) {
+    public void updateExpense(Category category, Long amount, LocalDate expenseDate, String isFixed, SavingGoal savingGoal) {
         this.category = category;
         this.amount = amount;
         this.expenseDate = expenseDate;
         this.isFixed = isFixed;
+        this.savingGoal = savingGoal; // ★ 추가: 수정 시 목표 데이터도 변경되도록 반영
         this.updatedAt = LocalDateTime.now();
     }
 }

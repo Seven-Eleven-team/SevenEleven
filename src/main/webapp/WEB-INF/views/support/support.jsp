@@ -5,10 +5,17 @@
     <title>고객센터</title>
     <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/support-hub.css?v=1">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/faq.css">
 </head>
 <body>
 
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
+<script>
+    document.querySelector('.site-header')?.classList.add('is-solid');
+    document.body.classList.add('is-header-ready');
+    document.body.classList.add('is-opening-loaded');
+    document.body.classList.add('is-fab-ready');
+</script>
 
 <main class="support-main">
     <div class="support-box">
@@ -16,7 +23,7 @@
 
         <div class="support-cards">
             <div class="support-card">
-                <a href="${pageContext.request.contextPath}/support/qna" data-auth-required="true">
+                <a href="#" id="supportQnaBtn" data-auth-required="true">
                     <i class="bi bi-chat-left-dots"></i>
                     <p>1:1 문의</p>
                 </a>
@@ -32,9 +39,11 @@
     </div>
 </main>
 
+<%@ include file="/WEB-INF/views/common/modal/faqModal.jspf" %>
+<%@ include file="/WEB-INF/views/common/layout/floatingBtn.jspf" %>
 <%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
 <%@ include file="/WEB-INF/views/common/modal/authModal.jspf" %>
 <%@ include file="/WEB-INF/views/common/include/scripts.jspf" %>
-
+<script src="${pageContext.request.contextPath}/js/pages/faq.js"></script>
 </body>
 </html>

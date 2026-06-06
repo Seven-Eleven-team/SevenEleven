@@ -48,6 +48,15 @@ public class BoardComment {
     @Column(name = "UPDATED_AT")
     private LocalDateTime updatedAt;
 
+    @Transient
+    private String displayWriterName;
+
+    @Transient
+    private String displayAvatarText;
+
+    @Transient
+    private String displayAvatarClass;
+
     @PrePersist
     public void prePersist() {
         if (isDeleted == null || isDeleted.isBlank()) {
@@ -87,6 +96,10 @@ public class BoardComment {
     }
 
     public String getWriterName() {
+        if (displayWriterName != null && !displayWriterName.isBlank()) {
+            return displayWriterName;
+        }
+
         if (user == null || user.getNickname() == null || user.getNickname().isBlank()) {
             if (userId == null) {
                 return "알 수 없음";
@@ -96,5 +109,27 @@ public class BoardComment {
         }
 
         return user.getNickname();
+    }
+
+    public String getAvatarText() {
+        if (displayAvatarText != null && !displayAvatarText.isBlank()) {
+            return displayAvatarText;
+        }
+
+        String writerName = getWriterName();
+
+        if (writerName == null || writerName.isBlank()) {
+            return "M";
+        }
+
+        return writerName.substring(0, 1);
+    }
+
+    public String getAvatarClass() {
+        if (displayAvatarClass != null && !displayAvatarClass.isBlank()) {
+            return displayAvatarClass;
+        }
+
+        return "board-avatar-default";
     }
 }
