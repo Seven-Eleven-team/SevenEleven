@@ -25,7 +25,7 @@ public class SubscriptionScheduler {
     private final JavaMailSender javaMailSender; // 이미 세팅해두신 스프링 메일 발송기!
 
     // 매일 오전 9시 0분 0초에 자동 실행되는 마법의 주문! (크론 표현식)
-    @Scheduled(cron = "0 0 9 * * *")
+    @Scheduled(cron = "0 0 9 * * *") // 0 0 9 * * *
     @Transactional
     public void sendExpirationNotifications() {
         log.info("[스케줄러 작동] 구독 만료 3일 전 알림 발송 프로세스 시작...");

@@ -32,17 +32,17 @@
                 <span class="admin-card-sub">비밀번호는 관리자 화면에 노출하지 않음</span>
             </div>
             <dl class="admin-detail-grid">
-                <div><dt>회원 ID</dt><dd>1</dd></div>
-                <div><dt>로그인 ID</dt><dd>admin</dd></div>
-                <div><dt>닉네임</dt><dd>관리자</dd></div>
-                <div><dt>성별</dt><dd>FEMALE</dd></div>
-                <div><dt>생년월일</dt><dd>2000-01-01</dd></div>
-                <div><dt>가입 방식</dt><dd>LOCAL</dd></div>
-                <div><dt>2차 인증 여부</dt><dd>N</dd></div>
-                <div><dt>멘토 톤</dt><dd>MILD</dd></div>
-                <div><dt>권한</dt><dd><span class="admin-badge badge-blue">ADMIN</span></dd></div>
-                <div><dt>계정 상태</dt><dd><span class="admin-badge badge-green">ACTIVE</span></dd></div>
-                <div><dt>알림 수신 여부</dt><dd>Y</dd></div>
+                <div><dt>회원 ID</dt><dd id="detail-userId"></dd></div>
+                <div><dt>로그인 ID</dt><dd id="detail-loginId"></dd></div>
+                <div><dt>닉네임</dt><dd id="detail-nickname"></dd></div>
+                <div><dt>성별</dt><dd id="detail-gender"></dd></div>
+                <div><dt>생년월일</dt><dd id="detail-birthDate"></dd></div>
+                <div><dt>가입 방식</dt><dd id="detail-provider"></dd></div>
+                <div><dt>2차 인증 여부</dt><dd id="detail-is2fa"></dd></div>
+                <div><dt>멘토 톤</dt><dd id="detail-mentorTone"></dd></div>
+                <div><dt>권한</dt><dd id="detail-role"></dd></div>
+                <div><dt>계정 상태</dt><dd id="detail-status"></dd></div>
+                <div><dt>알림 수신 여부</dt><dd id="detail-noti"></dd></div>
             </dl>
         </div>
         <div class="admin-bottom-actions">
@@ -53,5 +53,6 @@
 </main>
 
 <script src="${pageContext.request.contextPath}/js/pages/admin-dashboard.js"></script>
+<script src="${pageContext.request.contextPath}/js/pages/admin_user_detail.js"></script>
 </body>
 </html>

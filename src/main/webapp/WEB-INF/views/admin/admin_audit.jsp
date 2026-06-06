@@ -43,18 +43,17 @@
                     <thead>
                     <tr>
                         <th>로그 ID</th>
-                        <th>관리자 ID</th>
-                        <th>작업 유형</th>
+                        <th>관리자 닉네임</th> <th>작업 유형</th>
                         <th>대상 테이블</th>
                         <th>대상 ID</th>
                         <th>IP 주소</th>
                         <th>작업 일시</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr><td>1</td><td>1</td><td>USER_STATUS_UPDATE</td><td>USERS</td><td>2</td><td>127.0.0.1</td><td>2026-06-02 12:00</td></tr>
-                    <tr><td>2</td><td>1</td><td>TERMS_CREATE</td><td>TERMS</td><td>4</td><td>127.0.0.1</td><td>2026-06-02 12:10</td></tr>
+
+                    <tbody id="audit-table-body">
                     </tbody>
+
                 </table>
             </div>
         </div>

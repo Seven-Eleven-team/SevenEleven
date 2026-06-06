@@ -37,4 +37,12 @@ public class AdminUserService {
 
         log.info("[AdminUserService] 회원 상태 변경 완료 - 회원 ID: {}, 변경된 상태: {}", userId, newStatus);
     }
+
+    // 3. 특정 회원 단건 조회
+    @Transactional(readOnly = true)
+    public AdminUserResponse getUserById(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다. ID: " + userId));
+        return AdminUserResponse.fromEntity(user);
+    }
 }
