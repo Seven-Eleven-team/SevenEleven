@@ -118,23 +118,18 @@
     height: 140px;
 
     border: none;
-
     border-radius: 30px;
 
-    background: #1e2b50;
-
-    color: white;
+    background: #e5e7eb;
+    color: #374151;
 
     cursor: pointer;
 
     transition: all 0.25s ease;
 
     display: flex;
-
     flex-direction: column;
-
     justify-content: center;
-
     align-items: center;
 
     gap: 15px;
@@ -152,7 +147,7 @@
 
     align-items: center;
 
-    border-bottom: 2px solid rgba(255,255,255,0.3);
+    border-bottom: 2px solid rgba(0,0,0,0.15);
 
     font-size: 32px;
 
@@ -161,11 +156,25 @@
 
 .month-buttons button:hover {
 
+    background: #d1d5db;
     transform: translateY(-5px);
 
     box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
+.month-buttons button.active {
 
+    background: #1e2b50;
+
+    color: white;
+
+    transform: scale(1.05);
+
+    box-shadow: 0 10px 25px rgba(30,43,80,0.35);
+}
+.month-buttons button div:first-child {
+
+    border-bottom: 2px solid rgba(0,0,0,0.15);
+}
 /* 하단 버튼 */
 .detail-buttons {
 
@@ -250,15 +259,19 @@
 /* 기본 카드 */
 .swiper-slide {
 
-    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
 
     transition: all 0.5s ease;
-}
 
-/* 활성 카드 */
-.swiper-slide-active {
+    filter: grayscale(1) blur(2px);
 
-    opacity: 1;
+    transform: scale(0.65);
+
+    opacity: 0.25;
 }
 
 /* 선택 카드 */
@@ -313,4 +326,400 @@
     font-size: 18px;
 
     font-weight: 500;
+
+    margin-bottom: 15px;
+}
+/* ========================= */
+/* OTT 메인 화면 */
+/* ========================= */
+
+:root {
+    --header-bg: #1e293b;
+    --bg-white: #ffffff;
+    --accent-blue: #3b82f6;
+    --border-line: #e2e8f0;
+    --text-gray: #64748b;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Pretendard', sans-serif;
+    background-color: var(--bg-white);
+    overflow-x: hidden;
+}
+
+/* 헤더 */
+
+/*header {
+    background-color: var(--header-bg);
+    color: white;
+    height: 60px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 20px;
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header .menu-icon {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+header h1 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    flex-grow: 1;
+    text-align: center;
+}
+
+header .auth-links {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+header .auth-links span {
+    cursor: pointer;
+    margin-left: 10px;
+}
+*/
+/* 메인 */
+
+.main-container {
+    display: flex;
+
+    height: calc(100vh - 60px);
+    width: 100%;
+    background-color: transparent;
+}
+
+.column {
+    flex: 1;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    border-right: 1px solid var(--border-line);
+    position: relative;
+}
+
+.column:last-child {
+    border-right: none;
+}
+
+/* 카테고리 */
+
+.category-name {
+    position: absolute;
+    top: 20px;
+    left: 0;
+
+    width: 100%;
+
+    text-align: center;
+
+    z-index: 10;
+
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--header-bg);
+    letter-spacing: -0.5px;
+}
+
+/* 스와이퍼 */
+
+.swiper-container-wrapper {
+
+    flex: 1;
+
+    width: 100%;
+
+    margin-top: 80px;
+
+    overflow: hidden;
+
+    -webkit-mask-image: linear-gradient(
+            to bottom,
+            transparent,
+            black 25%,
+            black 75%,
+            transparent
+    );
+
+    mask-image: linear-gradient(
+            to bottom,
+            transparent,
+            black 25%,
+            black 75%,
+            transparent
+    );
+}
+
+.swiper {
+    width: 100%;
+    height: 100% !important;
+}
+
+.swiper-slide-active {
+
+    filter: none;
+
+    opacity: 1;
+
+    transform: scale(1);
+}
+
+.selected-card {
+
+    transform: translateX(-120px) scale(1.1);
+
+    opacity: 1 !important;
+
+    transition: all 0.5s ease;
+
+    z-index: 50;
+}
+
+/* 로고 */
+
+.logo-box {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+}
+
+.logo-box img {
+    max-width: 70%;
+    max-height: 70%;
+    object-fit: contain;
+}
+
+/* 우측 아이콘 */
+
+.fixed-icons {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    z-index: 2000;
+}
+
+.icon-btn {
+    width: 50px;
+    height: 50px;
+
+    background: white;
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+
+    cursor: pointer;
+}
+
+.icon-btn img {
+    width: 28px;
+    height: 28px;
+}
+
+/* ========================= */
+/* 결제 확인 모달 */
+/* ========================= */
+
+.payment-modal {
+
+    display: none;
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0,0,0,0.25);
+
+    justify-content: center;
+    align-items: center;
+
+    z-index: 10000;
+}
+
+.payment-box {
+
+    width: 700px;
+
+    background: white;
+
+    border-radius: 40px;
+
+    padding: 35px 45px;
+
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+.payment-box h2 {
+
+    font-size: 30px;
+
+    margin-bottom: 25px;
+
+    font-weight: 700;
+}
+
+.payment-box hr {
+
+    border: none;
+
+    border-top: 2px solid #d1d5db;
+
+    margin-bottom: 50px;
+}
+
+.payment-box table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+.payment-box th {
+
+    font-size: 32px;
+
+    font-weight: 700;
+
+    padding: 40px 20px;
+
+    border-bottom: 1px solid #d1d5db;
+}
+
+.payment-box td {
+
+    font-size: 28px;
+
+    padding: 40px 20px;
+
+    text-align: center;
+
+    border-bottom: 1px solid #d1d5db;
+}
+
+.payment-buttons {
+
+    margin-top: 35px;
+
+    display: flex;
+
+    justify-content: space-between;
+}
+
+.payment-buttons button {
+
+    width: 160px;
+
+    height: 50px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+}
+
+.payment-buttons button:first-child {
+
+    background: #d9d9d9;
+
+    color: #333;
+}
+
+.payment-buttons button:last-child {
+
+    background: #1e2b50;
+
+    color: white;
+}
+
+.payment-buttons button:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.payment-info {
+
+    margin-top: 40px;
+
+    margin-bottom: 50px;
+}
+
+.payment-row {
+
+    display: flex;
+
+    align-items: center;
+
+    margin-bottom: 18px;
+
+    font-size: 18px;
+}
+
+.payment-row .label {
+
+    width: 100px;
+
+    font-weight: 700;
+}
+
+.swiper-slide-prev .logo-box {
+    transform: translateY(40px) scale(0.85);
+    transition: all 0.5s ease;
+}
+
+.swiper-slide-next .logo-box {
+    transform: translateY(-40px) scale(0.85);
+    transition: all 0.5s ease;
+}
+
+.swiper-slide-active .logo-box {
+    transform: scale(1.15);
+    transition: all 0.5s ease;
+}
+
+.site-header {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
 }

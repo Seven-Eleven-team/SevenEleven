@@ -5,10 +5,13 @@
             <a href="${pageContext.request.contextPath}/dashboard" data-auth-required="true">대시보드</a>
         </li>
         <li>
-            <a href="${pageContext.request.contextPath}/community">게시판</a>
+            <a href="${pageContext.request.contextPath}/subscription/ott" data-auth-required="true">OTT 구독</a>
         </li>
         <li>
             <a href="${pageContext.request.contextPath}/party/seller-identity" data-auth-required="true">판매자 등록</a>
+        </li>
+        <li>
+            <a href="${pageContext.request.contextPath}/community">게시판</a>
         </li>
         <li>
             <a href="${pageContext.request.contextPath}/support">고객센터</a>
