@@ -7,6 +7,7 @@ import com.bu.jichulmate.exception.BusinessException;
 import com.bu.jichulmate.response.ApiResponse;
 import com.bu.jichulmate.service.AccountService;
 import com.bu.jichulmate.service.MyPageService;
+import com.bu.jichulmate.service.NotificationService;
 import com.bu.jichulmate.util.SessionUtils;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/mypage")
 @RequiredArgsConstructor
@@ -30,6 +33,7 @@ public class MyPageController {
 
     private final MyPageService myPageService;
     private final AccountService accountService;
+    private final NotificationService notificationService;
 
     /* [내 정보 수정 페이지] */
     @GetMapping("/editprofile")
@@ -144,10 +148,17 @@ public class MyPageController {
     // ==================== 나머지 마이페이지 메뉴들 ====================
 
     @GetMapping("/alarm")
-    public String myAlarm(HttpSession session) {
-        if (SessionUtils.getLoginUserId(session) == null) {
+    public String myAlarm(@PageableDefault(size = 10) Pageable pageable, HttpSession session, Model model) {
+        Long userId = SessionUtils.getLoginUserId(session);
+        if (userId == null) {
             return "redirect:/";
         }
+
+        // 서비스에 pageable을 함께 넘깁니다.
+        Page<NotificationResponse> alarms = notificationService.getMyNotifications(userId, pageable);
+
+        model.addAttribute("alarms", alarms);
+
         return "members/mypage/myalarm";
     }
 
