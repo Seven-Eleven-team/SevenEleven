@@ -20,6 +20,21 @@
           href="${pageContext.request.contextPath}/css/myque.css">
 
     <style>
+    body.mypage .hamburger-btn{
+        display:flex !important;
+        flex-direction:column !important;
+        justify-content:center !important;
+        align-items:center !important;
+        gap:4px !important;
+    }
+
+    body.mypage .hamburger-btn span{
+        display:block !important;
+        width:22px !important;
+        height:2px !important;
+        background:white !important;
+        border-radius:999px !important;
+    }
       /*풋터*/
         .footer {
             width: 100%;
@@ -74,33 +89,80 @@
             left: 0;
         }
 
-        body.mypage nav.sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+       body.mypage nav.sidebar {
+           position: fixed;
+           top: 78px;
+           left: -260px;
+           width: 250px;
+           height: calc(100vh - 78px);
 
-        body.mypage nav.sidebar li {
-            width: 100%;
-        }
+           background: #243864; /* ⭐ 네이비 (핵심) */
+           border-right: none;
 
-        body.mypage nav.sidebar li a {
-            display: flex;
-            align-items: center;
+           transition: all 0.3s ease;
+           z-index: 9998;
+           padding-top: 20px;
+       }
 
-            height: 54px;
+       body.mypage nav.sidebar.open {
+           left: 0;
+       }
 
-            padding: 0 24px;
+       /* 리스트 기본 */
+       body.mypage nav.sidebar ul {
+           list-style: none;
+           padding: 0;
+           margin: 0;
+       }
 
-            color: #222;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 500;
-        }
+       /* 메뉴 아이템 */
+       body.mypage nav.sidebar li {
+           width: 100%;
+       }
 
-        body.mypage nav.sidebar li a:hover {
-            background: #f5f5f5;
-        }
+       /* 링크 */
+       body.mypage nav.sidebar li a {
+           display: flex;
+           align-items: center;
+
+           height: 54px;
+           padding: 0 24px;
+
+           color: white; /* ⭐ 네이비라서 흰 글씨 */
+           text-decoration: none;
+           font-size: 16px;
+           font-weight: 500;
+
+           transition: 0.2s;
+       }
+
+       /* hover */
+       body.mypage nav.sidebar li a:hover {
+           background: rgba(255, 255, 255, 0.12);
+       }
+
+       /* 로그아웃 영역 */
+       .sidebar-logout {
+           position: absolute;
+           bottom: 20px;
+           left: 0;
+           width: 100%;
+       }
+
+       .sidebar-logout a {
+           display: flex;
+           align-items: center;
+           gap: 8px;
+           padding: 0 24px;
+           height: 54px;
+
+           color: white;
+           text-decoration: none;
+       }
+
+       .sidebar-logout a:hover {
+           background: rgba(255, 255, 255, 0.12);
+       }
 
         /* 마이페이지에서는 공통 사이드 드롭다운 숨김 */
         body.mypage .sidebar-overlay,
@@ -397,91 +459,57 @@
             </div>
 
             <!-- 문의 -->
-            <div class="table-row">
+          <c:choose>
+              <c:when test="${empty inquiries.content}">
+                  <div style="text-align: center; padding: 50px 0; color: #888; font-size: 15px;">
+                      등록된 문의가 없습니다.
+                  </div>
+              </c:when>
+              <c:otherwise>
+                  <c:forEach var="inquiry" items="${inquiries.content}" varStatus="status">
+                      <div class="table-row">
+                          <div class="col-no">${status.count}</div>
 
-                <div class="col-no">
-                    1.
-                </div>
+                          <div class="col-title question-title-link"
+                               onclick="openQuestionModal(
+                                  '${inquiry.title}',
+                                  '${inquiry.content}',
+                                  '${not empty inquiry.answerContent ? inquiry.answerContent : "아직 답변이 등록되지 않았습니다."}'
+                               )">
+                              ${inquiry.title}
+                          </div>
 
-                <div class="col-title question-title-link"
-                     onclick="openQuestionModal(
-                        '컴퓨터가 안켜져요',
-                        '어떻게하면 컴퓨터를 킬까요',
-                        '전원 버튼을 누르시면 됩니다.'
-                     )">
+                          <div class="col-answer ${inquiry.status eq 'ANSWERED' ? 'complete' : ''}">
+                              ${inquiry.status eq 'ANSWERED' ? '답변 완료' : '답변 전'}
+                          </div>
 
-                    어떻게 해요
+                          <div class="col-date">
+                              <fmt:formatDate value="${inquiry.createdAt}" pattern="MM/dd HH:mm"/>
+                          </div>
 
-                </div>
+                          <div class="col-manage">
+                              <form action="${pageContext.request.contextPath}/mypage/questions/delete/${inquiry.id}"
+                                    method="post"
+                                    onsubmit="return confirm('삭제하시겠습니까?')">
+                                  <button type="submit" class="delete-btn">삭제하기</button>
+                              </form>
+                          </div>
+                      </div>
+                  </c:forEach>
+              </c:otherwise>
+          </c:choose>
 
-                <div class="col-answer complete">
-                    답변 완료
-                </div>
-
-                <div class="col-date">
-                    05/04 15:33
-                </div>
-
-                <div class="col-manage">
-
-                    <button class="delete-btn">
-                        삭제하기
-                    </button>
-
-                </div>
-
-            </div>
-
-            <!-- 문의 -->
-            <div class="table-row">
-
-                <div class="col-no">
-                    2.
-                </div>
-
-                <div class="col-title question-title-link"
-                     onclick="openQuestionModal(
-                        '문의 대기중',
-                        '문의 내용을 확인중입니다.',
-                        '아직 답변이 등록되지 않았습니다.'
-                     )">
-
-                    내용 그대로
-
-                </div>
-
-                <div class="col-answer">
-                    답변 전
-                </div>
-
-                <div class="col-date">
-                    05/03 19:52
-                </div>
-
-                <div class="col-manage">
-
-                    <button class="delete-btn">
-                        삭제하기
-                    </button>
-
-                </div>
-
-            </div>
-
-            <!-- 빈 줄 -->
-            <div class="empty-line"></div>
-            <div class="empty-line"></div>
-            <div class="empty-line"></div>
-            <div class="empty-line"></div>
-            <div class="empty-line"></div>
-            <div class="empty-line"></div>
-            <div class="empty-line"></div>
-            <div class="empty-line"></div>
-
-            <!-- 페이지네이션 -->
-            <div class="pagination">
-                1
-            </div>
+         <!-- 페이지네이션 -->
+         <div class="pagination">
+             <c:if test="${inquiries.totalPages > 0}">
+                 <c:forEach begin="0" end="${inquiries.totalPages - 1}" var="i">
+                     <a href="?page=${i}"
+                        style="${inquiries.number eq i ? 'font-weight:bold; color:#ff4d4d;' : 'color:#333;'}">
+                         ${i + 1}
+                     </a>
+                 </c:forEach>
+             </c:if>
+         </div>
 
         </section>
 

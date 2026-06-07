@@ -13,8 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -170,8 +172,40 @@ public class SubscriptionService {
                             subscription.getStatus()
                     );
 
+                    res.setSerialCode(subscription.getSerialCode());
+
+                    res.setSharedId(subscription.getParty().getShareId());
+                    res.setSharedPwd(subscription.getParty().getSharePassword());
+
                     return res;
                 })
-                .toList();
+                .collect(Collectors.toList());
     }
-}
+
+    @Transactional
+    public void cancelSubscription(Long subscriptionId) {
+        Subscription subscription = subscriptionRepository.findById(subscriptionId)
+                .orElseThrow(() -> new RuntimeException("구독 없음"));
+
+        subscription.setStatus("CANCELLED");
+        // save() 안해도 됨 — @Transactional이라 자동 반영
+    }
+    // 💡 [여기에 추가] 내 정보 메인 화면용: 최신 구독 내역 최대 3개만 잘라서 가져오기
+    @Transactional(readOnly = true)
+    public List<SubscriptionResponse> getTop3Subscriptions(Long userId) {
+        // 1. 기존 메서드로 전체 구독을 긁어옵니다.
+        List<SubscriptionResponse> allSubs = getMySubscriptions(userId);
+
+        // 2. 만약 전체 목록이 null이거나 비어있으면 안전하게 바로 빈 리스트 반환
+        if (allSubs == null || allSubs.isEmpty()) {
+            System.out.println("⚠️ [서비스 로그] 유저 " + userId + "번의 구독 데이터가 DB에 없거나 null입니다.");
+            return new ArrayList<>();
+        }
+
+        // 3. 최신순 정렬을 보장하기 위해 ID 역순(최신순) 정렬 후 최대 3개 컷팅
+        return allSubs.stream()
+                .sorted((a, b) -> b.getId().compareTo(a.getId())) // 최신 구독이 위로 오게 정렬
+                .limit(3)
+                .collect(Collectors.toList());
+    }
+} // <--- 클래스가 끝나는 맨 마지막 중괄호 바로 위에 넣으셔야 합니다!

@@ -16,6 +16,11 @@
 
     /* 1. ⚡ 사이드바 크기 밸런스 조정 (아랫단 높이를 맞추기 위해 내부 상하 여백 확대) */
     .mypage-sidebar-fixed {
+
+            position: sticky !important;
+            top: 100px !important;              /* 💡 스크롤 시 화면 상단에서 100px 떨어진 위치에 딱 붙어 따라옵니다 (탑바 높이에 맞게 조절 가능) */
+            z-index: 100 !important;
+
         width: 250px !important;
         min-width: 250px !important;
         max-width: 250px !important;
@@ -90,7 +95,7 @@
 <aside class="mypage-sidebar-fixed">
     <ul>
         <li class="${menu == 'mypage' ? 'active' : ''}"><a href="/mypage">내 정보</a></li>
-        <li class="${menu == 'subscriptions' ? 'active' : ''}"><a href="/mypage/subscriptions">내 구독 관리</a></li>
+        <li class="${menu == 'subscriptions' ? 'active' : ''}"><a href="/subscription/my">내 구독 관리</a></li>
         <li class="${menu == 'posts' ? 'active' : ''}"><a href="/mypage/posts">내 게시글 보기</a></li>
         <li class="${menu == 'questions' ? 'active' : ''}"><a href="/mypage/questions">내 문의</a></li>
         <li class="${menu == 'reports' ? 'active' : ''}"><a href="/mypage/reports">내 신고 목록</a></li>

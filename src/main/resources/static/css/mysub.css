@@ -772,4 +772,115 @@
 
         width:calc(100% - 32px);
     }
+    /* =========================
+       반응형 (mypage 전체 공통)
+    ========================= */
+
+    /* 태블릿 이하 */
+    @media screen and (max-width: 1024px) {
+
+        .mypage-container {
+            flex-direction: column !important;
+            padding: 20px 16px !important;
+            gap: 20px !important;
+        }
+
+        /* 사이드바 → 모바일에서는 숨기거나 위로 */
+        .mypage-sidebar {
+            width: 100% !important;
+            min-width: 100% !important;
+            border-radius: 12px !important;
+        }
+
+        /* 카드 2열 → 1열 */
+        .bottom-row {
+            flex-direction: column !important;
+            gap: 20px !important;
+        }
+
+        /* 헤더 여백 조정 */
+        body.mypage .site-header {
+            height: 70px !important;
+        }
+
+        body.mypage {
+            padding-top: 70px !important;
+        }
+    }
+
+    /* 모바일 */
+    @media screen and (max-width: 768px) {
+
+        /* 햄버거 버튼 유지 + 크기 조정 */
+        body.mypage .hamburger-btn {
+            left: 16px !important;
+            width: 38px !important;
+            height: 38px !important;
+        }
+
+        /* 프로필 영역 세로 정렬 */
+        .profile-combined-card {
+            flex-direction: column !important;
+        }
+
+        .info-side,
+        .alert-side {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        /* 카드 패딩 줄이기 */
+        .single-account-box {
+            padding: 18px !important;
+        }
+
+        .account-info-card {
+            padding: 12px !important;
+        }
+
+        /* 텍스트 줄바꿈 안정화 */
+        .main-bank-info strong,
+        .main-bank-info span {
+            font-size: 14px !important;
+        }
+
+        /* 구독 카드 */
+        .sub-item {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 8px !important;
+        }
+
+        /* 버튼 크기 */
+        .change-account-btn,
+        .add-account-btn {
+            font-size: 13px !important;
+            padding: 10px !important;
+        }
+    }
+
+    /* 아주 작은 모바일 */
+    @media screen and (max-width: 480px) {
+
+        .mypage-container {
+            padding: 12px !important;
+        }
+
+        .card-title-center {
+            font-size: 16px !important;
+        }
+
+        .account-info-card {
+            border-radius: 10px !important;
+        }
+
+        body.mypage nav.sidebar {
+            width: 220px !important;
+        }
+
+        body.mypage nav.sidebar li a {
+            font-size: 14px !important;
+            height: 48px !important;
+        }
+    }
 }
