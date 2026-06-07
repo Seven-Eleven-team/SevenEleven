@@ -105,7 +105,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "/favicon.ico",
                         "/support",
                         "/support/type",
-                        "/support/api/faqs/**"
+                        "/support/api/faqs/**",
+                        "/subscription/ott"
                 );
         //  관리자 페이지 권한 체크 인터셉터
         registry.addInterceptor(adminCheckInterceptor)
