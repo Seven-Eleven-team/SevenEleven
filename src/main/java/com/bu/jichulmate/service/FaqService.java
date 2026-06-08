@@ -1,22 +1,24 @@
 package com.bu.jichulmate.service;
 
+import com.bu.jichulmate.domain.User; // ★ 추가
 import com.bu.jichulmate.dto.support.FaqRequest;
 import com.bu.jichulmate.dto.support.FaqResponse;
 import com.bu.jichulmate.domain.Faq;
 import com.bu.jichulmate.repository.FaqRepository;
+import lombok.RequiredArgsConstructor; // ★ 추가
+import lombok.extern.slf4j.Slf4j; // ★ 추가
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor // ★ 생성자 주입을 롬복으로 깔끔하게 변경
 public class FaqService {
 
     private final FaqRepository faqRepository;
-
-    public FaqService(FaqRepository faqRepository) {
-        this.faqRepository = faqRepository;
-    }
+    private final AdminAuditService adminAuditService; // ★ 로그 서비스 주입
 
     public List<FaqResponse> getFaqList() {
         return faqRepository.findAllByOrderBySortOrderAsc()
@@ -25,7 +27,6 @@ public class FaqService {
                 .toList();
     }
 
-    // 카테고리가 삭제되었으므로, 구조 유지를 위해 일단 전체 리스트를 반환
     public List<FaqResponse> getFaqListByCategory(String category) {
         return faqRepository.findAllByOrderBySortOrderAsc()
                 .stream()
@@ -41,24 +42,41 @@ public class FaqService {
     }
 
     @Transactional
-    public FaqResponse createFaq(FaqRequest request) {
+    public FaqResponse createFaq(FaqRequest request, User admin, String ipAddress) { // ★ 파라미터 추가
         Faq faq = new Faq();
-        // ★ 호영님이 작성하신 update 메서드 규격(파라미터 3개)에 완벽하게 맞춤!
         faq.update(request.getQuestion(), request.getAnswer(), request.getSortOrder());
-        return new FaqResponse(faqRepository.save(faq));
+        Faq savedFaq = faqRepository.save(faq);
+
+        // ★ 로그 기록 (만약 Faq 엔티티의 PK 필드명이 다르다면 savedFaq.getFaqId() 등으로 수정해 주세요)
+        if (admin != null) {
+            adminAuditService.recordLog(admin, "CREATE_FAQ", "FAQS", savedFaq.getFaqId(), ipAddress);
+        }
+
+        return new FaqResponse(savedFaq);
     }
 
     @Transactional
-    public FaqResponse updateFaq(Long faqId, FaqRequest request) {
+    public FaqResponse updateFaq(Long faqId, FaqRequest request, User admin, String ipAddress) { // ★ 파라미터 추가
         Faq faq = faqRepository.findById(faqId)
                 .orElseThrow(() -> new RuntimeException("FAQ를 찾을 수 없습니다."));
         faq.update(request.getQuestion(), request.getAnswer(), request.getSortOrder());
+
+        // ★ 로그 기록
+        if (admin != null) {
+            adminAuditService.recordLog(admin, "UPDATE_FAQ", "FAQS", faqId, ipAddress);
+        }
+
         return new FaqResponse(faq);
     }
 
     @Transactional
-    public void deleteFaq(Long faqId) {
+    public void deleteFaq(Long faqId, User admin, String ipAddress) { // ★ 파라미터 추가
         faqRepository.deleteById(faqId);
+
+        // ★ 로그 기록
+        if (admin != null) {
+            adminAuditService.recordLog(admin, "DELETE_FAQ", "FAQS", faqId, ipAddress);
+        }
     }
 
     public FaqResponse getFaqByIndex(int index) {

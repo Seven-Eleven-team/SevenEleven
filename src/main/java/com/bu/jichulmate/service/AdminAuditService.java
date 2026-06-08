@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,8 +28,7 @@ public class AdminAuditService {
                 .collect(Collectors.toList());
     }
 
-    // 2. [참고용] 활동 로그 저장 메서드
-    // 나중에 AdminPartyService 등에서 파티를 승인한 직후 이 메서드를 호출해서 기록을 남기면 됩니다!
+    // 2.  활동 로그 저장 메서드
     @Transactional
     public void recordLog(User admin, String actionType, String targetTable, Long targetId, String ipAddress) {
         AdminAuditLog log = AdminAuditLog.builder()
@@ -37,6 +37,7 @@ public class AdminAuditService {
                 .targetTable(targetTable)
                 .targetId(targetId)
                 .ipAddress(ipAddress)
+                .createdAt(LocalDateTime.now()) // ★ 이 줄을 추가해서 직접 시간을 넣어줍니다!
                 .build();
 
         adminAuditLogRepository.save(log);

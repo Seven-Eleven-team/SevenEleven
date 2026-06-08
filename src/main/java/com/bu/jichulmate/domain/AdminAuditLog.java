@@ -47,4 +47,13 @@ public class AdminAuditLog {
     @CreatedDate
     @Column(name = "CREATED_AT", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    // AdminAuditLog.java 맨 아래에 추가
+    @PrePersist
+    protected void onCreate() {
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+    }
+
 }

@@ -1,5 +1,7 @@
 package com.bu.jichulmate.controller;
 
+import com.bu.jichulmate.util.SessionUtils;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -13,15 +15,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class AdminController {
 
-    // 나중에 데이터를 가져올 서비스 클래스를 여기에 연결할 예정입니다!
-    // private final AdminUserService adminUserService;
+
 
     // ==========================================
     // 1. 관리자 메인 대시보드
     // ==========================================
     @GetMapping({"", "/"})
-    public String adminDashboard() {
-        // DB 연결 없이 메인 화면만 띄워줍니다.
+    public String adminDashboard(HttpSession session) { // ★ HttpSession 파라미터 추가
+
+        // ★ AdminPageController에 있던 보안 로직을 여기로 가져옵니다.
+        if (!SessionUtils.isAdmin(session)) {
+            return "redirect:/auth/login"; // 로그인 페이지 경로에 맞게 수정해주세요 (예: /login 또는 /auth/login)
+        }
+
         return "admin/admin_index";
     }
 

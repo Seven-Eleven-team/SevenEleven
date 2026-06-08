@@ -23,12 +23,31 @@
             </div>
             <a class="admin-text-link admin-link" href="${pageContext.request.contextPath}/admin/terms">약관 목록</a>
         </div>
-        <form class="admin-card admin-form wide" action="${pageContext.request.contextPath}/admin/terms/save" method="post">
-            <label><span>약관 유형</span><input type="text" name="termType" value="SERVICE"></label>
-            <label><span>버전</span><input type="text" name="version" value="1.0"></label>
-            <label><span>필수 여부</span><select name="isRequired"><option value="Y">Y</option><option value="N">N</option></select></label>
-            <label><span>적용일</span><input type="date" name="applyDate" value="2026-06-01"></label>
-            <label class="full-field"><span>약관 내용</span><textarea name="content" rows="12">약관 내용을 입력하세요.</textarea></label>
+
+        <form class="admin-card admin-form wide" id="terms-form">
+            <label>
+                <span>약관 유형</span>
+                <input type="text" name="termType" id="term-type" readonly required>
+            </label>
+            <label>
+                <span>버전</span>
+                <input type="text" name="version" id="term-version" required>
+            </label>
+            <label>
+                <span>필수 여부</span>
+                <select name="isRequired" id="term-required">
+                    <option value="Y">Y</option>
+                    <option value="N">N</option>
+                </select>
+            </label>
+            <label>
+                <span>적용일</span>
+                <input type="date" name="applyDate" id="term-apply-date" required>
+            </label>
+            <label class="full-field">
+                <span>약관 내용</span>
+                <textarea name="content" id="term-content" rows="12" required></textarea>
+            </label>
             <div class="admin-bottom-actions form-actions">
                 <a class="admin-btn ghost admin-link" href="${pageContext.request.contextPath}/admin/terms">취소</a>
                 <button class="admin-btn" type="submit">저장</button>
@@ -37,7 +56,6 @@
     </section>
 </main>
 <script src="${pageContext.request.contextPath}/js/pages/admin-terms.js"></script>
-
 <script src="${pageContext.request.contextPath}/js/pages/admin-dashboard.js"></script>
 </body>
 </html>

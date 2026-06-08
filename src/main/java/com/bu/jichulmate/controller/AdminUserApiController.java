@@ -3,9 +3,9 @@ package com.bu.jichulmate.controller;
 import com.bu.jichulmate.domain.User;
 import com.bu.jichulmate.dto.admin.AdminUserResponse;
 import com.bu.jichulmate.dto.admin.UserStatusUpdateRequest;
-import com.bu.jichulmate.service.AdminAuditService;
 import com.bu.jichulmate.service.AdminUserService;
 import com.bu.jichulmate.util.SessionUtils;
+import jakarta.servlet.http.HttpServletRequest; // ★ IP 추출용 추가
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,23 +17,20 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/admin/users") // ★ 공통 주소를 /users까지 확장하여 코드가 짧아집니다!
+@RequestMapping("/api/admin/users")
 @RequiredArgsConstructor
 public class AdminUserApiController {
 
     private final AdminUserService adminUserService;
-    private final AdminAuditService adminAuditService;
+    // ★ 컨트롤러에 있던 AdminAuditService는 서비스 계층으로 역할을 넘겼으므로 삭제했습니다.
 
-    // 1. 회원 목록 조회 API
     @GetMapping
     public ResponseEntity<Map<String, Object>> getUserList(HttpSession session) {
-        // 관리자 권한 철통 방어
         if (!SessionUtils.isAdmin(session)) {
             return fail(HttpStatus.FORBIDDEN, "관리자 권한이 필요합니다.");
         }
 
         List<AdminUserResponse> users = adminUserService.getAllUsers();
-
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("ok", true);
         body.put("users", users);
@@ -41,32 +38,25 @@ public class AdminUserApiController {
         return ResponseEntity.ok(body);
     }
 
-    // 2. 회원 상태 변경 API (정지/활성화)
     @PatchMapping("/{userId}/status")
     public ResponseEntity<Map<String, Object>> changeUserStatus(
             @PathVariable("userId") Long userId,
             @RequestBody UserStatusUpdateRequest request,
-            HttpSession session) {
+            HttpSession session,
+            HttpServletRequest httpRequest) { // ★ HttpServletRequest 추가
 
         if (!SessionUtils.isAdmin(session)) {
             return fail(HttpStatus.FORBIDDEN, "관리자 권한이 필요합니다.");
         }
 
         try {
-            // 1. 상태 변경은 확실하게 수행
-            adminUserService.updateUserStatus(userId, request.getStatus());
+            // ★ 세션에서 실제 관리자 객체 꺼내기
+            User admin = (User) session.getAttribute(SessionUtils.SESSION_USER);
+            // ★ 실제 접속 IP 꺼내기 (127.0.0.1 하드코딩 제거)
+            String ipAddress = httpRequest.getRemoteAddr();
 
-            // 2. 로그 기록을 별도 try-catch로 감싸서,
-            // 로그 저장에 실패해도 상태 변경은 성공한 것으로 처리합니다.
-            try {
-                User admin = (User) session.getAttribute(SessionUtils.SESSION_USER);
-                if (admin != null) {
-                    adminAuditService.recordLog(admin, "USER_STATUS_UPDATE", "USERS", userId, "127.0.0.1");
-                }
-            } catch (Exception logError) {
-                // 로그 저장 실패는 에러로 치지 않고 기록만 남깁니다.
-                logError.printStackTrace();
-            }
+            // ★ 서비스로 모든 재료(대상, 상태, 관리자, IP)를 한 번에 넘겨줍니다.
+            adminUserService.updateUserStatus(userId, request.getStatus(), admin, ipAddress);
 
             Map<String, Object> body = new LinkedHashMap<>();
             body.put("ok", true);
@@ -79,7 +69,6 @@ public class AdminUserApiController {
         }
     }
 
-    // 공통 실패 응답 템플릿
     private ResponseEntity<Map<String, Object>> fail(HttpStatus status, String message) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("ok", false);
@@ -89,9 +78,7 @@ public class AdminUserApiController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<Map<String, Object>> getUserDetail(@PathVariable("userId") Long userId) {
-        // 이제 서비스의 최적화된 단건 조회 메서드를 호출합니다.
         AdminUserResponse user = adminUserService.getUserById(userId);
-
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("ok", true);
         body.put("user", user);

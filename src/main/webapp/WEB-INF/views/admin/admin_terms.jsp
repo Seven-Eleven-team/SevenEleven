@@ -52,9 +52,7 @@
                         <th>관리</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr><td>1</td><td>SERVICE</td><td>1.0</td><td>Y</td><td>2026-06-01</td><td>2026-06-01</td><td>-</td><td><a class="admin-btn ghost admin-link" href="${pageContext.request.contextPath}/admin/terms/form?termId=1">수정</a></td></tr>
-                    <tr><td>2</td><td>PRIVACY</td><td>1.0</td><td>Y</td><td>2026-06-01</td><td>2026-06-01</td><td>-</td><td><a class="admin-btn ghost admin-link" href="${pageContext.request.contextPath}/admin/terms/form?termId=2">수정</a></td></tr>
+                    <tbody id="terms-table-body">
                     </tbody>
                 </table>
             </div>

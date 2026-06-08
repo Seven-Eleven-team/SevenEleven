@@ -1,8 +1,12 @@
 package com.bu.jichulmate.controller;
 
+import com.bu.jichulmate.domain.User; // ★ 추가
 import com.bu.jichulmate.dto.admin.AdminPartyResponse;
 import com.bu.jichulmate.dto.admin.PartyApprovalRequest;
 import com.bu.jichulmate.service.AdminPartyService;
+import com.bu.jichulmate.util.SessionUtils; // ★ 추가
+import jakarta.servlet.http.HttpServletRequest; // ★ 추가
+import jakarta.servlet.http.HttpSession; // ★ 추가
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,9 +53,16 @@ public class AdminPartyApiController {
     @PostMapping("/{partyId}/approve")
     public ResponseEntity<Map<String, Object>> processPartyApproval(
             @PathVariable("partyId") Long partyId,
-            @RequestBody PartyApprovalRequest request) {
+            @RequestBody PartyApprovalRequest request,
+            HttpSession session,               // ★ 세션 추가
+            HttpServletRequest httpRequest) {  // ★ IP 추출용 추가
         try {
-            adminPartyService.approveOrRejectParty(partyId, request.isApproved(), request.getRejectReason());
+            // ★ 세션에서 관리자 정보 꺼내기
+            User admin = (User) session.getAttribute(SessionUtils.SESSION_USER);
+            // ★ IP 주소 꺼내기
+            String ipAddress = httpRequest.getRemoteAddr();
+
+            adminPartyService.approveOrRejectParty(partyId, request.isApproved(), request.getRejectReason(), admin, ipAddress);
 
             Map<String, Object> body = new LinkedHashMap<>();
             body.put("ok", true);
@@ -64,9 +75,17 @@ public class AdminPartyApiController {
 
     // 4. 불량 파티 강제 취소 처리
     @PostMapping("/{partyId}/cancel")
-    public ResponseEntity<Map<String, Object>> cancelInvalidParty(@PathVariable("partyId") Long partyId) {
+    public ResponseEntity<Map<String, Object>> cancelInvalidParty(
+            @PathVariable("partyId") Long partyId,
+            HttpSession session,               // ★ 세션 추가
+            HttpServletRequest httpRequest) {  // ★ IP 추출용 추가
         try {
-            adminPartyService.cancelInvalidParty(partyId);
+            // ★ 세션에서 관리자 정보 꺼내기
+            User admin = (User) session.getAttribute(SessionUtils.SESSION_USER);
+            // ★ IP 주소 꺼내기
+            String ipAddress = httpRequest.getRemoteAddr();
+
+            adminPartyService.cancelInvalidParty(partyId, admin, ipAddress);
 
             Map<String, Object> body = new LinkedHashMap<>();
             body.put("ok", true);
@@ -77,7 +96,7 @@ public class AdminPartyApiController {
         }
     }
 
-    // 공통 실패 응답 템플릿 (각 컨트롤러마다 필요합니다)
+    // 공통 실패 응답 템플릿
     private ResponseEntity<Map<String, Object>> fail(HttpStatus status, String message) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("ok", false);

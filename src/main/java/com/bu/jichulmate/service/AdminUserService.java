@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 public class AdminUserService {
 
     private final UserRepository userRepository;
+    private final AdminAuditService adminAuditService; // ★ 로그 서비스 주입 추가
 
-    // 1. 전체 회원 목록 조회 (Entity -> DTO 안전 변환)
     @Transactional(readOnly = true)
     public List<AdminUserResponse> getAllUsers() {
         return userRepository.findAll().stream()
@@ -26,19 +26,23 @@ public class AdminUserService {
                 .collect(Collectors.toList());
     }
 
-    // 2. 특정 회원 상태 변경 (정지, 활성화 등)
+    // ★ 관리자(admin)와 접속 IP(ipAddress) 파라미터 추가
     @Transactional
-    public void updateUserStatus(Long userId, String newStatus) {
+    public void updateUserStatus(Long userId, String newStatus, User admin, String ipAddress) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다. ID: " + userId));
 
-        // JPA의 더티 체킹(Dirty Checking)으로 save() 없이 상태 즉시 변경
         user.setAccountStatus(newStatus);
-
         log.info("[AdminUserService] 회원 상태 변경 완료 - 회원 ID: {}, 변경된 상태: {}", userId, newStatus);
+
+        // ★ 비즈니스 로직(상태 변경)이 성공적으로 끝나면 로그 기록
+        if (admin != null) {
+            adminAuditService.recordLog(admin, "USER_STATUS_UPDATE", "USERS", userId, ipAddress);
+        } else {
+            log.warn("관리자 정보가 없어 로그를 남길 수 없습니다.");
+        }
     }
 
-    // 3. 특정 회원 단건 조회
     @Transactional(readOnly = true)
     public AdminUserResponse getUserById(Long userId) {
         User user = userRepository.findById(userId)

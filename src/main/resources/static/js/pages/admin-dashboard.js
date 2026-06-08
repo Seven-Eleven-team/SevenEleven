@@ -59,7 +59,8 @@
       partyId: null,
       notificationId: null,
       inquiryId: null,
-      faqId: null
+      faqId: null,
+      termId: null
     },
     cache: {},
     loadingToken: 0
@@ -120,11 +121,46 @@
     const faqDelete = event.target.closest("[data-faq-delete]");
     const partyApprove = event.target.closest("[data-party-approve]");
     const partyCancel = event.target.closest("[data-party-cancel]");
+    const userSearchBtn = event.target.closest("#btn-user-search");
+    const termEdit = event.target.closest("[data-term-edit]");
 
     if (subTab) {
+
+      if (subTab.dataset.subTab === "termsForm") state.selected.termId = null;
+
       state.activeSubTabs[state.activePage] = subTab.dataset.subTab;
       await renderActiveContent();
       return;
+    }
+
+    if (userSearchBtn) {
+          const searchId = document.getElementById("search-login-id").value.toLowerCase();
+          const searchStatus = document.getElementById("search-status").value;
+          const rows = document.querySelectorAll("#user-table-body .user-row");
+
+          rows.forEach(row => {
+            // 화면에 그려진 아이디와 상태 텍스트를 가져와서 비교합니다
+            const loginId = row.querySelector(".user-login-id").textContent.toLowerCase();
+            const status = row.querySelector(".user-status").textContent.trim();
+
+            const matchId = loginId.includes(searchId); // 입력한 텍스트가 포함되어 있는지
+            const matchStatus = searchStatus === "" || status === searchStatus; // 상태가 일치하는지
+
+            // 두 조건이 모두 맞으면 보이고, 아니면 숨깁니다
+            if (matchId && matchStatus) {
+              row.style.display = "";
+            } else {
+              row.style.display = "none";
+            }
+          });
+          return;
+        }
+
+    if (termEdit) {
+          state.selected.termId = Number(termEdit.dataset.termEdit);
+          state.activeSubTabs.terms = "termsForm";
+          await renderActiveContent();
+          return;
     }
 
     if (userDetail) {
@@ -430,51 +466,54 @@
   }
 
   async function renderUsers() {
-    const users = await loadUsers();
-    const rows = users.map((user) => {
-      const userId = value(user, ["userId", "id"], "-");
-      const loginId = value(user, ["loginId", "email", "username"], "-");
-      const nickname = value(user, ["nickname", "name"], "-");
-      const role = value(user, ["role"], "USER");
-      const status = value(user, ["accountStatus", "status"], "-");
-      const noti = value(user, ["isNotiEnabled", "notiEnabled", "notificationEnabled"], "-");
+      const users = await loadUsers();
+      const rows = users.map((user) => {
+        const userId = value(user, ["userId", "id"], "-");
+        const loginId = value(user, ["loginId", "email", "username"], "-");
+        const nickname = value(user, ["nickname", "name"], "-");
+        const role = value(user, ["role"], "USER");
+        const status = value(user, ["accountStatus", "status"], "-");
+        const noti = value(user, ["isNotiEnabled", "notiEnabled", "notificationEnabled"], "-");
+
+        return `
+          <tr class="user-row"> <td>${escapeHtml(userId)}</td>
+            <td class="user-login-id">${escapeHtml(loginId)}</td> <td>${escapeHtml(nickname)}</td>
+            <td>${badge(role, role === "ADMIN" ? "blue" : "gray")}</td>
+            <td class="user-status">${statusBadge(status)}</td> <td>${escapeHtml(noti)}</td>
+            <td class="admin-actions">
+              <button class="admin-btn ghost" type="button" data-user-detail="${escapeAttr(userId)}">상세보기</button>
+              <button class="admin-btn soft" type="button" data-user-status="${escapeAttr(userId)}">상태변경</button>
+            </td>
+          </tr>
+        `;
+      }).join("");
 
       return `
-        <tr>
-          <td>${escapeHtml(userId)}</td>
-          <td>${escapeHtml(loginId)}</td>
-          <td>${escapeHtml(nickname)}</td>
-          <td>${badge(role, role === "ADMIN" ? "blue" : "gray")}</td>
-          <td>${statusBadge(status)}</td>
-          <td>${escapeHtml(noti)}</td>
-          <td class="admin-actions">
-            <button class="admin-btn ghost" type="button" data-user-detail="${escapeAttr(userId)}">상세보기</button>
-            <button class="admin-btn soft" type="button" data-user-status="${escapeAttr(userId)}">상태변경</button>
-          </td>
-        </tr>
+        <article class="admin-card">
+          <div class="admin-card-head">
+            <h2>회원 목록</h2>
+          </div>
+          <div class="admin-filter-bar">
+            <label>로그인 ID <input type="search" id="search-login-id" placeholder="화면 내 검색"></label>
+            <label>계정 상태
+              <select id="search-status">
+                <option value="">전체</option>
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="SUSPENDED">SUSPENDED</option>
+                <option value="WITHDRAWN">WITHDRAWN</option>
+              </select>
+            </label>
+            <button class="admin-btn" type="button" id="btn-user-search">검색</button>
+            </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead><tr><th>회원 ID</th><th>로그인 ID</th><th>닉네임</th><th>권한</th><th>계정 상태</th><th>알림 수신</th><th>관리</th></tr></thead>
+              <tbody id="user-table-body">${rows || emptyRow(7, "회원 데이터가 없습니다.")}</tbody>
+            </table>
+          </div>
+        </article>
       `;
-    }).join("");
-
-    return `
-      <article class="admin-card">
-        <div class="admin-card-head">
-          <h2>회원 목록</h2>
-        </div>
-        <div class="admin-filter-bar">
-          <label>로그인 ID <input type="search" placeholder="화면 내 검색"></label>
-          <label>계정 상태 <select><option>전체</option><option>ACTIVE</option><option>SUSPENDED</option><option>WITHDRAWN</option></select></label>
-          <button class="admin-btn" type="button">검색</button>
-          <button class="admin-btn ghost" type="button">Export</button>
-        </div>
-        <div class="admin-table-wrap">
-          <table class="admin-table">
-            <thead><tr><th>회원 ID</th><th>로그인 ID</th><th>닉네임</th><th>권한</th><th>계정 상태</th><th>알림 수신</th><th>관리</th></tr></thead>
-            <tbody>${rows || emptyRow(7, "회원 데이터가 없습니다.")}</tbody>
-          </table>
-        </div>
-      </article>
-    `;
-  }
+    }
 
   async function renderAuditLogs() {
     const logs = await loadAuditLogs();
@@ -572,43 +611,67 @@
   }
 
   async function renderTerms() {
-    const terms = await loadTerms();
-    const rows = terms.map((term) => `
-      <tr>
-        <td>${escapeHtml(value(term, ["termsId", "termId", "id"], "-"))}</td>
-        <td>${escapeHtml(value(term, ["termType", "type", "termsType"], "-"))}</td>
-        <td>${escapeHtml(value(term, ["version"], "-"))}</td>
-        <td>${escapeHtml(value(term, ["displayOrder", "sortOrder"], "-"))}</td>
-        <td>${requiredBadge(value(term, ["isRequired", "required"], "-"))}</td>
-        <td>${escapeHtml(formatDate(value(term, ["applyDate", "createdAt"], null)))}</td>
-        <td class="admin-actions"><button class="admin-btn ghost" type="button" data-sub-tab="termsForm">새 버전 등록</button></td>
-      </tr>
-    `).join("");
+      const terms = await loadTerms();
+      const rows = terms.map((term) => `
+        <tr>
+          <td>${escapeHtml(value(term, ["termsId", "termId", "id"], "-"))}</td>
+          <td>${escapeHtml(value(term, ["termType", "type", "termsType"], "-"))}</td>
+          <td>${escapeHtml(value(term, ["version"], "-"))}</td>
+          <td>${escapeHtml(value(term, ["displayOrder", "sortOrder"], "-"))}</td>
+          <td>${requiredBadge(value(term, ["isRequired", "required"], "-"))}</td>
+          <td>${escapeHtml(formatDate(value(term, ["applyDate", "createdAt"], null)))}</td>
+          <td class="admin-actions">
+            <button class="admin-btn ghost" type="button" data-term-edit="${escapeAttr(value(term, ["termsId", "termId", "id"], ""))}">약관 수정</button>
+          </td>
+        </tr>
+      `).join("");
 
-    return `
-      <article class="admin-card">
-        <div class="admin-card-head"><h2>약관 목록</h2><button class="admin-btn" type="button" data-sub-tab="termsForm">약관 등록</button></div>
-        <div class="admin-table-wrap"><table class="admin-table">
-          <thead><tr><th>약관 ID</th><th>약관 종류</th><th>버전</th><th>정렬</th><th>필수 여부</th><th>적용일</th><th>관리</th></tr></thead>
-          <tbody>${rows || emptyRow(7, "약관 데이터가 없습니다.")}</tbody>
-        </table></div>
-      </article>
-    `;
-  }
+      return `
+        <article class="admin-card">
+          <div class="admin-card-head"><h2>약관 목록</h2><button class="admin-btn" type="button" data-sub-tab="termsForm">신규 등록</button></div>
+          <div class="admin-table-wrap"><table class="admin-table">
+            <thead><tr><th>약관 ID</th><th>약관 종류</th><th>버전</th><th>정렬</th><th>필수 여부</th><th>적용일</th><th>관리</th></tr></thead>
+            <tbody>${rows || emptyRow(7, "약관 데이터가 없습니다.")}</tbody>
+          </table></div>
+        </article>
+      `;
+    }
 
   async function renderTermsForm() {
-    return `
-      <form class="admin-card admin-form wide" data-terms-form>
-        <div class="admin-card-head full-field"><h2>약관 새 버전 등록</h2></div>
-        <label><span>약관 종류</span><select name="termType" required><option value="SERVICE">SERVICE</option><option value="PRIVACY">PRIVACY</option><option value="MARKETING">MARKETING</option><option value="LOCATION">LOCATION</option></select></label>
-        <label><span>버전</span><input name="version" placeholder="예: v1.1" required></label>
-        <label><span>필수 여부</span><select name="isRequired"><option value="Y">Y</option><option value="N">N</option></select></label>
-        <label><span>적용일</span><input name="applyDate" type="datetime-local"></label>
-        <label class="full-field"><span>약관 내용</span><textarea name="content" rows="12" placeholder="약관 내용을 입력하세요." required></textarea></label>
-        <div class="form-actions admin-bottom-actions"><button class="admin-btn ghost" type="button" data-sub-tab="terms">목록으로</button><button class="admin-btn" type="submit">저장</button></div>
-      </form>
-    `;
-  }
+      let term = null;
+      // ★ 수정 모드: 저장해둔 ID가 있으면 기존 약관 정보를 불러옵니다.
+      if (state.selected.termId) {
+        const terms = await loadTerms();
+        term = findById(terms, state.selected.termId, ["termsId", "termId", "id"]);
+      }
+
+      const isEdit = !!term; // 정보가 있으면 true(수정), 없으면 false(신규)
+      const termId = isEdit ? value(term, ["termsId", "termId", "id"], "") : "";
+      const termType = isEdit ? value(term, ["termType", "type"], "SERVICE") : "SERVICE";
+      const version = isEdit ? value(term, ["version"], "") : "";
+      const isRequired = isEdit ? value(term, ["isRequired", "required"], "Y") : "Y";
+      const content = isEdit ? value(term, ["content"], "") : "";
+
+      // 날짜 포맷 맞추기 (YYYY-MM-DDTHH:mm)
+      let applyDate = "";
+      if (isEdit && term.applyDate) applyDate = term.applyDate.slice(0, 16);
+
+      return `
+        <form class="admin-card admin-form wide" data-terms-form>
+          <div class="admin-card-head full-field"><h2>${isEdit ? "약관 수정" : "약관 신규 등록"}</h2></div>
+          ${isEdit ? `<input type="hidden" name="termId" value="${escapeAttr(termId)}">` : ""}
+          <label><span>약관 종류</span>${selectHtml("termType", ["SERVICE", "PRIVACY", "MARKETING", "LOCATION"], termType)}</label>
+          <label><span>버전</span><input name="version" placeholder="예: v1.1" value="${escapeAttr(version)}" required></label>
+          <label><span>필수 여부</span>${selectHtml("isRequired", ["Y", "N"], isRequired)}</label>
+          <label><span>적용일</span><input name="applyDate" type="datetime-local" value="${escapeAttr(applyDate)}"></label>
+          <label class="full-field"><span>약관 내용</span><textarea name="content" rows="12" required>${escapeHtml(content)}</textarea></label>
+          <div class="form-actions admin-bottom-actions">
+            <button class="admin-btn ghost" type="button" data-sub-tab="terms">목록으로</button>
+            <button class="admin-btn" type="submit">저장</button>
+          </div>
+        </form>
+      `;
+    }
 
   async function renderOttParties(onlyWaiting) {
     const parties = await loadParties();
@@ -744,7 +807,6 @@
       return `
         <tr>
           <td>${escapeHtml(faqId)}</td>
-          <td>${escapeHtml(value(faq, ["category"], "-"))}</td>
           <td>${escapeHtml(value(faq, ["question", "title"], "-"))}</td>
           <td>${escapeHtml(value(faq, ["displayOrder", "sortOrder"], "-"))}</td>
           <td>${requiredBadge(value(faq, ["isActive", "useYn", "isUsed"], "Y"))}</td>
@@ -759,13 +821,13 @@
         <article class="admin-card">
           <div class="admin-card-head"><h2>FAQ 목록</h2></div>
           <div class="admin-table-wrap"><table class="admin-table">
-            <thead><tr><th>FAQ ID</th><th>카테고리</th><th>질문</th><th>정렬</th><th>사용 여부</th><th>등록일</th><th>관리</th></tr></thead>
-            <tbody>${rows || emptyRow(7, "FAQ 데이터가 없습니다.")}</tbody>
+            <thead><tr><th>FAQ ID</th><th>질문</th><th>정렬</th><th>사용 여부</th><th>등록일</th><th>관리</th></tr></thead>
+            <tbody>${rows || emptyRow(6, "FAQ 데이터가 없습니다.")}</tbody>
           </table></div>
         </article>
         <form class="admin-card admin-form" data-faq-form>
           <div class="admin-card-head"><h2>FAQ 등록</h2></div>
-          <label><span>카테고리</span><input name="category" placeholder="예: 계정" required></label>
+
           <label><span>질문</span><input name="question" placeholder="질문을 입력하세요." required></label>
           <label><span>답변</span><textarea name="answer" rows="7" required></textarea></label>
           <label><span>정렬 순서</span><input name="displayOrder" type="number" value="1"></label>
@@ -846,21 +908,36 @@
   }
 
   async function submitTerms(form) {
-    const applyDate = form.applyDate.value ? new Date(form.applyDate.value).toISOString() : null;
-    await requestJson("/api/admin/terms", {
-      method: "POST",
-      body: JSON.stringify({
+      const termId = form.termId ? form.termId.value : null; // 숨겨둔 ID 찾기
+      const applyDate = form.applyDate.value ? new Date(form.applyDate.value).toISOString() : null;
+
+      const payload = {
         termType: form.termType.value,
         version: form.version.value,
         content: form.content.value,
         isRequired: form.isRequired.value,
         applyDate
-      })
-    });
-    clearCache("terms", "auditLogs");
-    state.activeSubTabs.terms = "terms";
-    await renderActiveContent();
-  }
+      };
+
+      if (termId) {
+        // ★ ID가 있으면 수정 (PUT)
+        await requestJson(`/api/admin/terms/${encodeURIComponent(termId)}`, {
+          method: "PUT",
+          body: JSON.stringify(payload)
+        });
+      } else {
+        // ★ ID가 없으면 신규 등록 (POST)
+        await requestJson("/api/admin/terms", {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+      }
+
+      clearCache("terms", "auditLogs"); // 캐시 지우기 (최신 데이터 갱신)
+      state.activeSubTabs.terms = "terms"; // 목록 화면으로 돌아가기
+      state.selected.termId = null; // 수정 완료 후 ID 비우기
+      await renderActiveContent();
+    }
 
   async function submitInquiryAnswer(form) {
     const inquiryId = form.inquiryId.value;
@@ -874,19 +951,18 @@
   }
 
   async function submitFaq(form) {
-    await requestJson("/api/admin/faqs", {
-      method: "POST",
-      body: JSON.stringify({
-        category: form.category.value,
-        question: form.question.value,
-        answer: form.answer.value,
-        displayOrder: Number(form.displayOrder.value || 0),
-        isActive: form.isActive.value
-      })
-    });
-    clearCache("faqs", "auditLogs");
-    await renderActiveContent();
-  }
+      await requestJson("/api/admin/faqs", {
+        method: "POST",
+        body: JSON.stringify({
+          question: form.question.value,
+          answer: form.answer.value,
+          displayOrder: Number(form.displayOrder.value || 0),
+          isActive: form.isActive.value
+        })
+      });
+      clearCache("faqs", "auditLogs");
+      await renderActiveContent();
+    }
 
   async function deleteFaq(faqId) {
     if (!window.confirm("선택한 FAQ를 삭제할까요?")) return;
