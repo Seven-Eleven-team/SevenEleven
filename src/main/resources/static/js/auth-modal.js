@@ -1374,7 +1374,8 @@
                 }
 
                 if (form.id === 'loginForm') {
-                    window.location.href = '/'; // 로그인 폼이면 뒤도 돌아보지 말고 무조건 메인으로 강제 새로고침!
+                    const redirectUrl = resolveRedirectUrl(data.redirectTo || options.redirectTo || '/');
+                    window.location.href = redirectUrl || getContextPath() + '/';
                     return;
                 }
 

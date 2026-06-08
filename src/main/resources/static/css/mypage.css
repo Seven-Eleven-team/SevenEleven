@@ -41,9 +41,8 @@
 
 .site-logo {
     font-size: 28px;
-    font-weight: 700;
-    color: #111111;
-    margin: 0;
+    font-weight: 800;
+    color: #f9f7f7;
 }
 
 .header-action-area {
@@ -64,17 +63,19 @@
 }
 
 .user-avatar {
-    width: 42px;
-    height: 42px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
-    background: #ff4d4d;
-    color: white;
+
+    background: #f2f2f2;
+    color: #193b60;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    font-weight: bold;
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .hamburger-btn {
@@ -447,10 +448,12 @@
         opacity: 0;
         transform: translateY(25px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
+}
     .mypage-sidebar-fixed li.active a {
         color: #ff4d4d !important;        /* 텍스트를 빨간색으로 변경 */
         font-weight: 700 !important;       /* 글씨를 두껍고 진하게 변경 */
