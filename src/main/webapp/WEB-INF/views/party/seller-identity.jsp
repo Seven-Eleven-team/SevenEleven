@@ -7,24 +7,110 @@
     <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
     <title>판매자 등록</title>
     <style>
-        body { background: #e8e8e8; min-height: 100vh; display: flex; flex-direction: column; }
-        .site-header { opacity: 1 !important; transform: translateY(0) !important; background: rgba(25, 59, 96, 0.96) !important; }
+        body {
+            background: #e8e8e8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
         .footer { height: auto !important; }
-        body { display: flex; flex-direction: column; min-height: 100vh; }
-        .page-wrap { flex: 1; }
-        .page-wrap { padding: 2rem 1.5rem; max-width: 900px; width: 100%; margin: 0 auto; padding-top: calc(74px + 2rem); flex: 1; box-sizing: border-box; }
-        .breadcrumb { font-size: 12px; color: #666; margin-bottom: 1rem; }
-        .card { background: #f0f0f0; border-radius: 12px; padding: 1.5rem 2rem; }
-        .card-title { text-align: center; font-size: 20px; font-weight: 500; margin-bottom: 1.5rem; color: #1a1a1a; }
-        .inner-box { background: #e0e0e0; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
-        .inner-box p { font-weight: 500; margin-bottom: 1rem; color: #333; }
-        .check-label { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; cursor: pointer; font-size: 14px; color: #333; }
-        .btn-row { display: flex; justify-content: center; gap: 1rem; margin-top: 2rem; }
-        .btn-dark { background: #1e3a5f; color: #fff; border: none; border-radius: 30px; padding: 10px 40px; font-size: 15px; cursor: pointer; }
+
+        .page-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: calc(74px + 3rem) 1.5rem 3rem;
+            box-sizing: border-box;
+        }
+
+        .breadcrumb {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .card {
+            background: #f0f0f0;
+            border-radius: 16px;
+            padding: 2.5rem 3rem;
+            width: 100%;
+            max-width: 560px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .card-title {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: #1a1a1a;
+        }
+
+        .inner-box {
+            background: #e0e0e0;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .inner-box p {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 1.4rem;
+            color: #222;
+        }
+
+        .check-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .check-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .btn-row {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .btn-dark {
+            background: #1e3a5f;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 48px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .btn-dark:hover { background: #162d4a; }
     </style>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
+<script>
+    (function() {
+        var header = document.querySelector('.site-header');
+        if (header) header.classList.add('is-solid');
+        document.body.classList.add('is-header-ready');
+        document.body.classList.add('is-opening-loaded');
+        document.body.classList.add('is-fab-ready');
+    })();
+</script>
 
 <div class="page-wrap">
     <p class="breadcrumb">판매자 등록</p>
@@ -40,7 +126,7 @@
             </label>
             <label class="check-label">
                 <input type="checkbox" id="chk-exp" name="experience" value="Y" onchange="handleCheck('chk-exp', 'chk-new')">
-                판매해본 적 이 있습니다.
+                판매해본 적이 있습니다.
             </label>
         </div>
 
