@@ -1,13 +1,18 @@
 package com.bu.jichulmate.controller;
 
+import com.bu.jichulmate.domain.Inquiry;
+import com.bu.jichulmate.domain.SavingGoal;
 import com.bu.jichulmate.domain.Subscription;
 import com.bu.jichulmate.dto.mypage.*;
+import com.bu.jichulmate.dto.subscription.SubscriptionResponse;
 import com.bu.jichulmate.dto.user.UserUpdateRequest;
 import com.bu.jichulmate.exception.BusinessException;
+import com.bu.jichulmate.repository.GoalRepository;
+import com.bu.jichulmate.repository.InquiryRepository;
 import com.bu.jichulmate.response.ApiResponse;
 import com.bu.jichulmate.service.AccountService;
 import com.bu.jichulmate.service.MyPageService;
-import com.bu.jichulmate.service.NotificationService;
+import com.bu.jichulmate.service.SubscriptionService;
 import com.bu.jichulmate.util.SessionUtils;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -23,6 +28,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.bu.jichulmate.domain.Inquiry;
+import com.bu.jichulmate.repository.InquiryRepository;
+
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import java.util.List;
 
@@ -33,7 +45,9 @@ public class MyPageController {
 
     private final MyPageService myPageService;
     private final AccountService accountService;
-    private final NotificationService notificationService;
+    private final SubscriptionService subscriptionService;
+    private final GoalRepository goalRepository;
+    private final InquiryRepository inquiryRepository;
 
     /* [내 정보 수정 페이지] */
     @GetMapping("/editprofile")
@@ -64,8 +78,25 @@ public class MyPageController {
         Page<Subscription> subscriptionPage = myPageService.getMySubscriptionList(userId, pageable);
         model.addAttribute("subscriptions", subscriptionPage.getContent());
 
+        List<SubscriptionResponse> top3 = subscriptionService.getTop3Subscriptions(userId);
+        model.addAttribute("top3Subscriptions", top3);
+
+        model.addAttribute("fixedGoal", goalRepository.findTopByUserUserIdOrderByIdDesc(userId)
+                .filter(g -> "Y".equals(g.getIsFixed()))
+                .orElse(null));
+
+        List<SavingGoal> normalGoals = goalRepository.findByUserUserId(userId)
+                .stream()
+                .filter(g -> "N".equals(g.getIsFixed()))
+                .limit(3)
+                .collect(Collectors.toList());
+        model.addAttribute("normalGoals", normalGoals);
+
+
         return "members/mypage/mypage";
     }
+    //내 목표설정
+
 
     /**
      * 계좌 등록 / 수정 처리
@@ -144,6 +175,34 @@ public class MyPageController {
             return ResponseEntity.badRequest().body(ApiResponse.error("프로필 이미지 업로드에 실패했습니다."));
         }
     }
+    // 내 구독 3개 불러오기
+    // ⚠️ 기존에 작성된 엉뚱한 구독 조회 로직(예: memberService.get... 이나 다른 레포지토리 호출)을
+// 완전히 주석 처리하거나 지우시고, 확실하게 subscriptionService를 호출하도록 강제해야 합니다.
+
+    @GetMapping("/mypage")
+    public String mypageDashboard(Model model) {
+        Long userId = 2L; // DB 아이디와 일치
+
+        // 1. 기존 유저 요약 정보나 계좌 정보 바인딩은 그대로 유지
+        // model.addAttribute("summary", memberService.getMemberSummary(userId));
+        // model.addAttribute("accounts", accountService.getMyAccounts(userId));
+
+        // =====================================================================
+        // 🌟 핵심: 엉뚱한 쿼리가 안 나가도록 확실하게 우리가 만든 서비스 메서드로 교체합니다.
+        // =====================================================================
+        List<SubscriptionResponse> top3Subs = new ArrayList<>();
+        try {
+            // 기존에 가로채고 있던 다른 서비스 호출 지우고, 무조건 이 메서드로 호출!
+            top3Subs = subscriptionService.getTop3Subscriptions(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // JSP 파일의 <c:forEach var="sub" items="${top3Subscriptions}"> 와 완벽히 매핑
+        model.addAttribute("top3Subscriptions", top3Subs);
+
+        return "members/mypage/mypage";
+    }
 
     // ==================== 나머지 마이페이지 메뉴들 ====================
 
@@ -173,11 +232,22 @@ public class MyPageController {
     }
 
     @GetMapping("/questions")
-    public String myQuestions(HttpSession session) {
-        if (SessionUtils.getLoginUserId(session) == null) {
-            return "redirect:/";
-        }
+    public String myQuestions(@PageableDefault(size = 10) Pageable pageable,
+                              HttpSession session, Model model) {
+        Long userId = SessionUtils.getLoginUserId(session);
+        if (userId == null) return "redirect:/";
+
+        model.addAttribute("inquiries",
+                inquiryRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable));
         return "members/mypage/myque";
+    }
+
+    @PostMapping("/questions/delete/{id}")
+    public String deleteInquiry(@PathVariable Long id, HttpSession session) {
+        Long userId = SessionUtils.getLoginUserId(session);
+        if (userId == null) return "redirect:/";
+        inquiryRepository.deleteById(id);
+        return "redirect:/mypage/questions";
     }
 
     @GetMapping("/reports")
@@ -285,5 +355,24 @@ public class MyPageController {
         } catch (BusinessException e) {
             return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
         }
+    }
+
+    @GetMapping("/goals")
+    public String myGoals(HttpSession session, Model model) {
+        Long userId = SessionUtils.getLoginUserId(session);
+        if (userId == null) {
+            return "redirect:/";
+        }
+        model.addAttribute("fixedGoal", goalRepository.findTopByUserUserIdOrderByIdDesc(userId)
+                .filter(g -> "Y".equals(g.getIsFixed()))
+                .orElse(null));
+
+        List<SavingGoal> normalGoals = goalRepository.findByUserUserId(userId)
+                .stream()
+                .filter(g -> "N".equals(g.getIsFixed()))
+                .collect(Collectors.toList());
+        model.addAttribute("normalGoals", normalGoals);
+
+        return "members/mypage/mygoals";
     }
 }

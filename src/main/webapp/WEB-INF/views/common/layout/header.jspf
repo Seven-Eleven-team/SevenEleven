@@ -37,10 +37,11 @@
             <span class="user-avatar" id="userAvatarInitial">
                 <c:choose>
                     <c:when test="${not empty sessionScope.loginUser.nickname}">
-                        ${fn:substring(sessionScope.loginUser.nickname, 0, 1)}
+                        ${fn:toUpperCase(fn:substring(sessionScope.loginUser.nickname, 0, 1))}
                     </c:when>
+
                     <c:when test="${not empty sessionScope.nickname}">
-                        ${fn:substring(sessionScope.nickname, 0, 1)}
+                        ${fn:toUpperCase(fn:substring(sessionScope.nickname, 0, 1))}
                     </c:when>
                     <c:otherwise>M</c:otherwise>
                 </c:choose>

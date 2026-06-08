@@ -38,4 +38,13 @@ public class SubscriptionResponse {
 
     // 상태
     private String status;
+
+    // 주문 시리얼 코드
+    private String serialCode;
+
+    //공유계쩡 아이디
+    private String sharedId;
+
+    //공유계쩡 비밀번호
+    private String sharedPwd;
 }

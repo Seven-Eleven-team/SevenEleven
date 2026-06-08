@@ -1,132 +1,64 @@
-/* =========================================================
-   mysales.css (REFORMED)
-   마이페이지 > 내 판매 목록 전용 스타일
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 18px 16px;
-    margin-bottom: 12px;
-
-    border: 1px solid #f0f0f0;
-    border-radius: 12px;
-
-    transition: all 0.2s ease;
-    background: #fff;
+.dashboard{
+    flex:1;
+    min-width:0;
 }
 
-.sale-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(0,0,0,0.06);
-    border-color: #e6e6e6;
+.sales-card{
+    background:#fff;
+    border:1px solid #d9d9d9;
+    border-radius:12px;
+    min-height:760px;
+    overflow:hidden;
 }
 
-/* 왼쪽 영역 */
-.item-left-group {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    min-width: 0;
+.sales-header{
+    padding:18px 24px;
+    border-bottom:1px solid #d9d9d9;
 }
 
-/* 상품명 */
-.item-name {
-    width: 160px;
-    font-size: 18px;
-    font-weight: 700;
-    color: #222;
-    flex-shrink: 0;
+.sales-header h2{
+    font-size:15px;
+    font-weight:600;
+    color:#222;
+    margin:0;
 }
 
-/* 로고 */
-.item-logo-area {
-    width: 110px;
-    flex-shrink: 0;
+.sales-body{
+    min-height:680px;
 }
 
-.item-logo-area img {
-    height: 28px;
-    object-fit: contain;
+.empty-box{
+    height:680px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
 }
 
-/* 설명 */
-.item-desc-text {
-    font-size: 15px;
-    color: #444;
-    line-height: 1.6;
-    min-width: 0;
+.empty-box h1{
+    font-size:54px;
+    font-weight:700;
+    color:#222;
+    margin-bottom:45px;
 }
 
-/* 오른쪽 값 */
-.item-right-stat {
-    font-size: 18px;
-    font-weight: 800;
-    color: #111;
-    white-space: nowrap;
+.primary-btn{
+    width:180px;
+    height:48px;
+
+    border:none;
+    border-radius:10px;
+
+    background:#243864;
+    color:#fff;
+
+    font-size:14px;
+    font-weight:600;
+
+    cursor:pointer;
 }
 
-/* 빈 화면 */
-.sales-empty-center {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.empty-msg {
-    font-size: 36px;
-    font-weight: 800;
-    margin-bottom: 30px;
-}
-
-/* 버튼 */
-.register-btn {
-    background-color: #1e2d4d;
-    color: #fff;
-    padding: 16px 50px;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
-}
-
-.register-btn:hover {
-    opacity: 0.9;
-}
-
-/* ⭐ 페이지네이션 (absolute 제거 → 안정형) */
-.pagination-area {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-
-    font-size: 15px;
-    color: #888;
-}
-
-/* 사이드바 active */
-.sidebar ul li.active-red a {
-    color: #ff4d4d !important;
-    font-weight: 700;
-}
-
-/* 반응형 */
-@media (max-width: 1024px) {
-    .sales-main-box {
-        max-width: 100%;
-        margin: 10px;
-    }
-
-    .sale-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-
-    .item-name {
-        width: auto;
-    }
+.primary-btn:hover{
+    opacity:0.9;
 }

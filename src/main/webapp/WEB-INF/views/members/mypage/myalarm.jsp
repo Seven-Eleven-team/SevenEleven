@@ -9,6 +9,21 @@
     <link rel="stylesheet" href="/css/mypage.css">
     <link rel="stylesheet" href="/css/myalarm.css">
     <style>
+    body.mypage .hamburger-btn{
+        display:flex !important;
+        flex-direction:column !important;
+        justify-content:center !important;
+        align-items:center !important;
+        gap:4px !important;
+    }
+
+    body.mypage .hamburger-btn span{
+        display:block !important;
+        width:22px !important;
+        height:2px !important;
+        background:white !important;
+        border-radius:999px !important;
+    }
       /*풋터*/
         .footer {
             width: 100%;
@@ -64,32 +79,79 @@
              left: 0;
          }
 
+         body.mypage nav.sidebar {
+             position: fixed;
+             top: 78px;
+             left: -260px;
+             width: 250px;
+             height: calc(100vh - 78px);
+
+             background: #243864; /* ⭐ 네이비 (핵심) */
+             border-right: none;
+
+             transition: all 0.3s ease;
+             z-index: 9998;
+             padding-top: 20px;
+         }
+
+         body.mypage nav.sidebar.open {
+             left: 0;
+         }
+
+         /* 리스트 기본 */
          body.mypage nav.sidebar ul {
              list-style: none;
              padding: 0;
              margin: 0;
          }
 
+         /* 메뉴 아이템 */
          body.mypage nav.sidebar li {
              width: 100%;
          }
 
+         /* 링크 */
          body.mypage nav.sidebar li a {
              display: flex;
              align-items: center;
 
              height: 54px;
-
              padding: 0 24px;
 
-             color: #222;
+             color: white; /* ⭐ 네이비라서 흰 글씨 */
              text-decoration: none;
              font-size: 16px;
              font-weight: 500;
+
+             transition: 0.2s;
          }
 
+         /* hover */
          body.mypage nav.sidebar li a:hover {
-             background: #f5f5f5;
+             background: rgba(255, 255, 255, 0.12);
+         }
+
+         /* 로그아웃 영역 */
+         .sidebar-logout {
+             position: absolute;
+             bottom: 20px;
+             left: 0;
+             width: 100%;
+         }
+
+         .sidebar-logout a {
+             display: flex;
+             align-items: center;
+             gap: 8px;
+             padding: 0 24px;
+             height: 54px;
+
+             color: white;
+             text-decoration: none;
+         }
+
+         .sidebar-logout a:hover {
+             background: rgba(255, 255, 255, 0.12);
          }
 
          /* 마이페이지에서는 공통 사이드 드롭다운 숨김 */
