@@ -89,8 +89,10 @@ public class MyPageService {
                 .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
     }
 
+    // MyPageService.java
     public Page<Subscription> getMySubscriptionList(Long userId, Pageable pageable) {
         User user = getUser(userId);
+
         return subscriptionRepository.findByUserOrderByCreatedAtDesc(user, pageable);
     }
 

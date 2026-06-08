@@ -1,8 +1,6 @@
 package com.bu.jichulmate.controller;
 
-import com.bu.jichulmate.domain.Inquiry;
-import com.bu.jichulmate.domain.SavingGoal;
-import com.bu.jichulmate.domain.Subscription;
+import com.bu.jichulmate.domain.*;
 import com.bu.jichulmate.dto.mypage.*;
 import com.bu.jichulmate.dto.subscription.SubscriptionResponse;
 import com.bu.jichulmate.dto.user.UserUpdateRequest;
@@ -10,9 +8,7 @@ import com.bu.jichulmate.exception.BusinessException;
 import com.bu.jichulmate.repository.GoalRepository;
 import com.bu.jichulmate.repository.InquiryRepository;
 import com.bu.jichulmate.response.ApiResponse;
-import com.bu.jichulmate.service.AccountService;
-import com.bu.jichulmate.service.MyPageService;
-import com.bu.jichulmate.service.SubscriptionService;
+import com.bu.jichulmate.service.*;
 import com.bu.jichulmate.util.SessionUtils;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -28,11 +24,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.bu.jichulmate.domain.Inquiry;
-import com.bu.jichulmate.repository.InquiryRepository;
-
-
-import java.util.ArrayList;
+import com.bu.jichulmate.repository.ExpenseRepository;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +42,9 @@ public class MyPageController {
     private final SubscriptionService subscriptionService;
     private final GoalRepository goalRepository;
     private final InquiryRepository inquiryRepository;
+    private final NotificationService notificationService;
+    private final FileService fileService;
+    private final ExpenseRepository expenseRepository;
 
     /* [내 정보 수정 페이지] */
     @GetMapping("/editprofile")
@@ -85,17 +82,49 @@ public class MyPageController {
                 .filter(g -> "Y".equals(g.getIsFixed()))
                 .orElse(null));
 
-        List<SavingGoal> normalGoals = goalRepository.findByUserUserId(userId)
-                .stream()
+        // ==========================================================
+        // ★ [수정된 부분] 일반 목표를 최신순으로 정렬하고 딱 2개만 자릅니다!
+        // ==========================================================
+        List<SavingGoal> allGoals = goalRepository.findByUserUserId(userId);
+
+        // 1. Expense(가계부) 테이블에서 각 목표별로 지금까지 저축한 총액 계산
+        List<Object[]> savingDataRaw = expenseRepository.getMonthlySavingsGroupedByGoal(userId);
+        Map<Long, Long> goalTotals = new HashMap<>();
+        for (Object[] row : savingDataRaw) {
+            Long gId = ((Number) row[0]).longValue();
+            Long amt = ((Number) row[2]).longValue();
+            goalTotals.put(gId, amt);
+        }
+        // 계산된 금액을 JSP로 전달!
+        model.addAttribute("goalTotals", goalTotals);
+
+        // 2. 고정 목표 1개
+        SavingGoal fixed = allGoals.stream()
+                .filter(g -> "Y".equals(g.getIsFixed()))
+                .max((g1, g2) -> g1.getId().compareTo(g2.getId()))
+                .orElse(null);
+        model.addAttribute("fixedGoal", fixed);
+
+        // 일반 목표 최신순 2개 찾기
+        List<SavingGoal> normalGoals = allGoals.stream()
                 .filter(g -> "N".equals(g.getIsFixed()))
-                .limit(3)
+                .sorted((g1, g2) -> g2.getId().compareTo(g1.getId()))
+                .limit(2)
                 .collect(Collectors.toList());
         model.addAttribute("normalGoals", normalGoals);
 
+        // =====================================================================
+        // ★ 프로필 이미지 불러오기 (FileService 이용)
+        // =====================================================================
+        List<Attachment> attachments = fileService.findFiles("USERS", userId);
+        if (!attachments.isEmpty()) {
+            // 가장 최근에 올린 사진의 경로를 JSP로 넘겨줌
+            String latestProfileImage = attachments.get(attachments.size() - 1).getFilePath();
+            model.addAttribute("profileImageUrl", latestProfileImage);
+        }
 
         return "members/mypage/mypage";
     }
-    //내 목표설정
 
 
     /**
@@ -175,34 +204,8 @@ public class MyPageController {
             return ResponseEntity.badRequest().body(ApiResponse.error("프로필 이미지 업로드에 실패했습니다."));
         }
     }
-    // 내 구독 3개 불러오기
-    // ⚠️ 기존에 작성된 엉뚱한 구독 조회 로직(예: memberService.get... 이나 다른 레포지토리 호출)을
-// 완전히 주석 처리하거나 지우시고, 확실하게 subscriptionService를 호출하도록 강제해야 합니다.
 
-    @GetMapping("/mypage")
-    public String mypageDashboard(Model model) {
-        Long userId = 2L; // DB 아이디와 일치
 
-        // 1. 기존 유저 요약 정보나 계좌 정보 바인딩은 그대로 유지
-        // model.addAttribute("summary", memberService.getMemberSummary(userId));
-        // model.addAttribute("accounts", accountService.getMyAccounts(userId));
-
-        // =====================================================================
-        // 🌟 핵심: 엉뚱한 쿼리가 안 나가도록 확실하게 우리가 만든 서비스 메서드로 교체합니다.
-        // =====================================================================
-        List<SubscriptionResponse> top3Subs = new ArrayList<>();
-        try {
-            // 기존에 가로채고 있던 다른 서비스 호출 지우고, 무조건 이 메서드로 호출!
-            top3Subs = subscriptionService.getTop3Subscriptions(userId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // JSP 파일의 <c:forEach var="sub" items="${top3Subscriptions}"> 와 완벽히 매핑
-        model.addAttribute("top3Subscriptions", top3Subs);
-
-        return "members/mypage/mypage";
-    }
 
     // ==================== 나머지 마이페이지 메뉴들 ====================
 
@@ -274,13 +277,20 @@ public class MyPageController {
         return "members/mypage/mysaleslist";
     }
 
+    // MyPageController.java
     @GetMapping("/subscriptions")
     public String mySubscriptions(@PageableDefault(size = 5) Pageable pageable, HttpSession session, Model model) {
         Long userId = SessionUtils.getLoginUserId(session);
         if (userId == null) {
             return "redirect:/";
         }
-        model.addAttribute("subscriptions", myPageService.getMySubscriptionList(userId, pageable));
+
+        // 1. 서비스에서 데이터를 가져옵니다.
+        Page<Subscription> subPage = myPageService.getMySubscriptionList(userId, pageable);
+
+        // 2. ★ 중요: JSP의 ${subscriptions}와 일치하도록 모델에 담아줍니다!
+        model.addAttribute("subscriptions", subPage.getContent());
+
         return "members/mypage/mysub";
     }
 
@@ -375,4 +385,7 @@ public class MyPageController {
 
         return "members/mypage/mygoals";
     }
+
+
+
 }

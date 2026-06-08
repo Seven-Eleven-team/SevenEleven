@@ -224,63 +224,86 @@
     }
 
     function saveProfile() {
-        const curEmail = document.getElementById('curEmail').value.trim();
-        const curNickname = document.getElementById('curNickname').value.trim();
-        const curPw = document.getElementById('curPw').value.trim();
+            const curEmail = document.getElementById('curEmail').value.trim();
+            const curNickname = document.getElementById('curNickname').value.trim();
+            const curPw = document.getElementById('curPw').value.trim();
 
-        const emailId = document.getElementById('emailId').value.trim();
-        const newNickname = document.getElementById('newNickname').value.trim();
-        const confirmPw = document.getElementById('confirmPw').value.trim();
-        const mentorTone = document.getElementById('mentorTone').value;
+            const emailId = document.getElementById('emailId').value.trim();
+            const newNickname = document.getElementById('newNickname').value.trim();
+            const confirmPw = document.getElementById('confirmPw').value.trim();
+            const mentorTone = document.getElementById('mentorTone').value;
 
-        let finalNewEmail = null;
-        if (emailId !== "") {
-            finalNewEmail = emailId;
-        }
+            let finalNewEmail = null;
+            if (emailId !== "") finalNewEmail = emailId;
 
-        let finalNickname = curNickname;
-        if (newNickname !== "") {
-            if (newNickname.length < 2 || newNickname.length > 5) {
-                alert("닉네임은 2~5자여야 합니다.");
+            let finalNickname = curNickname;
+            if (newNickname !== "") {
+                if (newNickname.length < 2 || newNickname.length > 5) {
+                    alert("닉네임은 2~5자여야 합니다.");
+                    return;
+                }
+                finalNickname = newNickname;
+            }
+
+            if (curPw === "") {
+                alert("정보 수정을 위해 현재 비밀번호를 입력해주세요.");
                 return;
             }
-            finalNickname = newNickname;
-        }
 
-        if (curPw === "") {
-            alert("정보 수정을 위해 현재 비밀번호를 입력해주세요.");
-            return;
-        }
+            // 1. 기존 텍스트 데이터 묶기
+            const requestData = {
+                loginId: curEmail,
+                newEmail: finalNewEmail,
+                nickname: finalNickname,
+                currentPassword: curPw,
+                newPassword: confirmPw === "" ? null : confirmPw,
+                confirmPassword: confirmPw === "" ? null : confirmPw,
+                mentorTone: mentorTone
+            };
 
-        const requestData = {
-            loginId: curEmail,
-            newEmail: finalNewEmail,
-            nickname: finalNickname,
-            currentPassword: curPw,
-            newPassword: confirmPw === "" ? null : confirmPw,
-            confirmPassword: confirmPw === "" ? null : confirmPw,
-            mentorTone: mentorTone
-        };
+            // ★ 2. 파일과 텍스트를 함께 보낼 수 있는 FormData 생성
+            const formData = new FormData();
 
-        fetch('${pageContext.request.contextPath}/user/updateProfile', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(requestData)
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                alert("정보가 수정되었습니다.");
-                location.href = '${pageContext.request.contextPath}/mypage';
-            } else {
-                alert(data.message || "수정에 실패했습니다.");
+            // 텍스트 데이터는 'userRequest'라는 이름의 JSON 문자열로 포장해서 넣음
+            formData.append('userRequest', new Blob([JSON.stringify(requestData)], { type: "application/json" }));
+
+            // 사진 파일이 선택되었다면 'profileImage'라는 이름으로 넣음
+            const fileInput = document.getElementById('profileImageInput');
+            if (fileInput.files.length > 0) {
+                formData.append('profileImage', fileInput.files[0]);
             }
-        })
-        .catch(err => {
-            console.error(err);
-            alert("서버 연결 실패");
+
+            // 3. fetch 요청 (★ headers에서 'Content-Type'을 지워야 브라우저가 알아서 Multipart로 보냅니다!)
+            fetch('${pageContext.request.contextPath}/user/updateProfile', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert("정보가 수정되었습니다.");
+                    location.href = '${pageContext.request.contextPath}/mypage';
+                } else {
+                    alert(data.message || "수정에 실패했습니다.");
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("서버 연결 실패");
+            });
+        }
+
+    //  프로필 사진 선택 시 미리보기 기능
+        document.getElementById('profileImageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profilePreview').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
         });
-    }
 </script>
 </body>
 </html>

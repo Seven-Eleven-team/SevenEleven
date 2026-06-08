@@ -51,4 +51,14 @@ public class UserService {
 
         return userRepository.save(user);
     }
+
+    // ★ 회원 탈퇴 (Soft Delete) 메서드 추가
+    @Transactional
+    public void withdrawUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+
+        // DB에서 즉시 삭제하지 않고, 기획(30일 보관)에 맞춰 상태만 변경합니다.
+        user.setAccountStatus("WITHDRAWN");
+    }
 }
