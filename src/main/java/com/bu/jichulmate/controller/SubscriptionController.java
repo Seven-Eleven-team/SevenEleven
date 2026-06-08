@@ -73,8 +73,8 @@ public class SubscriptionController {
     }
     //마이페이지 내 구독관리
     @GetMapping("/my")
-    public String mySubscriptions(Model model) {
-        Long userId = 2L;
+    public String mySubscriptions(HttpSession session, Model model) {
+        Long userId = SessionUtils.getLoginUserId(session);
 
         List<SubscriptionResponse> subs;
         try {
@@ -90,6 +90,7 @@ public class SubscriptionController {
         model.addAttribute("subscriptions", subs);
         return "members/mypage/mysub";
     }
+
     //마이페이지 내 구독관리 취소
     @PostMapping("/cancel/{id}")
     public String cancel(@PathVariable Long id) {
