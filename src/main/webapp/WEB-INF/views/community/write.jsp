@@ -24,6 +24,16 @@
             padding-top: 94px;
             background: #fff;
             flex: 1 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .community-page > .board-form-wrap {
+            width: min(640px, calc(100% - 80px));
+            margin: 0;           /* flex 안에서는 auto margin 불필요 */
+            padding-bottom: 2rem;
+            padding-top: 2rem;
         }
 
         .board-form-wrap {
@@ -334,6 +344,8 @@
         justify-content: flex-start !important;
         margin-top: auto !important;
         flex-shrink: 0 !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
     }
 
     body.community-body .footer-nav,
