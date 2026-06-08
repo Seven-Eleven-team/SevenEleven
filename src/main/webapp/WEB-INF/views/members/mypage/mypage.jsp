@@ -263,8 +263,7 @@
     .add-account-btn:hover { opacity: 0.9; }
     .no-account { text-align: center; font-size: 14px; color: #777; margin-bottom: 10px; }
 
-    .footer { width: 100%; background: #243864; color: white; padding: 40px 0; margin-top: 60px; }
-    body.mypage { padding-top: 78px; min-height: 100vh; display: flex; flex-direction: column; }
+.footer { background: #193b60 !important; margin-top: 60px; }
     .mypage-container { flex: 1; }
     body.mypage .auth-link { display: none !important; }
     body.mypage .header-action-area { position: absolute !important; right: 36px !important; }
@@ -297,11 +296,18 @@
 
     body.mypage .site-header {
         position: fixed !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 78px !important;
-        background: #243864 !important; display: flex !important; align-items: center !important; justify-content: center !important; z-index: 9999 !important;
+        background: rgba(25, 59, 96, 0.96) !important; display: flex !important; align-items: center !important; justify-content: center !important; z-index: 9999 !important;
     }
     body.mypage .hamburger-btn {
-        position: absolute !important; left: 36px !important; width: 42px !important; height: 42px !important;
-        border: none !important; border-radius: 12px !important; background: rgba(255,255,255,0.15) !important; color: white !important; font-size: 22px !important;
+          position: absolute !important;
+          left: 36px !important;
+          width: 42px !important;
+          height: 42px !important;
+          border: none !important;
+          border-radius: 0 !important;        /* 박스 제거 */
+          background: transparent !important; /* 배경 제거 */
+          color: white !important;
+          font-size: 22px !important;
     }
     body.mypage .user-profile-link { width: 46px !important; height: 46px !important; border-radius: 50% !important; background: white !important; display: flex !important; align-items: center !important; justify-content: center !important; text-decoration: none !important; }
     body.mypage .user-avatar { color: #243864 !important; font-weight: 700 !important; }

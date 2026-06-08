@@ -178,7 +178,7 @@
         left: 0 !important;
         width: 100% !important;
         height: 78px !important;
-        background: #243864 !important;
+        background: rgba(25, 59, 96, 0.96) !important;
 
         display: flex !important;
         align-items: center !important;
@@ -199,21 +199,17 @@
            margin: 0 !important;
        }
 
-       body.mypage .hamburger-btn {
-           position: absolute !important;
-           left: 36px !important;
-
-           width: 42px !important;
-           height: 42px !important;
-
-           border: none !important;
-           border-radius: 12px !important;
-
-           background: rgba(255,255,255,0.15) !important;
-           color: white !important;
-
-           font-size: 22px !important;
-       }
+     body.mypage .hamburger-btn {
+               position: absolute !important;
+               left: 36px !important;
+               width: 42px !important;
+               height: 42px !important;
+               border: none !important;
+               border-radius: 0 !important;        /* 박스 제거 */
+               background: transparent !important; /* 배경 제거 */
+               color: white !important;
+               font-size: 22px !important;
+         }
 
        body.mypage .header-action-area {
            position: absolute !important;
