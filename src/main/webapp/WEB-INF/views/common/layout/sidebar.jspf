@@ -5,7 +5,7 @@
             <a href="${pageContext.request.contextPath}/dashboard" data-auth-required="true">대시보드</a>
         </li>
         <li>
-            <a href="${pageContext.request.contextPath}/subscription/ott" data-auth-required="true">OTT 구독</a>
+            <a href="${pageContext.request.contextPath}/subscription/ott">OTT 구독</a>
         </li>
         <li>
             <a href="${pageContext.request.contextPath}/party/seller-identity" data-auth-required="true">판매자 등록</a>

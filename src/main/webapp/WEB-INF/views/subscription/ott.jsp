@@ -728,7 +728,10 @@ let currentPrices = {
 let selectedMonth = 1;
 let selectedPrice = 0;
 
-function showSubscription(name) {
+let selectedPartyPost = null;
+
+
+async function showSubscription(name) {
 
       document
             .querySelectorAll('.month-buttons button')
@@ -745,6 +748,41 @@ function showSubscription(name) {
         const preview =
             document.getElementById('selectedServicePreview');
         document.querySelector('.month-buttons button').click();
+
+        const response =
+            await fetch('/api/party/posts');
+
+        const posts =
+            await response.json();
+
+        console.log('판매글 목록', posts);
+
+        let serviceName = '';
+
+        if(name === 'netflix') serviceName = '넷플릭스';
+        else if(name === 'youtube') serviceName = '유튜브 프리미엄';
+        else if(name === 'tving') serviceName = '티빙';
+        else if(name === 'disney') serviceName = '디즈니+';
+        else if(name === 'laftel') serviceName = '라프텔';
+        else if(name === 'wavve') serviceName = '웨이브';
+        else if(name === 'watcha') serviceName = '왓챠';
+        else if(name === 'chatgpt') serviceName = 'ChatGPT';
+        else if(name === 'gemini') serviceName = 'Gemini';
+        else if(name === 'claude') serviceName = 'Claude';
+        else if(name === 'capcut') serviceName = '캡컷';
+        else if(name === 'adobe') serviceName = '어도비';
+        else if(name === 'duolingo') serviceName = '듀오링고';
+        else if(name === 'millie') serviceName = '밀리의 서재';
+        else if(name === 'microsoft') serviceName = '마이크로소프트';
+        else if(name === 'polaris') serviceName = '폴라리스 오피스';
+
+        const filteredPosts =
+            posts.filter(
+                p => p.serviceName === serviceName
+            );
+        selectedPartyPost = filteredPosts[0];
+
+        console.log('해당 서비스 판매글', filteredPosts);
 
     if(name === 'youtube') {
 
@@ -1228,7 +1266,11 @@ function updatePriceButtons() {
         else if(serviceName.includes('Microsoft')) serviceId = 15;
         else if(serviceName.includes('폴라리스')) serviceId = 16;
 
-        document.getElementById("partyId").value = serviceId;
+
+        console.log("선택된 판매글",selectedPartyPost);
+        document.getElementById("partyId").value = selectedPartyPost.id;
+        console.log("구매할 판매글 ID",selectedPartyPost.id);
+
         document.getElementById("monthlyFee").value = selectedPrice;
         document.getElementById("periodMonths").value = selectedMonth;
 
@@ -1258,6 +1300,15 @@ function updatePriceButtons() {
         document.getElementById("purchaseForm").submit();
     }
 
+
+fetch('/api/party/posts')
+    .then(response => response.json())
+    .then(data => {
+        console.log('판매글 목록', data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
 
 </script>
 

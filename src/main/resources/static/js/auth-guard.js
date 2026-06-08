@@ -56,8 +56,9 @@
             '/expenses',
             '/dashboard',
             '/goal',
-            '/subscription',
+
             '/subscriptions',
+
             '/party',
             '/support/qna',
             '/support/qna/write',
