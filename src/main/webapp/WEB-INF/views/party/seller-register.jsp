@@ -13,6 +13,18 @@
         body { display: flex; flex-direction: column; min-height: 100vh; }
         .page-wrap { flex: 1; }
         .page-wrap { padding: 2rem 1.5rem; max-width: 900px; width: 100%; margin: 0 auto; padding-top: calc(74px + 2rem); flex: 1; box-sizing: border-box; }
+        /* 변경 */
+        .page-wrap {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            padding: calc(74px + 2rem) 1.5rem 2rem;
+            flex: 1;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
         .breadcrumb { font-size: 12px; color: #666; margin-bottom: 1rem; }
         .card { background: #f0f0f0; border-radius: 12px; padding: 1.5rem 2rem; }
         .card-title { text-align: center; font-size: 20px; font-weight: 500; margin-bottom: 1.5rem; color: #1a1a1a; }

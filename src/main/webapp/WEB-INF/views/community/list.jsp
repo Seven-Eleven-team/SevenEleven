@@ -46,6 +46,7 @@
         .board-list-wrap {
             width: min(1100px, calc(100% - 80px));
             margin: 0 auto;
+             padding-top: 2.5rem;
             padding-bottom: 4rem;
         }
 
