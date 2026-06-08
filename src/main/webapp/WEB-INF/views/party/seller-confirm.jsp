@@ -5,10 +5,21 @@
 <html>
 <head>
     <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
+
+    <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
+    <script>
+        (function() {
+            var header = document.querySelector('.site-header');
+            if (header) header.classList.add('is-solid');
+            document.body.classList.add('is-header-ready');
+            document.body.classList.add('is-opening-loaded');
+            document.body.classList.add('is-fab-ready');
+        })();
+    </script>
+
     <title>OTT 판매 확인</title>
     <style>
         body { background: #e8e8e8; min-height: 100vh; display: flex; flex-direction: column; }
-        .site-header { opacity: 1 !important; transform: translateY(0) !important; background: rgba(25, 59, 96, 0.96) !important; }
         .footer { height: auto !important; }
         body { display: flex; flex-direction: column; min-height: 100vh; }
         .page-wrap { flex: 1; }

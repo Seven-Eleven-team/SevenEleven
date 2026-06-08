@@ -25,33 +25,40 @@
         }
 
         .page-wrap {
-            padding: 2rem 1.5rem;
-            max-width: 960px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            max-width: 1200px;
             width: 100%;
             margin: 0 auto;
-            padding-top: calc(74px + 2rem);
-            flex: 1;
+
+            padding: 115px 1.5rem 4rem;
             box-sizing: border-box;
         }
 
         .page-title {
             text-align: center;
-            font-size: 21px;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 1.4rem;
             color: #1a1a1a;
         }
 
         .profile-card {
             display: flex;
             gap: 0;
+
             background: #f0f0f0;
-            border-radius: 12px;
+            border-radius: 18px;
             overflow: visible;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+
             width: 100%;
-            min-height: 360px;
+            min-height: 470px;
             box-sizing: border-box;
+
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
         }
 
         .profile-left {
@@ -59,67 +66,75 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            padding: 2rem 1.6rem;
-            min-width: 220px;
+
+            padding: 2.8rem 2.2rem;
+            min-width: 290px;
+
             background: #e8e8e8;
             box-sizing: border-box;
-            border-radius: 12px 0 0 12px;
+            border-radius: 18px 0 0 18px;
         }
 
         .profile-img {
-            width: 160px;
-            height: 200px;
+            width: 200px;
+            height: 250px;
+
             background: #d5d5d5;
-            border-radius: 8px;
+            border-radius: 12px;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 13.5px;
+
+            font-size: 16px;
             color: #999;
         }
 
         .profile-right {
             flex: 1;
-            padding: 1.9rem 2.2rem 1.5rem;
+            padding: 2.8rem 3rem;
             box-sizing: border-box;
         }
 
         .info-row {
             display: flex;
             align-items: center;
-            gap: 2.5rem;
-            padding: 0.9rem 0 1rem;
+            gap: 3rem;
+
+            padding: 1.2rem 0;
             border-bottom: 1px solid #ddd;
-            font-size: 14.5px;
+
+            font-size: 17px;
         }
 
         .info-label {
             font-weight: 700;
             color: #333;
-            min-width: 80px;
+            min-width: 100px;
+            font-size: 17px;
         }
 
         .info-value {
             color: #333;
             font-weight: 600;
-            font-size: 14.5px;
+            font-size: 17px;
         }
 
         .ott-section {
-            margin-top: 1.45rem;
+            margin-top: 2rem;
         }
 
         .ott-section h3 {
-            font-size: 14.5px;
+            font-size: 18px;
             font-weight: 700;
             color: #2f2f2f;
-            margin: 0 0 0.85rem;
+            margin: 0 0 1rem;
         }
 
         .ott-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 22px;
             overflow: visible;
         }
 
@@ -131,16 +146,19 @@
         }
 
         .ott-logo {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
             background: transparent;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10.5px;
+
+            font-size: 12px;
             color: #555;
             text-align: center;
+
             overflow: hidden;
             cursor: default;
         }
@@ -149,7 +167,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 10px;
+            border-radius: 14px;
             display: block;
         }
 
@@ -159,16 +177,21 @@
             left: 50%;
             bottom: calc(100% + 8px);
             transform: translateX(-50%);
+
             background: rgba(30, 58, 95, 0.96);
             color: #fff;
+
             font-size: 12px;
             font-weight: 500;
+
             padding: 5px 9px;
             border-radius: 8px;
             white-space: nowrap;
+
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
+
             transition: opacity 0.15s ease, transform 0.15s ease;
             z-index: 30;
         }
@@ -179,12 +202,15 @@
             left: 50%;
             bottom: calc(100% + 3px);
             transform: translateX(-50%);
+
             border-width: 5px 5px 0 5px;
             border-style: solid;
             border-color: rgba(30, 58, 95, 0.96) transparent transparent transparent;
+
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
+
             transition: opacity 0.15s ease;
             z-index: 29;
         }
@@ -201,36 +227,37 @@
         }
 
         .empty-msg {
-            font-size: 13.5px;
+            font-size: 15px;
             color: #aaa;
         }
 
         .sell-section {
-            margin-top: 2rem;
-            padding-top: 1.2rem;
+            margin-top: 2.8rem;
+            padding-top: 1.6rem;
             border-top: 1px solid #ddd;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         .sell-question {
-            font-size: 14.5px;
+            font-size: 17px;
             color: #555;
         }
 
         .sell-btns {
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
 
         .btn-yes {
             background: #1e3a5f;
             color: #fff;
             border: none;
-            border-radius: 20px;
-            padding: 7px 22px;
-            font-size: 13.5px;
+            border-radius: 24px;
+            padding: 10px 30px;
+            font-size: 15px;
             cursor: pointer;
         }
 
@@ -238,9 +265,9 @@
             background: transparent;
             color: #888;
             border: 1px solid #ccc;
-            border-radius: 20px;
-            padding: 7px 22px;
-            font-size: 13.5px;
+            border-radius: 24px;
+            padding: 10px 30px;
+            font-size: 15px;
             cursor: pointer;
         }
 
@@ -252,10 +279,92 @@
             color: #555;
             border-color: #aaa;
         }
+
+        @media (max-width: 768px) {
+            .page-wrap {
+                justify-content: flex-start;
+                padding: 120px 1rem 3rem;
+            }
+
+            .page-title {
+                font-size: 26px;
+                margin-bottom: 1.5rem;
+            }
+
+            .profile-card {
+                flex-direction: column;
+                min-height: auto;
+            }
+
+            .profile-left {
+                min-width: 100%;
+                border-radius: 18px 18px 0 0;
+                padding: 2rem 1.5rem;
+            }
+
+            .profile-img {
+                width: 180px;
+                height: 220px;
+            }
+
+            .profile-right {
+                padding: 2rem 1.6rem;
+            }
+
+            .info-row {
+                gap: 1.2rem;
+                font-size: 15px;
+            }
+
+            .info-label {
+                min-width: 70px;
+                font-size: 15px;
+            }
+
+            .info-value {
+                font-size: 15px;
+            }
+
+            .ott-section h3 {
+                font-size: 16px;
+            }
+
+            .ott-logo {
+                width: 48px;
+                height: 48px;
+            }
+
+            .sell-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .sell-question {
+                font-size: 15px;
+            }
+
+            .btn-yes,
+            .btn-no {
+                padding: 9px 26px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
+
+<script>
+    (function() {
+        var header = document.querySelector('.site-header');
+        if (header) header.classList.add('is-solid');
+
+        document.body.classList.add('is-header-ready');
+        document.body.classList.add('is-opening-loaded');
+        document.body.classList.add('is-fab-ready');
+    })();
+</script>
 
 <div class="page-wrap">
     <h2 class="page-title">내 정보</h2>

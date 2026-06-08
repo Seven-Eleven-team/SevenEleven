@@ -63,6 +63,17 @@
 <body>
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
 
+<%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
+<script>
+    (function() {
+        var header = document.querySelector('.site-header');
+        if (header) header.classList.add('is-solid');
+        document.body.classList.add('is-header-ready');
+        document.body.classList.add('is-opening-loaded');
+        document.body.classList.add('is-fab-ready');
+    })();
+
+</script>
 <div id="postcode-layer" class="postcode-layer">
     <div class="postcode-box">
         <button type="button" class="postcode-close" onclick="closePost()">×</button>
