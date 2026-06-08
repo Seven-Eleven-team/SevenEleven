@@ -57,12 +57,15 @@ public class AuthApiController {
                     user.getRole()
             );
 
+            String role = user.getRole() == null ? "" : user.getRole().trim();
+            String redirectTo = "ADMIN".equalsIgnoreCase(role) ? "/admin" : "/";
+
             Map<String, Object> body = new LinkedHashMap<>();
             body.put("ok", true);
             body.put("message", "로그인이 완료되었습니다.");
-            body.put("redirectTo", "/");
+            body.put("redirectTo", redirectTo);
             body.put("nickname", user.getNickname());
-            body.put("role", user.getRole());
+            body.put("role", role);
 
             Map<String, Object> userBody = new LinkedHashMap<>();
             userBody.put("userId", user.getUserId());

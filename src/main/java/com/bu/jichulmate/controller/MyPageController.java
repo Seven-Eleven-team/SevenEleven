@@ -36,6 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/mypage")
 @RequiredArgsConstructor
@@ -205,10 +207,17 @@ public class MyPageController {
     // ==================== 나머지 마이페이지 메뉴들 ====================
 
     @GetMapping("/alarm")
-    public String myAlarm(HttpSession session) {
-        if (SessionUtils.getLoginUserId(session) == null) {
+    public String myAlarm(@PageableDefault(size = 10) Pageable pageable, HttpSession session, Model model) {
+        Long userId = SessionUtils.getLoginUserId(session);
+        if (userId == null) {
             return "redirect:/";
         }
+
+        // 서비스에 pageable을 함께 넘깁니다.
+        Page<NotificationResponse> alarms = notificationService.getMyNotifications(userId, pageable);
+
+        model.addAttribute("alarms", alarms);
+
         return "members/mypage/myalarm";
     }
 

@@ -102,9 +102,21 @@ public class SubscriptionService {
                 "ACTIVE"
         );
 
+        subscription.setSerialCode(
+                "SUB-" + System.currentTimeMillis()
+        );
+
         // 저장
         subscriptionRepository.save(subscription);
+
+        party.setOccupiedSlots(
+                party.getOccupiedSlots() + 1
+        );
+        if (party.getOccupiedSlots() >= party.getTotalSlots()) {
+            party.setStatus("FULL");
+        }
     }
+
 
     // 내 구독 목록 조회
     @Transactional(readOnly = true)

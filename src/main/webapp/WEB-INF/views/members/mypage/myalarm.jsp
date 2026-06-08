@@ -233,6 +233,55 @@
             color: #243864 !important;
             font-weight: 700 !important;
         }
+
+        /* ================= 페이징(Pagination) 디자인 ================= */
+                .pagination {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 8px; /* 버튼 사이 간격 */
+                    margin-top: 40px;
+                    padding-bottom: 30px;
+                }
+
+                /* 일반 페이지 버튼 */
+                .pagination .page-link {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 32px;
+                    height: 32px;
+                    border: 1px solid #ddd;
+                    border-radius: 6px; /* 약간 둥근 네모 */
+                    background-color: #fff;
+                    color: #555 !important;
+                    text-decoration: none !important;
+                    font-size: 14px;
+                    transition: all 0.2s ease;
+                }
+
+                /* 마우스 올렸을 때 효과 */
+                .pagination .page-link:hover {
+                    border-color: #243864; /* 지출메이트 메인 네이비 색상 */
+                    color: #243864 !important;
+                    background-color: #f4f6f9;
+                }
+
+                /* 현재 보고 있는 페이지 버튼 (활성화 상태) */
+                .pagination .current-page {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 32px;
+                    height: 32px;
+                    border: 1px solid #243864;
+                    border-radius: 6px;
+                    background-color: #243864;
+                    color: #fff;
+                    font-weight: bold;
+                    font-size: 14px;
+                }
+
     </style>
 </head>
 <body class="mypage">
@@ -264,45 +313,65 @@
             </div>
 
             <div class="alarm-table">
+                            <%-- 이제 List가 아니라 Page 객체이므로 alarms.content 로 알맹이를 꺼내야 합니다! --%>
+                            <c:choose>
+                                <c:when test="${empty alarms.content}">
+                                    <div class="alarm-row" style="justify-content: center; color: #888;">
+                                        <span class="alarm-text">최근 수신된 알림이 없습니다.</span>
+                                    </div>
+                                </c:when>
 
-                <div class="alarm-row warning">
-                    <div class="alarm-left">
-                        <span class="alarm-icon">🔔</span>
-                        <span class="alarm-text">
-                            유튜브 자동 결제까지
-                            <strong class="danger-text">3일</strong>
-                            남았습니다.
-                        </span>
-                    </div>
-                </div>
+                                <c:otherwise>
+                                    <c:forEach var="alarm" items="${alarms.content}">
+                                        <div class="alarm-row">
+                                            <div class="alarm-left">
+                                                <span class="alarm-icon">
+                                                    <%-- 깨지는 이모지 대신 안전한 텍스트 아이콘으로 임시 변경 --%>
+                                                    <c:choose>
+                                                        <c:when test="${alarm.type == 'EMAIL'}">[메일]</c:when>
+                                                        <c:when test="${alarm.type == 'PAYMENT'}">[결제]</c:when>
+                                                        <c:otherwise>[알림]</c:otherwise>
+                                                    </c:choose>
+                                                </span>
+                                                <span class="alarm-text">${alarm.content}</span>
+                                            </div>
+                                            <div class="alarm-right" style="color: #aaa; font-size: 13px;">
+                                                ${alarm.createdAt.toLocalDate()}
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
 
-                <div class="alarm-row">
-                    <div class="alarm-left">
-                        <span class="alarm-icon">💳</span>
-                        <span class="alarm-text">넷플릭스 결제가 완료되었습니다.</span>
-                    </div>
-                </div>
+                        <%-- 동적 페이징 버튼 영역 --%>
+                                    <div class="pagination">
+                                        <%-- 이전 페이지 버튼 (<) --%>
+                                        <c:if test="${!alarms.first}">
+                                            <a href="?page=${alarms.number - 1}" class="page-link">&lt;</a>
+                                        </c:if>
 
-                <div class="alarm-row">
-                    <div class="alarm-left">
-                        <span class="alarm-icon">📌</span>
-                        <span class="alarm-text">새로운 공지사항이 등록되었습니다.</span>
-                    </div>
-                </div>
+                                        <%-- 페이지 번호 (1, 2, 3...) --%>
+                                        <c:forEach begin="0" end="${alarms.totalPages - 1}" var="i">
+                                            <c:choose>
+                                                <%-- 현재 페이지: 굵은 네이비 버튼 --%>
+                                                <c:when test="${alarms.number == i}">
+                                                    <span class="current-page">${i + 1}</span>
+                                                </c:when>
+                                                <%-- 다른 페이지: 일반 버튼 --%>
+                                                <c:otherwise>
+                                                    <a href="?page=${i}" class="page-link">${i + 1}</a>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>
 
-                <div class="empty-line"></div>
-                <div class="empty-line"></div>
-                <div class="empty-line"></div>
-                <div class="empty-line"></div>
-                <div class="empty-line"></div>
-                <div class="empty-line"></div>
-                <div class="empty-line"></div>
+                                        <%-- 다음 페이지 버튼 (>) --%>
+                                        <c:if test="${!alarms.last}">
+                                            <a href="?page=${alarms.number + 1}" class="page-link">&gt;</a>
+                                        </c:if>
+                                    </div>
 
-            </div>
 
-            <div class="pagination">
-                1
-            </div>
 
         </section>
 

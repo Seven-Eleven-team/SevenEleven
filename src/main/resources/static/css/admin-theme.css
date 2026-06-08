@@ -1,0 +1,84 @@
+:root {
+    --admin-bg: #f3f7ff;
+    --admin-bg-soft: #eef5ff;
+    --admin-white: #ffffff;
+    --admin-navy: #0b2c5f;
+    --admin-blue: #2563eb;
+    --admin-blue-dark: #1d4ed8;
+    --admin-sky: #dbeafe;
+    --admin-line: #d8e3f5;
+    --admin-text: #172033;
+    --admin-muted: #6b7a90;
+    --admin-green: #0f9f6e;
+    --admin-yellow: #b7791f;
+    --admin-red: #dc2626;
+    --admin-shadow: 0 22px 70px rgba(37, 99, 235, 0.16);
+    --admin-radius-lg: 32px;
+    --admin-radius-md: 22px;
+    --admin-radius-sm: 14px;
+    --admin-speed: 260ms;
+}
+
+* { box-sizing: border-box; }
+
+body.admin-body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--admin-text);
+    font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:
+        radial-gradient(circle at 20% 10%, rgba(96, 165, 250, 0.22), transparent 36%),
+        radial-gradient(circle at 80% 20%, rgba(37, 99, 235, 0.18), transparent 30%),
+        linear-gradient(180deg, #f9fbff 0%, var(--admin-bg) 100%);
+}
+
+a { color: inherit; text-decoration: none; }
+button, input, select, textarea { font: inherit; }
+
+.admin-topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    width: 100%;
+    height: 84px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(216, 227, 245, 0.72);
+}
+
+.admin-brand {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--admin-navy);
+}
+
+.admin-enter {
+    animation: adminEnter 520ms cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.admin-body.is-leaving .admin-enter {
+    animation: adminLeave 220ms ease both;
+}
+
+@keyframes adminEnter {
+    from { opacity: 0; transform: translateY(18px) scale(.985); filter: blur(8px); }
+    to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+@keyframes adminLeave {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to { opacity: 0; transform: translateY(8px) scale(.992); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .admin-enter,
+    .admin-body.is-leaving .admin-enter,
+    .admin-folder-card,
+    .admin-mini-folder,
+    .admin-btn { animation: none; transition: none; }
+}
