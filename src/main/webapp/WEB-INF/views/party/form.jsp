@@ -54,7 +54,7 @@
             padding: 2rem 2.2rem;
 
             width: 100%;
-            max-width: 730px;
+            max-width: 900px;
             margin: 0 auto;
 
             box-sizing: border-box;
@@ -72,7 +72,7 @@
         .form-body {
             display: flex;
             gap: 2.5rem;
-            align-items: center;
+            align-items: flex-start;
         }
 
         .logo-area {
@@ -82,13 +82,17 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+
+            padding-top: 10px;
         }
 
         .logo-box {
             width: 130px;
             height: 130px;
             border-radius: 18px;
+
+            margin-top: -8px;
 
             display: flex;
             align-items: center;

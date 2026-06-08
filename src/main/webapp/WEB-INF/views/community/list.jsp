@@ -9,6 +9,17 @@
     <title>${categoryLabel} 게시판 | 지출메이트</title>
 
     <style>
+        html,
+        body {
+            min-height: 100%;
+        }
+
+        body.community-body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
         body.community-body .site-header {
             opacity: 1 !important;
             transform: translate3d(0,0,0) !important;
@@ -29,6 +40,7 @@
             padding-top: 94px;
             background: #ffffff;
             min-height: calc(100vh - 94px);
+            flex: 1 0 auto;
         }
 
         .board-list-wrap {
@@ -311,17 +323,8 @@
         }
 
         body.community-body .footer {
-            height: auto;
-            min-height: 200px;
-            padding: 60px 20px;
-            background: #193b60;
-            color: #f9f7f7;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            font-weight: 800;
-            font-size: 16px;
+            margin-top: auto;
+            flex-shrink: 0;
         }
     </style>
 </head>
@@ -500,6 +503,49 @@
 <%@ include file="/WEB-INF/views/common/layout/floatingBtn.jspf" %>
 <%@ include file="/WEB-INF/views/common/modal/faqModal.jspf" %>
 <%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
+
+<style>
+    body.community-body .footer {
+        display: block !important;
+        text-align: left !important;
+        align-items: stretch !important;
+        justify-content: flex-start !important;
+        margin-top: auto !important;
+        flex-shrink: 0 !important;
+    }
+
+    body.community-body .footer-nav,
+    body.community-body .footer-body,
+    body.community-body .footer-bottombar {
+        text-align: left !important;
+    }
+
+    body.community-body .footer-nav-inner,
+    body.community-body .footer-body-inner,
+    body.community-body .footer-bottombar-inner {
+        text-align: left !important;
+    }
+
+    body.community-body .footer-body-inner {
+        align-items: flex-start !important;
+    }
+
+    body.community-body .footer-brand,
+    body.community-body .footer-info,
+    body.community-body .footer-info-row,
+    body.community-body .footer-contact,
+    body.community-body .footer-sns,
+    body.community-body .footer-copy,
+    body.community-body .footer-note,
+    body.community-body .footer-brand-desc {
+        text-align: left !important;
+    }
+
+    body.community-body .footer-info {
+        align-items: flex-start !important;
+    }
+</style>
+
 <%@ include file="/WEB-INF/views/common/modal/authModal.jspf" %>
 <%@ include file="/WEB-INF/views/common/include/scripts.jspf" %>
 

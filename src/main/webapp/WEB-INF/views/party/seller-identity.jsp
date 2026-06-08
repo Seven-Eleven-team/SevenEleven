@@ -37,9 +37,9 @@
         .card {
             background: #f0f0f0;
             border-radius: 16px;
-            padding: 2.5rem 3rem;
+            padding: 2.8rem 3.5rem;
             width: 100%;
-            max-width: 560px;
+            max-width: 720px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
 
@@ -54,7 +54,7 @@
         .inner-box {
             background: #e0e0e0;
             border-radius: 12px;
-            padding: 2rem;
+            padding: 2.3rem 2.5rem;
             margin-bottom: 2.5rem;
         }
 

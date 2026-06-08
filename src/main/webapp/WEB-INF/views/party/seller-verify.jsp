@@ -6,6 +6,7 @@
 <head>
     <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
     <title>본인 인증</title>
+
     <style>
         body {
             background: #e8e8e8;
@@ -29,7 +30,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-
             max-width: 1200px;
             width: 100%;
             margin: 0 auto;
@@ -121,33 +121,6 @@
             display: block;
         }
 
-        .msg-ok {
-            font-size: 14px;
-            color: #1d6fbf;
-            display: none;
-            margin-top: 3px;
-        }
-
-        .msg-ok.on {
-            display: block;
-        }
-
-        .btn-confirm {
-            background: #1e3a5f;
-            color: #fff;
-            border: none;
-            border-radius: 32px;
-            padding: 14px 58px;
-            font-size: 18px;
-            cursor: pointer;
-            display: none;
-            margin-top: 2rem;
-        }
-
-        .btn-confirm.on {
-            display: block;
-        }
-
         .btn-row {
             display: flex;
             justify-content: center;
@@ -192,16 +165,11 @@
             width: 90%;
         }
 
-        .modal-icon {
-            font-size: 42px;
-            margin-bottom: 0.9rem;
-        }
-
         .modal-title {
-            font-size: 19px;
+            font-size: 20px;
             font-weight: 700;
             color: #1a1a1a;
-            margin-bottom: 0.6rem;
+            margin-bottom: 1.7rem;
         }
 
         .modal-desc {
@@ -287,23 +255,38 @@
                 font-size: 13px;
             }
 
-            .btn-confirm,
             .btn-outline {
                 padding: 12px 42px;
                 font-size: 15px;
             }
+
+            .modal-btns {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
+
 <body>
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
 
+<div class="modal-overlay" id="success-modal">
+    <div class="modal-box">
+        <div class="modal-title">인증되었습니다 !</div>
+
+        <div class="modal-btns">
+            <button class="modal-btn-no" onclick="closeSuccessModal()">이전으로</button>
+            <button class="modal-btn-yes" onclick="goProfile()">인증 확인</button>
+        </div>
+    </div>
+</div>
+
 <div class="modal-overlay" id="no-history-modal">
     <div class="modal-box">
-        <div class="modal-icon">⚠️</div>
         <div class="modal-title">판매 등록 이력이 없습니다</div>
         <div class="modal-desc">아직 판매자로 등록된 이력이 없어요.</div>
         <div class="modal-question">판매자 등록을 하러 가시겠습니까?</div>
+
         <div class="modal-btns">
             <button class="modal-btn-yes" onclick="goRegister()">예</button>
             <button class="modal-btn-no" onclick="goMain()">아니요</button>
@@ -325,9 +308,6 @@
             </div>
 
             <span class="msg-err" id="pw-err">비밀번호를 잘못 입력하셨습니다.</span>
-            <span class="msg-ok" id="pw-ok">인증되었습니다!</span>
-
-            <button class="btn-confirm" id="btn-confirm" onclick="goProfile()">인증 확인</button>
         </div>
 
         <div class="btn-row">
@@ -345,6 +325,8 @@
 
     function verifyPw() {
         const password = document.getElementById('password').value;
+        const errMsg = document.getElementById('pw-err');
+        const successModal = document.getElementById('success-modal');
 
         if (!password) {
             alert('비밀번호를 입력해주세요.');
@@ -359,20 +341,28 @@
             .then(res => res.text())
             .then(text => {
                 if (text.includes('인증되었습니다')) {
-                    document.getElementById('pw-err').classList.remove('on');
-                    document.getElementById('pw-ok').classList.add('on');
-                    document.getElementById('btn-confirm').classList.add('on');
+                    errMsg.classList.remove('on');
+                    successModal.classList.add('on');
                 } else {
-                    document.getElementById('pw-ok').classList.remove('on');
-                    document.getElementById('btn-confirm').classList.remove('on');
-                    document.getElementById('pw-err').classList.add('on');
+                    successModal.classList.remove('on');
+                    errMsg.classList.add('on');
                 }
+            })
+            .catch(function() {
+                successModal.classList.remove('on');
+                errMsg.classList.add('on');
             });
+    }
+
+    function closeSuccessModal() {
+        document.getElementById('success-modal').classList.remove('on');
     }
 
     function goProfile() {
         fetch(ctx + '/api/party/sellers/' + userId)
             .then(function(res) {
+                document.getElementById('success-modal').classList.remove('on');
+
                 if (res.ok) {
                     location.href = ctx + '/party/seller-profile';
                 } else {
@@ -380,6 +370,7 @@
                 }
             })
             .catch(function() {
+                document.getElementById('success-modal').classList.remove('on');
                 document.getElementById('no-history-modal').classList.add('on');
             });
     }

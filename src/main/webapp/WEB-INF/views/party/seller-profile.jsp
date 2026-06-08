@@ -34,15 +34,15 @@
             width: 100%;
             margin: 0 auto;
 
-            padding: 130px 1.5rem 4rem;
+            padding: 115px 1.5rem 4rem;
             box-sizing: border-box;
         }
 
         .page-title {
             text-align: center;
-            font-size: 32px;
+            font-size: 30px;
             font-weight: 700;
-            margin-bottom: 2rem;
+            margin-bottom: 1.4rem;
             color: #1a1a1a;
         }
 
@@ -55,7 +55,7 @@
             overflow: visible;
 
             width: 100%;
-            min-height: 520px;
+            min-height: 470px;
             box-sizing: border-box;
 
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
@@ -76,8 +76,8 @@
         }
 
         .profile-img {
-            width: 220px;
-            height: 280px;
+            width: 200px;
+            height: 250px;
 
             background: #d5d5d5;
             border-radius: 12px;
