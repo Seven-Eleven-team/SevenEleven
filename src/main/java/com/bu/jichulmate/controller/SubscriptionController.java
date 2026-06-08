@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import jakarta.servlet.http.HttpSession;
+import com.bu.jichulmate.util.SessionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,21 +55,26 @@ public class SubscriptionController {
     }
 
     // 구독 저장
-    @PostMapping("/buy")
-    public String create(SubscriptionCreateRequest request) {
+    @PostMapping("/ott")
+    public String create(
+            SubscriptionCreateRequest request,
+            HttpSession session
+    ) {
 
-        // TODO : 로그인 연동 후 실제 사용자 ID 적용
-        Long userId = 1L;
+        Long userId =
+                SessionUtils.getLoginUserId(session);
 
-        subscriptionService.createSubscription(userId, request);
+        subscriptionService.createSubscription(
+                userId,
+                request
+        );
 
-        return "subscription/success";
-
+        return "subscription/paymentSuccess";
     }
     //마이페이지 내 구독관리
     @GetMapping("/my")
-    public String mySubscriptions(Model model) {
-        Long userId = 2L;
+    public String mySubscriptions(HttpSession session, Model model) {
+        Long userId = SessionUtils.getLoginUserId(session);
 
         List<SubscriptionResponse> subs;
         try {
@@ -83,6 +90,7 @@ public class SubscriptionController {
         model.addAttribute("subscriptions", subs);
         return "members/mypage/mysub";
     }
+
     //마이페이지 내 구독관리 취소
     @PostMapping("/cancel/{id}")
     public String cancel(@PathVariable Long id) {
@@ -90,9 +98,9 @@ public class SubscriptionController {
         return "redirect:/subscription/my";
     }
 
-    //ott
-    @GetMapping("/ott")
-    public String ottPage() {
-        return "subscription/ott";
+    // 결제 완료 페이지
+    @GetMapping("/paymentSuccess")
+    public String paymentSuccess() {
+        return "subscription/paymentSuccess";
     }
 }

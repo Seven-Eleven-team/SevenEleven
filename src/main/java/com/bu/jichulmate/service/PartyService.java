@@ -76,8 +76,11 @@ public class PartyService {
         PartyDetailResponse response = new PartyDetailResponse();
         response.setId(post.getId());
         response.setSellerId(post.getSeller().getUserId());
-        response.setOttCategory(post.getService() != null ?
-                post.getService().getServiceCategory() : null);
+        response.setServiceName(
+                post.getService() != null
+                        ? post.getService().getServiceName()
+                        : null
+        );
         response.setShareId(post.getShareId());
         response.setSharePassword(post.getSharePassword());
         response.setMonthlyPrice(post.getMonthlyPrice());

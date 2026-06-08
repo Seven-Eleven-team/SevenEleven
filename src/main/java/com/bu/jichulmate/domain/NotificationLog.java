@@ -32,4 +32,11 @@ public class NotificationLog {
 
     @Column(name = "CREATED_AT", updatable = false)
     private LocalDateTime createdAt;
+
+    //  DB에 Insert 되기 직전에 현재 시간을 꽉 채워줍니다.
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
 }

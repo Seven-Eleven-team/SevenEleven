@@ -14,7 +14,7 @@ public class PartyDetailResponse {
 
     private Long id;
     private Long sellerId;
-    private String ottCategory;
+    private String serviceName;
     private String shareId;
     private String sharePassword;
     private Integer monthlyPrice;

@@ -4,6 +4,8 @@ import com.bu.jichulmate.domain.Faq;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 public class FaqResponse {
@@ -12,6 +14,7 @@ public class FaqResponse {
     private String question;
     private String answer;
     private Integer sortOrder;
+    private LocalDateTime createdAt;
 
     // Faq 엔티티를 받아서 DTO로 변환
     public FaqResponse(Faq faq) {
@@ -19,5 +22,6 @@ public class FaqResponse {
         this.question = faq.getQuestion();
         this.answer = faq.getAnswer();
         this.sortOrder = faq.getSortOrder();
+        this.createdAt = faq.getCreatedAt();
     }
 }

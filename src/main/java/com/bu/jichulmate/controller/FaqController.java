@@ -37,33 +37,6 @@ public class FaqController {
         return faqService.getFaqListByCategory(category);
     }
 
-    @ResponseBody
-    @GetMapping("/api/admin/faqs")
-    public List<FaqResponse> getAllFaqs() {
-        return faqService.getAllFaqList();
-    }
-
-    @ResponseBody
-    @PostMapping("/api/admin/faqs")
-    public ResponseEntity<FaqResponse> createFaq(@RequestBody FaqRequest request) {
-        return ResponseEntity.ok(faqService.createFaq(request));
-    }
-
-    @ResponseBody
-    @PutMapping("/api/admin/faqs/{faqId}")
-    public ResponseEntity<FaqResponse> updateFaq(
-            @PathVariable Long faqId,
-            @RequestBody FaqRequest request
-    ) {
-        return ResponseEntity.ok(faqService.updateFaq(faqId, request));
-    }
-
-    @ResponseBody
-    @DeleteMapping("/api/admin/faqs/{faqId}")
-    public ResponseEntity<Void> deleteFaq(@PathVariable Long faqId) {
-        faqService.deleteFaq(faqId);
-        return ResponseEntity.ok().build();
-    }
 
     @ResponseBody
     @PostMapping("/api/faqs/chat")
@@ -76,7 +49,7 @@ public class FaqController {
                     .body("숫자만 입력해주세요.");
         }
 
-        int index = Integer.parseInt(input);
+        int index = Integer.parseInt(input) -1;
         FaqResponse response = faqService.getFaqByIndex(index);
 
         if (response == null) {

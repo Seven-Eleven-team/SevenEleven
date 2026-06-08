@@ -269,6 +269,80 @@
     body.mypage .header-action-area { position: absolute !important; right: 36px !important; }
     body.mypage .user-profile-link { display: flex !important; }
 
+
+    /* =========================
+           개인 소비 목표 UI 개선
+        ========================= */
+        .goal-card .main-goal {
+            background: #fff5f5;
+            border: 1px solid #ffe3e3;
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+        }
+        .goal-card .main-goal-title {
+            color: #ff4d4d;
+            font-size: 14px;
+            font-weight: 800;
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .goal-card .goal-item {
+            padding: 15px 10px;
+            border-bottom: 1px dashed #eee;
+        }
+        .goal-card .goal-item:last-child {
+            border-bottom: none;
+        }
+        .goal-card .goal-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            margin: 0 0 12px 0;
+        }
+        .goal-card .progress-bg {
+            position: relative;
+            width: 100%;
+            height: 24px;
+            background-color: #f1f3f5;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .goal-card .progress-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 12px;
+            transition: width 1.5s ease-in-out, background-color 0.5s;
+        }
+        .goal-card .progress-text {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 13px;
+            font-weight: 800;
+            color: #495057;
+            z-index: 2;
+        }
+
+        /* 대시보드에서 가져온 깔끔한 게이지바 스타일 */
+        .progress-bg {
+            background: #F0F5F9;
+            height: 16px;
+            border-radius: 8px;
+            width: 100%;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 8px;
+            background-color: #3F72AF; /* 대시보드와 동일한 파란색 */
+            transition: width 1.2s ease;
+        }
+
     body.mypage nav.sidebar {
         position: fixed;
         top: 78px;
@@ -367,8 +441,20 @@
                 <h3 class="card-title-center">내 정보</h3>
                 <div class="info-body">
                     <div class="profile-section">
-                        <div class="profile-img-box">
-                            <img src="/images/profile.jpg" alt="프로필">
+                        <div class="profile-img-box" style="display: flex; align-items: center; justify-content: center; background-color: #243864; color: white; font-size: 50px; font-weight: bold; border-radius: 50%; width: 140px; height: 140px; margin: 0 auto 15px auto; overflow: hidden; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+
+                            <c:choose>
+                                <%-- 백엔드에서 넘겨줄 profileImageUrl 사용 --%>
+                                <c:when test="${not empty profileImageUrl}">
+                                    <img src="${profileImageUrl}" alt="프로필 사진" style="width: 100%; height: 100%; object-fit: cover;">
+                                </c:when>
+
+                                <%-- 사진이 없을 때는 이니셜 표시 --%>
+                                <c:otherwise>
+                                    ${not empty summary.nickname ? fn:substring(summary.nickname, 0, 1) : 'U'}
+                                </c:otherwise>
+                            </c:choose>
+
                         </div>
                         <button class="edit-info-btn" onclick="location.href='${pageContext.request.contextPath}/mypage/editprofile'">
                             내 정보 수정
@@ -496,25 +582,27 @@
                 <c:if test="${not empty fixedGoal}">
                     <div class="main-goal">
                         <p class="main-goal-title">🔥 가장 중요한 목표</p>
-                        <p>${fixedGoal.goalName}</p>
+                        <p class="goal-name">${fixedGoal.goalName}</p>
                         <div class="progress-bg">
-                            <div class="progress-bar"
-                                 data-value="${fixedGoal.targetAmount > 0 ? (fixedGoal.savedAmount * 100 / fixedGoal.targetAmount) : 0}">
-                                0%
-                            </div>
+                            <div class="progress-fill" style="width: ${fixedGoal.targetAmount > 0 ? (fixedGoal.savedAmount * 100.0 / fixedGoal.targetAmount) : 0}%; background-color: #ffb300;"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                             <span>₩<fmt:formatNumber value="${fixedGoal.savedAmount}" pattern="#,##0" /></span>
+                             <span><fmt:formatNumber value="${fixedGoal.targetAmount > 0 ? (fixedGoal.savedAmount * 100.0 / fixedGoal.targetAmount) : 0}" pattern="##0.0"/>%</span>
                         </div>
                     </div>
                 </c:if>
 
-                <%-- 일반 목표 최대 3개 --%>
+                <%-- 일반 목표 --%>
                 <c:forEach var="goal" items="${normalGoals}">
                     <div class="goal-item">
-                        <p>${goal.goalName}</p>
+                        <p class="goal-name">${goal.goalName}</p>
                         <div class="progress-bg">
-                            <div class="progress-bar"
-                                 data-value="${goal.targetAmount > 0 ? (goal.savedAmount * 100 / goal.targetAmount) : 0}">
-                                0%
-                            </div>
+                            <div class="progress-fill" style="width: ${goal.targetAmount > 0 ? (goal.savedAmount * 100.0 / goal.targetAmount) : 0}%;"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                             <span>₩<fmt:formatNumber value="${goal.savedAmount}" pattern="#,##0" /></span>
+                             <span><fmt:formatNumber value="${goal.targetAmount > 0 ? (goal.savedAmount * 100.0 / goal.targetAmount) : 0}" pattern="##0.0"/>%</span>
                         </div>
                     </div>
                 </c:forEach>
@@ -564,11 +652,7 @@
                 <div id="accountError" class="error-text"></div>
             </div>
 
-            <div class="form-group">
-                <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                    <input type="checkbox" name="primary" id="primary" value="true" checked> 이 계좌를 대표 계좌로 설정
-                </label>
-            </div>
+            <input type="hidden" name="primary" id="primary" value="true">
 
             <button type="submit" id="accountSubmitBtn" class="change-account-btn" style="width:100%; padding:15px; border-radius:10px; border:none; background:#4f46e5; color:white; font-weight:bold; cursor:pointer;">
                 계좌 등록하기
@@ -582,7 +666,7 @@
         <span class="close-btn" onclick="closeModal()">&times;</span>
         <h2 style="margin-bottom: 10px;">회원 탈퇴</h2>
         <p>정말로 탈퇴하시겠습니까?<br>회원 탈퇴시 내 정보는 30일 동안 저장 되었다 삭제됩니다.</p>
-        <button class="leave-btn">탈퇴하기</button>
+        <button class="leave-btn" onclick="submitWithdraw()">탈퇴하기</button>
     </div>
 </div>
 
@@ -709,24 +793,36 @@
     }
 
     window.onload = function() {
-        const progressBars = document.querySelectorAll('.progress-bar');
-        progressBars.forEach((progressBar) => {
-            const targetValue = parseInt(progressBar.getAttribute('data-value')) || 0;
-            setTimeout(() => {
-                progressBar.style.width = targetValue + '%';
-                if (targetValue <= 30) progressBar.style.backgroundColor = '#ff8a80';
-                else if (targetValue <= 70) progressBar.style.backgroundColor = '#fde047';
-                else progressBar.style.backgroundColor = '#a3e635';
-                let count = 0;
-                if (targetValue > 0) {
-                    const interval = setInterval(() => {
-                        if (count >= targetValue) { clearInterval(interval); progressBar.innerText = targetValue + '%'; }
-                        else { progressBar.innerText = count + '%'; count++; }
-                    }, 1500 / targetValue);
-                } else { progressBar.innerText = '0%'; }
-            }, 200);
-        });
-    };
+            const progressBars = document.querySelectorAll('.progress-bar');
+
+            progressBars.forEach((progressBar) => {
+                const targetValue = parseInt(progressBar.getAttribute('data-value')) || 0;
+                const textSpan = progressBar.nextElementSibling;
+
+                setTimeout(() => {
+                    progressBar.style.width = targetValue + '%';
+
+                    if (targetValue <= 30) progressBar.style.backgroundColor = '#ff8a80';
+                    else if (targetValue <= 70) progressBar.style.backgroundColor = '#fde047';
+                    else progressBar.style.backgroundColor = '#a3e635';
+
+                    let count = 0;
+                    if (targetValue > 0) {
+                        const interval = setInterval(() => {
+                            if (count >= targetValue) {
+                                clearInterval(interval);
+                                if(textSpan) textSpan.innerText = targetValue + '%';
+                            } else {
+                                if(textSpan) textSpan.innerText = count + '%';
+                                count++;
+                            }
+                        }, 1500 / targetValue);
+                    } else {
+                        if(textSpan) textSpan.innerText = '0%';
+                    }
+                }, 200);
+            });
+        };
 
     const hamburgerBtn = document.querySelector('.hamburger-btn');
     const sidebar = document.querySelector('nav.sidebar');
@@ -735,6 +831,32 @@
             sidebar.classList.toggle('open');
         });
     }
+
+    // 회원 탈퇴 실행 함수 추가 (fetch API 사용)
+        function submitWithdraw() {
+            if(confirm("정말로 탈퇴를 진행하시겠습니까?\n(탈퇴 시 30일 유예 기간이 적용됩니다)")) {
+
+                fetch('${pageContext.request.contextPath}/user/withdraw', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.success) {
+                        alert(data.message);
+                        window.location.href = '${pageContext.request.contextPath}/'; // 성공 시 메인 화면으로 튕겨냄
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("서버 통신 중 오류가 발생했습니다.");
+                });
+            }
+        }
 </script>
 </body>
 </html>
