@@ -62,6 +62,55 @@
             color: #333;
             margin-bottom: 0; /* 옆에 버튼이 오므로 하단 여백 제거 */
         }
+       /* 공통 헤더 */
+    body.mypage .site-header {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 78px !important;
+        background: rgba(25, 59, 96, 0.96) !important;
+
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        z-index: 9999 !important;
+    }
+
+       /* 우측 영역 */
+      body.mypage .header-action-area {
+           position: absolute;
+           right: 36px;
+       }
+       body.mypage .site-logo {
+           color: white !important;
+           font-size: 28px !important;
+           font-weight: 800 !important;
+           margin: 0 !important;
+       }
+
+     body.mypage .hamburger-btn {
+               position: absolute !important;
+               left: 36px !important;
+               width: 42px !important;
+               height: 42px !important;
+               border: none !important;
+               border-radius: 0 !important;        /* 박스 제거 */
+               background: transparent !important; /* 배경 제거 */
+               color: white !important;
+               font-size: 22px !important;
+         }
+
+       body.mypage .header-action-area {
+           position: absolute !important;
+           right: 36px !important;
+       }
+
+       body.mypage .auth-link {
+           color: white !important;
+           text-decoration: none !important;
+       }
 
         /* 필터 버튼 스타일 */
         .filter-container {

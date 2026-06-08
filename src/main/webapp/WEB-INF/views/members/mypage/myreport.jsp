@@ -14,9 +14,218 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/myreport.css">
 
     <style>
-        /* 풋터 및 기본 배경 */
-        .footer { width: 100%; background: #243864; color: white; padding: 40px 0; margin-top: 60px; }
-        body.mypage { padding-top: 78px; min-height: 100vh; display: flex; flex-direction: column; background: #f5f5f5; }
+    body.mypage .hamburger-btn{
+        display:flex !important;
+        flex-direction:column !important;
+        justify-content:center !important;
+        align-items:center !important;
+        gap:4px !important;
+    }
+
+    body.mypage .hamburger-btn span{
+        display:block !important;
+        width:22px !important;
+        height:2px !important;
+        background:white !important;
+        border-radius:999px !important;
+    }
+      /*풋터*/
+        .footer {
+            width: 100%;
+            background: #243864;
+            color: white;
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+       body.mypage {
+           padding-top: 78px;
+
+           min-height: 100vh;
+
+           display: flex;
+           flex-direction: column;
+       }
+       .mypage-container {
+           flex: 1;
+       }
+    /*헤더*/
+         /* 마이페이지에서는 로그인 버튼 숨김 */
+         body.mypage .auth-link {
+             display: none !important;
+         }
+         body.mypage .header-action-area {
+             position: absolute !important;
+             right: 36px !important;
+         }
+
+         body.mypage .user-profile-link {
+             display: flex !important;
+         }
+         /* 공통 햄버거 사이드바 */
+         body.mypage nav.sidebar {
+             position: fixed;
+             top: 78px;
+             left: -260px;
+
+             width: 250px;
+             height: calc(100vh - 78px);
+
+             background: white;
+             border-right: 1px solid #ddd;
+
+             transition: all 0.3s ease;
+
+             z-index: 9998;
+
+             padding-top: 20px;
+         }
+
+         body.mypage nav.sidebar.open {
+             left: 0;
+         }
+
+ body.mypage nav.sidebar {
+     position: fixed;
+     top: 78px;
+     left: -260px;
+     width: 250px;
+     height: calc(100vh - 78px);
+
+     background: #243864; /* ⭐ 네이비 (핵심) */
+     border-right: none;
+
+     transition: all 0.3s ease;
+     z-index: 9998;
+     padding-top: 20px;
+ }
+
+ body.mypage nav.sidebar.open {
+     left: 0;
+ }
+
+ /* 리스트 기본 */
+ body.mypage nav.sidebar ul {
+     list-style: none;
+     padding: 0;
+     margin: 0;
+ }
+
+ /* 메뉴 아이템 */
+ body.mypage nav.sidebar li {
+     width: 100%;
+ }
+
+ /* 링크 */
+ body.mypage nav.sidebar li a {
+     display: flex;
+     align-items: center;
+
+     height: 54px;
+     padding: 0 24px;
+
+     color: white; /* ⭐ 네이비라서 흰 글씨 */
+     text-decoration: none;
+     font-size: 16px;
+     font-weight: 500;
+
+     transition: 0.2s;
+ }
+
+ /* hover */
+ body.mypage nav.sidebar li a:hover {
+     background: rgba(255, 255, 255, 0.12);
+ }
+
+ /* 로그아웃 영역 */
+ .sidebar-logout {
+     position: absolute;
+     bottom: 20px;
+     left: 0;
+     width: 100%;
+ }
+
+ .sidebar-logout a {
+     display: flex;
+     align-items: center;
+     gap: 8px;
+     padding: 0 24px;
+     height: 54px;
+
+     color: white;
+     text-decoration: none;
+ }
+
+ .sidebar-logout a:hover {
+     background: rgba(255, 255, 255, 0.12);
+ }
+
+         /* 마이페이지에서는 공통 사이드 드롭다운 숨김 */
+         body.mypage .sidebar-overlay,
+         body.mypage .sidebar-drawer,
+         body.mypage .sidebar-menu,
+         body.mypage .mobile-sidebar {
+             display: none !important;
+         }
+        /* 공통 헤더 */
+     body.mypage .site-header {
+         position: fixed !important;
+         top: 0 !important;
+         left: 0 !important;
+         width: 100% !important;
+         height: 78px !important;
+         background: rgba(25, 59, 96, 0.96) !important;
+
+         display: flex !important;
+         align-items: center !important;
+         justify-content: center !important;
+
+         z-index: 9999 !important;
+     }
+
+        /* 우측 영역 */
+       body.mypage .header-action-area {
+            position: absolute;
+            right: 36px;
+        }
+        body.mypage .site-logo {
+            color: white !important;
+            font-size: 28px !important;
+            font-weight: 800 !important;
+            margin: 0 !important;
+        }
+
+        body.mypage .hamburger-btn {
+            position: absolute !important;
+            left: 36px !important;
+
+            width: 42px !important;
+            height: 42px !important;
+
+            border: none !important;
+            border-radius: 12px !important;
+
+            background: rgba(255,255,255,0.15) !important;
+            color: white !important;
+
+            font-size: 22px !important;
+        }
+
+        body.mypage .header-action-area {
+            position: absolute !important;
+            right: 36px !important;
+        }
+
+        body.mypage .auth-link {
+            color: white !important;
+            text-decoration: none !important;
+        }
+
+        body.mypage .user-profile-link {
+            width: 46px !important;
+            height: 46px !important;
+
+            border-radius: 50% !important;
+            background: white !important;
 
         /* 레이아웃 틀 고정 (사이드바 + 메인) */
         .mypage-container {

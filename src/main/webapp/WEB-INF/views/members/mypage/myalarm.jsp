@@ -30,13 +30,65 @@
             flex: 1;
         }
 
-        /* 헤더 고정 스타일 */
-        body.mypage .site-header {
-            position: fixed !important; top: 0 !important; left: 0 !important;
-            width: 100% !important; height: 78px !important;
-            background: #243864 !important; display: flex !important;
-            align-items: center !important; justify-content: center !important; z-index: 9999 !important;
-        }
+         /* 링크 */
+         body.mypage nav.sidebar li a {
+             display: flex;
+             align-items: center;
+
+             height: 54px;
+             padding: 0 24px;
+
+             color: white; /* ⭐ 네이비라서 흰 글씨 */
+             text-decoration: none;
+             font-size: 16px;
+             font-weight: 500;
+
+             transition: 0.2s;
+         }
+
+         /* hover */
+         body.mypage nav.sidebar li a:hover {
+             background: rgba(255, 255, 255, 0.12);
+         }
+
+         /* 로그아웃 영역 */
+         .sidebar-logout {
+             position: absolute;
+             bottom: 20px;
+             left: 0;
+             width: 100%;
+         }
+
+         .sidebar-logout a {
+             display: flex;
+             align-items: center;
+             gap: 8px;
+             padding: 0 24px;
+             height: 54px;
+
+             color: white;
+             text-decoration: none;
+         }
+
+         .sidebar-logout a:hover {
+             background: rgba(255, 255, 255, 0.12);
+         }
+
+         /* 마이페이지에서는 공통 사이드 드롭다운 숨김 */
+         body.mypage .sidebar-overlay,
+         body.mypage .sidebar-drawer,
+         body.mypage .sidebar-menu,
+         body.mypage .mobile-sidebar {
+             display: none !important;
+         }
+        /* 공통 헤더 */
+     body.mypage .site-header {
+         position: fixed !important;
+         top: 0 !important;
+         left: 0 !important;
+         width: 100% !important;
+         height: 78px !important;
+         background: rgba(25, 59, 96, 0.96) !important;
 
         /* 사이드바 스타일 */
         .mypage-sidebar {
@@ -63,20 +115,21 @@
             margin-bottom: 0;
         }
 
-        /* 이메일 알림 스위치 스타일 */
-        .email-setting {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 15px;
-            color: #666;
-            font-weight: 500;
-        }
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 44px;
-            height: 22px;
+     body.mypage .hamburger-btn {
+               position: absolute !important;
+               left: 36px !important;
+               width: 42px !important;
+               height: 42px !important;
+               border: none !important;
+               border-radius: 0 !important;        /* 박스 제거 */
+               background: transparent !important; /* 배경 제거 */
+               color: white !important;
+               font-size: 22px !important;
+         }
+
+        body.mypage .header-action-area {
+            position: absolute !important;
+            right: 36px !important;
         }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider {

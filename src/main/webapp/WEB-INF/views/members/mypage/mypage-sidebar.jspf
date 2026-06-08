@@ -98,7 +98,6 @@
         <li class="${menu == 'subscriptions' ? 'active' : ''}"><a href="/subscription/my">내 구독 관리</a></li>
         <li class="${menu == 'posts' ? 'active' : ''}"><a href="/mypage/posts">내 게시글 보기</a></li>
         <li class="${menu == 'questions' ? 'active' : ''}"><a href="/mypage/questions">내 문의</a></li>
-        <li class="${menu == 'reports' ? 'active' : ''}"><a href="/mypage/reports">내 신고 목록</a></li>
         <li class="${menu == 'alarm' ? 'active' : ''}"><a href="/mypage/alarm">알림</a></li>
         <li class="${menu == 'sales' ? 'active' : ''}"><a href="/mypage/sales">내 판매 목록</a></li>
     </ul>
