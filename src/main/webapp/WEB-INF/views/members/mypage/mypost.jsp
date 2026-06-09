@@ -78,41 +78,90 @@
         .table-row:hover { background: #fafafa; }
 
         /* 컬럼 너비 및 정렬 */
-        .col-no { width: 10%; text-align: center; }
-        .col-title { width: 50%; text-align: left; padding: 0 20px; color: #333; }
-        .col-date { width: 20%; text-align: center; }
-        .col-view { width: 10%; text-align: center; }
-        .row-right { width: 10%; display: flex; gap: 5px; justify-content: center; }
+        /* 컬럼 너비 및 정렬 */
+                .col-no { width: 10%; text-align: center; }
+                .col-title { width: 45%; text-align: left; padding: 0 20px; color: #333; }
+
+                /* ✅ [추가] 제목 링크 기본 스타일 제거 및 호버 효과 */
+                .col-title a {
+                    text-decoration: none; /* 밑줄 제거 */
+                    color: #333; /* 글씨 색상을 기존 텍스트와 동일하게 고정 */
+                    display: block; /* 클릭 영역을 넓혀줌 */
+                }
+                .col-title a:hover {
+                    text-decoration: underline; /* 마우스를 올렸을 때만 밑줄이 생기도록 (선택 사항) */
+                    color: #243864; /* 마우스를 올리면 네이비색으로 포인트 */
+                }
+
+                .col-date { width: 15%; text-align: center; }
+                .col-view { width: 10%; text-align: center; }
+                .row-right { width: 20%; display: flex; gap: 8px; justify-content: center; align-items: center; }
 
         /* 버튼 스타일 */
-        .btn-action {
-            padding: 6px 12px;
-            border-radius: 15px;
-            border: none;
-            font-size: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.2s;
-            background: #645495;
-            color: white;
-        }
-        .btn-action:hover { background: #4f4178; }
+        .btn-edit {
+                    padding: 8px 16px;
+                    background: #ffffff;
+                    color: #243864; /* 지출메이트 네이비 */
+                    border: 1px solid #243864;
+                    border-radius: 6px;
+                    font-size: 13px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    white-space: nowrap;
+                }
+                .btn-edit:hover {
+                    background: #243864;
+                    color: #ffffff;
+                }
 
-        .btn-delete {
-            background: #645495;
-            color: white;
-        }
-        .btn-delete:hover { background: #ff4d4d; }
+                .btn-delete {
+                    padding: 8px 16px;
+                    background: #ffffff;
+                    color: #ff4d4d; /* 삭제는 강조를 위해 레드 유지 */
+                    border: 1px solid #ff4d4d;
+                    border-radius: 6px;
+                    font-size: 13px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    white-space: nowrap;
+                }
+                .btn-delete:hover {
+                    background: #ff4d4d;
+                    color: #ffffff;
+                }
 
         /* 데이터 없을 때 */
         .empty-msg { text-align: center; padding: 60px 0; color: #999; font-size: 15px; }
 
-        /* 페이지네이션 스타일 */
-        .pagination { display: flex; justify-content: center; margin-top: 20px; gap: 5px; }
-        .page-link { padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px;
-                    text-decoration: none; color: #333; font-size: 14px; }
-        .page-link.active { background: #645495; color: white; border-color: #645495; }
-    </style>
+
+       /* 페이징 버튼 디자인 */
+       .pagination {
+           display: flex;
+           justify-content: center;
+           margin: 40px 0;
+           gap: 8px;
+       }
+       .page-link {
+           padding: 8px 16px;
+           border: 1px solid #ddd;
+           border-radius: 8px;
+           text-decoration: none;
+           color: #52616B;
+           font-weight: 600;
+           transition: 0.2s;
+       }
+       .page-link.active {
+           background: #243864; /* 지출메이트 네이비 */
+           color: white;
+           border-color: #243864;
+       }
+       .page-link:hover:not(.active) {
+           background: #f1f3f5;
+           color: #243864;
+       }
+       </style>
 </head>
 <body class="mypage">
 
@@ -128,29 +177,34 @@
 
         <section class="mypost-card">
             <div class="post-table">
-                <!-- 테이블 헤더 -->
                 <div class="table-header">
                     <div class="col-no">순번</div>
                     <div class="col-title">제목</div>
                     <div class="col-date">게시판</div>
-                    <div class="col-view">조회수</div>
-                    <div class="row-right">관리</div>
+                    <div class="col-view">조회수</div> <div class="row-right">관리</div>
                 </div>
 
-                <!-- DB 데이터 출력 루프 -->
                 <c:choose>
                     <c:when test="${not empty boards and not empty boards.content}">
+                        <%-- boards 자체가 Page 객체이므로 그 안의 content를 루프 돌립니다 --%>
                         <c:forEach var="board" items="${boards.content}" varStatus="status">
                             <div class="table-row">
-                                <div class="col-no">${status.count}</div>
-                                <div class="col-title">${board.title}</div>
+                                <%-- 페이지 번호 * 페이지당 개수 + 순번으로 계산해야 페이지가 넘어가도 번호가 1, 2, 3... 이어집니다 --%>
+                                <div class="col-no">${(boards.number * boards.size) + status.count}</div>
+                                <div class="col-title">
+                                    <a href="${pageContext.request.contextPath}/community/detail/${board.boardId}">
+                                        ${board.title}
+                                    </a>
+                                </div>
                                 <div class="col-date">${board.boardType}</div>
-                                <div class="col-view">${board.viewCount}</div>
+                                <div class="col-view">${board.viewsCount}</div>
                                 <div class="row-right">
-                                    <button type="button" class="btn-action"
-                                            onclick="location.href='${pageContext.request.contextPath}/board/edit/${board.id}'">수정</button>
-                                    <button type="button" class="btn-action btn-delete"
-                                            onclick="deleteBoard(${board.id})">삭제</button>
+                                    <button type="button" class="btn-edit"
+                                            onclick="location.href='${pageContext.request.contextPath}/community/edit/${board.boardId}'">수정</button>
+
+                                    <form action="${pageContext.request.contextPath}/community/delete/${board.boardId}" method="post" style="display:inline;" onsubmit="return confirm('정말로 이 게시글을 삭제하시겠습니까?');">
+                                        <button type="submit" class="btn-delete">삭제</button>
+                                    </form>
                                 </div>
                             </div>
                         </c:forEach>
@@ -161,12 +215,29 @@
                 </c:choose>
             </div>
 
-            <!-- 페이지네이션 -->
+            <%-- 페이지네이션 영역 --%>
             <c:if test="${not empty boards and boards.totalPages > 0}">
                 <div class="pagination">
+
+                    <%-- [이전] 버튼: 현재 페이지가 1보다 클 때만 표시 --%>
+                    <c:if test="${boards.number > 0}">
+                        <a href="?page=${boards.number}" class="page-link">이전</a>
+                    </c:if>
+
+                    <%-- 페이지 번호 버튼 (1부터 totalPages까지) --%>
+                    <%-- boards.number는 0부터 시작하므로, 보여줄 때는 +1을 합니다 --%>
                     <c:forEach begin="0" end="${boards.totalPages - 1}" var="i">
-                        <a href="?page=${i + 1}" class="page-link ${boards.number == i ? 'active' : ''}">${i + 1}</a>
+                        <a href="?page=${i + 1}"
+                           class="page-link ${boards.number == i ? 'active' : ''}">
+                           ${i + 1}
+                        </a>
                     </c:forEach>
+
+                    <%-- [다음] 버튼: 현재 페이지가 전체 페이지보다 작을 때만 표시 --%>
+                    <c:if test="${boards.number < boards.totalPages - 1}">
+                        <a href="?page=${boards.number + 2}" class="page-link">다음</a>
+                    </c:if>
+
                 </div>
             </c:if>
         </section>

@@ -28,100 +28,52 @@
 
     <main class="dashboard">
 
-        <div class="sales-header-title">
-
-            내 판매 목록
-
-        </div>
-
-        <div class="sales-main-box">
-
-            <div class="sales-list-content">
-
-                <!-- 판매 목록 1 -->
-                <div class="sale-item">
-
-                    <div class="item-left-group">
-
-                        <div class="item-name">
-
-                            유튜브 프리미엄
-
-                        </div>
-
-                        <div class="item-logo-area">
-
-                            <img src="${pageContext.request.contextPath}/images/youtube_premium_logo.png"
-                                 alt="유튜브 로고">
-
-                        </div>
-
-                        <div class="item-desc-text">
-
-                            판매상태 : 판매중
-                            <br>
-                            가격 : 7,800원
-
-                        </div>
-
-                    </div>
-
-                    <div class="item-right-stat">
-
-                        3명 구매
-
-                    </div>
-
-                </div>
-
-                <!-- 판매 목록 2 -->
-                <div class="sale-item">
-
-                    <div class="item-left-group">
-
-                        <div class="item-name">
-
-                            넷플릭스
-
-                        </div>
-
-                        <div class="item-logo-area">
-
-                            <img src="${pageContext.request.contextPath}/images/netflix_logo.png"
-                                 alt="넷플릭스 로고">
-
-                        </div>
-
-                        <div class="item-desc-text">
-
-                            판매상태 : 판매완료
-                            <br>
-                            가격 : 4,500원
-
-                        </div>
-
-                    </div>
-
-                    <div class="item-right-stat">
-
-                        4명 구매
-
-                    </div>
-
-                </div>
-
+            <div class="page-header">
+                <h1 class="page-title">내 판매 목록</h1>
             </div>
 
-            <!-- 페이지네이션 -->
-            <div class="pagination-area">
+            <section class="sales-card">
+                <c:choose>
+                    <%-- 1. 판매자 등록을 하지 않은 경우 (empty-box 표시) --%>
+                    <c:when test="${not isSeller}">
+                        <div class="empty-box">
+                            <h1>판매자 등록을 먼저 해주세요!</h1>
+                            <button type="button" class="primary-btn" onclick="location.href='${pageContext.request.contextPath}/mypage/sales/register-identity'">
+                                판매자 등록하기
+                            </button>
+                        </div>
+                    </c:when>
 
-                1
+                    <%-- 2. 판매자 등록이 완료된 경우 (판매 리스트 표시) --%>
+                    <c:otherwise>
+                        <div class="sales-list-content">
+                            <div class="sale-item">
+                                <div class="item-left-group">
+                                    <div class="item-logo-area">
+                                        <img src="${pageContext.request.contextPath}/images/youtube_premium_logo.png" alt="유튜브 로고">
+                                    </div>
+                                    <div class="item-info">
+                                        <div class="item-name">유튜브 프리미엄</div>
+                                        <div class="item-desc-text">
+                                            <span class="status-badge selling">판매중</span>
+                                            <span class="price-text">7,800원</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item-right-stat">
+                                    <span class="buyer-count">3명 구매</span>
+                                </div>
+                            </div>
+                            </div>
 
-            </div>
+                        <div class="pagination">
+                            <a href="#" class="page-link active">1</a>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </section>
 
-        </div>
-
-    </main>
+        </main>
 
 </div>
 

@@ -112,6 +112,21 @@
            text-decoration: none !important;
        }
 
+       /* 문의 제목 링크 스타일 */
+               .inq-link {
+                   text-decoration: none;
+                   color: #222; /* 기본 글씨색 */
+                   display: block;
+                   width: 100%;
+                   overflow: hidden;
+                   text-overflow: ellipsis;
+                   white-space: nowrap; /* 길면 ... 으로 표시 */
+               }
+               .inq-link:hover {
+                   text-decoration: underline;
+                   color: #243864; /* 마우스 올리면 네이비색 포인트 */
+               }
+
         /* 필터 버튼 스타일 */
         .filter-container {
             display: flex;
@@ -137,6 +152,19 @@
             border-color: #645495;
             font-weight: 600;
         }
+
+        .filter-group { display: flex; gap: 10px; }
+        .btn-filter {
+            padding: 8px 16px; border: 1px solid #243864; border-radius: 20px;
+            text-decoration: none; color: #243864; font-weight: 600;
+        }
+        .btn-filter.active { background: #243864; color: white; }
+
+        .status-badge {
+            padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;
+        }
+        .status-badge.done { background: #e7f5ff; color: #228be6; }
+        .status-badge.wait { background: #fff3bf; color: #f59f00; }
 
         /* 테이블 스타일 (통일성 적용) */
         .question-card {
@@ -166,12 +194,36 @@
         }
         .table-row:hover { background: #fafafa; }
 
+        .table-header, .table-row {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+
         /* 컬럼 너비 설정 */
         .col-no { width: 10%; text-align: center; }
-        .col-title { width: 45%; text-align: left; padding: 0 20px; color: #333; }
-        .col-answer { width: 20%; text-align: center; }
+        .col-title { width: 40%; text-align: left; padding-left: 20px; }
+        .col-status { width: 15%; text-align: center; }
         .col-date { width: 15%; text-align: center; }
-        .col-manage { width: 10%; display: flex; justify-content: center; }
+        .col-manage { width: 20%; text-align: center; }
+
+        /* 깔끔한 삭제 버튼 디자인 */
+        .btn-delete {
+            padding: 6px 12px;
+            background: #ffffff;
+            color: #ff4d4d;
+            border: 1px solid #ff4d4d;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-delete:hover {
+            background: #ff4d4d;
+            color: #ffffff;
+        }
 
         /* 상태 표시 스타일 */
         .status-complete { color: #10b981; font-weight: 600; }
@@ -235,48 +287,57 @@
         <!-- ✅ 제목과 버튼을 한 줄로 배치한 헤더 영역 -->
         <div class="page-header">
             <h1 class="page-title">내 문의</h1>
-            <div class="filter-container">
-                <a href="?filter=all" class="filter-btn ${param.filter == 'all' || empty param.filter ? 'active' : ''}">전체</a>
-                <a href="?filter=completed" class="filter-btn ${param.filter == 'completed' ? 'active' : ''}">답변 완료</a>
-                <a href="?filter=pending" class="filter-btn ${param.filter == 'pending' ? 'active' : ''}">답변 전</a>
+            <div class="filter-group">
+                <a href="?status=ALL" class="btn-filter ${currentStatus == 'ALL' ? 'active' : ''}">전체</a>
+                <a href="?status=ANSWERED" class="btn-filter ${currentStatus == 'ANSWERED' ? 'active' : ''}">답변 완료</a>
+                <a href="?status=WAITING" class="btn-filter ${currentStatus == 'WAITING' ? 'active' : ''}">답변 전</a>
             </div>
         </div>
 
         <section class="question-card">
-            <div class="table-header">
-                <div class="col-no">순번</div>
-                <div class="col-title">제목</div>
-                <div class="col-answer">답변여부</div>
-                <div class="col-date">문의시각</div>
-                <div class="col-manage">관리</div>
-            </div>
+            <div class="post-table">
+                <div class="table-header">
+                    <div class="col-no">순번</div>
+                    <div class="col-title">제목</div>
+                    <div class="col-status">답변여부</div>
+                    <div class="col-date">문의시각</div>
+                    <div class="col-manage">관리</div>
+                </div>
 
-            <c:choose>
-                <c:when test="${not empty questions}">
-                    <c:forEach var="q" items="${questions}" varStatus="status">
-                        <div class="table-row">
-                            <div class="col-no">${status.count}</div>
-                            <div class="col-title"
-                                 style="cursor:pointer; color:#1e2d4d; font-weight:500;"
-                                 onclick="openQuestionModal('${q.title}', '${q.content}', '${q.answerContent}')">
-                                ${q.title}
+                <c:choose>
+                    <c:when test="${not empty inquiries.content}">
+                        <c:forEach var="inq" items="${inquiries.content}" varStatus="status">
+                            <div class="table-row">
+                                <div class="col-no">${(inquiries.number * inquiries.size) + status.count}</div>
+                                <div class="col-title">
+                                    <a href="javascript:void(0);"
+                                       class="inq-link"
+                                       onclick="openQuestionModal(this.getAttribute('data-title'), this.getAttribute('data-content'), this.getAttribute('data-answer'))"
+                                       data-title="<c:out value='${inq.title}'/>"
+                                       data-content="<c:out value='${inq.content}'/>"
+                                       data-answer="<c:out value='${inq.answerContent}'/>">
+                                        ${inq.title}
+                                    </a>
+                                </div>
+                                <div class="col-status">
+                                    <span class="status-badge ${inq.status == 'ANSWERED' ? 'done' : 'wait'}">
+                                        ${inq.status == 'ANSWERED' ? '답변 완료' : '답변 전'}
+                                    </span>
+                                </div>
+                                <div class="col-date">${inq.createdAt.toLocalDate()}</div>
+                                <div class="col-manage">
+                                    <form action="${pageContext.request.contextPath}/mypage/questions/delete/${inq.id}" method="post" style="margin: 0; display: flex; justify-content: center;" onsubmit="return confirm('삭제하시겠습니까?');">
+                                        <button type="submit" class="btn-delete">삭제</button>
+                                    </form>
+                                </div>
                             </div>
-                            <div class="col-answer">
-                                <span class="${q.status == 'ANSWERED' ? 'status-complete' : 'status-pending'}">
-                                    ${q.status == 'ANSWERED' ? '답변 완료' : '답변 전'}
-                                </span>
-                            </div>
-                            <div class="col-date">${q.createdAt}</div>
-                            <div class="col-manage">
-                                <button type="button" class="delete-btn" onclick="deleteQuestion(${q.inquiryId})">삭제</button>
-                            </div>
-                        </div>
-                    </c:forEach>
-                </c:when>
-                <c:otherwise>
-                    <div class="empty-msg">문의하신 내역이 없습니다.</div>
-                </c:otherwise>
-            </c:choose>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="empty-msg">문의하신 내역이 없습니다.</div>
+                    </c:otherwise>
+                </c:choose>
+            </div>
         </section>
     </main>
 </div>

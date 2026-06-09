@@ -126,7 +126,6 @@ public class MyPageController {
         return "members/mypage/mypage";
     }
 
-
     /**
      * 계좌 등록 / 수정 처리
      */
@@ -230,18 +229,31 @@ public class MyPageController {
         if (userId == null) {
             return "redirect:/";
         }
+        // 서비스에서 내 게시글 목록 가져오기
         model.addAttribute("boards", myPageService.getMyBoardList(userId, pageable));
-        return "members/mypage/mypost";
+        return "members/mypage/mypost"; // (이 파일이 존재해야 합니다!)
     }
 
+    // MyPageController.java에 추가
     @GetMapping("/questions")
-    public String myQuestions(@PageableDefault(size = 10) Pageable pageable,
-                              HttpSession session, Model model) {
+    public String myQuestions(
+            @RequestParam(required = false) String status, // 전체, WAITING, ANSWERED
+            @PageableDefault(size = 10) Pageable pageable,
+            HttpSession session, Model model) {
+
         Long userId = SessionUtils.getLoginUserId(session);
         if (userId == null) return "redirect:/";
 
-        model.addAttribute("inquiries",
-                inquiryRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable));
+        Page<Inquiry> inquiries;
+        if (status == null || status.equals("ALL")) {
+            inquiries = inquiryRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable);
+        } else {
+
+            inquiries = inquiryRepository.findByUserIdAndStatusOrderByCreatedAtDesc(userId, status, pageable);
+        }
+
+        model.addAttribute("inquiries", inquiries);
+        model.addAttribute("currentStatus", status == null ? "ALL" : status);
         return "members/mypage/myque";
     }
 
@@ -277,7 +289,7 @@ public class MyPageController {
         return "members/mypage/mysaleslist";
     }
 
-    // MyPageController.java
+
     @GetMapping("/subscriptions")
     public String mySubscriptions(@PageableDefault(size = 5) Pageable pageable, HttpSession session, Model model) {
         Long userId = SessionUtils.getLoginUserId(session);
@@ -386,6 +398,16 @@ public class MyPageController {
         return "members/mypage/mygoals";
     }
 
+    // 판매자 등록 화면으로 이동
+    @GetMapping("/sales/register-identity")
+    public String salesRegisterForm(HttpSession session) {
+        // 로그인 체크
+        if (SessionUtils.getLoginUserId(session) == null) {
+            return "redirect:/";
+        }
 
+        // 새로 만드실 '판매자 등록' 화면의 JSP 파일 경로를 적어줍니다.
+        return "party/seller-identity";
+    }
 
 }
