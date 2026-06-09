@@ -1,457 +1,110 @@
-.modal-overlay {
-
-    position: fixed;
-
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-
-    display: none;
-
-    justify-content: center;
-
-    align-items: center;
-
-    z-index: 9999;
-}
-
-/* 전체 레이아웃 */
-.modal-content {
-
-    width: 1400px;
-
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    align-items: center;
-}
-/* 왼쪽 선택 카드 */
-.selected-service-preview {
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-}
-/* 왼쪽 로고 */
-.selected-service-preview img {
-
-    width: 75%;
-
-    object-fit: contain;
-
-    filter: none !important;
-
-    opacity: 1 !important;
-
-    transform:
-           translateX(-120px)
-           scale(1.2);
-}
-
-/* 오른쪽 상세창 */
-.subscription-detail {
-
-    width: 850px;
-
-    background: white;
-
-    border-radius: 30px;
-
-    padding: 40px;
-
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-
-    animation: popup 0.35s ease;
-
-    pointer-events: auto;
-}
-
-/* 상단 */
-.detail-header {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 30px;
-
-    margin-bottom: 30px;
-}
-
-.detail-header img {
-
-    width: 180px;
-}
-
-/* 설명 */
-.detail-description {
-
-    border: 1px solid #d1d5db;
-
-    border-radius: 20px;
-
-    padding: 30px;
-
-    margin-bottom: 30px;
-
-    line-height: 1.6;
-}
-
-/* 개월 버튼 */
-.month-buttons {
-
-    display: flex;
-
-    gap: 20px;
-
-    margin-bottom: 50px;
-}
-
-.month-buttons button {
-
-    width: 140px;
-    height: 140px;
-
-    border: none;
-    border-radius: 30px;
-
-    background: #e5e7eb;
-    color: #374151;
-
-    cursor: pointer;
-
-    transition: all 0.25s ease;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    gap: 15px;
-}
-
-.month-buttons button div:first-child {
-
-    width: 100%;
-
-    flex: 3;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    border-bottom: 2px solid rgba(0,0,0,0.15);
-
-    font-size: 32px;
-
-    font-weight: bold;
-}
-
-.month-buttons button:hover {
-
-    background: #d1d5db;
-    transform: translateY(-5px);
-
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-}
-.month-buttons button.active {
-
-    background: #1e2b50;
-
-    color: white;
-
-    transform: scale(1.05);
-
-    box-shadow: 0 10px 25px rgba(30,43,80,0.35);
-}
-.month-buttons button div:first-child {
-
-    border-bottom: 2px solid rgba(0,0,0,0.15);
-}
-/* 하단 버튼 */
-.detail-buttons {
-
-    display: flex;
-
-    justify-content: space-between;
-}
-
-.buy-btn,
-.back-btn {
-
-    width: 220px;
-    height: 60px;
-
-    border: none;
-
-    border-radius: 15px;
-
-    font-size: 20px;
-
-    cursor: pointer;
-
-    transition: all 0.25s ease;
-}
-
-.buy-btn {
-
-    background: #1e2b50;
-
-    color: white;
-}
-
-.back-btn {
-
-    background: #dbe2f0;
-}
-
-.buy-btn:hover,
-.back-btn:hover {
-
-    transform: translateY(-3px);
-
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-}
-
-/* 팝업 등장 */
-@keyframes popup {
-
-    0% {
-
-        opacity: 0;
-
-        transform: scale(0.85);
-    }
-
-    100% {
-
-        opacity: 1;
-
-        transform: scale(1);
-    }
-}
-
-/* 왼쪽 카드 이동 애니메이션 */
-@keyframes moveLeft {
-
-    0% {
-
-        transform: translateX(200px);
-
-        opacity: 0;
-    }
-
-    100% {
-
-        transform: translateX(0);
-
-        opacity: 1;
-    }
-}
-
-/* 기본 카드 */
-.swiper-slide {
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-
-
-    transition: all 0.5s ease;
-
-    filter: grayscale(1) blur(2px);
-
-    transform: scale(0.65);
-
-    opacity: 0.25;
-}
-
-/* 선택 카드 */
-.selected-card {
-
-    transform: scale(1.25);
-
-    opacity: 1 !important;
-
-    filter: none !important;
-
-    transition: all 0.7s ease;
-
-    z-index: 99999;
-
-    position: relative;
-
-    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-}
-
-/* 배경 흐림 */
-.blur-background {
-
-    filter: blur(6px);
-
-    opacity: 0.25;
-
-    transition: all 0.5s ease;
-}
-
-.month-buttons button {
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
-
-    align-items: center;
-}
-
-.month-price {
-
-    flex: 1;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    font-size: 18px;
-
-    font-weight: 500;
-
-    margin-bottom: 15px;
-}
-/* ========================= */
-/* OTT 메인 화면 */
-/* ========================= */
+@charset "UTF-8";
+
+/* =========================================================
+   OTT 구독 페이지 전용 CSS
+   header / footer / floating-buttons는 공통 레이아웃 사용
+========================================================= */
 
 :root {
-    --header-bg: #1e293b;
-    --bg-white: #ffffff;
-    --accent-blue: #3b82f6;
-    --border-line: #e2e8f0;
-    --text-gray: #64748b;
+    --ott-primary: #1e2b50;
+    --ott-primary-dark: #15203d;
+    --ott-header-text: #1e293b;
+    --ott-border: #e2e8f0;
+    --ott-white: #ffffff;
+    --ott-muted: #64748b;
 }
 
 * {
     box-sizing: border-box;
 }
 
-body,
-html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: 'Pretendard', sans-serif;
-    background-color: var(--bg-white);
+body.ott-page {
+    padding-top: 74px;
+    background: #ffffff;
     overflow-x: hidden;
 }
 
-/* 헤더 */
+.ott-page button,
+.ott-page input,
+.ott-page select {
+    font-family: inherit;
+}
 
-/*header {
-    background-color: var(--header-bg);
-    color: white;
-    height: 60px;
+/* =========================================================
+   공통 Header / Sidebar 강제 활성화 보정
+========================================================= */
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    padding: 0 20px;
-
-    position: sticky;
+body.ott-page .site-header,
+body.ott-page > header,
+body.ott-page > .header,
+body.ott-page > .main-header,
+body.ott-page > .global-header,
+body.ott-page > .common-header,
+body.ott-page > .app-header,
+body.ott-page > #header {
+    position: fixed !important;
     top: 0;
-    z-index: 1000;
+    left: 0;
+    right: 0;
+    z-index: 9000 !important;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
 }
 
-header .menu-icon {
-    font-size: 24px;
-    cursor: pointer;
+body.ott-page .sidebar,
+body.ott-page .side-bar,
+body.ott-page .side-menu,
+body.ott-page .global-sidebar {
+    z-index: 9100 !important;
 }
 
-header h1 {
-    font-size: 18px;
-    font-weight: 700;
-    margin: 0;
-    flex-grow: 1;
-    text-align: center;
-}
+/* =========================================================
+   OTT 메인 화면
+========================================================= */
 
-header .auth-links {
-    font-size: 12px;
-    opacity: 0.8;
-}
-
-header .auth-links span {
-    cursor: pointer;
-    margin-left: 10px;
-}
-*/
-/* 메인 */
-
-.main-container {
-    display: flex;
-
-    height: calc(100vh - 60px);
+.ott-page .main-container {
     width: 100%;
-    background-color: transparent;
+    height: calc(100vh - 74px);
+    min-height: 760px;
+    display: flex;
+    background: #ffffff;
 }
 
-.column {
+.ott-page .column {
     flex: 1;
     height: 100%;
-
+    position: relative;
     display: flex;
     flex-direction: column;
-
-    border-right: 1px solid var(--border-line);
-    position: relative;
+    border-right: 1px solid var(--ott-border);
 }
 
-.column:last-child {
+.ott-page .column:last-child {
     border-right: none;
 }
 
-/* 카테고리 */
-
-.category-name {
+.ott-page .category-name {
     position: absolute;
     top: 20px;
     left: 0;
-
-    width: 100%;
-
-    text-align: center;
-
     z-index: 10;
-
+    width: 100%;
+    text-align: center;
     font-size: 36px;
     font-weight: 800;
-    color: var(--header-bg);
+    color: var(--ott-header-text);
     letter-spacing: -0.5px;
 }
 
-/* 스와이퍼 */
-
-.swiper-container-wrapper {
-
+.ott-page .swiper-container-wrapper {
     flex: 1;
-
     width: 100%;
-
+    height: 100%;
     margin-top: 80px;
-
     overflow: hidden;
-
     -webkit-mask-image: linear-gradient(
             to bottom,
             transparent,
@@ -459,7 +112,6 @@ header .auth-links span {
             black 75%,
             transparent
     );
-
     mask-image: linear-gradient(
             to bottom,
             transparent,
@@ -469,257 +121,857 @@ header .auth-links span {
     );
 }
 
-.swiper {
+.ott-page .swiper {
     width: 100%;
     height: 100% !important;
 }
 
-.swiper-slide-active {
+.ott-page .swiper-wrapper {
+    min-height: 100%;
+}
 
+.ott-page .swiper-slide {
+    height: 160px;
+    min-height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: grayscale(1) blur(2px);
+    opacity: 0.25;
+    transform: scale(0.65);
+    transition: all 0.5s ease;
+}
+
+.ott-page .swiper-slide-active {
     filter: none;
-
     opacity: 1;
-
     transform: scale(1);
 }
 
-.selected-card {
-
-    transform: translateX(-120px) scale(1.1);
-
-    opacity: 1 !important;
-
-    transition: all 0.5s ease;
-
-    z-index: 50;
-}
-
-/* 로고 */
-
-.logo-box {
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    cursor: pointer;
-}
-
-.logo-box img {
-    max-width: 70%;
-    max-height: 70%;
-    object-fit: contain;
-}
-
-/* 우측 아이콘 */
-
-.fixed-icons {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-
-    z-index: 2000;
-}
-
-.icon-btn {
-    width: 50px;
-    height: 50px;
-
-    background: white;
-    border-radius: 50%;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-
-    cursor: pointer;
-}
-
-.icon-btn img {
-    width: 28px;
-    height: 28px;
-}
-
-/* ========================= */
-/* 결제 확인 모달 */
-/* ========================= */
-
-.payment-modal {
-
-    display: none;
-
-    position: fixed;
-
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-
-    background: rgba(0,0,0,0.25);
-
-    justify-content: center;
-    align-items: center;
-
-    z-index: 10000;
-}
-
-.payment-box {
-
-    width: 700px;
-
-    background: white;
-
-    border-radius: 40px;
-
-    padding: 35px 45px;
-
-    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-}
-
-.payment-box h2 {
-
-    font-size: 30px;
-
-    margin-bottom: 25px;
-
-    font-weight: 700;
-}
-
-.payment-box hr {
-
-    border: none;
-
-    border-top: 2px solid #d1d5db;
-
-    margin-bottom: 50px;
-}
-
-.payment-box table {
-
-    width: 100%;
-
-    border-collapse: collapse;
-}
-
-.payment-box th {
-
-    font-size: 32px;
-
-    font-weight: 700;
-
-    padding: 40px 20px;
-
-    border-bottom: 1px solid #d1d5db;
-}
-
-.payment-box td {
-
-    font-size: 28px;
-
-    padding: 40px 20px;
-
-    text-align: center;
-
-    border-bottom: 1px solid #d1d5db;
-}
-
-.payment-buttons {
-
-    margin-top: 35px;
-
-    display: flex;
-
-    justify-content: space-between;
-}
-
-.payment-buttons button {
-
-    width: 160px;
-
-    height: 50px;
-
-    border: none;
-
-    border-radius: 12px;
-
-    font-size: 18px;
-
-    cursor: pointer;
-
-    transition: all 0.25s ease;
-}
-
-.payment-buttons button:first-child {
-
-    background: #d9d9d9;
-
-    color: #333;
-}
-
-.payment-buttons button:last-child {
-
-    background: #1e2b50;
-
-    color: white;
-}
-
-.payment-buttons button:hover {
-
-    transform: translateY(-3px);
-
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-}
-
-.payment-info {
-
-    margin-top: 40px;
-
-    margin-bottom: 50px;
-}
-
-.payment-row {
-
-    display: flex;
-
-    align-items: center;
-
-    margin-bottom: 18px;
-
-    font-size: 18px;
-}
-
-.payment-row .label {
-
-    width: 100px;
-
-    font-weight: 700;
-}
-
-.swiper-slide-prev .logo-box {
+.ott-page .swiper-slide-prev .logo-box {
     transform: translateY(40px) scale(0.85);
     transition: all 0.5s ease;
 }
 
-.swiper-slide-next .logo-box {
+.ott-page .swiper-slide-next .logo-box {
     transform: translateY(-40px) scale(0.85);
     transition: all 0.5s ease;
 }
 
-.swiper-slide-active .logo-box {
+.ott-page .swiper-slide-active .logo-box {
     transform: scale(1.15);
     transition: all 0.5s ease;
 }
 
-.site-header {
+.ott-page .selected-card {
+    position: relative;
+    z-index: 50;
+    filter: none !important;
     opacity: 1 !important;
-    transform: translateY(0) !important;
+    transform: translateX(-120px) scale(1.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    transition: all 0.5s ease;
+}
+
+.ott-page .logo-box {
+    width: 100%;
+    height: 160px;
+    min-height: 160px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.ott-page .logo-box img {
+    width: auto;
+    max-width: 70%;
+    max-height: 120px;
+    object-fit: contain;
+    display: block;
+}
+
+.ott-page .blur-background {
+    filter: blur(6px);
+    opacity: 0.25;
+    transition: all 0.5s ease;
+}
+
+/* =========================================================
+   공통 플로팅 버튼 보정
+   - dashboard / community에서 사용하는 공통 floatingBtn 디자인을 그대로 사용
+   - subscription.css에서는 버튼 크기, 배경색, 아이콘 크기를 덮어쓰지 않음
+========================================================= */
+
+body.ott-page .floating-buttons {
+    z-index: 9999 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+body.ott-page .floating-btn {
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+/* 공통 FAQ / AI 멘토링 레이어가 OTT 화면 위에서도 눌리도록 보정 */
+body.ott-page .faq-widget,
+body.ott-page #faqWidget,
+body.ott-page .faq-modal,
+body.ott-page #faqModal {
+    z-index: 9300 !important;
+}
+
+body.ott-page #ai-mentor-modal,
+body.ott-page .ai-mentor-drawer {
+    z-index: 9400 !important;
+}
+
+/* =========================================================
+   구독 상세 모달
+========================================================= */
+
+.ott-page .ott-detail-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 11000;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.ott-page .ott-detail-modal-content {
+    width: min(1400px, calc(100% - 80px));
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 40px;
+}
+
+.ott-page .selected-service-preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ott-page .selected-service-preview img {
+    width: 75%;
+    max-height: 420px;
+    object-fit: contain;
+    filter: none !important;
+    opacity: 1 !important;
+    transform: translateX(-80px) scale(1.12);
+}
+
+.ott-page .subscription-detail {
+    width: min(850px, 100%);
+    background: #ffffff;
+    border-radius: 30px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    animation: popup 0.35s ease;
+    pointer-events: auto;
+}
+
+.ott-page .detail-header {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.ott-page .detail-header img {
+    width: 180px;
+    max-height: 90px;
+    object-fit: contain;
+}
+
+.ott-page .detail-header h2 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    color: var(--ott-primary);
+}
+
+.ott-page .detail-header p {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ott-muted);
+}
+
+.ott-page .detail-description {
+    border: 1px solid #d1d5db;
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.ott-page .detail-description p {
+    margin: 0;
+    font-size: 16px;
+    color: #374151;
+}
+
+.ott-page .month-buttons {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 50px;
+}
+
+.ott-page .month-buttons button {
+    width: 140px;
+    height: 140px;
+    border: none;
+    border-radius: 30px;
+    background: #e5e7eb;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.ott-page .month-buttons button div:first-child {
+    width: 100%;
+    flex: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.15);
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.ott-page .month-price {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.ott-page .month-buttons button:hover {
+    background: #d1d5db;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.ott-page .month-buttons button.active {
+    background: var(--ott-primary);
+    color: #ffffff;
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(30, 43, 80, 0.35);
+}
+
+.ott-page .month-buttons button.active div:first-child {
+    border-bottom-color: rgba(255, 255, 255, 0.35);
+}
+
+.ott-page .detail-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.ott-page .buy-btn,
+.ott-page .back-btn {
+    width: 220px;
+    height: 60px;
+    border: none;
+    border-radius: 15px;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.ott-page .buy-btn {
+    background: var(--ott-primary);
+    color: #ffffff;
+}
+
+.ott-page .back-btn {
+    background: #dbe2f0;
+    color: #1f2937;
+}
+
+.ott-page .buy-btn:hover,
+.ott-page .back-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================================================
+   결제 확인 모달
+========================================================= */
+
+.ott-page .ott-payment-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 12000;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.25);
+    justify-content: center;
+    align-items: center;
+}
+
+.ott-page .payment-box {
+    width: min(700px, calc(100% - 40px));
+    background: #ffffff;
+    border-radius: 40px;
+    padding: 35px 45px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.ott-page .payment-box h2 {
+    margin: 0 0 25px;
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--ott-primary);
+}
+
+.ott-page .payment-box hr {
+    border: none;
+    border-top: 2px solid #d1d5db;
+    margin-bottom: 40px;
+}
+
+.ott-page .payment-info {
+    margin-top: 30px;
+    margin-bottom: 45px;
+}
+
+.ott-page .payment-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 18px;
+    font-size: 18px;
+}
+
+.ott-page .payment-row .label {
+    width: 100px;
+    font-weight: 800;
+    color: var(--ott-primary);
+}
+
+.ott-page .payment-buttons {
+    margin-top: 35px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.ott-page .payment-buttons button {
+    width: 160px;
+    height: 50px;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.ott-page .payment-buttons button:first-child {
+    background: #d9d9d9;
+    color: #333333;
+}
+
+.ott-page .payment-buttons button:last-child {
+    background: var(--ott-primary);
+    color: #ffffff;
+}
+
+.ott-page .payment-buttons button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================================================
+   Animation
+========================================================= */
+
+@keyframes popup {
+    0% {
+        opacity: 0;
+        transform: scale(0.85);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* =========================================================
+   Responsive
+========================================================= */
+
+@media (max-width: 1100px) {
+    .ott-page .ott-detail-modal-content {
+        width: min(760px, calc(100% - 40px));
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .ott-page .selected-service-preview {
+        display: none;
+    }
+
+    .ott-page .subscription-detail {
+        width: 100%;
+    }
+}
+
+@media (max-width: 900px) {
+    .ott-page .main-container {
+        height: auto;
+        min-height: 0;
+        flex-direction: column;
+    }
+
+    .ott-page .column {
+        height: 580px;
+        border-right: none;
+        border-bottom: 1px solid var(--ott-border);
+    }
+
+    .ott-page .column:last-child {
+        border-bottom: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .ott-page .main-container {
+        height: auto;
+        min-height: 0;
+    }
+
+    .ott-page .category-name {
+        font-size: 28px;
+    }
+
+    .ott-page .subscription-detail {
+        padding: 28px;
+        border-radius: 24px;
+    }
+
+    .ott-page .detail-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .ott-page .detail-header img {
+        width: 150px;
+    }
+
+    .ott-page .month-buttons {
+        flex-direction: column;
+    }
+
+    .ott-page .month-buttons button {
+        width: 100%;
+        height: 94px;
+    }
+
+    .ott-page .detail-buttons {
+        flex-direction: column;
+    }
+
+    .ott-page .buy-btn,
+    .ott-page .back-btn {
+        width: 100%;
+    }
+
+    .ott-page .payment-box {
+        padding: 30px 24px;
+        border-radius: 28px;
+    }
+
+    .ott-page .payment-buttons {
+        flex-direction: column;
+    }
+
+    .ott-page .payment-buttons button {
+        width: 100%;
+    }
+}
+
+/* =========================================================
+   OTT 페이지 보정 v4
+   - 헤더 햄버거 목록바 강제 토글 보정
+   - 공통 로그인/회원가입/인증 모달 위치 보정
+   - OTT 구독 상세 모달은 하단 시트 유지
+   - OTT 결제 확인 모달은 중앙 팝업으로 고정
+========================================================= */
+
+body.ott-page .hamburger-btn {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    z-index: 9201 !important;
+}
+
+body.ott-page .sidebar,
+body.ott-page .side-bar,
+body.ott-page .side-nav,
+body.ott-page .side-menu,
+body.ott-page .sidebar-menu,
+body.ott-page .mobile-menu,
+body.ott-page .mobile-sidebar,
+body.ott-page .menu-drawer,
+body.ott-page .drawer-menu,
+body.ott-page .nav-drawer,
+body.ott-page .header-sidebar,
+body.ott-page .global-sidebar,
+body.ott-page .layout-sidebar {
+    z-index: 9200 !important;
+    pointer-events: none;
+}
+
+body.ott-page.is-sidebar-open .sidebar,
+body.ott-page.sidebar-open .sidebar,
+body.ott-page.is-sidebar-open .side-bar,
+body.ott-page.sidebar-open .side-bar,
+body.ott-page.is-sidebar-open .side-nav,
+body.ott-page.sidebar-open .side-nav,
+body.ott-page.is-sidebar-open .side-menu,
+body.ott-page.sidebar-open .side-menu,
+body.ott-page.is-sidebar-open .sidebar-menu,
+body.ott-page.sidebar-open .sidebar-menu,
+body.ott-page.is-sidebar-open .mobile-menu,
+body.ott-page.sidebar-open .mobile-menu,
+body.ott-page.is-sidebar-open .mobile-sidebar,
+body.ott-page.sidebar-open .mobile-sidebar,
+body.ott-page.is-sidebar-open .menu-drawer,
+body.ott-page.sidebar-open .menu-drawer,
+body.ott-page.is-sidebar-open .drawer-menu,
+body.ott-page.sidebar-open .drawer-menu,
+body.ott-page.is-sidebar-open .nav-drawer,
+body.ott-page.sidebar-open .nav-drawer,
+body.ott-page.is-sidebar-open .header-sidebar,
+body.ott-page.sidebar-open .header-sidebar,
+body.ott-page.is-sidebar-open .global-sidebar,
+body.ott-page.sidebar-open .global-sidebar,
+body.ott-page.is-sidebar-open .layout-sidebar,
+body.ott-page.sidebar-open .layout-sidebar,
+body.ott-page .sidebar.is-open,
+body.ott-page .sidebar.open,
+body.ott-page .sidebar.active,
+body.ott-page .side-menu.is-open,
+body.ott-page .side-menu.open,
+body.ott-page .side-menu.active,
+body.ott-page .menu-drawer.is-open,
+body.ott-page .menu-drawer.open,
+body.ott-page .menu-drawer.active,
+body.ott-page .nav-drawer.is-open,
+body.ott-page .nav-drawer.open,
+body.ott-page .nav-drawer.active {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: translateX(0) !important;
+}
+
+body.ott-page .sidebar-overlay,
+body.ott-page .side-overlay,
+body.ott-page .menu-overlay,
+body.ott-page .drawer-overlay,
+body.ott-page .nav-overlay,
+body.ott-page .global-dim,
+body.ott-page .dimmed-layer {
+    z-index: 9100 !important;
+    background: rgba(17, 45, 78, 0.14) !important;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+body.ott-page.is-sidebar-open .sidebar-overlay,
+body.ott-page.sidebar-open .sidebar-overlay,
+body.ott-page.is-sidebar-open .side-overlay,
+body.ott-page.sidebar-open .side-overlay,
+body.ott-page.is-sidebar-open .menu-overlay,
+body.ott-page.sidebar-open .menu-overlay,
+body.ott-page.is-sidebar-open .drawer-overlay,
+body.ott-page.sidebar-open .drawer-overlay,
+body.ott-page.is-sidebar-open .nav-overlay,
+body.ott-page.sidebar-open .nav-overlay,
+body.ott-page .sidebar-overlay.is-open,
+body.ott-page .sidebar-overlay.open,
+body.ott-page .sidebar-overlay.active,
+body.ott-page .menu-overlay.is-open,
+body.ott-page .menu-overlay.open,
+body.ott-page .menu-overlay.active {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+/* 공통 로그인/회원가입/인증 모달 보정 */
+body.ott-page .modal-overlay:not(.ott-detail-modal-overlay):not(.ott-payment-modal),
+body.ott-page .auth-modal-overlay,
+body.ott-page .login-modal-overlay,
+body.ott-page .signup-modal-overlay,
+body.ott-page .login-required-modal-overlay {
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(255, 255, 255, 0.72) !important;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    padding: 96px 24px 32px !important;
+    overflow-y: auto !important;
+}
+
+body.ott-page .modal-overlay:not(.ott-detail-modal-overlay):not(.ott-payment-modal) .modal-content,
+body.ott-page .auth-modal,
+body.ott-page .auth-modal-content,
+body.ott-page .login-modal,
+body.ott-page .login-modal-content,
+body.ott-page .signup-modal,
+body.ott-page .signup-modal-content,
+body.ott-page .login-required-modal,
+body.ott-page .login-required-modal-content {
+    margin: auto !important;
+    max-width: calc(100vw - 48px) !important;
+    max-height: calc(100vh - 128px) !important;
+    box-shadow: 0 16px 42px rgba(17, 45, 78, 0.16) !important;
+    animation: ottModalFadeUp 0.24s ease both !important;
+}
+
+/* OTT 구독 상세 모달: 하단 시트 형태 유지 */
+.ott-page .ott-detail-modal-overlay {
+    align-items: flex-end !important;
+    justify-content: center !important;
+    background: rgba(255, 255, 255, 0.78) !important;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    padding: 0 32px 32px !important;
+}
+
+.ott-page .ott-detail-modal-content {
+    width: min(1180px, calc(100% - 48px)) !important;
+    max-height: calc(100vh - 120px);
+    grid-template-columns: 0.9fr 1.1fr !important;
+    align-items: end !important;
+    animation: ottSheetUp 0.3s ease both;
+}
+
+.ott-page .subscription-detail {
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    border-radius: 32px 32px 24px 24px !important;
+    box-shadow: 0 -12px 36px rgba(17, 45, 78, 0.16) !important;
+}
+
+.ott-page .selected-service-preview img {
+    transform: translateX(-30px) scale(1.02) !important;
+}
+
+/* OTT 결제 확인 모달: 중앙 팝업으로 고정 */
+.ott-page .ott-payment-modal {
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(0, 0, 0, 0.25) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 0 24px !important;
+}
+
+.ott-page .payment-box {
+    animation: ottPaymentPopup 0.25s ease both !important;
+    border-radius: 40px !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15) !important;
+    max-height: calc(100vh - 96px);
+    overflow-y: auto;
+}
+
+@keyframes ottPaymentPopup {
+    0% {
+        opacity: 0;
+        transform: translateY(12px) scale(0.97);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes ottSheetUp {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes ottModalFadeUp {
+    0% {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 1100px) {
+    .ott-page .ott-detail-modal-overlay {
+        padding: 0 20px 24px !important;
+    }
+
+    .ott-page .ott-detail-modal-content {
+        width: 100% !important;
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 768px) {
+    body.ott-page .modal-overlay:not(.ott-detail-modal-overlay):not(.ott-payment-modal),
+    body.ott-page .auth-modal-overlay,
+    body.ott-page .login-modal-overlay,
+    body.ott-page .signup-modal-overlay,
+    body.ott-page .login-required-modal-overlay {
+        padding: 86px 14px 22px !important;
+    }
+
+    .ott-page .ott-detail-modal-overlay {
+        padding: 0 14px 18px !important;
+    }
+
+    .ott-page .ott-payment-modal {
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0 14px !important;
+    }
+}
+
+/* =========================================================
+   OTT 상세/결제 모달 중앙 고정 최종 보정
+   - Claude Pro / 1개월 / 3개월 / 6개월 상세 모달 중앙 배치
+   - 최종 결제 확인 모달도 중앙 배치
+   - 기존 하단 시트 flex-end 설정 최종 덮어쓰기
+========================================================= */
+
+/* 구독 상세 모달: 화면 중앙 고정 */
+body.ott-page .ott-detail-modal-overlay {
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(255, 255, 255, 0.78) !important;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    padding: 74px 32px 32px !important;
+}
+
+/* 구독 상세 모달 내부 레이아웃 중앙 정렬 */
+body.ott-page .ott-detail-modal-content {
+    width: min(1180px, calc(100% - 64px)) !important;
+    max-height: calc(100vh - 120px) !important;
+    grid-template-columns: 0.9fr 1.1fr !important;
+    align-items: center !important;
+    animation: ottCenterPopup 0.25s ease both !important;
+}
+
+/* 상세 카드도 하단 시트 모양이 아니라 중앙 팝업 카드처럼 보이게 보정 */
+body.ott-page .subscription-detail {
+    max-height: calc(100vh - 140px) !important;
+    overflow-y: auto !important;
+    border-radius: 32px !important;
+    box-shadow: 0 16px 42px rgba(17, 45, 78, 0.16) !important;
+}
+
+/* 왼쪽 선택 로고도 화면 아래로 처지지 않도록 중앙 정렬 */
+body.ott-page .selected-service-preview {
+    align-items: center !important;
+}
+
+body.ott-page .selected-service-preview img {
+    transform: translateX(-30px) scale(1.02) !important;
+    max-height: 360px !important;
+    margin: 0 auto !important;
+}
+
+/* 최종 결제 확인 모달: 중앙 팝업으로 고정 */
+body.ott-page .ott-payment-modal {
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(0, 0, 0, 0.25) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 74px 24px 32px !important;
+}
+
+/* 결제 확인 박스 */
+body.ott-page .payment-box {
+    margin: auto !important;
+    max-height: calc(100vh - 120px) !important;
+    overflow-y: auto !important;
+    border-radius: 40px !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15) !important;
+    animation: ottCenterPopup 0.25s ease both !important;
+}
+
+/* 중앙 팝업 애니메이션 */
+@keyframes ottCenterPopup {
+    0% {
+        opacity: 0;
+        transform: translateY(12px) scale(0.97);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* 태블릿 이하에서는 왼쪽 로고 미리보기 숨기고 카드만 중앙 표시 */
+@media (max-width: 1100px) {
+    body.ott-page .ott-detail-modal-overlay {
+        padding: 74px 20px 24px !important;
+    }
+
+    body.ott-page .ott-detail-modal-content {
+        width: 100% !important;
+        grid-template-columns: 1fr !important;
+        align-items: center !important;
+    }
+
+    body.ott-page .selected-service-preview {
+        display: none !important;
+    }
+}
+
+/* 모바일 중앙 정렬 */
+@media (max-width: 768px) {
+    body.ott-page .ott-detail-modal-overlay,
+    body.ott-page .ott-payment-modal {
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 74px 14px 18px !important;
+    }
+
+    body.ott-page .subscription-detail,
+    body.ott-page .payment-box {
+        max-height: calc(100vh - 100px) !important;
+    }
 }
