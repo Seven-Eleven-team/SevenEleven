@@ -1,371 +1,333 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+
 <c:set var="menu" value="questions"/>
 
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
+
     <meta charset="UTF-8">
     <title>지출메이트 - 내 문의</title>
 
-    <!-- 공통 및 전용 CSS -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/mypage.css?v=1">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/myque.css">
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/css/mypage.css?v=42">
 
-    <style>
-        /* 풋터 및 기본 배경 */
-        .footer { width: 100%; background: #243864; color: white; padding: 40px 0; margin-top: 60px; }
-        body.mypage { padding-top: 78px; min-height: 100vh; display: flex; flex-direction: column; background: #f5f5f5; }
-
-        /* 레이아웃 틀 고정 (사이드바 + 메인) */
-        .mypage-container {
-            display: flex !important;
-            flex-direction: row !important;
-            align-items: stretch !important;
-            gap: 26px !important;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 0;
-            flex: 1;
-        }
-
-        /* 헤더 고정 스타일 */
-        body.mypage .site-header {
-            position: fixed !important; top: 0 !important; left: 0 !important;
-            width: 100% !important; height: 78px !important;
-            background: #243864 !important; display: flex !important;
-            align-items: center !important; justify-content: center !important; z-index: 9999 !important;
-        }
-
-        /* 사이드바 스타일 */
-        .mypage-sidebar {
-            width: 250px !important; min-width: 250px !important; height: auto !important;
-            background: #ffffff !important; border: 1px solid #dddddd !important;
-            border-radius: 20px !important; padding: 0 !important; display: flex !important;
-            align-items: center !important;
-        }
-
-        /* 메인 영역 */
-        .question-main { flex: 1; }
-
-        /* ✅ 제목과 버튼을 한 줄로 배치하기 위한 헤더 스타일 */
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .page-title {
-            font-size: 24px;
-            font-weight: 800;
-            color: #333;
-            margin-bottom: 0; /* 옆에 버튼이 오므로 하단 여백 제거 */
-        }
-       /* 공통 헤더 */
-    body.mypage .site-header {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 78px !important;
-        background: rgba(25, 59, 96, 0.96) !important;
-
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-
-        z-index: 9999 !important;
-    }
-
-       /* 우측 영역 */
-      body.mypage .header-action-area {
-           position: absolute;
-           right: 36px;
-       }
-       body.mypage .site-logo {
-           color: white !important;
-           font-size: 28px !important;
-           font-weight: 800 !important;
-           margin: 0 !important;
-       }
-
-     body.mypage .hamburger-btn {
-               position: absolute !important;
-               left: 36px !important;
-               width: 42px !important;
-               height: 42px !important;
-               border: none !important;
-               border-radius: 0 !important;        /* 박스 제거 */
-               background: transparent !important; /* 배경 제거 */
-               color: white !important;
-               font-size: 22px !important;
-         }
-
-       body.mypage .header-action-area {
-           position: absolute !important;
-           right: 36px !important;
-       }
-
-       body.mypage .auth-link {
-           color: white !important;
-           text-decoration: none !important;
-       }
-
-       /* 문의 제목 링크 스타일 */
-               .inq-link {
-                   text-decoration: none;
-                   color: #222; /* 기본 글씨색 */
-                   display: block;
-                   width: 100%;
-                   overflow: hidden;
-                   text-overflow: ellipsis;
-                   white-space: nowrap; /* 길면 ... 으로 표시 */
-               }
-               .inq-link:hover {
-                   text-decoration: underline;
-                   color: #243864; /* 마우스 올리면 네이비색 포인트 */
-               }
-
-        /* 필터 버튼 스타일 */
-        .filter-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 0; /* 헤더 내부로 들어갔으므로 여백 제거 */
-        }
-        .filter-btn {
-            padding: 8px 16px;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            background: white;
-            color: #666;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-        .filter-btn:hover { background: #f0f0f0; color: #333; }
-        .filter-btn.active {
-            background: #645495;
-            color: white;
-            border-color: #645495;
-            font-weight: 600;
-        }
-
-        .filter-group { display: flex; gap: 10px; }
-        .btn-filter {
-            padding: 8px 16px; border: 1px solid #243864; border-radius: 20px;
-            text-decoration: none; color: #243864; font-weight: 600;
-        }
-        .btn-filter.active { background: #243864; color: white; }
-
-        .status-badge {
-            padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;
-        }
-        .status-badge.done { background: #e7f5ff; color: #228be6; }
-        .status-badge.wait { background: #fff3bf; color: #f59f00; }
-
-        /* 테이블 스타일 (통일성 적용) */
-        .question-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid #eee;
-            box-shadow: none;
-        }
-        .table-header {
-            display: flex;
-            background: white;
-            border-bottom: 1px solid #eee;
-            font-weight: bold;
-            color: #333;
-            text-align: center;
-            padding: 15px 0;
-        }
-        .table-row {
-            display: flex;
-            background: white;
-            border-bottom: 1px solid #f5f5f5;
-            align-items: center;
-            transition: background 0.2s;
-            cursor: pointer;
-            padding: 15px 0;
-        }
-        .table-row:hover { background: #fafafa; }
-
-        .table-header, .table-row {
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid #eee;
-            padding: 15px 0;
-        }
-
-        /* 컬럼 너비 설정 */
-        .col-no { width: 10%; text-align: center; }
-        .col-title { width: 40%; text-align: left; padding-left: 20px; }
-        .col-status { width: 15%; text-align: center; }
-        .col-date { width: 15%; text-align: center; }
-        .col-manage { width: 20%; text-align: center; }
-
-        /* 깔끔한 삭제 버튼 디자인 */
-        .btn-delete {
-            padding: 6px 12px;
-            background: #ffffff;
-            color: #ff4d4d;
-            border: 1px solid #ff4d4d;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .btn-delete:hover {
-            background: #ff4d4d;
-            color: #ffffff;
-        }
-
-        /* 상태 표시 스타일 */
-        .status-complete { color: #10b981; font-weight: 600; }
-        .status-pending { color: #f59e0b; font-weight: 600; }
-
-        /* 버튼 스타일 */
-        .delete-btn {
-            padding: 6px 12px;
-            border-radius: 15px;
-            border: none;
-            font-size: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.2s;
-            background: #645495;
-            color: white;
-        }
-        .delete-btn:hover { background: #ff4d4d; }
-
-        /* 데이터 없을 때 */
-        .empty-msg { text-align: center; padding: 60px 0; color: #999; font-size: 15px; }
-
-        /* 문의 상세 팝업 */
-        .question-modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.45); z-index: 5000; justify-content: center; align-items: center;
-            backdrop-filter: blur(3px);
-        }
-        .question-modal-content {
-            width: 700px; background: white; border-radius: 24px; padding: 30px;
-            position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2); animation: modalPop 0.3s ease;
-        }
-        @keyframes modalPop { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .question-close-btn { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; color: #aaa; }
-        .question-detail-title { font-size: 22px; font-weight: 700; color: #111; margin-bottom: 15px; }
-        .question-divider { width: 100%; height: 1px; background: #eee; margin-bottom: 20px; }
-        .question-box, .answer-box {
-            width: 100%; min-height: 120px; border: 1px solid #eef0f2; border-radius: 12px;
-            background: #fcfcfc; padding: 20px; margin-bottom: 20px; font-size: 15px;
-            color: #444; line-height: 1.7; box-sizing: border-box;
-        }
-        .answer-box { background: #f0f4ff; border-color: #dbe2ff; }
-        .confirm-btn {
-            width: 120px; height: 45px; border: none; border-radius: 12px;
-            background: #645495; color: white; font-size: 15px; font-weight: 700;
-            cursor: pointer; float: right; transition: 0.2s;
-        }
-        .confirm-btn:hover { background: #4f4178; }
-    </style>
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/css/myque.css?v=42">
 </head>
-<body class="mypage">
+
+<body class="mypage is-header-ready is-opening-loaded is-fab-ready">
 
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
 
+<script id="mypageHeaderInit">
+    (function () {
+        function initMypageCommonHeaderFallback() {
+            const hamburger = document.querySelector('.hamburger-btn');
+
+            if (!hamburger || hamburger.dataset.mypageSidebarBound === 'true') {
+                return;
+            }
+
+            hamburger.dataset.mypageSidebarBound = 'true';
+            hamburger.setAttribute('aria-expanded', 'false');
+
+            const sidebarSelectors = [
+                '#sidebar',
+                '#sideBar',
+                '#sideMenu',
+                '#sidebarMenu',
+                '#mobileMenu',
+                '#menuDrawer',
+                '.sidebar',
+                '.side-bar',
+                '.side-nav',
+                '.side-menu',
+                '.sidebar-menu',
+                '.mobile-menu',
+                '.mobile-sidebar',
+                '.menu-drawer',
+                '.drawer-menu',
+                '.nav-drawer',
+                '.header-sidebar',
+                '.global-sidebar',
+                '.layout-sidebar'
+            ];
+
+            const overlaySelectors = [
+                '#sidebarOverlay',
+                '#sideOverlay',
+                '#menuOverlay',
+                '.sidebar-overlay',
+                '.side-overlay',
+                '.menu-overlay',
+                '.drawer-overlay',
+                '.nav-overlay',
+                '.global-dim',
+                '.dimmed-layer'
+            ];
+
+            function getElements(selectors) {
+                return selectors
+                    .flatMap(function (selector) {
+                        return Array.from(document.querySelectorAll(selector));
+                    })
+                    .filter(function (element, index, array) {
+                        return element && array.indexOf(element) === index;
+                    });
+            }
+
+            function isOpened() {
+                return document.body.classList.contains('is-sidebar-open')
+                    || document.body.classList.contains('sidebar-open')
+                    || hamburger.classList.contains('is-open')
+                    || hamburger.classList.contains('active');
+            }
+
+            function setSidebarOpen(open) {
+                document.body.classList.toggle('is-sidebar-open', open);
+                document.body.classList.toggle('sidebar-open', open);
+                document.documentElement.classList.toggle('is-sidebar-open', open);
+
+                hamburger.classList.toggle('is-open', open);
+                hamburger.classList.toggle('active', open);
+                hamburger.setAttribute('aria-expanded', String(open));
+
+                getElements(sidebarSelectors).forEach(function (element) {
+                    element.hidden = false;
+                    element.classList.toggle('is-open', open);
+                    element.classList.toggle('open', open);
+                    element.classList.toggle('active', open);
+                    element.classList.toggle('show', open);
+                    element.setAttribute('aria-hidden', String(!open));
+                });
+
+                getElements(overlaySelectors).forEach(function (element) {
+                    element.hidden = false;
+                    element.classList.toggle('is-open', open);
+                    element.classList.toggle('open', open);
+                    element.classList.toggle('active', open);
+                    element.classList.toggle('show', open);
+                    element.setAttribute('aria-hidden', String(!open));
+                });
+            }
+
+            hamburger.addEventListener('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                event.stopImmediatePropagation();
+                setSidebarOpen(!isOpened());
+            }, true);
+
+            document.addEventListener('click', function (event) {
+                if (!isOpened()) {
+                    return;
+                }
+
+                const closeTarget = event.target.closest(
+                    '.sidebar-overlay, .side-overlay, .menu-overlay, .drawer-overlay, .nav-overlay, ' +
+                    '.sidebar-close, .side-close, .menu-close, .drawer-close, ' +
+                    '[data-sidebar-close], [data-menu-close]'
+                );
+
+                if (closeTarget) {
+                    setSidebarOpen(false);
+                }
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape' && isOpened()) {
+                    setSidebarOpen(false);
+                }
+            });
+        }
+
+        document.querySelector('.site-header')?.classList.add('is-solid');
+        document.body.classList.add('is-header-ready');
+        document.body.classList.add('is-opening-loaded');
+        document.body.classList.add('is-fab-ready');
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initMypageCommonHeaderFallback);
+        } else {
+            initMypageCommonHeaderFallback();
+        }
+    })();
+</script>
+
 <div class="mypage-container">
+
     <aside class="mypage-sidebar">
         <%@ include file="/WEB-INF/views/members/mypage/mypage-sidebar.jspf" %>
     </aside>
 
     <main class="question-main">
-        <!-- ✅ 제목과 버튼을 한 줄로 배치한 헤더 영역 -->
-        <div class="page-header">
-            <h1 class="page-title">내 문의</h1>
+
+        <div class="question-page-header">
+            <div class="question-title-area">
+                <h1 class="page-title">내 문의</h1>
+                <p class="question-subtitle">
+                    내가 등록한 문의와 관리자 답변 상태를 확인할 수 있습니다.
+                </p>
+            </div>
+
             <div class="filter-group">
-                <a href="?status=ALL" class="btn-filter ${currentStatus == 'ALL' ? 'active' : ''}">전체</a>
-                <a href="?status=ANSWERED" class="btn-filter ${currentStatus == 'ANSWERED' ? 'active' : ''}">답변 완료</a>
-                <a href="?status=WAITING" class="btn-filter ${currentStatus == 'WAITING' ? 'active' : ''}">답변 전</a>
+                <a href="?status=ALL"
+                   class="btn-filter ${currentStatus eq 'ALL' ? 'active' : ''}">
+                    전체
+                </a>
+
+                <a href="?status=ANSWERED"
+                   class="btn-filter ${currentStatus eq 'ANSWERED' ? 'active' : ''}">
+                    답변 완료
+                </a>
+
+                <a href="?status=WAITING"
+                   class="btn-filter ${currentStatus eq 'WAITING' ? 'active' : ''}">
+                    답변 전
+                </a>
             </div>
         </div>
 
         <section class="question-card">
-            <div class="post-table">
-                <div class="table-header">
-                    <div class="col-no">순번</div>
-                    <div class="col-title">제목</div>
-                    <div class="col-status">답변여부</div>
-                    <div class="col-date">문의시각</div>
-                    <div class="col-manage">관리</div>
-                </div>
 
-                <c:choose>
-                    <c:when test="${not empty inquiries.content}">
-                        <c:forEach var="inq" items="${inquiries.content}" varStatus="status">
-                            <div class="table-row">
-                                <div class="col-no">${(inquiries.number * inquiries.size) + status.count}</div>
-                                <div class="col-title">
-                                    <a href="javascript:void(0);"
-                                       class="inq-link"
-                                       onclick="openQuestionModal(this.getAttribute('data-title'), this.getAttribute('data-content'), this.getAttribute('data-answer'))"
-                                       data-title="<c:out value='${inq.title}'/>"
-                                       data-content="<c:out value='${inq.content}'/>"
-                                       data-answer="<c:out value='${inq.answerContent}'/>">
-                                        ${inq.title}
-                                    </a>
+            <div class="question-table-wrap">
+                <div class="question-table">
+
+                    <div class="table-header">
+                        <div class="col-no">순번</div>
+                        <div class="col-title">제목</div>
+                        <div class="col-status">답변여부</div>
+                        <div class="col-date">문의시각</div>
+                        <div class="col-manage">관리</div>
+                    </div>
+
+                    <c:choose>
+                        <c:when test="${not empty inquiries and not empty inquiries.content}">
+                            <c:forEach var="inq" items="${inquiries.content}" varStatus="status">
+                                <div class="table-row">
+                                    <div class="col-no">
+                                            ${(inquiries.number * inquiries.size) + status.count}
+                                    </div>
+
+                                    <div class="col-title">
+                                        <a href="javascript:void(0);"
+                                           class="inq-link"
+                                           onclick="openQuestionModal(this)"
+                                           data-title="${fn:escapeXml(inq.title)}"
+                                           data-content="${fn:escapeXml(inq.content)}"
+                                           data-answer="${fn:escapeXml(inq.answerContent)}">
+                                                ${inq.title}
+                                        </a>
+                                    </div>
+
+                                    <div class="col-status">
+                                        <span class="status-badge ${inq.status eq 'ANSWERED' ? 'done' : 'wait'}">
+                                                ${inq.status eq 'ANSWERED' ? '답변 완료' : '답변 전'}
+                                        </span>
+                                    </div>
+
+                                    <div class="col-date">
+                                            ${inq.createdAt}
+                                    </div>
+
+                                    <div class="col-manage">
+                                        <form action="${pageContext.request.contextPath}/mypage/questions/delete/${inq.id}"
+                                              method="post"
+                                              style="margin:0; display:flex; justify-content:center;"
+                                              onsubmit="return confirm('삭제하시겠습니까?');">
+                                            <button type="submit"
+                                                    class="btn-delete">
+                                                삭제
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
-                                <div class="col-status">
-                                    <span class="status-badge ${inq.status == 'ANSWERED' ? 'done' : 'wait'}">
-                                        ${inq.status == 'ANSWERED' ? '답변 완료' : '답변 전'}
-                                    </span>
-                                </div>
-                                <div class="col-date">${inq.createdAt.toLocalDate()}</div>
-                                <div class="col-manage">
-                                    <form action="${pageContext.request.contextPath}/mypage/questions/delete/${inq.id}" method="post" style="margin: 0; display: flex; justify-content: center;" onsubmit="return confirm('삭제하시겠습니까?');">
-                                        <button type="submit" class="btn-delete">삭제</button>
-                                    </form>
-                                </div>
+                            </c:forEach>
+                        </c:when>
+
+                        <c:otherwise>
+                            <div class="empty-msg">
+                                문의하신 내역이 없습니다.
                             </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="empty-msg">문의하신 내역이 없습니다.</div>
-                    </c:otherwise>
-                </c:choose>
+                        </c:otherwise>
+                    </c:choose>
+
+                </div>
             </div>
+
+            <c:if test="${not empty inquiries and inquiries.totalPages > 0}">
+                <div class="pagination">
+
+                    <c:if test="${inquiries.number > 0}">
+                        <a href="?status=${currentStatus}&page=${inquiries.number - 1}"
+                           class="page-link">
+                            이전
+                        </a>
+                    </c:if>
+
+                    <c:forEach begin="0" end="${inquiries.totalPages - 1}" var="i">
+                        <a href="?status=${currentStatus}&page=${i}"
+                           class="page-link ${inquiries.number == i ? 'active' : ''}">
+                                ${i + 1}
+                        </a>
+                    </c:forEach>
+
+                    <c:if test="${inquiries.number < inquiries.totalPages - 1}">
+                        <a href="?status=${currentStatus}&page=${inquiries.number + 1}"
+                           class="page-link">
+                            다음
+                        </a>
+                    </c:if>
+
+                </div>
+            </c:if>
+
         </section>
+
     </main>
+
 </div>
 
-<!-- 문의 상세 팝업 -->
 <div id="questionModal" class="question-modal-overlay">
     <div class="question-modal-content">
         <span class="question-close-btn" onclick="closeQuestionModal()">&times;</span>
-        <div class="question-detail-title" id="modalTitle">문의 내용</div>
+
+        <h2 class="question-detail-title" id="modalTitle">문의 내용</h2>
+
         <div class="question-divider"></div>
 
-        <div style="font-weight:bold; margin-bottom:5px; color:#666;">[문의 내용]</div>
+        <p class="modal-label">문의 내용</p>
         <div class="question-box" id="modalQuestion"></div>
 
-        <div style="font-weight:bold; margin-bottom:5px; color:#666;">[관리자 답변]</div>
+        <p class="modal-label">관리자 답변</p>
         <div class="answer-box" id="modalAnswer"></div>
 
-        <button class="confirm-btn" onclick="closeQuestionModal()">확인</button>
+        <button type="button"
+                class="confirm-btn"
+                onclick="closeQuestionModal()">
+            확인
+        </button>
     </div>
 </div>
 
 <%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
+<%@ include file="/WEB-INF/views/common/include/scripts.jspf" %>
 
 <script>
-    function openQuestionModal(title, question, answer) {
+    function openQuestionModal(element) {
+        const title = element.getAttribute('data-title') || '문의 내용';
+        const question = element.getAttribute('data-content') || '';
+        const answer = element.getAttribute('data-answer') || '';
+
         document.getElementById('modalTitle').innerText = title;
         document.getElementById('modalQuestion').innerText = question;
-        document.getElementById('modalAnswer').innerText = (answer && answer.trim() !== "") ? answer : "아직 답변이 등록되지 않았습니다.";
+        document.getElementById('modalAnswer').innerText =
+            answer.trim() !== '' ? answer : '아직 답변이 등록되지 않았습니다.';
+
         document.getElementById('questionModal').style.display = 'flex';
     }
 
@@ -373,39 +335,17 @@
         document.getElementById('questionModal').style.display = 'none';
     }
 
-    function deleteQuestion(qId) {
-        if (confirm("정말로 이 문의 내역을 삭제하시겠습니까?")) {
-            fetch('${pageContext.request.contextPath}/mypage/questions/delete/' + qId, {
-                method: 'DELETE'
-            })
-            .then(res => {
-                if (res.ok) {
-                    alert("삭제되었습니다.");
-                    location.reload();
-                } else {
-                    alert("삭제에 실패했습니다.");
-                }
-            })
-            .catch(err => alert("서버 오류가 발생했습니다."));
-        }
-    }
-
-    window.addEventListener('click', function(event) {
+    window.addEventListener('click', function (event) {
         const modal = document.getElementById('questionModal');
+
         if (event.target === modal) {
             closeQuestionModal();
         }
     });
 
     document.addEventListener("DOMContentLoaded", function () {
-        const hamburgerBtn = document.querySelector('.hamburger-btn');
-        const sidebar = document.querySelector('nav.sidebar');
-        if (hamburgerBtn && sidebar) {
-            hamburgerBtn.addEventListener('click', function () {
-                sidebar.classList.toggle('open');
-            });
-        }
     });
 </script>
+
 </body>
 </html>

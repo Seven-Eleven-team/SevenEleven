@@ -1,258 +1,125 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <c:set var="menu" value="sales"/>
 
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
 
+    <meta charset="UTF-8">
     <title>지출메이트 - 내 판매 목록 리스트</title>
 
     <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/css/mypage.css?v=1">
-
-    <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/css/sales.css">
+          href="${pageContext.request.contextPath}/css/mypage.css?v=31">
 
     <style>
-        body.mypage-body {
-            padding-top: 78px;
-            min-height: 100vh;
+        .sales-list-main {
             display: flex;
             flex-direction: column;
-            background: #f7f8fb;
+            gap: 24px;
         }
 
-        body.mypage-body .site-header {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100% !important;
-            height: 78px !important;
-            background: rgba(25, 59, 96, 0.96) !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            z-index: 9999 !important;
+        .sales-list-page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 18px;
         }
 
-        body.mypage-body .site-logo {
-            color: white !important;
-            font-size: 28px !important;
-            font-weight: 800 !important;
-            margin: 0 !important;
+        .sales-list-title-area {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        body.mypage-body .auth-link {
-            display: none !important;
+        .sales-list-title-area .page-title {
+            margin: 0;
         }
 
-        body.mypage-body .header-action-area {
-            position: absolute !important;
-            right: 36px !important;
+        .sales-list-subtitle {
+            margin: 0;
+            color: #6b7280;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.5;
         }
 
-        body.mypage-body .user-profile-link {
-            width: 46px !important;
-            height: 46px !important;
-            border-radius: 50% !important;
-            background: white !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            text-decoration: none !important;
-        }
-
-        body.mypage-body .user-avatar {
-            color: #243864 !important;
-            font-weight: 700 !important;
-        }
-
-        body.mypage-body .hamburger-btn {
-            position: absolute !important;
-            left: 36px !important;
-            width: 42px !important;
-            height: 42px !important;
-            border: none !important;
-            border-radius: 0 !important;
-            background: transparent !important;
-            color: white !important;
-            font-size: 22px !important;
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: center !important;
-            align-items: center !important;
-            gap: 4px !important;
-        }
-
-        body.mypage-body .hamburger-btn span {
-            display: block !important;
-            width: 22px !important;
-            height: 2px !important;
-            background: white !important;
-            border-radius: 999px !important;
-        }
-
-        body.mypage-body nav.sidebar {
-            position: fixed;
-            top: 78px;
-            left: -260px;
-            width: 250px;
-            height: calc(100vh - 78px);
+        .register-post-btn {
+            height: 46px;
+            padding: 0 18px;
+            border: none;
+            border-radius: 999px;
             background: #243864;
-            border-right: none;
-            transition: all 0.3s ease;
-            z-index: 9998;
-            padding-top: 20px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 900;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: opacity 0.2s ease, transform 0.2s ease;
         }
 
-        body.mypage-body nav.sidebar.open {
-            left: 0;
+        .register-post-btn:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
         }
 
-        body.mypage-body nav.sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        body.mypage-body nav.sidebar li {
+        .sales-list-card {
             width: 100%;
-        }
-
-        body.mypage-body nav.sidebar li a {
-            display: flex;
-            align-items: center;
-            height: 54px;
-            padding: 0 24px;
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 500;
-            transition: 0.2s;
-        }
-
-        body.mypage-body nav.sidebar li a:hover {
-            background: rgba(255, 255, 255, 0.12);
-        }
-
-        .mypage-container {
-            display: flex;
-            gap: 26px;
-            max-width: 1200px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 40px 0;
-            flex: 1;
-        }
-
-        .mypage-sidebar {
-            width: 250px;
-            min-width: 250px;
+            min-height: 620px;
+            padding: 30px 34px;
+            border: 1px solid #e2e4ea;
+            border-radius: 24px;
             background: #ffffff;
-            border: 1px solid #dddddd;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-        }
-
-        .mypage-sidebar ul {
+            box-shadow: 0 8px 24px rgba(17, 24, 39, 0.04);
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            width: 100%;
-        }
-
-        .mypage-sidebar li {
-            width: 100%;
-        }
-
-        .mypage-sidebar li a {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 55px;
-            padding: 0;
-            text-align: center;
-            font-size: 16px;
-            font-weight: 500;
-            color: #111111;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .mypage-sidebar li a:hover {
-            background: #fafafa;
-            color: #ff4d4d;
-        }
-
-        .mypage-sidebar li.active a {
-            color: #ff4d4d;
-            font-weight: 700;
-        }
-
-        .dashboard {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .page-header {
-            margin-bottom: 24px;
-        }
-
-        .page-title {
-            font-size: 28px;
-            font-weight: 800;
-            color: #111111;
-            margin: 0;
-        }
-
-        .sales-card {
-            background: #ffffff;
-            border-radius: 22px;
-            padding: 32px;
-            border: 1px solid #e5e5e5;
-            min-height: 420px;
         }
 
         .empty-box {
-            min-height: 320px;
+            min-height: 460px;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             gap: 22px;
             text-align: center;
         }
 
         .empty-box h1 {
-            font-size: 26px;
-            font-weight: 800;
-            color: #222222;
             margin: 0;
+            color: #111111;
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+        }
+
+        .empty-box p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.6;
         }
 
         .primary-btn {
             min-width: 160px;
             height: 48px;
+            padding: 0 20px;
             border: none;
             border-radius: 14px;
             background: #243864;
-            color: white;
-            font-size: 16px;
-            font-weight: 700;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 900;
             cursor: pointer;
+            transition: opacity 0.2s ease, transform 0.2s ease;
         }
 
         .primary-btn:hover {
             opacity: 0.92;
+            transform: translateY(-1px);
         }
 
         .sales-list-content {
@@ -262,57 +129,64 @@
         }
 
         .sale-item {
+            width: 100%;
+            padding: 22px 24px;
+            border: 1px solid #e8eaf0;
+            border-radius: 20px;
+            background: #ffffff;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 22px 24px;
-            border: 1px solid #eeeeee;
-            border-radius: 18px;
-            background: #ffffff;
-            transition: 0.2s;
+            gap: 20px;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
         }
 
         .sale-item:hover {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 10px 28px rgba(17, 24, 39, 0.07);
             transform: translateY(-1px);
         }
 
         .item-left-group {
+            min-width: 0;
             display: flex;
             align-items: center;
             gap: 18px;
-            min-width: 0;
         }
 
         .item-logo-area {
-            width: 58px;
-            height: 58px;
+            width: 64px;
+            height: 64px;
+            flex: 0 0 64px;
             border-radius: 18px;
             background: #f4f6fa;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            flex-shrink: 0;
+            color: #243864;
+            font-size: 13px;
+            font-weight: 900;
+            text-align: center;
         }
 
         .item-logo-area img {
-            max-width: 44px;
-            max-height: 44px;
+            max-width: 46px;
+            max-height: 46px;
             object-fit: contain;
         }
 
         .item-info {
+            min-width: 0;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            min-width: 0;
+            gap: 9px;
         }
 
         .item-name {
-            font-size: 18px;
-            font-weight: 800;
             color: #111111;
+            font-size: 19px;
+            font-weight: 900;
+            letter-spacing: -0.03em;
         }
 
         .item-desc-text {
@@ -320,20 +194,23 @@
             align-items: center;
             gap: 10px;
             flex-wrap: wrap;
+            color: #6b7280;
             font-size: 14px;
-            color: #666666;
+            font-weight: 700;
+            line-height: 1.5;
         }
 
         .status-badge {
+            min-width: 76px;
+            height: 30px;
+            padding: 0 10px;
+            border-radius: 999px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-width: 68px;
-            height: 28px;
-            padding: 0 10px;
-            border-radius: 999px;
             font-size: 13px;
-            font-weight: 700;
+            font-weight: 900;
+            white-space: nowrap;
         }
 
         .status-badge.selling {
@@ -357,77 +234,294 @@
         }
 
         .price-text {
-            font-weight: 700;
-            color: #222222;
+            color: #111111;
+            font-weight: 900;
         }
 
         .item-right-stat {
+            flex: 0 0 auto;
             display: flex;
             align-items: center;
-            gap: 10px;
-            flex-shrink: 0;
+            gap: 12px;
         }
 
-        .buyer-count {
-            font-size: 14px;
-            font-weight: 700;
+        .created-text {
             color: #555555;
+            font-size: 14px;
+            font-weight: 800;
+            white-space: nowrap;
         }
 
         .detail-btn {
-            height: 34px;
+            height: 36px;
             padding: 0 14px;
             border: 1px solid #243864;
             border-radius: 10px;
-            background: white;
+            background: #ffffff;
             color: #243864;
-            font-weight: 700;
+            font-size: 13px;
+            font-weight: 900;
             cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
         }
 
         .detail-btn:hover {
             background: #243864;
-            color: white;
+            color: #ffffff;
+            transform: translateY(-1px);
         }
 
         .pagination {
-            margin-top: 28px;
+            width: 100%;
+            margin-top: auto;
+            padding-top: 28px;
             display: flex;
             justify-content: center;
+            align-items: center;
         }
 
         .page-link {
-            width: 34px;
-            height: 34px;
+            min-width: 36px;
+            height: 36px;
+            padding: 0 12px;
+            border: 1px solid #243864;
+            border-radius: 10px;
+            background: #243864;
+            color: #ffffff;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 800;
             text-decoration: none;
-            color: #333333;
-            font-weight: 700;
-            border: 1px solid #dddddd;
         }
 
-        .page-link.active {
-            background: #243864;
-            color: white;
-            border-color: #243864;
+        @media (max-width: 1024px) {
+            .sale-item {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .item-right-stat {
+                width: 100%;
+                justify-content: space-between;
+            }
         }
 
-        .footer {
-            width: 100%;
-            background: #243864;
-            color: white;
-            padding: 40px 0;
-            margin-top: 60px;
+        @media (max-width: 768px) {
+            .sales-list-page-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .register-post-btn {
+                width: 100%;
+            }
+
+            .sales-list-card {
+                min-height: 520px;
+                padding: 24px 20px;
+                border-radius: 20px;
+            }
+
+            .empty-box {
+                min-height: 380px;
+            }
+
+            .empty-box h1 {
+                font-size: 22px;
+            }
+
+            .sale-item {
+                padding: 20px;
+                border-radius: 18px;
+            }
+
+            .item-left-group {
+                align-items: flex-start;
+                width: 100%;
+            }
+
+            .item-logo-area {
+                width: 56px;
+                height: 56px;
+                flex-basis: 56px;
+            }
+
+            .item-name {
+                font-size: 17px;
+            }
+
+            .item-desc-text {
+                font-size: 13px;
+            }
+
+            .item-right-stat {
+                align-items: stretch;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .created-text {
+                white-space: normal;
+            }
+
+            .detail-btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .item-left-group {
+                flex-direction: column;
+            }
+
+            .item-logo-area {
+                width: 60px;
+                height: 60px;
+            }
         }
     </style>
 </head>
 
-<body class="mypage-body">
+<body class="mypage is-header-ready is-opening-loaded is-fab-ready">
 
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
+
+<script id="mypageHeaderInit">
+    (function () {
+        function initMypageCommonHeaderFallback() {
+            const hamburger = document.querySelector('.hamburger-btn');
+
+            if (!hamburger || hamburger.dataset.mypageSidebarBound === 'true') {
+                return;
+            }
+
+            hamburger.dataset.mypageSidebarBound = 'true';
+            hamburger.setAttribute('aria-expanded', 'false');
+
+            const sidebarSelectors = [
+                '#sidebar',
+                '#sideBar',
+                '#sideMenu',
+                '#sidebarMenu',
+                '#mobileMenu',
+                '#menuDrawer',
+                '.sidebar',
+                '.side-bar',
+                '.side-nav',
+                '.side-menu',
+                '.sidebar-menu',
+                '.mobile-menu',
+                '.mobile-sidebar',
+                '.menu-drawer',
+                '.drawer-menu',
+                '.nav-drawer',
+                '.header-sidebar',
+                '.global-sidebar',
+                '.layout-sidebar'
+            ];
+
+            const overlaySelectors = [
+                '#sidebarOverlay',
+                '#sideOverlay',
+                '#menuOverlay',
+                '.sidebar-overlay',
+                '.side-overlay',
+                '.menu-overlay',
+                '.drawer-overlay',
+                '.nav-overlay',
+                '.global-dim',
+                '.dimmed-layer'
+            ];
+
+            function getElements(selectors) {
+                return selectors
+                    .flatMap(function (selector) {
+                        return Array.from(document.querySelectorAll(selector));
+                    })
+                    .filter(function (element, index, array) {
+                        return element && array.indexOf(element) === index;
+                    });
+            }
+
+            function isOpened() {
+                return document.body.classList.contains('is-sidebar-open')
+                    || document.body.classList.contains('sidebar-open')
+                    || hamburger.classList.contains('is-open')
+                    || hamburger.classList.contains('active');
+            }
+
+            function setSidebarOpen(open) {
+                document.body.classList.toggle('is-sidebar-open', open);
+                document.body.classList.toggle('sidebar-open', open);
+                document.documentElement.classList.toggle('is-sidebar-open', open);
+
+                hamburger.classList.toggle('is-open', open);
+                hamburger.classList.toggle('active', open);
+                hamburger.setAttribute('aria-expanded', String(open));
+
+                getElements(sidebarSelectors).forEach(function (element) {
+                    element.hidden = false;
+                    element.classList.toggle('is-open', open);
+                    element.classList.toggle('open', open);
+                    element.classList.toggle('active', open);
+                    element.classList.toggle('show', open);
+                    element.setAttribute('aria-hidden', String(!open));
+                });
+
+                getElements(overlaySelectors).forEach(function (element) {
+                    element.hidden = false;
+                    element.classList.toggle('is-open', open);
+                    element.classList.toggle('open', open);
+                    element.classList.toggle('active', open);
+                    element.classList.toggle('show', open);
+                    element.setAttribute('aria-hidden', String(!open));
+                });
+            }
+
+            hamburger.addEventListener('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                event.stopImmediatePropagation();
+                setSidebarOpen(!isOpened());
+            }, true);
+
+            document.addEventListener('click', function (event) {
+                if (!isOpened()) {
+                    return;
+                }
+
+                const closeTarget = event.target.closest(
+                    '.sidebar-overlay, .side-overlay, .menu-overlay, .drawer-overlay, .nav-overlay, ' +
+                    '.sidebar-close, .side-close, .menu-close, .drawer-close, ' +
+                    '[data-sidebar-close], [data-menu-close]'
+                );
+
+                if (closeTarget) {
+                    setSidebarOpen(false);
+                }
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape' && isOpened()) {
+                    setSidebarOpen(false);
+                }
+            });
+        }
+
+        document.querySelector('.site-header')?.classList.add('is-solid');
+        document.body.classList.add('is-header-ready');
+        document.body.classList.add('is-opening-loaded');
+        document.body.classList.add('is-fab-ready');
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initMypageCommonHeaderFallback);
+        } else {
+            initMypageCommonHeaderFallback();
+        }
+    })();
+</script>
 
 <div class="mypage-container">
 
@@ -435,19 +529,36 @@
         <%@ include file="/WEB-INF/views/members/mypage/mypage-sidebar.jspf" %>
     </aside>
 
-    <main class="dashboard">
+    <main class="sales-list-main">
 
-        <div class="page-header">
-            <h1 class="page-title">내 판매 목록</h1>
+        <div class="sales-list-page-header">
+            <div class="sales-list-title-area">
+                <h1 class="page-title">내 판매 목록</h1>
+                <p class="sales-list-subtitle">
+                    판매자로 등록한 구독 공유 상품을 카드형 목록으로 확인할 수 있습니다.
+                </p>
+            </div>
+
+            <c:if test="${isSeller}">
+                <button type="button"
+                        class="register-post-btn"
+                        onclick="location.href='${pageContext.request.contextPath}/party/form'">
+                    판매글 등록하기
+                </button>
+            </c:if>
         </div>
 
-        <section class="sales-card">
+        <section class="sales-list-card">
 
             <c:choose>
 
                 <c:when test="${not isSeller}">
                     <div class="empty-box">
                         <h1>판매자 등록을 먼저 해주세요!</h1>
+                        <p>
+                            구독 공유 판매글을 등록하려면 판매자 인증이 필요합니다.<br>
+                            판매자 등록 후 판매 목록을 확인할 수 있습니다.
+                        </p>
 
                         <button type="button"
                                 class="primary-btn"
@@ -460,6 +571,9 @@
                 <c:when test="${isSeller and empty salesList}">
                     <div class="empty-box">
                         <h1>등록된 판매글이 없습니다.</h1>
+                        <p>
+                            판매할 구독 서비스를 등록하면 이곳에서 목록으로 확인할 수 있습니다.
+                        </p>
 
                         <button type="button"
                                 class="primary-btn"
@@ -473,8 +587,7 @@
                     <div class="sales-list-content">
 
                         <c:forEach var="s" items="${salesList}">
-
-                            <div class="sale-item">
+                            <article class="sale-item">
 
                                 <div class="item-left-group">
 
@@ -506,7 +619,7 @@
                                             </c:when>
 
                                             <c:otherwise>
-                                                <span style="font-weight:800; color:#243864;">
+                                                <span>
                                                         ${s.serviceName}
                                                 </span>
                                             </c:otherwise>
@@ -514,7 +627,9 @@
                                     </div>
 
                                     <div class="item-info">
-                                        <div class="item-name">${s.serviceName}</div>
+                                        <div class="item-name">
+                                                ${s.serviceName}
+                                        </div>
 
                                         <div class="item-desc-text">
                                             <c:choose>
@@ -539,16 +654,27 @@
                                                 </c:otherwise>
                                             </c:choose>
 
-                                            <span class="price-text">${s.monthlyPrice}원</span>
-                                            <span>${s.saleMonths}개월 판매</span>
-                                            <span>공유 ID: ${s.shareId}</span>
+                                            <span class="price-text">
+                                                ${s.monthlyPrice}원
+                                            </span>
+
+                                            <span>
+                                                ${not empty s.saleMonths ? s.saleMonths : '-'}개월 판매
+                                            </span>
+
+                                            <span>
+                                                공유 ID:
+                                                ${not empty s.shareId ? s.shareId : '-'}
+                                            </span>
                                         </div>
                                     </div>
+
                                 </div>
 
                                 <div class="item-right-stat">
-                                    <span class="buyer-count">
-                                        등록일: ${s.createdAt}
+                                    <span class="created-text">
+                                        등록일:
+                                        ${not empty s.createdAt ? s.createdAt : '-'}
                                     </span>
 
                                     <button type="button"
@@ -558,14 +684,13 @@
                                     </button>
                                 </div>
 
-                            </div>
-
+                            </article>
                         </c:forEach>
 
                     </div>
 
                     <div class="pagination">
-                        <a href="#" class="page-link active">1</a>
+                        <span class="page-link">1</span>
                     </div>
                 </c:otherwise>
 
@@ -581,14 +706,8 @@
 <%@ include file="/WEB-INF/views/common/include/scripts.jspf" %>
 
 <script>
-    const hamburgerBtn = document.querySelector('.hamburger-btn');
-    const sidebar = document.querySelector('nav.sidebar');
-
-    if (hamburgerBtn && sidebar) {
-        hamburgerBtn.addEventListener('click', function () {
-            sidebar.classList.toggle('open');
-        });
-    }
+    document.addEventListener("DOMContentLoaded", function () {
+    });
 </script>
 
 </body>

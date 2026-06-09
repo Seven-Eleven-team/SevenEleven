@@ -1,116 +1,509 @@
+@charset "UTF-8";
+
 /* =========================================================
-   myquestion.css
-   마이페이지 > 내 문의 전용 스타일 (통일성 보정본)
+   myque.css
+   마이페이지 > 내 문의 전용 최종 스타일 v42
+   - mypage.css의 공통 table !important 충돌을 이 파일에서 다시 덮어씀
+   - 제목 컬럼 포함 전체 테이블 균형 정렬
 ========================================================= */
 
-.question-main {
-    flex: 1;
-    width: 100%;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
+body.mypage .question-main,
+body.mypage-body .question-main {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important;
 }
 
-.page-title {
-    font-size: 32px;
-    font-weight: 700;
-    color: #111;
-    margin-bottom: 24px;
-    line-height: 1.2;
+body.mypage .question-page-header,
+body.mypage-body .question-page-header {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-end !important;
+    gap: 18px !important;
+    margin-bottom: 0 !important;
 }
 
-/* ⚡ 규격 통일: 높이 760px, 라운드 24px, 패딩 30px 35px, 그림자 추가 */
-.question-card {
-    width: 100%;
-    height: 760px;
-    background: white;
-    border: 1px solid #dbdbdb;
-    border-radius: 24px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-    padding: 30px 35px;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
+body.mypage .question-title-area,
+body.mypage-body .question-title-area {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
 }
 
-/* ⚡ 테이블 헤더 높이 52px 및 라인 스타일 통일 */
-.table-header {
-    display: flex;
-    align-items: center;
-    height: 52px;
-    border-top: 1px solid #dcdcdc;
-    border-bottom: 1px solid #dcdcdc;
-    font-size: 13px;
-    font-weight: 700;
-    color: #222;
-    background: #fafafa;
-    box-sizing: border-box;
+body.mypage .question-title-area .page-title,
+body.mypage-body .question-title-area .page-title,
+body.mypage .question-main .page-title,
+body.mypage-body .question-main .page-title {
+    margin: 0 !important;
+    color: #111111 !important;
+    font-size: clamp(32px, 2.2vw, 46px) !important;
+    font-weight: 900 !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.04em !important;
 }
 
-/* ⚡ 데이터 행 높이 62px 및 부드러운 회색 선(#eeeeee) 통일 */
-.table-row {
-    display: flex;
-    align-items: center;
-    height: 62px;
-    border-bottom: 1px solid #eeeeee;
-    font-size: 13px;
-    color: #222;
-    transition: 0.2s;
-    box-sizing: border-box;
-}
-.table-row:hover {
-    background: #fcfcfc;
+body.mypage .question-subtitle,
+body.mypage-body .question-subtitle {
+    margin: 0 !important;
+    color: #6b7280 !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    line-height: 1.5 !important;
 }
 
-.empty-line {
-    height: 62px;
-    border-bottom: 1px solid #eeeeee;
-    box-sizing: border-box;
+body.mypage .filter-group,
+body.mypage-body .filter-group {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 10px !important;
+    flex-wrap: wrap !important;
 }
 
-/* 컬럼 정렬 일치 */
-.col-no { width: 80px; text-align: center; flex-shrink: 0; }
-.col-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 15px; }
-.col-answer { width: 120px; text-align: center; flex-shrink: 0; }
-.col-date { width: 140px; text-align: center; flex-shrink: 0; color: #888; }
-.col-manage { width: 120px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
-
-/* 답변 완료 강조색 (빨간색 톤 매칭) */
-.complete {
-    color: #ff4d4d;
-    font-weight: 700;
+body.mypage .btn-filter,
+body.mypage-body .btn-filter {
+    min-width: 86px !important;
+    height: 40px !important;
+    padding: 0 15px !important;
+    border: 1px solid #d8dce5 !important;
+    border-radius: 999px !important;
+    background: #ffffff !important;
+    color: #4b5563 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    text-decoration: none !important;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease !important;
 }
 
-/* 삭제 버튼 알약 모양 규격 일치시킴 */
-.delete-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-width: 74px;
-    height: 34px;
-    padding: 0 14px;
-    border: none;
-    border-radius: 999px;
-    background: #1e2d4d;
-    color: white;
-    font-size: 11px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.2s;
+body.mypage .btn-filter:hover,
+body.mypage-body .btn-filter:hover {
+    background: #f4f6fa !important;
+    transform: translateY(-1px) !important;
 }
-.delete-btn:hover { opacity: 0.92; }
 
-/* 페이지네이션 정렬 및 폰트 통일 */
-.pagination {
-    margin-top: auto;
-    padding-top: 28px;
-    text-align: center;
-    font-size: 13px;
-    font-weight: 600;
-    color: #666;
+body.mypage .btn-filter.active,
+body.mypage-body .btn-filter.active {
+    background: #243864 !important;
+    border-color: #243864 !important;
+    color: #ffffff !important;
 }
-.mypage-sidebar-fixed li.active a {
-    color: #ff4d4d !important;        /* 텍스트를 빨간색으로 변경 */
-    font-weight: 700 !important;       /* 글씨를 두껍고 진하게 변경 */
-    background: #fff5f5 !important;    /* 바탕색을 연한 핑크빛으로 변경 */
+
+body.mypage .question-main .question-card,
+body.mypage-body .question-main .question-card {
+    width: 100% !important;
+    min-height: 760px !important;
+    padding: 30px 35px !important;
+    border: 1px solid #dbdbdb !important;
+    border-radius: 24px !important;
+    background: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
+}
+
+body.mypage .question-table-wrap,
+body.mypage-body .question-table-wrap {
+    width: 100% !important;
+    overflow-x: auto !important;
+}
+
+body.mypage .question-table,
+body.mypage-body .question-table {
+    width: 100% !important;
+    min-width: 900px !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+body.mypage .question-main .table-header,
+body.mypage-body .question-main .table-header,
+body.mypage .question-main .table-row,
+body.mypage-body .question-main .table-row {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 90px minmax(0, 1fr) 150px 210px 140px !important;
+    align-items: center !important;
+    column-gap: 0 !important;
+    box-sizing: border-box !important;
+}
+
+body.mypage .question-main .table-header,
+body.mypage-body .question-main .table-header {
+    min-height: 54px !important;
+    height: auto !important;
+    border-top: 1px solid #e2e4ea !important;
+    border-bottom: 1px solid #e2e4ea !important;
+    background: #f8fafc !important;
+    color: #222222 !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    text-align: center !important;
+}
+
+body.mypage .question-main .table-row,
+body.mypage-body .question-main .table-row {
+    min-height: 68px !important;
+    height: auto !important;
+    border-bottom: 1px solid #eef0f4 !important;
+    background: #ffffff !important;
+    color: #333333 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    transition: background 0.2s ease !important;
+}
+
+body.mypage .question-main .table-row:hover,
+body.mypage-body .question-main .table-row:hover {
+    background: #fbfcff !important;
+}
+
+body.mypage .question-main .col-no,
+body.mypage-body .question-main .col-no,
+body.mypage .question-main .col-title,
+body.mypage-body .question-main .col-title,
+body.mypage .question-main .col-status,
+body.mypage-body .question-main .col-status,
+body.mypage .question-main .col-date,
+body.mypage-body .question-main .col-date,
+body.mypage .question-main .col-manage,
+body.mypage-body .question-main .col-manage {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+    padding: 0 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+}
+
+body.mypage .question-main .col-title,
+body.mypage-body .question-main .col-title {
+    padding: 0 24px !important;
+}
+
+body.mypage .question-main .inq-link,
+body.mypage-body .question-main .inq-link {
+    display: block !important;
+    width: auto !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    color: #111111 !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    transition: color 0.2s ease !important;
+}
+
+body.mypage .question-main .inq-link:hover,
+body.mypage-body .question-main .inq-link:hover {
+    color: #243864 !important;
+    text-decoration: underline !important;
+}
+
+body.mypage .question-main .status-badge,
+body.mypage-body .question-main .status-badge {
+    min-width: 76px !important;
+    height: 30px !important;
+    padding: 0 10px !important;
+    border-radius: 999px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+}
+
+body.mypage .question-main .status-badge.done,
+body.mypage-body .question-main .status-badge.done {
+    background: #e9f8ef !important;
+    color: #1f9d55 !important;
+}
+
+body.mypage .question-main .status-badge.wait,
+body.mypage-body .question-main .status-badge.wait {
+    background: #fff4df !important;
+    color: #d48600 !important;
+}
+
+body.mypage .question-main .col-manage form,
+body.mypage-body .question-main .col-manage form {
+    margin: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+body.mypage .question-main .btn-delete,
+body.mypage-body .question-main .btn-delete {
+    min-width: 64px !important;
+    height: 34px !important;
+    padding: 0 12px !important;
+    border: 1px solid #ff4d4d !important;
+    border-radius: 10px !important;
+    background: #ffffff !important;
+    color: #ff4d4d !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease !important;
+}
+
+body.mypage .question-main .btn-delete:hover,
+body.mypage-body .question-main .btn-delete:hover {
+    background: #ff4d4d !important;
+    color: #ffffff !important;
+    transform: translateY(-1px) !important;
+}
+
+body.mypage .question-main .empty-msg,
+body.mypage-body .question-main .empty-msg {
+    min-height: 360px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #8a8f98 !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+}
+
+body.mypage .question-main .pagination,
+body.mypage-body .question-main .pagination {
+    width: 100% !important;
+    margin-top: auto !important;
+    padding-top: 28px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+}
+
+body.mypage .question-main .page-link,
+body.mypage-body .question-main .page-link {
+    min-width: 36px !important;
+    height: 36px !important;
+    padding: 0 12px !important;
+    border: 1px solid #d8dce5 !important;
+    border-radius: 10px !important;
+    background: #ffffff !important;
+    color: #4b5563 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    text-decoration: none !important;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease !important;
+}
+
+body.mypage .question-main .page-link:hover,
+body.mypage-body .question-main .page-link:hover {
+    background: #f4f6fa !important;
+}
+
+body.mypage .question-main .page-link.active,
+body.mypage-body .question-main .page-link.active {
+    background: #243864 !important;
+    border-color: #243864 !important;
+    color: #ffffff !important;
+}
+
+body.mypage .question-modal-overlay,
+body.mypage-body .question-modal-overlay {
+    display: none;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 10000 !important;
+    padding: 24px !important;
+    background: rgba(0, 0, 0, 0.45) !important;
+    align-items: center !important;
+    justify-content: center !important;
+    backdrop-filter: blur(3px) !important;
+}
+
+body.mypage .question-modal-content,
+body.mypage-body .question-modal-content {
+    width: min(100%, 720px) !important;
+    max-height: min(760px, calc(100vh - 48px)) !important;
+    overflow-y: auto !important;
+    background: #ffffff !important;
+    border-radius: 24px !important;
+    padding: 34px !important;
+    position: relative !important;
+    box-shadow: 0 20px 46px rgba(0, 0, 0, 0.2) !important;
+    animation: questionModalPop 0.25s ease both !important;
+}
+
+@keyframes questionModalPop {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+body.mypage .question-close-btn,
+body.mypage-body .question-close-btn {
+    position: absolute !important;
+    top: 20px !important;
+    right: 22px !important;
+    color: #888888 !important;
+    font-size: 28px !important;
+    font-weight: 900 !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+}
+
+body.mypage .question-close-btn:hover,
+body.mypage-body .question-close-btn:hover {
+    color: #111111 !important;
+}
+
+body.mypage .question-detail-title,
+body.mypage-body .question-detail-title {
+    margin: 0 34px 18px 0 !important;
+    color: #111111 !important;
+    font-size: 24px !important;
+    font-weight: 900 !important;
+    line-height: 1.35 !important;
+    word-break: keep-all !important;
+}
+
+body.mypage .question-divider,
+body.mypage-body .question-divider {
+    width: 100% !important;
+    height: 1px !important;
+    background: #eef0f4 !important;
+    margin-bottom: 22px !important;
+}
+
+body.mypage .modal-label,
+body.mypage-body .modal-label {
+    margin: 0 0 8px !important;
+    color: #4b5563 !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+}
+
+body.mypage .question-box,
+body.mypage-body .question-box,
+body.mypage .answer-box,
+body.mypage-body .answer-box {
+    width: 100% !important;
+    min-height: 120px !important;
+    padding: 20px !important;
+    border: 1px solid #eef0f4 !important;
+    border-radius: 14px !important;
+    background: #fcfcfd !important;
+    color: #333333 !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    line-height: 1.75 !important;
+    word-break: keep-all !important;
+    white-space: pre-wrap !important;
+    margin-bottom: 22px !important;
+}
+
+body.mypage .answer-box,
+body.mypage-body .answer-box {
+    background: #f4f7ff !important;
+    border-color: #dfe7ff !important;
+}
+
+body.mypage .confirm-btn,
+body.mypage-body .confirm-btn {
+    min-width: 120px !important;
+    height: 46px !important;
+    margin-left: auto !important;
+    border: none !important;
+    border-radius: 14px !important;
+    background: #243864 !important;
+    color: #ffffff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 15px !important;
+    font-weight: 900 !important;
+    cursor: pointer !important;
+    transition: opacity 0.2s ease, transform 0.2s ease !important;
+}
+
+body.mypage .confirm-btn:hover,
+body.mypage-body .confirm-btn:hover {
+    opacity: 0.92 !important;
+    transform: translateY(-1px) !important;
+}
+
+@media (max-width: 1024px) {
+    body.mypage .question-main .question-card,
+    body.mypage-body .question-main .question-card {
+        padding: 24px !important;
+        overflow-x: auto !important;
+    }
+
+    body.mypage .question-table,
+    body.mypage-body .question-table {
+        min-width: 860px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    body.mypage .question-page-header,
+    body.mypage-body .question-page-header {
+        align-items: flex-start !important;
+        flex-direction: column !important;
+    }
+
+    body.mypage .filter-group,
+    body.mypage-body .filter-group {
+        width: 100% !important;
+        justify-content: flex-start !important;
+    }
+
+    body.mypage .btn-filter,
+    body.mypage-body .btn-filter {
+        flex: 1 !important;
+        min-width: 0 !important;
+    }
+
+    body.mypage .question-main .question-card,
+    body.mypage-body .question-main .question-card {
+        min-height: 520px !important;
+        padding: 24px 20px !important;
+        border-radius: 20px !important;
+    }
+
+    body.mypage .question-main .table-header,
+    body.mypage-body .question-main .table-header,
+    body.mypage .question-main .table-row,
+    body.mypage-body .question-main .table-row {
+        grid-template-columns: 70px minmax(240px, 1fr) 120px 170px 120px !important;
+    }
+
+    body.mypage .question-modal-content,
+    body.mypage-body .question-modal-content {
+        padding: 28px 22px !important;
+        border-radius: 20px !important;
+    }
+
+    body.mypage .question-detail-title,
+    body.mypage-body .question-detail-title {
+        font-size: 21px !important;
+    }
 }

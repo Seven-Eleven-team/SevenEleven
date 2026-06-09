@@ -1,316 +1,341 @@
+@charset "UTF-8";
+
 /* =========================================================
    mypost.css
-   마이페이지 > 내 게시글 보기 전용 스타일
+   마이페이지 > 내 게시글 보기 전용 최종 스타일 v42
+   - mypage.css의 공통 table !important 충돌을 이 파일에서 다시 덮어씀
+   - 제목 컬럼 포함 전체 테이블 균형 정렬
 ========================================================= */
 
-/* =========================
-   메인 영역
-========================= */
-
-.mypost-main{
-
-    flex:1;
-
-    width:100%;
-    min-width:0;
-
-    display:flex;
-    flex-direction:column;
+body.mypage .mypost-main,
+body.mypage-body .mypost-main {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important;
 }
 
-/* =========================
-   페이지 제목
-========================= */
-
-.page-title{
-
-    font-size:32px;
-    font-weight:700;
-
-    color:#111;
-
-    margin-bottom:24px;
+body.mypage .post-page-header,
+body.mypage-body .post-page-header {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+    gap: 18px !important;
+    margin-bottom: 0 !important;
 }
 
-/* =========================
-   메인 카드
-========================= */
-
-.mypost-card{
-
-    width:100%;
-    min-height:760px;
-
-    background:white;
-
-    border:1px solid #dbdbdb;
-    border-radius:24px;
-
-    box-shadow:0 4px 15px rgba(0,0,0,0.04);
-
-    padding:30px 35px;
-
-    display:flex;
-    flex-direction:column;
+body.mypage .post-title-area,
+body.mypage-body .post-title-area {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
 }
 
-/* =========================
-   카드 제목
-========================= */
-
-.mypost-title{
-
-    font-size:20px;
-    font-weight:700;
-
-    color:#222;
-
-    margin-bottom:18px;
+body.mypage .post-title-area .page-title,
+body.mypage-body .post-title-area .page-title,
+body.mypage .mypost-main .page-title,
+body.mypage-body .mypost-main .page-title {
+    margin: 0 !important;
+    color: #111111 !important;
+    font-size: clamp(32px, 2.2vw, 46px) !important;
+    font-weight: 900 !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.04em !important;
 }
 
-/* =========================
-   테이블
-========================= */
-
-.post-table{
-
-    width:100%;
+body.mypage .post-subtitle,
+body.mypage-body .post-subtitle {
+    margin: 0 !important;
+    color: #6b7280 !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    line-height: 1.5 !important;
 }
 
-.table-header{
-
-    display:flex;
-
-    align-items:center;
-
-    height:52px;
-
-    border-top:1px solid #dcdcdc;
-    border-bottom:1px solid #dcdcdc;
-
-    font-size:13px;
-    font-weight:700;
-
-    color:#222;
-
-    background:#fafafa;
+body.mypage .write-btn,
+body.mypage-body .write-btn {
+    display: none !important;
 }
 
-.table-row{
-
-    display:flex;
-
-    align-items:center;
-
-    height:62px;
-
-    border-bottom:1px solid #eeeeee;
-
-    font-size:13px;
-
-    color:#222;
-
-    transition:0.2s;
+body.mypage .mypost-main .mypost-card,
+body.mypage-body .mypost-main .mypost-card {
+    width: 100% !important;
+    min-height: 760px !important;
+    padding: 30px 35px !important;
+    border: 1px solid #dbdbdb !important;
+    border-radius: 24px !important;
+    background: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
 }
 
-.table-row:hover{
-    background:#fcfcfc;
+body.mypage .post-table-wrap,
+body.mypage-body .post-table-wrap {
+    width: 100% !important;
+    overflow-x: auto !important;
 }
 
-.empty-line{
-
-    height:62px;
-
-    border-bottom:1px solid #eeeeee;
+body.mypage .post-table,
+body.mypage-body .post-table {
+    width: 100% !important;
+    min-width: 860px !important;
+    display: flex !important;
+    flex-direction: column !important;
 }
 
-/* =========================
-   컬럼
-========================= */
-
-.col-no{
-
-    width:80px;
-
-    text-align:center;
-
-    flex-shrink:0;
+body.mypage .mypost-main .table-header,
+body.mypage-body .mypost-main .table-header,
+body.mypage .mypost-main .table-row,
+body.mypage-body .mypost-main .table-row {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 90px minmax(0, 1fr) 150px 120px 170px !important;
+    align-items: center !important;
+    column-gap: 0 !important;
+    box-sizing: border-box !important;
 }
 
-.col-title{
-
-    flex:1;
-
-    min-width:0;
-
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
+body.mypage .mypost-main .table-header,
+body.mypage-body .mypost-main .table-header {
+    min-height: 54px !important;
+    height: auto !important;
+    border-top: 1px solid #e2e4ea !important;
+    border-bottom: 1px solid #e2e4ea !important;
+    background: #f8fafc !important;
+    color: #222222 !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    text-align: center !important;
 }
 
-.col-date{
-
-    width:120px;
-
-    text-align:center;
-
-    flex-shrink:0;
+body.mypage .mypost-main .table-row,
+body.mypage-body .mypost-main .table-row {
+    min-height: 66px !important;
+    height: auto !important;
+    border-bottom: 1px solid #eef0f4 !important;
+    background: #ffffff !important;
+    color: #333333 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    transition: background 0.2s ease !important;
 }
 
-.col-view{
-
-    width:90px;
-
-    text-align:center;
-
-    flex-shrink:0;
+body.mypage .mypost-main .table-row:hover,
+body.mypage-body .mypost-main .table-row:hover {
+    background: #fbfcff !important;
 }
 
-.col-status{
-
-    width:160px;
-
-    text-align:center;
-
-    flex-shrink:0;
+body.mypage .mypost-main .col-no,
+body.mypage-body .mypost-main .col-no,
+body.mypage .mypost-main .col-title,
+body.mypage-body .mypost-main .col-title,
+body.mypage .mypost-main .col-board,
+body.mypage-body .mypost-main .col-board,
+body.mypage .mypost-main .col-view,
+body.mypage-body .mypost-main .col-view,
+body.mypage .mypost-main .row-right,
+body.mypage-body .mypost-main .row-right {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 100% !important;
+    padding: 0 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
 }
 
-/* =========================
-   오른쪽 버튼 영역
-========================= */
-
-.row-right{
-
-    width:160px;
-
-    display:flex;
-
-    justify-content:center;
-    align-items:center;
-
-    gap:8px;
-
-    flex-shrink:0;
+body.mypage .mypost-main .col-title,
+body.mypage-body .mypost-main .col-title {
+    padding: 0 24px !important;
 }
 
-/* =========================
-   수정 버튼
-========================= */
-
-.status-btn{
-
-    display:flex;
-
-    justify-content:center;
-    align-items:center;
-
-    min-width:60px;
-    height:34px;
-
-    padding:0 16px;
-
-    border:none;
-    border-radius:999px;
-
-    background:#1e2d4d;
-    color:white;
-
-    font-size:11px;
-    font-weight:700;
-
-    cursor:pointer;
-
-    transition:0.2s;
+body.mypage .mypost-main .col-title a,
+body.mypage-body .mypost-main .col-title a {
+    display: block !important;
+    width: auto !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    color: #111111 !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+    transition: color 0.2s ease !important;
 }
 
-.status-btn:hover{
-    opacity:0.92;
+body.mypage .mypost-main .col-title a:hover,
+body.mypage-body .mypost-main .col-title a:hover {
+    color: #243864 !important;
+    text-decoration: underline !important;
 }
 
-/* =========================
-   삭제 버튼
-========================= */
-
-.delete-btn{
-
-    display:flex;
-
-    justify-content:center;
-    align-items:center;
-
-    min-width:74px;
-    height:34px;
-
-    padding:0 14px;
-
-    border:1px solid #d0d0d0;
-    border-radius:999px;
-
-    background:white;
-    color:#333;
-
-    font-size:11px;
-    font-weight:700;
-
-    cursor:pointer;
-
-    transition:0.2s;
+body.mypage .mypost-main .col-board,
+body.mypage-body .mypost-main .col-board,
+body.mypage .mypost-main .col-view,
+body.mypage-body .mypost-main .col-view {
+    color: #555555 !important;
 }
 
-.delete-btn:hover{
-
-    background:#f7f7f7;
+body.mypage .mypost-main .row-right,
+body.mypage-body .mypost-main .row-right {
+    gap: 8px !important;
 }
 
-/* =========================
-   페이지네이션
-========================= */
-
-.pagination{
-
-    margin-top:auto;
-
-    padding-top:28px;
-
-    text-align:center;
-
-    font-size:13px;
-    font-weight:600;
-
-    color:#666;
+body.mypage .mypost-main .row-right form,
+body.mypage-body .mypost-main .row-right form {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
 }
 
-/* =========================
-   반응형
-========================= */
+body.mypage .mypost-main .btn-edit,
+body.mypage-body .mypost-main .btn-edit,
+body.mypage .mypost-main .btn-delete,
+body.mypage-body .mypost-main .btn-delete {
+    min-width: 62px !important;
+    height: 34px !important;
+    padding: 0 12px !important;
+    border-radius: 10px !important;
+    background: #ffffff !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease !important;
+}
 
-@media (max-width:1024px){
+body.mypage .mypost-main .btn-edit,
+body.mypage-body .mypost-main .btn-edit {
+    border: 1px solid #243864 !important;
+    color: #243864 !important;
+}
 
-    .mypost-card{
+body.mypage .mypost-main .btn-edit:hover,
+body.mypage-body .mypost-main .btn-edit:hover {
+    background: #243864 !important;
+    color: #ffffff !important;
+    transform: translateY(-1px) !important;
+}
 
-        padding:24px;
+body.mypage .mypost-main .btn-delete,
+body.mypage-body .mypost-main .btn-delete {
+    border: 1px solid #ff4d4d !important;
+    color: #ff4d4d !important;
+}
 
-        overflow-x:auto;
+body.mypage .mypost-main .btn-delete:hover,
+body.mypage-body .mypost-main .btn-delete:hover {
+    background: #ff4d4d !important;
+    color: #ffffff !important;
+    transform: translateY(-1px) !important;
+}
+
+body.mypage .mypost-main .empty-msg,
+body.mypage-body .mypost-main .empty-msg {
+    min-height: 360px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #8a8f98 !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+}
+
+body.mypage .mypost-main .pagination,
+body.mypage-body .mypost-main .pagination {
+    width: 100% !important;
+    margin-top: auto !important;
+    padding-top: 28px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+}
+
+body.mypage .mypost-main .page-link,
+body.mypage-body .mypost-main .page-link {
+    min-width: 36px !important;
+    height: 36px !important;
+    padding: 0 12px !important;
+    border: 1px solid #d8dce5 !important;
+    border-radius: 10px !important;
+    background: #ffffff !important;
+    color: #4b5563 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    text-decoration: none !important;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease !important;
+}
+
+body.mypage .mypost-main .page-link:hover,
+body.mypage-body .mypost-main .page-link:hover {
+    background: #f4f6fa !important;
+}
+
+body.mypage .mypost-main .page-link.active,
+body.mypage-body .mypost-main .page-link.active {
+    background: #243864 !important;
+    border-color: #243864 !important;
+    color: #ffffff !important;
+}
+
+@media (max-width: 1024px) {
+    body.mypage .mypost-main .mypost-card,
+    body.mypage-body .mypost-main .mypost-card {
+        padding: 24px !important;
+        overflow-x: auto !important;
     }
 
-    .post-table{
-
-        min-width:760px;
+    body.mypage .post-table,
+    body.mypage-body .post-table {
+        min-width: 820px !important;
     }
 }
 
-@media (max-width:768px){
-
-    .page-title{
-
-        font-size:28px;
+@media (max-width: 768px) {
+    body.mypage .post-page-header,
+    body.mypage-body .post-page-header {
+        align-items: flex-start !important;
+        flex-direction: column !important;
     }
 
-    .mypost-card{
-
-        border-radius:20px;
+    body.mypage .mypost-main .mypost-card,
+    body.mypage-body .mypost-main .mypost-card {
+        min-height: 520px !important;
+        padding: 24px 20px !important;
+        border-radius: 20px !important;
     }
-  .mypage-container{
-      margin-top:20px;
-  }
+
+    body.mypage .mypost-main .table-header,
+    body.mypage-body .mypost-main .table-header,
+    body.mypage .mypost-main .table-row,
+    body.mypage-body .mypost-main .table-row {
+        grid-template-columns: 70px minmax(240px, 1fr) 130px 90px 150px !important;
+    }
+
+    body.mypage .post-title-area .page-title,
+    body.mypage-body .post-title-area .page-title,
+    body.mypage .mypost-main .page-title,
+    body.mypage-body .mypost-main .page-title {
+        font-size: 28px !important;
+    }
 }

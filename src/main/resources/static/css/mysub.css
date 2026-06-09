@@ -884,3 +884,428 @@
         }
     }
 }
+/* =========================================================
+   FINAL SUBSCRIPTION RESTORE PATCH
+========================================================= */
+body.mypage .manage-container {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+body.mypage .manage-grid {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    gap: 28px !important;
+    align-items: stretch !important;
+}
+
+body.mypage .sub-manage-card,
+body.mypage .detail-card,
+body.mypage .history-card {
+    border: 1px solid #dbdbdb !important;
+    border-radius: 24px !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04) !important;
+}
+
+body.mypage .terms-modal-overlay {
+    z-index: 10000 !important;
+}
+
+@media (max-width: 1024px) {
+    body.mypage .manage-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* =========================================================
+   FINAL PATCH v31
+   - 구독 관리 카드 비율 복구
+   - 서비스 로고/주문 내역 탭 표시 보정
+========================================================= */
+
+body.mypage .manage-container,
+body.mypage-body .manage-container {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: 100% !important;
+}
+
+body.mypage .manage-container .page-title,
+body.mypage-body .manage-container .page-title {
+    margin: 0 0 18px !important;
+    font-size: clamp(32px, 2.2vw, 46px) !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.04em !important;
+}
+
+body.mypage .tab-menu,
+body.mypage-body .tab-menu {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 42px !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 44px !important;
+    border-bottom: 2px solid #111111 !important;
+}
+
+body.mypage .tab,
+body.mypage-body .tab {
+    appearance: none !important;
+    border: 0 !important;
+    background: transparent !important;
+    position: relative !important;
+    padding: 14px 0 12px !important;
+    color: #111111 !important;
+    font-size: clamp(17px, 1vw, 20px) !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+}
+
+body.mypage .tab.active,
+body.mypage-body .tab.active {
+    color: #ff4d4d !important;
+    font-weight: 800 !important;
+}
+
+body.mypage .tab.active::before,
+body.mypage-body .tab.active::before {
+    top: -2px !important;
+    height: 3px !important;
+}
+
+body.mypage .tab-content,
+body.mypage-body .tab-content {
+    display: none !important;
+}
+
+body.mypage .tab-content.active,
+body.mypage-body .tab-content.active {
+    display: block !important;
+}
+
+body.mypage .manage-grid,
+body.mypage-body .manage-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: clamp(28px, 2.2vw, 42px) !important;
+    align-items: start !important;
+}
+
+body.mypage .subscription-card-wrap,
+body.mypage-body .subscription-card-wrap {
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+body.mypage .sub-manage-card,
+body.mypage-body .sub-manage-card,
+body.mypage .detail-card,
+body.mypage-body .detail-card {
+    min-height: clamp(640px, 54vh, 820px) !important;
+    padding: clamp(28px, 2vw, 42px) !important;
+    border: 1px solid #b8b8b8 !important;
+    border-radius: 26px !important;
+    box-shadow: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+}
+
+body.mypage .history-card,
+body.mypage-body .history-card {
+    min-height: clamp(640px, 58vh, 880px) !important;
+    padding: clamp(28px, 2vw, 42px) !important;
+    border: 1px solid #b8b8b8 !important;
+    border-radius: 26px !important;
+    box-shadow: none !important;
+    overflow-y: auto !important;
+    max-height: calc(100vh - 260px) !important;
+}
+
+body.mypage .card-header,
+body.mypage-body .card-header {
+    align-items: flex-start !important;
+    margin-bottom: 36px !important;
+}
+
+body.mypage .service-info,
+body.mypage-body .service-info,
+body.mypage .history-left,
+body.mypage-body .history-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px !important;
+    min-width: 0 !important;
+}
+
+body.mypage .sub-logo-small,
+body.mypage-body .sub-logo-small {
+    width: clamp(52px, 3.4vw, 70px) !important;
+    height: clamp(52px, 3.4vw, 70px) !important;
+    flex: 0 0 clamp(52px, 3.4vw, 70px) !important;
+    border-radius: 16px !important;
+    background: #ffffff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+}
+
+body.mypage .sub-logo-small img,
+body.mypage-body .sub-logo-small img {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    display: block !important;
+}
+
+body.mypage .sub-logo-small span,
+body.mypage-body .sub-logo-small span {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 16px !important;
+    background: #1e2d4d !important;
+    color: #ffffff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 24px !important;
+    font-weight: 900 !important;
+}
+
+body.mypage .service-text,
+body.mypage-body .service-text {
+    min-width: 0 !important;
+}
+
+body.mypage .service-info h3,
+body.mypage-body .service-info h3 {
+    margin: 0 !important;
+    font-size: clamp(18px, 1.15vw, 23px) !important;
+    font-weight: 800 !important;
+    color: #111111 !important;
+}
+
+body.mypage .order-num,
+body.mypage-body .order-num {
+    margin: 8px 0 0 !important;
+    font-size: 13px !important;
+    color: #9ca3af !important;
+}
+
+body.mypage .card-btns,
+body.mypage-body .card-btns {
+    gap: 12px !important;
+}
+
+body.mypage .btn-extend,
+body.mypage-body .btn-extend,
+body.mypage .btn-cancel,
+body.mypage-body .btn-cancel,
+body.mypage .btn-re-sub,
+body.mypage-body .btn-re-sub {
+    min-width: 96px !important;
+    height: 38px !important;
+    border-radius: 999px !important;
+    font-size: 13px !important;
+}
+
+body.mypage .btn-extend,
+body.mypage-body .btn-extend,
+body.mypage .btn-re-sub,
+body.mypage-body .btn-re-sub,
+body.mypage .view-terms,
+body.mypage-body .view-terms {
+    background: #193b60 !important;
+    color: #ffffff !important;
+}
+
+body.mypage .order-log-box,
+body.mypage-body .order-log-box {
+    margin-top: 28px !important;
+    margin-bottom: 22px !important;
+    min-height: 150px !important;
+    background: #f5f6f8 !important;
+    border: 1px solid #eceef2 !important;
+    border-radius: 18px !important;
+    padding: 24px !important;
+}
+
+body.mypage .log-title,
+body.mypage-body .log-title {
+    margin: 0 0 22px !important;
+    color: #111111 !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+}
+
+body.mypage .success-text,
+body.mypage-body .success-text {
+    color: #111111 !important;
+    font-weight: 800 !important;
+}
+
+body.mypage .view-terms,
+body.mypage-body .view-terms {
+    height: 56px !important;
+    margin: 0 0 18px !important;
+    border-radius: 12px !important;
+}
+
+body.mypage .detail-info-table,
+body.mypage-body .detail-info-table {
+    margin-top: auto !important;
+}
+
+body.mypage .detail-info-table th,
+body.mypage-body .detail-info-table th,
+body.mypage .detail-info-table td,
+body.mypage-body .detail-info-table td {
+    padding: 15px 0 !important;
+    border-bottom: 1px solid #eeeeee !important;
+    font-size: 14px !important;
+}
+
+body.mypage .detail-info-table .share-label,
+body.mypage-body .detail-info-table .share-label {
+    color: #ff4d4d !important;
+    font-weight: 800 !important;
+    width: 130px !important;
+}
+
+body.mypage .detail-info-table .share-value,
+body.mypage-body .detail-info-table .share-value {
+    text-align: left !important;
+    color: #111111 !important;
+    font-weight: 800 !important;
+}
+
+body.mypage .detail-info-table .share-value span,
+body.mypage-body .detail-info-table .share-value span {
+    color: #c6cbd3 !important;
+    margin-right: 14px !important;
+}
+
+body.mypage .history-item,
+body.mypage-body .history-item {
+    min-height: 150px !important;
+    padding: 30px 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 28px !important;
+}
+
+body.mypage .history-info,
+body.mypage-body .history-info {
+    min-width: 0 !important;
+}
+
+body.mypage .history-info strong,
+body.mypage-body .history-info strong {
+    color: #111111 !important;
+    font-size: clamp(17px, 1vw, 21px) !important;
+    font-weight: 800 !important;
+}
+
+body.mypage .history-info span,
+body.mypage-body .history-info span {
+    color: #111111 !important;
+    font-size: 14px !important;
+    margin-top: 8px !important;
+}
+
+body.mypage .history-status,
+body.mypage-body .history-status {
+    display: inline-flex !important;
+    margin-left: 8px !important;
+    color: #ff4d4d !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+}
+
+body.mypage .history-right,
+body.mypage-body .history-right {
+    min-width: 220px !important;
+    align-items: flex-end !important;
+    gap: 36px !important;
+}
+
+body.mypage .order-code,
+body.mypage-body .order-code {
+    color: #111111 !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+}
+
+body.mypage .history-divider,
+body.mypage-body .history-divider {
+    border: 0 !important;
+    border-top: 1px solid #111111 !important;
+    margin: 0 !important;
+}
+
+body.mypage .empty-subscription-card,
+body.mypage-body .empty-subscription-card,
+body.mypage .empty-history-message,
+body.mypage-body .empty-history-message {
+    width: 100% !important;
+    min-height: 220px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #888888 !important;
+    font-size: 16px !important;
+    border: 1px dashed #d7dbe3 !important;
+    border-radius: 20px !important;
+}
+
+@media (max-width: 1280px) {
+    body.mypage .manage-grid,
+    body.mypage-body .manage-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 768px) {
+    body.mypage .tab-menu,
+    body.mypage-body .tab-menu {
+        gap: 24px !important;
+    }
+
+    body.mypage .card-header,
+    body.mypage-body .card-header,
+    body.mypage .history-item,
+    body.mypage-body .history-item {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+
+    body.mypage .history-right,
+    body.mypage-body .history-right {
+        width: 100% !important;
+        min-width: 0 !important;
+        align-items: flex-start !important;
+        gap: 14px !important;
+    }
+}
+
+body.mypage .sub-logo-small.logo-fallback::before,
+body.mypage-body .sub-logo-small.logo-fallback::before {
+    content: attr(data-initial);
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    background: #1e2d4d;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 900;
+}

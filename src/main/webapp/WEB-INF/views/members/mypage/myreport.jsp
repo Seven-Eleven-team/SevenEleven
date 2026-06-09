@@ -1,531 +1,767 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+
 <c:set var="menu" value="reports"/>
 
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <%@ include file="/WEB-INF/views/common/include/head.jspf" %>
+
     <meta charset="UTF-8">
     <title>지출메이트 - 내 신고 목록</title>
 
-    <!-- 공통 및 전용 CSS -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/mypage.css?v=2">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/myreport.css">
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/css/mypage.css?v=31">
 
     <style>
-    body.mypage .hamburger-btn{
-        display:flex !important;
-        flex-direction:column !important;
-        justify-content:center !important;
-        align-items:center !important;
-        gap:4px !important;
-    }
-
-    body.mypage .hamburger-btn span{
-        display:block !important;
-        width:22px !important;
-        height:2px !important;
-        background:white !important;
-        border-radius:999px !important;
-    }
-      /*풋터*/
-        .footer {
-            width: 100%;
-            background: #243864;
-            color: white;
-            padding: 40px 0;
-            margin-top: 60px;
-        }
-       body.mypage {
-           padding-top: 78px;
-
-           min-height: 100vh;
-
-           display: flex;
-           flex-direction: column;
-       }
-       .mypage-container {
-           flex: 1;
-       }
-    /*헤더*/
-         /* 마이페이지에서는 로그인 버튼 숨김 */
-         body.mypage .auth-link {
-             display: none !important;
-         }
-         body.mypage .header-action-area {
-             position: absolute !important;
-             right: 36px !important;
-         }
-
-         body.mypage .user-profile-link {
-             display: flex !important;
-         }
-         /* 공통 햄버거 사이드바 */
-         body.mypage nav.sidebar {
-             position: fixed;
-             top: 78px;
-             left: -260px;
-
-             width: 250px;
-             height: calc(100vh - 78px);
-
-             background: white;
-             border-right: 1px solid #ddd;
-
-             transition: all 0.3s ease;
-
-             z-index: 9998;
-
-             padding-top: 20px;
-         }
-
-         body.mypage nav.sidebar.open {
-             left: 0;
-         }
-
- body.mypage nav.sidebar {
-     position: fixed;
-     top: 78px;
-     left: -260px;
-     width: 250px;
-     height: calc(100vh - 78px);
-
-     background: #243864; /* ⭐ 네이비 (핵심) */
-     border-right: none;
-
-     transition: all 0.3s ease;
-     z-index: 9998;
-     padding-top: 20px;
- }
-
- body.mypage nav.sidebar.open {
-     left: 0;
- }
-
- /* 리스트 기본 */
- body.mypage nav.sidebar ul {
-     list-style: none;
-     padding: 0;
-     margin: 0;
- }
-
- /* 메뉴 아이템 */
- body.mypage nav.sidebar li {
-     width: 100%;
- }
-
- /* 링크 */
- body.mypage nav.sidebar li a {
-     display: flex;
-     align-items: center;
-
-     height: 54px;
-     padding: 0 24px;
-
-     color: white; /* ⭐ 네이비라서 흰 글씨 */
-     text-decoration: none;
-     font-size: 16px;
-     font-weight: 500;
-
-     transition: 0.2s;
- }
-
- /* hover */
- body.mypage nav.sidebar li a:hover {
-     background: rgba(255, 255, 255, 0.12);
- }
-
- /* 로그아웃 영역 */
- .sidebar-logout {
-     position: absolute;
-     bottom: 20px;
-     left: 0;
-     width: 100%;
- }
-
- .sidebar-logout a {
-     display: flex;
-     align-items: center;
-     gap: 8px;
-     padding: 0 24px;
-     height: 54px;
-
-     color: white;
-     text-decoration: none;
- }
-
- .sidebar-logout a:hover {
-     background: rgba(255, 255, 255, 0.12);
- }
-
-         /* 마이페이지에서는 공통 사이드 드롭다운 숨김 */
-         body.mypage .sidebar-overlay,
-         body.mypage .sidebar-drawer,
-         body.mypage .sidebar-menu,
-         body.mypage .mobile-sidebar {
-             display: none !important;
-         }
-        /* 공통 헤더 */
-     body.mypage .site-header {
-         position: fixed !important;
-         top: 0 !important;
-         left: 0 !important;
-         width: 100% !important;
-         height: 78px !important;
-         background: rgba(25, 59, 96, 0.96) !important;
-
-         display: flex !important;
-         align-items: center !important;
-         justify-content: center !important;
-
-         z-index: 9999 !important;
-     }
-
-        /* 우측 영역 */
-       body.mypage .header-action-area {
-            position: absolute;
-            right: 36px;
-        }
-        body.mypage .site-logo {
-            color: white !important;
-            font-size: 28px !important;
-            font-weight: 800 !important;
-            margin: 0 !important;
+        .report-main {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
         }
 
-        body.mypage .hamburger-btn {
-            position: absolute !important;
-            left: 36px !important;
-
-            width: 42px !important;
-            height: 42px !important;
-
-            border: none !important;
-            border-radius: 12px !important;
-
-            background: rgba(255,255,255,0.15) !important;
-            color: white !important;
-
-            font-size: 22px !important;
-        }
-
-        body.mypage .header-action-area {
-            position: absolute !important;
-            right: 36px !important;
-        }
-
-        body.mypage .auth-link {
-            color: white !important;
-            text-decoration: none !important;
-        }
-
-        body.mypage .user-profile-link {
-            width: 46px !important;
-            height: 46px !important;
-
-            border-radius: 50% !important;
-            background: white !important;
-
-        /* 레이아웃 틀 고정 (사이드바 + 메인) */
-        .mypage-container {
-            display: flex !important;
-            flex-direction: row !important;
-            align-items: stretch !important;
-            gap: 26px !important;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 0;
-            flex: 1;
-        }
-
-        /* 헤더 고정 스타일 */
-        body.mypage .site-header {
-            position: fixed !important; top: 0 !important; left: 0 !important;
-            width: 100% !important; height: 78px !important;
-            background: #243864 !important; display: flex !important;
-            align-items: center !important; justify-content: center !important; z-index: 9999 !important;
-        }
-
-        /* 사이드바 스타일 */
-        .mypage-sidebar {
-            width: 250px !important; min-width: 250px !important; height: auto !important;
-            background: #ffffff !important; border: 1px solid #dddddd !important;
-            border-radius: 20px !important; padding: 0 !important; display: flex !important;
-            align-items: center !important;
-        }
-
-        /* 메인 영역 */
-        .report-main { flex: 1; }
-
-        /* 제목과 버튼을 한 줄로 배치 */
-        .page-header {
+        .report-page-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .page-title {
-            font-size: 24px;
-            font-weight: 800;
-            color: #333;
-            margin-bottom: 0;
+            align-items: flex-end;
+            gap: 18px;
         }
 
-        /* 필터 버튼 스타일 */
+        .report-title-area {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .report-title-area .page-title {
+            margin: 0;
+        }
+
+        .report-subtitle {
+            margin: 0;
+            color: #6b7280;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
         .filter-container {
             display: flex;
-            gap: 10px;
-            margin-bottom: 0;
-        }
-        .filter-btn {
-            padding: 8px 16px;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            background: white;
-            color: #666;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-        .filter-btn:hover { background: #f0f0f0; color: #333; }
-        .filter-btn.active {
-            background: #645495;
-            color: white;
-            border-color: #645495;
-            font-weight: 600;
-        }
-
-        /* 테이블 스타일 (네모 박스 제거 버전) */
-        .report-table {
-            background: transparent;
-            border: none;
-            border-radius: 0;
-            box-shadow: none;
-        }
-        .table-header {
-            display: flex;
-            background: white;
-            border-bottom: 1px solid #eee;
-            font-weight: bold;
-            color: #333;
-            text-align: center;
-            padding: 15px 0;
-        }
-        .table-row {
-            display: flex;
-            background: white;
-            border-bottom: 1px solid #f5f5f5;
             align-items: center;
-            transition: background 0.2s;
-            cursor: pointer;
-            padding: 15px 0;
+            gap: 10px;
+            flex-wrap: wrap;
         }
-        .table-row:hover { background: #fafafa; }
 
-        /* 컬럼 너비 설정 */
-        .col-no { width: 10%; text-align: center; }
-        .col-title { width: 45%; text-align: left; padding: 0 20px; color: #333; }
-        .col-answer { width: 20%; text-align: center; }
-        .col-date { width: 15%; text-align: center; }
-        .col-manage { width: 10%; display: flex; justify-content: center; }
+        .filter-btn {
+            min-width: 86px;
+            height: 40px;
+            padding: 0 15px;
+            border: 1px solid #d8dce5;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #4b5563;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+            text-decoration: none;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        }
 
-        /* 상태 표시 스타일 */
-        .status-complete { color: #10b981; font-weight: 600; }
-        .status-pending { color: #f59e0b; font-weight: 600; }
+        .filter-btn:hover {
+            background: #f4f6fa;
+            transform: translateY(-1px);
+        }
 
-        /* 버튼 스타일 (통일된 보라색) */
-        .btn-action {
-            padding: 6px 12px;
-            border-radius: 15px;
-            border: none;
-            font-size: 12px;
-            cursor: pointer;
+        .filter-btn.active {
+            background: #243864;
+            border-color: #243864;
+            color: #ffffff;
+        }
+
+        .report-card {
+            width: 100%;
+            min-height: 620px;
+            padding: 30px 34px;
+            border: 1px solid #e2e4ea;
+            border-radius: 24px;
+            background: #ffffff;
+            box-shadow: 0 8px 24px rgba(17, 24, 39, 0.04);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .report-table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .report-table {
+            width: 100%;
+            min-width: 780px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .table-header,
+        .table-row {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 80px minmax(280px, 1fr) 130px 170px 130px;
+            align-items: center;
+        }
+
+        .table-header {
+            min-height: 54px;
+            border-top: 1px solid #e2e4ea;
+            border-bottom: 1px solid #e2e4ea;
+            background: #f8fafc;
+            color: #222222;
+            font-size: 14px;
+            font-weight: 900;
+            text-align: center;
+        }
+
+        .table-row {
+            min-height: 68px;
+            border-bottom: 1px solid #eef0f4;
+            background: #ffffff;
+            color: #333333;
+            font-size: 14px;
             font-weight: 600;
-            transition: 0.2s;
-            background: #645495;
-            color: white;
+            transition: background 0.2s ease;
         }
-        .btn-action:hover { background: #4f4178; }
-        .btn-delete:hover { background: #ff4d4d; }
 
-        /* 데이터 없을 때 */
-        .empty-msg { text-align: center; padding: 60px 0; color: #999; font-size: 15px; }
+        .table-row:hover {
+            background: #fbfcff;
+        }
 
-        /* 페이지네이션 스타일 */
-        .pagination { display: flex; justify-content: center; margin-top: 20px; gap: 5px; }
-        .page-link { padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px;
-                    text-decoration: none; color: #333; font-size: 14px; }
-        .page-link.active { background: #645495; color: white; border-color: #645495; }
+        .col-no,
+        .col-answer,
+        .col-date,
+        .col-manage {
+            text-align: center;
+        }
 
-        /* 신고 상세 팝업 (통일된 디자인) */
+        .col-title {
+            min-width: 0;
+            padding: 0 20px;
+        }
+
+        .report-title-link {
+            display: block;
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: #111111;
+            font-size: 15px;
+            font-weight: 800;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .report-title-link:hover {
+            color: #243864;
+            text-decoration: underline;
+        }
+
+        .status-badge {
+            min-width: 76px;
+            height: 30px;
+            padding: 0 10px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .status-badge.done {
+            background: #e9f8ef;
+            color: #1f9d55;
+        }
+
+        .status-badge.wait {
+            background: #fff4df;
+            color: #d48600;
+        }
+
+        .btn-delete {
+            min-width: 64px;
+            height: 34px;
+            padding: 0 12px;
+            border: 1px solid #ff4d4d;
+            border-radius: 10px;
+            background: #ffffff;
+            color: #ff4d4d;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+        }
+
+        .btn-delete:hover {
+            background: #ff4d4d;
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .empty-msg {
+            min-height: 360px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8a8f98;
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .pagination {
+            width: 100%;
+            margin-top: auto;
+            padding-top: 28px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .page-link {
+            min-width: 36px;
+            height: 36px;
+            padding: 0 12px;
+            border: 1px solid #d8dce5;
+            border-radius: 10px;
+            background: #ffffff;
+            color: #4b5563;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+            text-decoration: none;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .page-link:hover {
+            background: #f4f6fa;
+        }
+
+        .page-link.active {
+            background: #243864;
+            border-color: #243864;
+            color: #ffffff;
+        }
+
         .report-modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.45); z-index: 5000; justify-content: center; align-items: center;
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            padding: 24px;
+            background: rgba(0, 0, 0, 0.45);
+            align-items: center;
+            justify-content: center;
             backdrop-filter: blur(3px);
         }
+
         .report-modal-content {
-            width: 700px; background: white; border-radius: 24px; padding: 30px;
-            position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2); animation: modalPop 0.3s ease;
+            width: min(100%, 720px);
+            max-height: min(760px, calc(100vh - 48px));
+            overflow-y: auto;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 34px;
+            position: relative;
+            box-shadow: 0 20px 46px rgba(0, 0, 0, 0.2);
+            animation: modalPop 0.25s ease both;
         }
-        @keyframes modalPop { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .report-close-btn { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; color: #aaa; }
-        .report-detail-title { font-size: 22px; font-weight: 700; color: #111; margin-bottom: 15px; }
-        .report-divider { width: 100%; height: 1px; background: #eee; margin-bottom: 20px; }
-        .report-box, .answer-box {
-            width: 100%; min-height: 120px; border: 1px solid #eef0f2; border-radius: 12px;
-            background: #fcfcfc; padding: 20px; margin-bottom: 20px; font-size: 15px;
-            color: #444; line-height: 1.7; box-sizing: border-box;
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        .answer-box { background: #f0f4ff; border-color: #dbe2ff; }
+
+        .report-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 22px;
+            color: #888888;
+            font-size: 28px;
+            font-weight: 900;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .report-close-btn:hover {
+            color: #111111;
+        }
+
+        .report-detail-title {
+            margin: 0 34px 18px 0;
+            color: #111111;
+            font-size: 24px;
+            font-weight: 900;
+            line-height: 1.35;
+            word-break: keep-all;
+        }
+
+        .report-divider {
+            width: 100%;
+            height: 1px;
+            background: #eef0f4;
+            margin-bottom: 22px;
+        }
+
+        .modal-label {
+            margin: 0 0 8px;
+            color: #4b5563;
+            font-size: 14px;
+            font-weight: 900;
+        }
+
+        .report-box,
+        .answer-box {
+            width: 100%;
+            min-height: 120px;
+            padding: 20px;
+            border: 1px solid #eef0f4;
+            border-radius: 14px;
+            background: #fcfcfd;
+            color: #333333;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.75;
+            word-break: keep-all;
+            white-space: pre-wrap;
+            margin-bottom: 22px;
+        }
+
+        .answer-box {
+            background: #f4f7ff;
+            border-color: #dfe7ff;
+        }
+
         .confirm-btn {
-            width: 120px; height: 45px; border: none; border-radius: 12px;
-            background: #645495; color: white; font-size: 15px; font-weight: 700;
-            cursor: pointer; float: right; transition: 0.2s;
+            min-width: 120px;
+            height: 46px;
+            margin-left: auto;
+            border: none;
+            border-radius: 14px;
+            background: #243864;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: opacity 0.2s ease, transform 0.2s ease;
         }
-        .confirm-btn:hover { background: #4f4178; }
+
+        .confirm-btn:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            .report-page-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .filter-container {
+                width: 100%;
+            }
+
+            .filter-btn {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .report-card {
+                min-height: 520px;
+                padding: 24px 20px;
+                border-radius: 20px;
+            }
+
+            .table-header,
+            .table-row {
+                grid-template-columns: 70px minmax(240px, 1fr) 120px 150px 110px;
+            }
+
+            .report-modal-content {
+                padding: 28px 22px;
+                border-radius: 20px;
+            }
+
+            .report-detail-title {
+                font-size: 21px;
+            }
+        }
     </style>
 </head>
 
-<body class="mypage">
+<body class="mypage is-header-ready is-opening-loaded is-fab-ready">
 
 <%@ include file="/WEB-INF/views/common/layout/header.jspf" %>
 
+<script id="mypageHeaderInit">
+    (function () {
+        function initMypageCommonHeaderFallback() {
+            const hamburger = document.querySelector('.hamburger-btn');
+
+            if (!hamburger || hamburger.dataset.mypageSidebarBound === 'true') {
+                return;
+            }
+
+            hamburger.dataset.mypageSidebarBound = 'true';
+            hamburger.setAttribute('aria-expanded', 'false');
+
+            const sidebarSelectors = [
+                '#sidebar',
+                '#sideBar',
+                '#sideMenu',
+                '#sidebarMenu',
+                '#mobileMenu',
+                '#menuDrawer',
+                '.sidebar',
+                '.side-bar',
+                '.side-nav',
+                '.side-menu',
+                '.sidebar-menu',
+                '.mobile-menu',
+                '.mobile-sidebar',
+                '.menu-drawer',
+                '.drawer-menu',
+                '.nav-drawer',
+                '.header-sidebar',
+                '.global-sidebar',
+                '.layout-sidebar'
+            ];
+
+            const overlaySelectors = [
+                '#sidebarOverlay',
+                '#sideOverlay',
+                '#menuOverlay',
+                '.sidebar-overlay',
+                '.side-overlay',
+                '.menu-overlay',
+                '.drawer-overlay',
+                '.nav-overlay',
+                '.global-dim',
+                '.dimmed-layer'
+            ];
+
+            function getElements(selectors) {
+                return selectors
+                    .flatMap(function (selector) {
+                        return Array.from(document.querySelectorAll(selector));
+                    })
+                    .filter(function (element, index, array) {
+                        return element && array.indexOf(element) === index;
+                    });
+            }
+
+            function isOpened() {
+                return document.body.classList.contains('is-sidebar-open')
+                    || document.body.classList.contains('sidebar-open')
+                    || hamburger.classList.contains('is-open')
+                    || hamburger.classList.contains('active');
+            }
+
+            function setSidebarOpen(open) {
+                document.body.classList.toggle('is-sidebar-open', open);
+                document.body.classList.toggle('sidebar-open', open);
+                document.documentElement.classList.toggle('is-sidebar-open', open);
+
+                hamburger.classList.toggle('is-open', open);
+                hamburger.classList.toggle('active', open);
+                hamburger.setAttribute('aria-expanded', String(open));
+
+                getElements(sidebarSelectors).forEach(function (element) {
+                    element.hidden = false;
+                    element.classList.toggle('is-open', open);
+                    element.classList.toggle('open', open);
+                    element.classList.toggle('active', open);
+                    element.classList.toggle('show', open);
+                    element.setAttribute('aria-hidden', String(!open));
+                });
+
+                getElements(overlaySelectors).forEach(function (element) {
+                    element.hidden = false;
+                    element.classList.toggle('is-open', open);
+                    element.classList.toggle('open', open);
+                    element.classList.toggle('active', open);
+                    element.classList.toggle('show', open);
+                    element.setAttribute('aria-hidden', String(!open));
+                });
+            }
+
+            hamburger.addEventListener('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                event.stopImmediatePropagation();
+                setSidebarOpen(!isOpened());
+            }, true);
+
+            document.addEventListener('click', function (event) {
+                if (!isOpened()) {
+                    return;
+                }
+
+                const closeTarget = event.target.closest(
+                    '.sidebar-overlay, .side-overlay, .menu-overlay, .drawer-overlay, .nav-overlay, ' +
+                    '.sidebar-close, .side-close, .menu-close, .drawer-close, ' +
+                    '[data-sidebar-close], [data-menu-close]'
+                );
+
+                if (closeTarget) {
+                    setSidebarOpen(false);
+                }
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape' && isOpened()) {
+                    setSidebarOpen(false);
+                }
+            });
+        }
+
+        document.querySelector('.site-header')?.classList.add('is-solid');
+        document.body.classList.add('is-header-ready');
+        document.body.classList.add('is-opening-loaded');
+        document.body.classList.add('is-fab-ready');
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initMypageCommonHeaderFallback);
+        } else {
+            initMypageCommonHeaderFallback();
+        }
+    })();
+</script>
+
 <div class="mypage-container">
-    <!-- 사이드바 고정 include -->
+
     <aside class="mypage-sidebar">
         <%@ include file="/WEB-INF/views/members/mypage/mypage-sidebar.jspf" %>
     </aside>
 
-    <!-- 메인 본문 -->
     <main class="report-main">
-        <!-- 제목과 버튼을 한 줄로 배치 -->
-        <div class="page-header">
-            <h1 class="page-title">내 신고 목록</h1>
+
+        <div class="report-page-header">
+            <div class="report-title-area">
+                <h1 class="page-title">내 신고 목록</h1>
+                <p class="report-subtitle">
+                    내가 접수한 신고 내역과 관리자 답변 상태를 확인할 수 있습니다.
+                </p>
+            </div>
+
             <div class="filter-container">
-                <a href="?filter=all" class="filter-btn ${param.filter == 'all' || empty param.filter ? 'active' : ''}">전체</a>
-                <a href="?filter=completed" class="filter-btn ${param.filter == 'completed' ? 'active' : ''}">답변 완료</a>
-                <a href="?filter=pending" class="filter-btn ${param.filter == 'pending' ? 'active' : ''}">답변 전</a>
+                <a href="?filter=all"
+                   class="filter-btn ${param.filter == 'all' || empty param.filter ? 'active' : ''}">
+                    전체
+                </a>
+
+                <a href="?filter=completed"
+                   class="filter-btn ${param.filter == 'completed' ? 'active' : ''}">
+                    답변 완료
+                </a>
+
+                <a href="?filter=pending"
+                   class="filter-btn ${param.filter == 'pending' ? 'active' : ''}">
+                    답변 전
+                </a>
             </div>
         </div>
 
         <section class="report-card">
-            <div class="report-table">
-                <!-- 테이블 헤더 -->
-                <div class="table-header">
-                    <div class="col-no">순번</div>
-                    <div class="col-title">제목</div>
-                    <div class="col-answer">답변여부</div>
-                    <div class="col-date">신고시각</div>
-                    <div class="col-manage">관리</div>
-                </div>
 
-                <!-- ✅ DB 데이터 출력 루프 (하드코딩 제거, DB 연동) -->
-                <c:choose>
-                    <c:when test="${not empty reports and not empty reports.content}">
-                        <c:forEach var="r" items="${reports.content}" varStatus="status">
-                            <div class="table-row">
-                                <div class="col-no">${status.count}</div>
-                                <div class="col-title"
-                                     style="cursor:pointer; color:#1e2d4d; font-weight:500;"
-                                     onclick="openReportModal('${r.title}', '${r.content}', '${r.answerContent}')">
-                                    ${r.title}
+            <div class="report-table-wrap">
+                <div class="report-table">
+
+                    <div class="table-header">
+                        <div class="col-no">순번</div>
+                        <div class="col-title">제목</div>
+                        <div class="col-answer">답변여부</div>
+                        <div class="col-date">신고시각</div>
+                        <div class="col-manage">관리</div>
+                    </div>
+
+                    <c:choose>
+                        <c:when test="${not empty reports and not empty reports.content}">
+                            <c:forEach var="r" items="${reports.content}" varStatus="status">
+                                <div class="table-row">
+                                    <div class="col-no">
+                                            ${(reports.number * reports.size) + status.count}
+                                    </div>
+
+                                    <div class="col-title">
+                                        <button type="button"
+                                                class="report-title-link"
+                                                onclick="openReportModal(this)"
+                                                data-title="${fn:escapeXml(r.title)}"
+                                                data-content="${fn:escapeXml(r.content)}"
+                                                data-answer="${fn:escapeXml(r.answerContent)}">
+                                                ${r.title}
+                                        </button>
+                                    </div>
+
+                                    <div class="col-answer">
+                                        <span class="status-badge ${r.status == 'ANSWERED' ? 'done' : 'wait'}">
+                                                ${r.status == 'ANSWERED' ? '답변 완료' : '답변 전'}
+                                        </span>
+                                    </div>
+
+                                    <div class="col-date">
+                                            ${r.createdAt}
+                                    </div>
+
+                                    <div class="col-manage">
+                                        <button type="button"
+                                                class="btn-delete"
+                                                onclick="deleteReport(${r.reportId})">
+                                            삭제
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="col-answer">
-                                    <span class="${r.status == 'ANSWERED' ? 'status-complete' : 'status-pending'}">
-                                        ${r.status == 'ANSWERED' ? '답변 완료' : '답변 전'}
-                                    </span>
-                                </div>
-                                <div class="col-date">${r.createdAt}</div>
-                                <div class="col-manage">
-                                    <button type="button" class="btn-action btn-delete" onclick="deleteReport(${r.reportId})">삭제</button>
-                                </div>
+                            </c:forEach>
+                        </c:when>
+
+                        <c:otherwise>
+                            <div class="empty-msg">
+                                신고하신 내역이 없습니다.
                             </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="empty-msg">신고하신 내역이 없습니다.</div>
-                    </c:otherwise>
-                </c:choose>
+                        </c:otherwise>
+                    </c:choose>
+
+                </div>
             </div>
 
-            <!-- 페이지네이션 (Page 객체 기반) -->
             <c:if test="${not empty reports and reports.totalPages > 0}">
                 <div class="pagination">
+
+                    <c:if test="${reports.number > 0}">
+                        <a href="?filter=${param.filter}&page=${reports.number - 1}"
+                           class="page-link">
+                            이전
+                        </a>
+                    </c:if>
+
                     <c:forEach begin="0" end="${reports.totalPages - 1}" var="i">
-                        <a href="?page=${i + 1}" class="page-link ${reports.number == i ? 'active' : ''}">${i + 1}</a>
+                        <a href="?filter=${param.filter}&page=${i}"
+                           class="page-link ${reports.number == i ? 'active' : ''}">
+                                ${i + 1}
+                        </a>
                     </c:forEach>
+
+                    <c:if test="${reports.number < reports.totalPages - 1}">
+                        <a href="?filter=${param.filter}&page=${reports.number + 1}"
+                           class="page-link">
+                            다음
+                        </a>
+                    </c:if>
+
                 </div>
             </c:if>
+
         </section>
+
     </main>
+
 </div>
 
-<!-- 신고 상세 팝업 -->
 <div id="reportModal" class="report-modal-overlay">
     <div class="report-modal-content">
         <span class="report-close-btn" onclick="closeReportModal()">&times;</span>
-        <div class="report-detail-title" id="modalTitle">신고 상세 내용</div>
+
+        <h2 class="report-detail-title" id="modalTitle">신고 상세 내용</h2>
+
         <div class="report-divider"></div>
 
-        <div style="font-weight:bold; margin-bottom:5px; color:#666;">[신고 내용]</div>
-        <div class="report-box" id="modalReport">신고 내용</div>
+        <p class="modal-label">신고 내용</p>
+        <div class="report-box" id="modalReport"></div>
 
-        <div style="font-weight:bold; margin-bottom:5px; color:#666;">[관리자 답변]</div>
-        <div class="answer-box" id="modalAnswer">관리자 답변</div>
+        <p class="modal-label">관리자 답변</p>
+        <div class="answer-box" id="modalAnswer"></div>
 
-        <button class="confirm-btn" onclick="closeReportModal()">확인</button>
+        <button type="button"
+                class="confirm-btn"
+                onclick="closeReportModal()">
+            확인
+        </button>
     </div>
 </div>
 
 <%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
+<%@ include file="/WEB-INF/views/common/include/scripts.jspf" %>
 
 <script>
-    function openReportModal(title, report, answer){
+    function openReportModal(element) {
+        const title = element.getAttribute('data-title') || '신고 상세 내용';
+        const report = element.getAttribute('data-content') || '';
+        const answer = element.getAttribute('data-answer') || '';
+
         document.getElementById('modalTitle').innerText = title;
         document.getElementById('modalReport').innerText = report;
-        document.getElementById('modalAnswer').innerText = (answer && answer.trim() !== "") ? answer : "아직 답변이 등록되지 않았습니다.";
+        document.getElementById('modalAnswer').innerText =
+            answer.trim() !== '' ? answer : '아직 답변이 등록되지 않았습니다.';
+
         document.getElementById('reportModal').style.display = 'flex';
     }
 
-    function closeReportModal(){
+    function closeReportModal() {
         document.getElementById('reportModal').style.display = 'none';
     }
 
     function deleteReport(reportId) {
-        if (confirm("정말로 이 신고 내역을 삭제하시겠습니까?")) {
-            fetch('${pageContext.request.contextPath}/mypage/reports/delete/' + reportId, {
-                method: 'DELETE'
-            })
-            .then(res => {
+        if (!confirm('정말로 이 신고 내역을 삭제하시겠습니까?')) {
+            return;
+        }
+
+        fetch('${pageContext.request.contextPath}/mypage/reports/delete/' + reportId, {
+            method: 'DELETE'
+        })
+            .then(function (res) {
                 if (res.ok) {
-                    alert("삭제되었습니다.");
+                    alert('삭제되었습니다.');
                     location.reload();
                 } else {
-                    alert("삭제에 실패했습니다.");
+                    alert('삭제에 실패했습니다.');
                 }
             })
-            .catch(err => alert("서버 오류가 발생했습니다."));
-        }
+            .catch(function (err) {
+                console.error(err);
+                alert('서버 오류가 발생했습니다.');
+            });
     }
 
-    window.addEventListener('click', function(event){
+    window.addEventListener('click', function (event) {
         const modal = document.getElementById('reportModal');
-        if(event.target === modal){
+
+        if (event.target === modal) {
             closeReportModal();
         }
     });
 
     document.addEventListener("DOMContentLoaded", function () {
-        const hamburgerBtn = document.querySelector('.hamburger-btn');
-        const sidebar = document.querySelector('nav.sidebar');
-        if (hamburgerBtn && sidebar) {
-            hamburgerBtn.addEventListener('click', function () {
-                sidebar.classList.toggle('open');
-            });
-        }
     });
 </script>
 
