@@ -353,7 +353,7 @@ public class CommunityController {
 
         int safePage = Math.max(page, 1);
 
-        Pageable pageable = PageRequest.of(safePage - 1, PAGE_SIZE);
+        Pageable pageable = PageRequest.of(safePage - 1, 10);
         Page<Board> postPage = communityService.findMyCommunityPosts(loginUserId, pageable);
 
         if (postPage.getTotalPages() > 0 && safePage > postPage.getTotalPages()) {
@@ -362,7 +362,8 @@ public class CommunityController {
             postPage = communityService.findMyCommunityPosts(loginUserId, pageable);
         }
 
-        model.addAttribute("posts", postPage.getContent());
+
+        model.addAttribute("boards", postPage);
 
         addPaginationAttributes(model, postPage, safePage);
 

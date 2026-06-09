@@ -16,4 +16,7 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Long> {
 
     // 2. MyPageService 용 (페이징 + 최신순 정렬)
     Page<Inquiry> findByUserIdOrderByCreatedAtDesc(Long userId, Pageable pageable);
+
+    // 3. 상태(status)와 사용자 ID로 필터링하여 페이징 조회
+    Page<Inquiry> findByUserIdAndStatusOrderByCreatedAtDesc(Long userId, String status, Pageable pageable);
 }

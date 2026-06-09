@@ -82,13 +82,15 @@
              display: none !important;
          }
         /* 공통 헤더 */
-     body.mypage .site-header {
+    body.mypage .site-header {
          position: fixed !important;
          top: 0 !important;
          left: 0 !important;
          width: 100% !important;
          height: 78px !important;
          background: rgba(25, 59, 96, 0.96) !important;
+    }
+
 
         /* 사이드바 스타일 */
         .mypage-sidebar {
@@ -103,11 +105,21 @@
 
         /* 제목과 알림 설정을 한 줄로 배치 */
         .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex !important;
+            justify-content: space-between !important; /* 양 끝으로 밀어냅니다 */
+            align-items: center !important; /* 세로 중앙 정렬 */
             margin-bottom: 20px;
+            width: 100%;
         }
+        .email-setting {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* 글씨와 토글 사이 간격 */
+            font-weight: 600;
+            color: #333;
+        }
+
+
         .page-title {
             font-size: 24px;
             font-weight: 800;
@@ -115,7 +127,7 @@
             margin-bottom: 0;
         }
 
-     body.mypage .hamburger-btn {
+        body.mypage .hamburger-btn {
                position: absolute !important;
                left: 36px !important;
                width: 42px !important;
@@ -186,14 +198,68 @@
             font-weight: 700;
         }
 
+
+                .alarm-card {
+                    width: 100%;
+                    min-height: 760px; /* 다른 카드들과 높이를 맞춥니다 */
+                    background: white;
+                    border: 1px solid #dbdbdb;
+                    border-radius: 24px;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+                    padding: 30px 35px;
+                    display: flex;
+                    flex-direction: column;
+                    box-sizing: border-box;
+                }
+
+                /* 알림 리스트가 카드의 남은 공간을 차지하도록 */
+                .alarm-table {
+                    flex: 1;
+                }
+
+
+
         /* 데이터 없을 때 */
         .empty-msg { text-align: center; padding: 60px 0; color: #999; font-size: 15px; }
 
+        .icon-badge {
+                    background-color: #eef1f6;
+                    color: #243864;
+                    padding: 4px 10px;
+                    border-radius: 6px;
+                    font-size: 12px;
+                    font-weight: 700;
+                    white-space: nowrap;
+                }
+
         /* 페이지네이션 스타일 */
-        .pagination { display: flex; justify-content: center; margin-top: 20px; gap: 5px; }
-        .page-link { padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px;
-                    text-decoration: none; color: #333; font-size: 14px; }
-        .page-link.active { background: #645495; color: white; border-color: #645495; }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: auto;
+            padding-top: 30px;
+            gap: 8px;
+            width: 100%;
+        }
+        .page-link {
+            display: inline-block;
+            padding: 8px 14px;
+            border: 1px solid #ddd !important;
+            border-radius: 8px !important;
+            text-decoration: none !important; /* 파란 밑줄 강제 제거 */
+            color: #52616B !important; /* 파란 글씨 강제 제거 */
+            font-weight: 600;
+            background: #fff;
+            transition: all 0.2s;
+        }
+        .page-link.active {
+            background: #243864 !important; /* 지출메이트 네이비 */
+            color: white !important;
+            border-color: #243864 !important;
+        }
+        .page-link:hover:not(.active) {
+            background: #f1f3f5 !important;
+        }
     </style>
 </head>
 <body class="mypage">
@@ -210,7 +276,7 @@
         <div class="page-header">
             <h1 class="page-title">알림</h1>
             <div class="email-setting">
-                <span>📧 이메일 알림</span>
+                <span>이메일 알림</span>
                 <label class="switch">
                     <input type="checkbox" checked>
                     <span class="slider"></span>
@@ -220,18 +286,13 @@
 
         <section class="alarm-card">
             <div class="alarm-table">
-                <!-- DB 데이터 출력 루프 -->
                 <c:choose>
-                    <c:when test="${not empty notifications and not empty notifications.content}">
-                        <c:forEach var="noti" items="${notifications.content}">
+                    <c:when test="${not empty alarms and not empty alarms.content}">
+                        <c:forEach var="noti" items="${alarms.content}">
                             <div class="alarm-row">
                                 <div class="alarm-left">
                                     <span class="alarm-icon">
-                                        <c:choose>
-                                            <c:when test="${noti.type == 'EMAIL'}">📧</c:when>
-                                            <c:when test="${noti.type == 'PUSH'}">🔔</c:when>
-                                            <c:otherwise>📌</c:otherwise>
-                                        </c:choose>
+                                        <span class="icon-badge">알림</span>
                                     </span>
                                     <span class="alarm-text">
                                         ${noti.content}
@@ -241,17 +302,15 @@
                         </c:forEach>
                     </c:when>
                     <c:otherwise>
-                        <!-- ✅ 예시 데이터 삭제: 데이터가 없을 때 이 메시지만 출력됨 -->
                         <div class="empty-msg">도착한 알림이 없습니다.</div>
                     </c:otherwise>
                 </c:choose>
             </div>
 
-            <!-- 페이지네이션 (Page 객체 기반) -->
-            <c:if test="${not empty notifications and notifications.totalPages > 0}">
+            <c:if test="${not empty alarms and alarms.totalPages > 0}">
                 <div class="pagination">
-                    <c:forEach begin="0" end="${notifications.totalPages - 1}" var="i">
-                        <a href="?page=${i + 1}" class="page-link ${notifications.number == i ? 'active' : ''}">${i + 1}</a>
+                    <c:forEach begin="1" end="${alarms.totalPages}" var="i">
+                        <a href="?page=${i - 1}" class="page-link ${alarms.number == (i - 1) ? 'active' : ''}">${i}</a>
                     </c:forEach>
                 </div>
             </c:if>
