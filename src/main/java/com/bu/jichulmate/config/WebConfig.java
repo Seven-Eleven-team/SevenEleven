@@ -53,11 +53,6 @@ public class WebConfig implements WebMvcConfigurer {
                         "/subscription/**",
                         "/subscriptions/**",
                         "/party/**",
-
-                        /*
-                         * 커뮤니티는 목록/상세는 공개로 둘 수 있고,
-                         * 글쓰기/수정/삭제/내 글만 로그인 필요로 잡는 게 자연스러움.
-                         */
                         "/community/write",
                         "/community/edit/**",
                         "/community/delete/**",
