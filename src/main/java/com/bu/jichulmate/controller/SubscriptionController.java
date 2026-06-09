@@ -1,7 +1,9 @@
 package com.bu.jichulmate.controller;
 
+import com.bu.jichulmate.domain.Account;
 import com.bu.jichulmate.dto.subscription.SubscriptionCreateRequest;
 import com.bu.jichulmate.dto.subscription.SubscriptionResponse;
+import com.bu.jichulmate.service.AccountService;
 import com.bu.jichulmate.service.SubscriptionService;
 import com.bu.jichulmate.util.SessionUtils;
 import jakarta.servlet.http.HttpSession;
@@ -12,7 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,10 +26,18 @@ import java.util.List;
 public class SubscriptionController {
 
     private final SubscriptionService subscriptionService;
+    private final AccountService accountService;
 
     @GetMapping("/mypage")
-    public String mypageDashboard(Model model) {
-        Long userId = 2L;
+    public String mypageDashboard(
+            HttpSession session,
+            Model model
+    ) {
+        Long userId = SessionUtils.getLoginUserId(session);
+
+        if (userId == null) {
+            return "redirect:/";
+        }
 
         List<SubscriptionResponse> top3Subs;
 
@@ -42,7 +54,22 @@ public class SubscriptionController {
     }
 
     @GetMapping("/ott")
-    public String ottPage() {
+    public String ottPage(
+            HttpSession session,
+            Model model
+    ) {
+        Long userId = SessionUtils.getLoginUserId(session);
+
+        Account primaryAccount = null;
+
+        if (userId != null) {
+            List<Account> accounts = accountService.getAccountsByUser(userId);
+            primaryAccount = getPrimaryAccount(accounts);
+        }
+
+        model.addAttribute("primaryAccount", primaryAccount);
+        model.addAttribute("hasPaymentAccount", primaryAccount != null);
+
         return "subscription/ott";
     }
 
@@ -54,16 +81,23 @@ public class SubscriptionController {
     @PostMapping("/ott")
     public String create(
             SubscriptionCreateRequest request,
-            HttpSession session
+            HttpSession session,
+            RedirectAttributes redirectAttributes
     ) {
         Long userId = SessionUtils.getLoginUserId(session);
 
-        subscriptionService.createSubscription(
-                userId,
-                request
-        );
+        if (userId == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
+            return "redirect:/subscription/ott";
+        }
 
-        return "redirect:/subscription/paymentSuccess";
+        try {
+            subscriptionService.createSubscription(userId, request);
+            return "redirect:/subscription/paymentSuccess";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/subscription/ott";
+        }
     }
 
     @GetMapping("/my")
@@ -72,6 +106,10 @@ public class SubscriptionController {
             Model model
     ) {
         Long userId = SessionUtils.getLoginUserId(session);
+
+        if (userId == null) {
+            return "redirect:/";
+        }
 
         List<SubscriptionResponse> subs;
 
@@ -83,13 +121,29 @@ public class SubscriptionController {
         }
 
         model.addAttribute("subscriptions", subs);
+        model.addAttribute("today", LocalDate.now());
 
         return "members/mypage/mysub";
     }
 
     @PostMapping("/cancel/{id}")
-    public String cancel(@PathVariable Long id) {
-        subscriptionService.cancelSubscription(id);
+    public String cancel(
+            @PathVariable Long id,
+            HttpSession session,
+            RedirectAttributes redirectAttributes
+    ) {
+        Long userId = SessionUtils.getLoginUserId(session);
+
+        if (userId == null) {
+            return "redirect:/";
+        }
+
+        try {
+            subscriptionService.cancelSubscription(id);
+            redirectAttributes.addFlashAttribute("successMessage", "구독이 해지되었습니다.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
 
         return "redirect:/subscription/my";
     }
@@ -97,5 +151,16 @@ public class SubscriptionController {
     @GetMapping("/paymentSuccess")
     public String paymentSuccess() {
         return "subscription/paymentSuccess";
+    }
+
+    private Account getPrimaryAccount(List<Account> accounts) {
+        if (accounts == null || accounts.isEmpty()) {
+            return null;
+        }
+
+        return accounts.stream()
+                .filter(account -> "Y".equals(account.getIsPrimary()))
+                .findFirst()
+                .orElse(accounts.get(0));
     }
 }

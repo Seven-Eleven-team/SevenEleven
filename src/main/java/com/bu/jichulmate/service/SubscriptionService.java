@@ -1,10 +1,12 @@
 package com.bu.jichulmate.service;
 
+import com.bu.jichulmate.domain.Account;
 import com.bu.jichulmate.domain.PartyPost;
 import com.bu.jichulmate.domain.Subscription;
 import com.bu.jichulmate.domain.User;
 import com.bu.jichulmate.dto.subscription.SubscriptionCreateRequest;
 import com.bu.jichulmate.dto.subscription.SubscriptionResponse;
+import com.bu.jichulmate.repository.AccountRepository;
 import com.bu.jichulmate.repository.PartyPostRepository;
 import com.bu.jichulmate.repository.SubscriptionRepository;
 import com.bu.jichulmate.repository.UserRepository;
@@ -25,199 +27,189 @@ public class SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
     private final UserRepository userRepository;
     private final PartyPostRepository partyPostRepository;
+    private final AccountRepository accountRepository;
 
-    // 구독 등록
     @Transactional
     public void createSubscription(
             Long userId,
             SubscriptionCreateRequest request
     ) {
+        if (userId == null) {
+            throw new RuntimeException("로그인이 필요합니다.");
+        }
 
-        // 회원 조회
+        validateCreateRequest(request);
+
         User user = userRepository.findById(userId)
-                .orElseThrow(() ->
-                        new RuntimeException("회원 없음"));
+                .orElseThrow(() -> new RuntimeException("회원 정보를 찾을 수 없습니다."));
 
-        // 파티 조회
-        PartyPost party = partyPostRepository.findById(
-                request.getPartyId()
-        ).orElseThrow(() ->
-                new RuntimeException("파티 없음"));
+        Account paymentAccount = resolvePaymentAccount(user, request.getAccountId());
 
-        // 시작일
+        if (paymentAccount == null) {
+            throw new RuntimeException("마이페이지에서 결제 계좌를 먼저 등록해 주세요.");
+        }
+
+        PartyPost party = partyPostRepository.findById(request.getPartyId())
+                .orElseThrow(() -> new RuntimeException("판매글 정보를 찾을 수 없습니다."));
+
+        validatePartyAvailable(party);
+
         LocalDate startDate = LocalDate.now();
+        LocalDate endDate = startDate.plusMonths(request.getPeriodMonths());
 
-        // 종료일 계산
-        LocalDate endDate =
-                startDate.plusMonths(
-                        request.getPeriodMonths()
-                );
+        int monthlyFee = request.getMonthlyFee();
+        int periodMonths = request.getPeriodMonths();
+        int totalAmount = monthlyFee * periodMonths;
 
-        // 총 결제 금액 계산
-        Integer totalAmount =
-                request.getMonthlyFee()
-                        * request.getPeriodMonths();
-
-        // 구독 객체 생성
         Subscription subscription = new Subscription();
-
-        // 회원 저장
         subscription.setUser(user);
-
-        // 파티 저장
         subscription.setParty(party);
+        subscription.setMonthlyFee(monthlyFee);
+        subscription.setTotalAmount(totalAmount);
+        subscription.setPeriodMonths(periodMonths);
+        subscription.setStartDate(startDate);
+        subscription.setEndDate(endDate);
+        subscription.setStatus("ACTIVE");
+        subscription.setSerialCode(createSerialCode());
 
-        // 월 요금
-        subscription.setMonthlyFee(
-                request.getMonthlyFee()
-        );
-
-        // 총 결제 금액
-        subscription.setTotalAmount(
-                totalAmount
-        );
-
-        // 구독 개월 수
-        subscription.setPeriodMonths(
-                request.getPeriodMonths()
-        );
-
-        // 시작일
-        subscription.setStartDate(
-                startDate
-        );
-
-        // 종료일
-        subscription.setEndDate(
-                endDate
-        );
-
-        // ★ 수정됨: 삭제된 nextPayDate 로직 제거 및 필수값인 serialCode 생성 추가
-        // 주문 고유 시리얼 넘버 생성 (예: ORD-168439201)
-        String serialCode = "ORD-" + System.currentTimeMillis();
-        subscription.setSerialCode(serialCode);
-
-        // 상태
-        subscription.setStatus(
-                "ACTIVE"
-        );
-
-        subscription.setSerialCode(
-                "SUB-" + System.currentTimeMillis()
-        );
-
-        // 저장
         subscriptionRepository.save(subscription);
 
-        party.setOccupiedSlots(
-                party.getOccupiedSlots() + 1
-        );
-        if (party.getOccupiedSlots() >= party.getTotalSlots()) {
+        int occupiedSlots = party.getOccupiedSlots() == null ? 0 : party.getOccupiedSlots();
+        int totalSlots = party.getTotalSlots() == null ? 4 : party.getTotalSlots();
+
+        party.setOccupiedSlots(occupiedSlots + 1);
+
+        if (party.getOccupiedSlots() >= totalSlots) {
             party.setStatus("FULL");
         }
+
+        partyPostRepository.save(party);
     }
 
-
-    // 내 구독 목록 조회
     @Transactional(readOnly = true)
-    public List<SubscriptionResponse> getMySubscriptions(
-            Long userId
-    ) {
+    public List<SubscriptionResponse> getMySubscriptions(Long userId) {
+        if (userId == null) {
+            return new ArrayList<>();
+        }
 
-        return subscriptionRepository
-                // 필드명이 user의 userId라면 userRepository 메서드명 확인 필요 (보통 findByUserId 또는 findByUser_UserId)
-                // 만약 에러나면 findByUserId(userId) 로 수정해주세요.
-                .findByUserUserId(userId)
+        return subscriptionRepository.findByUserUserId(userId)
                 .stream()
-                .map(subscription -> {
-
-                    SubscriptionResponse res =
-                            new SubscriptionResponse();
-
-                    // 구독 ID
-                    res.setId(
-                            subscription.getId()
-                    );
-
-                    // 파티 ID
-                    res.setPartyId(
-                            subscription.getParty().getId()
-                    );
-
-                    // OTT 서비스 이름
-                    res.setServiceName(
-                            subscription.getParty()
-                                    .getService()
-                                    .getServiceName()
-                    );
-
-                    // 월 요금
-                    res.setMonthlyFee(
-                            (int) subscription.getMonthlyFee()
-                    );
-
-                    // 총 결제 금액
-                    res.setTotalAmount(
-                            (int) subscription.getTotalAmount()
-                    );
-
-                    // 구독 개월 수
-                    res.setPeriodMonths(
-                            subscription.getPeriodMonths()
-                    );
-
-                    // 시작일
-                    res.setStartDate(
-                            subscription.getStartDate()
-                    );
-
-                    // 종료일
-                    res.setEndDate(
-                            subscription.getEndDate()
-                    );
-
-                    // ★ 수정됨: 삭제된 nextPayDate 로직 제거
-                    // res.setNextPayDate(...) 삭제 완료
-
-                    // 상태
-                    res.setStatus(
-                            subscription.getStatus()
-                    );
-
-                    res.setSerialCode(subscription.getSerialCode());
-
-                    res.setSharedId(subscription.getParty().getShareId());
-                    res.setSharedPwd(subscription.getParty().getSharePassword());
-
-                    return res;
-                })
+                .map(this::toResponse)
                 .collect(Collectors.toList());
     }
 
     @Transactional
     public void cancelSubscription(Long subscriptionId) {
         Subscription subscription = subscriptionRepository.findById(subscriptionId)
-                .orElseThrow(() -> new RuntimeException("구독 없음"));
+                .orElseThrow(() -> new RuntimeException("구독 정보를 찾을 수 없습니다."));
+
+        if ("CANCELLED".equals(subscription.getStatus())) {
+            throw new RuntimeException("이미 해지된 구독입니다.");
+        }
 
         subscription.setStatus("CANCELLED");
-        // save() 안해도 됨 — @Transactional이라 자동 반영
     }
-    // 💡 [여기에 추가] 내 정보 메인 화면용: 최신 구독 내역 최대 3개만 잘라서 가져오기
+
     @Transactional(readOnly = true)
     public List<SubscriptionResponse> getTop3Subscriptions(Long userId) {
-        // 1. 기존 메서드로 전체 구독을 긁어옵니다.
         List<SubscriptionResponse> allSubs = getMySubscriptions(userId);
 
-        // 2. 만약 전체 목록이 null이거나 비어있으면 안전하게 바로 빈 리스트 반환
         if (allSubs == null || allSubs.isEmpty()) {
-            System.out.println("⚠️ [서비스 로그] 유저 " + userId + "번의 구독 데이터가 DB에 없거나 null입니다.");
             return new ArrayList<>();
         }
 
-        // 3. 최신순 정렬을 보장하기 위해 ID 역순(최신순) 정렬 후 최대 3개 컷팅
         return allSubs.stream()
-                .sorted((a, b) -> b.getId().compareTo(a.getId())) // 최신 구독이 위로 오게 정렬
+                .sorted((a, b) -> b.getId().compareTo(a.getId()))
                 .limit(3)
                 .collect(Collectors.toList());
     }
-} // <--- 클래스가 끝나는 맨 마지막 중괄호 바로 위에 넣으셔야 합니다!
+
+    private void validateCreateRequest(SubscriptionCreateRequest request) {
+        if (request == null) {
+            throw new RuntimeException("결제 요청 정보가 없습니다.");
+        }
+
+        if (request.getPartyId() == null) {
+            throw new RuntimeException("판매글 정보가 없습니다.");
+        }
+
+        if (request.getMonthlyFee() == null || request.getMonthlyFee() <= 0) {
+            throw new RuntimeException("결제 금액 정보가 올바르지 않습니다.");
+        }
+
+        if (request.getPeriodMonths() == null || request.getPeriodMonths() <= 0) {
+            throw new RuntimeException("구독 기간 정보가 올바르지 않습니다.");
+        }
+    }
+
+    private Account resolvePaymentAccount(User user, Long accountId) {
+        if (accountId != null) {
+            return accountRepository.findByIdAndUser(accountId, user)
+                    .orElseThrow(() -> new RuntimeException("결제 계좌 정보를 찾을 수 없습니다."));
+        }
+
+        return accountRepository.findByUserAndIsPrimary(user, "Y")
+                .orElseGet(() -> {
+                    List<Account> accounts = accountRepository.findByUserOrderByIsPrimaryDescCreatedAtDesc(user);
+
+                    if (accounts == null || accounts.isEmpty()) {
+                        throw new RuntimeException("마이페이지에서 결제 계좌를 먼저 등록해 주세요.");
+                    }
+
+                    return accounts.get(0);
+                });
+    }
+
+    private void validatePartyAvailable(PartyPost party) {
+        if (party == null) {
+            throw new RuntimeException("판매글 정보를 찾을 수 없습니다.");
+        }
+
+        if ("REJECTED".equals(party.getStatus())) {
+            throw new RuntimeException("승인되지 않은 판매글입니다.");
+        }
+
+        if ("FULL".equals(party.getStatus())) {
+            throw new RuntimeException("이미 모집이 완료된 구독입니다.");
+        }
+
+        int occupiedSlots = party.getOccupiedSlots() == null ? 0 : party.getOccupiedSlots();
+        int totalSlots = party.getTotalSlots() == null ? 4 : party.getTotalSlots();
+
+        if (occupiedSlots >= totalSlots) {
+            throw new RuntimeException("이미 모집이 완료된 구독입니다.");
+        }
+    }
+
+    private String createSerialCode() {
+        return "SUB-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    }
+
+    private SubscriptionResponse toResponse(Subscription subscription) {
+        SubscriptionResponse res = new SubscriptionResponse();
+
+        res.setId(subscription.getId());
+
+        if (subscription.getParty() != null) {
+            res.setPartyId(subscription.getParty().getId());
+
+            if (subscription.getParty().getService() != null) {
+                res.setServiceName(subscription.getParty().getService().getServiceName());
+            }
+
+            res.setSharedId(subscription.getParty().getShareId());
+            res.setSharedPwd(subscription.getParty().getSharePassword());
+        }
+
+        res.setMonthlyFee((int) subscription.getMonthlyFee());
+        res.setTotalAmount((int) subscription.getTotalAmount());
+        res.setPeriodMonths(subscription.getPeriodMonths());
+        res.setStartDate(subscription.getStartDate());
+        res.setEndDate(subscription.getEndDate());
+        res.setNextPayDate(null);
+        res.setStatus(subscription.getStatus());
+        res.setSerialCode(subscription.getSerialCode());
+
+        return res;
+    }
+}
