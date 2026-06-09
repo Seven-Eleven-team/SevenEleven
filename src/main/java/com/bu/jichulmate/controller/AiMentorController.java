@@ -33,10 +33,10 @@ public class AiMentorController {
             @RequestBody ChatRequest request,
             HttpSession session) {
 
-        // ★ 수정됨: 엉뚱한 "userId" 대신, 팀 표준 SessionUtils를 사용해 안전하게 ID 추출!
+
         Long userId = SessionUtils.getLoginUserId(session);
 
-        // 멘토 서비스에 유저 ID와 메시지를 전달하여 대화 처리
+
         FeedbackResponse response = aiMentorService.getChatFeedback(userId, request.getMessage());
 
         return ResponseEntity.ok(response);
