@@ -381,6 +381,46 @@
                 height: 60px;
             }
         }
+
+        /* ★ 상세 팝업창(모달) 전용 스타일 */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4); /* 반투명 배경 */
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999;
+        }
+        .modal-content {
+            background: #ffffff;
+            border-radius: 20px; /* 둥근 테두리 */
+            width: 340px;
+            padding: 30px 24px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .modal-close-btn {
+            position: absolute; top: 16px; right: 20px;
+            font-size: 24px; font-weight: bold; color: #999;
+            background: none; border: none; cursor: pointer;
+        }
+        .modal-header {
+            text-align: center; margin-bottom: 24px;
+        }
+        .modal-header img { max-height: 36px; }
+
+        .info-group { margin-bottom: 16px; }
+        .info-group label {
+            display: block; font-size: 16px; font-weight: 800;
+            color: #111; margin-bottom: 8px; text-align: left;
+        }
+        .info-box {
+            border: 1px solid #ddd;
+            border-radius: 12px; /* 둥근 입력창 모양 */
+            padding: 10px 14px;
+            font-size: 14px; color: #333;
+            text-align: center; /* 텍스트 가운데 정렬 */
+            background: #fff;
+            font-weight: 600;
+        }
     </style>
 </head>
 
@@ -677,10 +717,8 @@
                                         ${not empty s.createdAt ? s.createdAt : '-'}
                                     </span>
 
-                                    <button type="button"
-                                            class="detail-btn"
-                                            onclick="location.href='${pageContext.request.contextPath}/party/detail/${s.id}'">
-                                        상세보기
+                                    <button type="button" class="btn-detail"
+                                        onclick="openDetailModal('${s.serviceName}', ${s.monthlyPrice}, '${s.shareId}', '${s.sharePassword}', '${s.createdAt}')"                                        상세
                                     </button>
                                 </div>
 
@@ -704,10 +742,72 @@
 
 <%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
 <%@ include file="/WEB-INF/views/common/include/scripts.jspf" %>
+<div id="detailModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <button type="button" class="modal-close-btn" onclick="closeDetailModal()">×</button>
 
+        <div class="modal-header">
+            <img id="modalLogo" src="" alt="OTT 로고">
+        </div>
+
+        <div class="modal-body">
+            <div class="info-group">
+                <label>OTT 명</label>
+                <div class="info-box" id="modalServiceName"></div>
+            </div>
+            <div class="info-group">
+                <label>가격</label>
+                <div class="info-box" id="modalPrice"></div>
+            </div>
+            <div class="info-group">
+                <label>아이디</label>
+                <div class="info-box" id="modalShareId"></div>
+            </div>
+            <div class="info-group">
+                <label>비밀번호</label>
+                <div class="info-box" id="modalSharePassword"></div>
+            </div>
+            <div class="info-group">
+                <label>판매 기간</label>
+                <div class="info-box" id="modalPeriod"></div>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
     });
+
+    // 팝업창 열기 함수
+        function openDetailModal(serviceName, price, shareId, sharePw, regDate) {
+            // 1. 로고 이미지 세팅
+            let logoSrc = '';
+            if(serviceName === '유튜브 프리미엄') logoSrc = '${pageContext.request.contextPath}/images/youtube_premium_logo.png';
+            else if(serviceName === '넷플릭스') logoSrc = '${pageContext.request.contextPath}/images/netflix.png';
+            else if(serviceName === '티빙') logoSrc = '${pageContext.request.contextPath}/images/tving.png';
+            else if(serviceName === '웨이브') logoSrc = '${pageContext.request.contextPath}/images/wavve.png';
+            else if(serviceName === '왓챠') logoSrc = '${pageContext.request.contextPath}/images/watcha.png';
+
+            document.getElementById('modalLogo').src = logoSrc;
+
+            // 2. 데이터 세팅
+            document.getElementById('modalServiceName').innerText = serviceName;
+            document.getElementById('modalPrice').innerText = price.toLocaleString() + '원';
+            document.getElementById('modalShareId').innerText = shareId || '정보 없음';
+            document.getElementById('modalSharePassword').innerText = sharePw || '정보 없음';
+
+            // 날짜가공 (시작일 ~)
+            let periodText = regDate ? regDate.substring(0, 10) + ' ~ (진행중)' : '-';
+            document.getElementById('modalPeriod').innerText = periodText;
+
+            // 3. 모달창 띄우기
+            document.getElementById('detailModal').style.display = 'flex';
+        }
+
+        // 팝업창 닫기 함수
+        function closeDetailModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
 </script>
 
 </body>

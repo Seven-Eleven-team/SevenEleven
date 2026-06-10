@@ -14,7 +14,7 @@ import com.bu.jichulmate.repository.GoalRepository;
 import com.bu.jichulmate.repository.InquiryRepository;
 import com.bu.jichulmate.repository.PartySellerRepository;
 import com.bu.jichulmate.response.ApiResponse;
-import com.bu.jichulmate.response.PartyDetailResponse;
+import com.bu.jichulmate.dto.party.PartyDetailResponse;
 import com.bu.jichulmate.service.AccountService;
 import com.bu.jichulmate.service.FileService;
 import com.bu.jichulmate.service.MyPageService;
@@ -293,46 +293,44 @@ public class MyPageController {
 
     @GetMapping("/sales")
     public String mySales(
+            @PageableDefault(size = 10) Pageable pageable, // ★ 추가
             HttpSession session,
             Model model
     ) {
         Long userId = SessionUtils.getLoginUserId(session);
-
-        if (userId == null) {
-            return "redirect:/";
-        }
+        if (userId == null) return "redirect:/";
 
         boolean isSeller = !partySellerRepository.findByUserId(userId).isEmpty();
 
-        List<PartyDetailResponse> salesList = isSeller
-                ? partyService.getPostsBySeller(userId)
-                : List.of();
+        // ★ 에러 해결: 변경된 서비스에 맞게 Page 객체로 받아옵니다.
+        Page<PartyDetailResponse> salesPage = isSeller
+                ? partyService.getPostsBySeller(userId, pageable)
+                : new org.springframework.data.domain.PageImpl<>(java.util.List.of(), pageable, 0);
 
         model.addAttribute("isSeller", isSeller);
-        model.addAttribute("salesList", salesList);
+        model.addAttribute("salesPage", salesPage);
+        model.addAttribute("salesList", salesPage.getContent());
 
         return "members/mypage/mysales";
     }
 
     @GetMapping("/sales/list")
     public String mySalesList(
+            @PageableDefault(size = 10) Pageable pageable, // ★ 추가
             HttpSession session,
             Model model
     ) {
         Long userId = SessionUtils.getLoginUserId(session);
-
-        if (userId == null) {
-            return "redirect:/";
-        }
+        if (userId == null) return "redirect:/";
 
         boolean isSeller = !partySellerRepository.findByUserId(userId).isEmpty();
-
-        List<PartyDetailResponse> salesList = isSeller
-                ? partyService.getPostsBySeller(userId)
-                : List.of();
+        Page<PartyDetailResponse> salesPage = isSeller
+                ? partyService.getPostsBySeller(userId, pageable)
+                : new org.springframework.data.domain.PageImpl<>(java.util.List.of(), pageable, 0);
 
         model.addAttribute("isSeller", isSeller);
-        model.addAttribute("salesList", salesList);
+        model.addAttribute("salesPage", salesPage);
+        model.addAttribute("salesList", salesPage.getContent());
 
         return "members/mypage/mysaleslist";
     }
@@ -420,25 +418,22 @@ public class MyPageController {
 
     @GetMapping("/parties")
     public String myParties(
-            @PageableDefault(size = 5) Pageable pageable,
+            @PageableDefault(size = 10) Pageable pageable, // ★ 5에서 10으로 통일
             HttpSession session,
             Model model
     ) {
         Long userId = SessionUtils.getLoginUserId(session);
-
-        if (userId == null) {
-            return "redirect:/";
-        }
+        if (userId == null) return "redirect:/";
 
         boolean isSeller = !partySellerRepository.findByUserId(userId).isEmpty();
-
-        List<PartyDetailResponse> salesList = isSeller
-                ? partyService.getPostsBySeller(userId)
-                : List.of();
+        Page<PartyDetailResponse> salesPage = isSeller
+                ? partyService.getPostsBySeller(userId, pageable)
+                : new org.springframework.data.domain.PageImpl<>(java.util.List.of(), pageable, 0);
 
         model.addAttribute("parties", myPageService.getMyPartyList(userId, pageable));
         model.addAttribute("isSeller", isSeller);
-        model.addAttribute("salesList", salesList);
+        model.addAttribute("salesPage", salesPage);
+        model.addAttribute("salesList", salesPage.getContent());
 
         return "members/mypage/mysaleslist";
     }
