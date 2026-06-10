@@ -6,6 +6,7 @@ import com.bu.jichulmate.domain.SavingGoal;
 import com.bu.jichulmate.repository.CategoryRepository;
 import com.bu.jichulmate.repository.ExpenseRepository;
 import com.bu.jichulmate.repository.GoalRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,24 +30,30 @@ public class ExpenseController {
 
     @PostMapping("/api/v1/expenses")
     @ResponseBody
-    public ResponseEntity<String> saveExpense(@RequestBody ExpenseRequestDto dto) {
+    public ResponseEntity<String> saveExpense(@RequestBody ExpenseRequestDto dto,
+                                              HttpSession session) {
+
+        Long userId = (Long) session.getAttribute("loginUserId");
+
+        if (userId == null) {
+            return ResponseEntity.status(401).body("로그인이 필요합니다.");
+        }
 
         Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 없습니다."));
 
-        // ★ 추가: JS에서 넘겨준 goalId가 있다면 DB에서 목표를 찾아옵니다.
         SavingGoal savingGoal = null;
         if (dto.getGoalId() != null) {
             savingGoal = goalRepository.findById(dto.getGoalId()).orElse(null);
         }
 
         Expense expense = Expense.builder()
-                .userId(dto.getUserId())
+                .userId(userId)
                 .category(category)
                 .amount(dto.getAmount())
                 .expenseDate(dto.getExpenseDate())
                 .isFixed(dto.getIsFixed())
-                .savingGoal(savingGoal) // ★ 추가: 찾은 목표를 지출 내역에 쏙 넣기
+                .savingGoal(savingGoal)
                 .build();
 
         expenseRepository.save(expense);
@@ -61,7 +68,7 @@ public class ExpenseController {
         private Long amount;
         private LocalDate expenseDate;
         private String isFixed;
-        private Long goalId; // ★ 핵심: 구멍 난 바구니 수리 (목표 ID를 드디어 받을 수 있습니다!)
+        private Long goalId;
     }
 
     @Data
