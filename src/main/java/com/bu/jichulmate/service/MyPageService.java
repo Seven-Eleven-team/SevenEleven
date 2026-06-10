@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.HashMap;
+import java.util.Map;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ public class MyPageService {
     private final PartyRepository partyRepository;
     private final PartySellerRepository partySellerRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ExpenseRepository expenseRepository;
 
     public MyPageSummaryResponse getMyPageSummary(Long userId) {
         User user = getUser(userId);
@@ -52,16 +55,33 @@ public class MyPageService {
 
         List<MyPageSummaryResponse.GoalSummary> goalList = new ArrayList<>();
 
+        Map<Long, Long> goalTotals = new HashMap<>();
+        List<Object[]> savingDataRaw = expenseRepository.getMonthlySavingsGroupedByGoal(userId);
+
+        for (Object[] row : savingDataRaw) {
+            Long goalId = ((Number) row[0]).longValue();
+            Long amount = ((Number) row[2]).longValue();
+
+            goalTotals.put(goalId, goalTotals.getOrDefault(goalId, 0L) + amount);
+        }
+
         if (currentGoal != null) {
-            int rate = currentGoal.getTargetAmount() > 0
-                    ? (int) ((double) currentGoal.getSavedAmount() / currentGoal.getTargetAmount() * 100)
-                    : 0;
+            long savedAmount = goalTotals.getOrDefault(currentGoal.getId(), 0L);
+
+            int rate = 0;
+            if (currentGoal.getTargetAmount() > 0) {
+                rate = (int) Math.round((double) savedAmount / currentGoal.getTargetAmount() * 100);
+
+                if (rate > 100) {
+                    rate = 100;
+                }
+            }
 
             goalList.add(MyPageSummaryResponse.GoalSummary.builder()
                     .goalId(currentGoal.getId())
                     .goalName(currentGoal.getGoalName())
                     .targetAmount(currentGoal.getTargetAmount())
-                    .savedAmount(currentGoal.getSavedAmount())
+                    .savedAmount(savedAmount)
                     .achievementRate(rate)
                     .build());
         }
