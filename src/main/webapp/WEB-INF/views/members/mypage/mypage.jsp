@@ -181,7 +181,7 @@
 
                                             <c:when test="${fn:contains(serviceLower, 'netflix') or fn:contains(serviceLower, '넷플릭스')}">
                                                 <img src="${pageContext.request.contextPath}/images/netflix.png"
-                                                     alt=""
+                                                     alt="넷플릭스"
                                                      onerror="this.parentElement.classList.add('logo-fallback'); this.remove();">
                                             </c:when>
 
@@ -655,14 +655,7 @@
             });
     }
 
-    const hamburgerBtn = document.querySelector('.hamburger-btn');
-    const sidebar = document.querySelector('nav.sidebar');
 
-    if (hamburgerBtn && sidebar) {
-        hamburgerBtn.addEventListener('click', function () {
-            sidebar.classList.toggle('open');
-        });
-    }
 </script>
 
 </body>

@@ -441,38 +441,17 @@
             hamburger.setAttribute('aria-expanded', 'false');
 
             const sidebarSelectors = [
-                '#sidebar',
-                '#sideBar',
-                '#sideMenu',
-                '#sidebarMenu',
-                '#mobileMenu',
-                '#menuDrawer',
-                '.sidebar',
-                '.side-bar',
-                '.side-nav',
-                '.side-menu',
-                '.sidebar-menu',
-                '.mobile-menu',
-                '.mobile-sidebar',
-                '.menu-drawer',
-                '.drawer-menu',
-                '.nav-drawer',
-                '.header-sidebar',
-                '.global-sidebar',
-                '.layout-sidebar'
+                '#sidebar', '#sideBar', '#sideMenu', '#sidebarMenu',
+                '#mobileMenu', '#menuDrawer', '.sidebar', '.side-bar',
+                '.side-nav', '.side-menu', '.sidebar-menu', '.mobile-menu',
+                '.mobile-sidebar', '.menu-drawer', '.drawer-menu', '.nav-drawer',
+                '.header-sidebar', '.global-sidebar', '.layout-sidebar'
             ];
 
             const overlaySelectors = [
-                '#sidebarOverlay',
-                '#sideOverlay',
-                '#menuOverlay',
-                '.sidebar-overlay',
-                '.side-overlay',
-                '.menu-overlay',
-                '.drawer-overlay',
-                '.nav-overlay',
-                '.global-dim',
-                '.dimmed-layer'
+                '#sidebarOverlay', '#sideOverlay', '#menuOverlay',
+                '.sidebar-overlay', '.side-overlay', '.menu-overlay',
+                '.drawer-overlay', '.nav-overlay', '.global-dim', '.dimmed-layer'
             ];
 
             function getElements(selectors) {
@@ -638,9 +617,10 @@
                                                      alt="유튜브 프리미엄 로고">
                                             </c:when>
 
-                                            <c:when test="${s.serviceName eq '넷플릭스'}">
+                                            <c:when test="${fn:contains(serviceLower, 'netflix') or fn:contains(serviceLower, '넷플릭스')}">
                                                 <img src="${pageContext.request.contextPath}/images/netflix.png"
-                                                     alt="넷플릭스 로고">
+                                                     alt="넷플릭스"
+                                                     onerror="this.parentElement.classList.add('logo-fallback'); this.remove();">
                                             </c:when>
 
                                             <c:when test="${s.serviceName eq '티빙'}">
