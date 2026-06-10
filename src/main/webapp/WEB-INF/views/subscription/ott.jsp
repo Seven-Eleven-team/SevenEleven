@@ -147,12 +147,30 @@
 
             <div class="payment-row">
                 <span class="label">은행</span>
-                <span>마이페이지 연동 예정</span>
+                <span id="payBankName">
+                    <c:choose>
+                        <c:when test="${not empty primaryAccount}">
+                            ${primaryAccount.bankName}
+                        </c:when>
+                        <c:otherwise>
+                            등록된 계좌 없음
+                        </c:otherwise>
+                    </c:choose>
+                </span>
             </div>
 
             <div class="payment-row">
                 <span class="label">계좌번호</span>
-                <span>마이페이지 연동 예정</span>
+                <span id="payAccountNumber">
+                    <c:choose>
+                        <c:when test="${not empty primaryAccount}">
+                            ${primaryAccount.accountNumber}
+                        </c:when>
+                        <c:otherwise>
+                            마이페이지에서 계좌 등록 필요
+                        </c:otherwise>
+                    </c:choose>
+                </span>
             </div>
         </div>
 
@@ -185,6 +203,11 @@
     <input type="hidden"
            name="periodMonths"
            id="periodMonths">
+
+    <input type="hidden"
+           name="accountId"
+           id="accountId"
+           value="${not empty primaryAccount ? primaryAccount.id : ''}">
 </form>
 
 <%@ include file="/WEB-INF/views/common/layout/floatingBtn.jspf" %>
@@ -199,6 +222,11 @@
 
 <script>
     const OTT_CONTEXT_PATH = '${pageContext.request.contextPath}';
+    const HAS_PAYMENT_ACCOUNT = ${hasPaymentAccount};
+
+    <c:if test="${not empty errorMessage}">
+    alert('${errorMessage}');
+    </c:if>
 
     const serviceData = {
         youtube: {
@@ -551,6 +579,12 @@
     }
 
     function openPaymentModal() {
+        if (!HAS_PAYMENT_ACCOUNT) {
+            alert('마이페이지에서 결제 계좌를 먼저 등록해 주세요.');
+            location.href = OTT_CONTEXT_PATH + '/mypage';
+            return;
+        }
+
         if (!selectedKey) {
             alert('먼저 구독 서비스를 선택해 주세요.');
             return;
@@ -582,13 +616,21 @@
     }
 
     function confirmPayment() {
+        if (!HAS_PAYMENT_ACCOUNT) {
+            alert('마이페이지에서 결제 계좌를 먼저 등록해 주세요.');
+            location.href = OTT_CONTEXT_PATH + '/mypage';
+            return;
+        }
+
         document.getElementById('purchaseForm').submit();
     }
 
     function initOttPage() {
         const detailOverlay = document.getElementById('ottDetailModalOverlay');
+
         if (detailOverlay && detailOverlay.dataset.bound !== 'true') {
             detailOverlay.dataset.bound = 'true';
+
             detailOverlay.addEventListener('click', function (event) {
                 if (event.target === detailOverlay) {
                     closeDetail();
@@ -609,7 +651,6 @@
         initOttPage();
     }
 </script>
-
 
 <script>
     (function () {
