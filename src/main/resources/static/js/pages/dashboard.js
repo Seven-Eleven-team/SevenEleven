@@ -366,7 +366,12 @@ window.saveAllData = function() {
     const requests = pendingEntries.map(entry => {
         return fetch('/api/v1/expenses', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId: 1, categoryId: parseInt(entry.categoryId), amount: entry.amount, expenseDate: entry.expenseDate, isFixed: entry.type === 'fixed' ? 'Y' : 'N' })
+            body: JSON.stringify({
+                categoryId: parseInt(entry.categoryId),
+                amount: entry.amount,
+                expenseDate: entry.expenseDate,
+                isFixed: entry.type === 'fixed' ? 'Y' : 'N'
+            })
         });
     });
     Promise.all(requests).then(responses => {
@@ -639,7 +644,13 @@ window.saveAllSavingData = function() {
     const requests = pendingSavingEntries.map(entry => {
         return fetch('/api/v1/expenses', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId: 1, categoryId: entry.categoryId, amount: entry.amount, expenseDate: entry.expenseDate, isFixed: entry.type === 'fixed' ? 'Y' : 'N', goalId: parseInt(entry.goalId) })
+            body: JSON.stringify({
+                categoryId: entry.categoryId,
+                amount: entry.amount,
+                expenseDate: entry.expenseDate,
+                isFixed: entry.type === 'fixed' ? 'Y' : 'N',
+                goalId: parseInt(entry.goalId)
+            })
         });
     });
 
@@ -815,53 +826,73 @@ window.closeGoalModal = function() {
 
 window.saveGoalData = function() {
     const requests = [];
-    const userId = 1;
 
     const fixedId = document.getElementById('fixedGoalId').value;
-    const fixedName = document.getElementById('fixedGoalName').value;
+    const fixedName = document.getElementById('fixedGoalName').value.trim();
     const fixedAmount = document.getElementById('fixedGoalAmount').value.replace(/[^0-9]/g, '');
 
     if (fixedName && fixedAmount) {
         const method = fixedId ? 'PUT' : 'POST';
         const url = fixedId ? '/api/v1/goals/' + fixedId : '/api/v1/goals';
+
         requests.push(fetch(url, {
-            method: method, headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId: userId, itemName: fixedName, itemPrice: parseInt(fixedAmount), isFixed: 'Y' })
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                itemName: fixedName,
+                itemPrice: parseInt(fixedAmount),
+                isFixed: 'Y'
+            })
         }));
     }
 
     const regRows = document.querySelectorAll('.regular-goal-row');
+
     regRows.forEach(row => {
         const id = row.querySelector('.reg-goal-id').value;
-        const name = row.querySelector('.reg-goal-name').value;
+        const name = row.querySelector('.reg-goal-name').value.trim();
         const amount = row.querySelector('.reg-goal-amount').value.replace(/[^0-9]/g, '');
 
         if (name && amount) {
             const method = id ? 'PUT' : 'POST';
             const url = id ? '/api/v1/goals/' + id : '/api/v1/goals';
+
             requests.push(fetch(url, {
-                method: method, headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: userId, itemName: name, itemPrice: parseInt(amount), isFixed: 'N' })
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    itemName: name,
+                    itemPrice: parseInt(amount),
+                    isFixed: 'N'
+                })
             }));
         }
     });
 
-    if (requests.length === 0) { openCustomAlert("입력 오류", "저장할 목표를 하나 이상 입력해주세요."); return; }
+    if (requests.length === 0) {
+        openCustomAlert("입력 오류", "저장할 목표를 하나 이상 입력해주세요.");
+        return;
+    }
 
     Promise.all(requests).then(async (responses) => {
         let allSuccess = true;
         let errorMessages = [];
+
         for (const res of responses) {
             if (!res.ok) {
                 allSuccess = false;
                 errorMessages.push(await res.text());
             }
         }
+
         if (allSuccess) {
             openCustomAlert("저장 완료", "목표가 성공적으로 저장되었습니다!", () => location.reload());
         } else {
             openCustomAlert("저장 실패", "저장 실패:\n" + errorMessages.join('\n'));
         }
+    }).catch(error => {
+        console.error("목표 저장 요청 오류:", error);
+        openCustomAlert("저장 실패", "목표 저장 요청 중 오류가 발생했습니다.");
     });
 };
 

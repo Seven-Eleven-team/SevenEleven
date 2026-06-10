@@ -1,7 +1,7 @@
 package com.bu.jichulmate.controller;
 
 import com.bu.jichulmate.dto.party.PartyPostRequest;
-import com.bu.jichulmate.response.PartyDetailResponse;
+import com.bu.jichulmate.dto.party.PartyDetailResponse;
 import com.bu.jichulmate.service.PartyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +30,8 @@ public class PartyController {
 
     @GetMapping("/posts/seller/{sellerId}")
     public ResponseEntity<List<PartyDetailResponse>> getPostsBySeller(@PathVariable Long sellerId) {
-        return ResponseEntity.ok(partyService.getPostsBySeller(sellerId));
+        return ResponseEntity.ok(
+                partyService.getPostsBySeller(sellerId, org.springframework.data.domain.PageRequest.of(0, 1000)).getContent()
+        );
     }
 }

@@ -10,6 +10,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,16 +31,31 @@ public class GoalController {
         private String isFixed;
     }
 
-    // 1. 목표 생성 (기존 유지)
+    // 1. 목표 생성
     @PostMapping
-    public ResponseEntity<String> saveGoal(@RequestBody GoalRequest request) {
+    public ResponseEntity<String> saveGoal(@RequestBody GoalRequest request,
+                                           HttpSession session) {
         try {
-            User user = userRepository.findById(request.getUserId())
+            Long userId = (Long) session.getAttribute("loginUserId");
+
+            if (userId == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+            }
+
+            User user = userRepository.findById(userId)
                     .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
+
             String isFixed = (request.getIsFixed() != null) ? request.getIsFixed() : "N";
 
-            savingGoalService.createGoal(user, request.getItemName(), request.getItemPrice(), isFixed);
+            savingGoalService.createGoal(
+                    user,
+                    request.getItemName(),
+                    request.getItemPrice(),
+                    isFixed
+            );
+
             return ResponseEntity.ok("성공");
+
         } catch (IllegalStateException e) {
             return ResponseEntity.badRequest().body("제한 초과: " + e.getMessage());
         } catch (Exception e) {

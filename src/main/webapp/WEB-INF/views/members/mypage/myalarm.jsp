@@ -202,6 +202,7 @@
             text-align: center;
         }
 
+        /* 페이지네이션 디자인 */
         .pagination {
             width: 100%;
             margin-top: 28px;
@@ -473,12 +474,12 @@
                 </c:choose>
             </div>
 
-            <c:if test="${not empty alarms and alarms.totalPages > 0}">
+            <c:if test="${not empty salesPage and salesPage.totalPages > 0}">
                 <div class="pagination">
-                    <c:forEach begin="1" end="${alarms.totalPages}" var="i">
+                    <c:forEach begin="1" end="${salesPage.totalPages}" var="i">
                         <a href="?page=${i - 1}"
-                           class="page-link ${alarms.number == (i - 1) ? 'active' : ''}">
-                                ${i}
+                            class="page-link ${salesPage.number == (i - 1) ? 'active' : ''}">
+                                 ${i}
                         </a>
                     </c:forEach>
                 </div>

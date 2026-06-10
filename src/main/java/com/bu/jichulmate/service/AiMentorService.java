@@ -21,6 +21,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
@@ -41,8 +42,6 @@ public class AiMentorService {
     private final CategoryRepository categoryRepository;
     private final GoalRepository goalRepository;
 
-
-
     @Value("${gemini.api.url}")
     private String apiUrl;
 
@@ -53,7 +52,6 @@ public class AiMentorService {
     private static final String PROMPT_MEDIUM = "지시사항: 너는 객관적이고 이성적인 재무 설계사야. 감정적인 공감보다는 분석적이고 논리적인 조언을 담백하게 제공해줘. 단, 텍스트를 강조하기 위한 마크다운 기호(***, **, ###, ---, * 등)는 절대 사용하지 말고 오직 순수 텍스트로만 답변해줘.\n\n";
     private static final String PROMPT_HOT = "지시사항: 너는 차갑고 냉정한 팩트 폭격기야. 돈을 낭비하는 것에 대해 아주 신랄하고 뼈때리는 직설적인 경고형 문체로 조언해줘. 이모티콘은 절대 쓰지 말고 단호하게 말해. 단, 텍스트를 강조하기 위한 마크다운 기호(***, **, ###, ---, * 등)는 절대 사용하지 말고 오직 순수 텍스트로만 답변해줘.\n\n";
 
-    // ★ 은아님 기획 반영: 지출, 저축, 목표 설정을 아우르는 마법의 지시사항!
     private static final String AI_ACTION_INSTRUCTION =
             "\n\n[중요 지시사항: AI 비서 자동 기록 명령]\n" +
                     "사용자의 대화를 분석해서, 가계부에 기록하거나 목표를 세워야 하는 내용이 있다면 반드시 대답 맨 마지막에 아래 태그를 붙여줘. (해당 없으면 생략)\n" +
@@ -81,9 +79,6 @@ public class AiMentorService {
 
         String systemPrompt = "MILD".equals(tone) ? PROMPT_MILD : ("HOT".equals(tone) ? PROMPT_HOT : PROMPT_MEDIUM);
 
-        // ==========================================================
-        // 대시보드 상태 수집 로직
-        // ==========================================================
         YearMonth thisMonth = YearMonth.now();
         YearMonth lastMonth = thisMonth.minusMonths(1);
 
@@ -135,9 +130,8 @@ public class AiMentorService {
         } else {
             for (SavingGoal g : goalList) {
                 long currentSaved = goalCurrentTotals.getOrDefault(g.getId(), 0L);
-                long target = g.getTargetAmount(); // 에러 잡았던 부분!
+                long target = g.getTargetAmount();
                 double percent = target > 0 ? ((double) currentSaved / target) * 100 : 0;
-                // ★ AI가 알 수 있도록 ID를 명시적으로 알려줍니다!
                 expenseContext.append("- (ID:").append(g.getId()).append(") [")
                         .append(g.getIsFixed().equals("Y") ? "고정목표" : "일반목표").append("] ")
                         .append(g.getGoalName()).append(": ")
@@ -148,7 +142,6 @@ public class AiMentorService {
 
         systemPrompt = systemPrompt + expenseContext.toString() + AI_ACTION_INSTRUCTION;
 
-        // API 요청 세팅
         List<FeedbackResponse.GeminiRequest.Content> contentsList = new ArrayList<>();
         Pageable pageLimit = PageRequest.of(0, 10);
         List<AiChatLog> rawHistory = aiChatLogRepository.findByUser_UserIdOrderByChatDateDesc(userId, pageLimit);
@@ -184,6 +177,7 @@ public class AiMentorService {
         FeedbackResponse result = new FeedbackResponse();
         result.setFlavor(tone.toLowerCase());
 
+        // ★ 수정한 부분: 구글 서버가 터졌을 때를 대비한 예외 처리 로직 추가
         try {
             FeedbackResponse.GeminiResponse apiResponse = restTemplate.postForObject(requestUrl, entity, FeedbackResponse.GeminiResponse.class);
 
@@ -191,9 +185,6 @@ public class AiMentorService {
                 String aiText = apiResponse.getCandidates().get(0).getContent().getParts().get(0).getText();
                 boolean isActionTaken = false;
 
-                // ==========================================================
-                // ★ 1. 일반 지출 저장 파싱 로직
-                // ==========================================================
                 Matcher expenseMatcher = Pattern.compile("\\|\\|SAVE_EXPENSE:(\\d+):(\\d+)\\|\\|").matcher(aiText);
                 while (expenseMatcher.find()) {
                     try {
@@ -216,15 +207,12 @@ public class AiMentorService {
                 }
                 aiText = expenseMatcher.replaceAll("");
 
-                // ==========================================================
-                // ★ 2. 저축 저장 파싱 로직 (은아님 기획!)
-                // ==========================================================
                 Matcher savingMatcher = Pattern.compile("\\|\\|SAVE_SAVING:(\\d+):(\\d+)\\|\\|").matcher(aiText);
                 while (savingMatcher.find()) {
                     try {
                         Long goalId = Long.parseLong(savingMatcher.group(1));
                         Long amount = Long.parseLong(savingMatcher.group(2));
-                        Category savingCategory = categoryRepository.findById(11L).orElse(null); // 11번이 저축 카테고리
+                        Category savingCategory = categoryRepository.findById(11L).orElse(null);
                         SavingGoal linkedGoal = goalRepository.findById(goalId).orElse(null);
 
                         if (savingCategory != null && linkedGoal != null) {
@@ -243,9 +231,6 @@ public class AiMentorService {
                 }
                 aiText = savingMatcher.replaceAll("");
 
-                // ==========================================================
-                // ★ 3. 새 목표 설정 파싱 로직 (은아님 기획!)
-                // ==========================================================
                 Matcher goalMatcher = Pattern.compile("\\|\\|SAVE_GOAL:([^:]+):(\\d+):([YN])\\|\\|").matcher(aiText);
                 while (goalMatcher.find()) {
                     try {
@@ -265,7 +250,6 @@ public class AiMentorService {
                 }
                 aiText = goalMatcher.replaceAll("").trim();
 
-                // 액션이 성공했다면 유저에게 알려주는 추임새
                 if (isActionTaken) {
                     aiText += "\n\n*(방금 말해준 내용은 내가 시스템에 완벽하게 등록해뒀어! 대시보드를 새로고침 해봐 📝)*";
                 }
@@ -282,10 +266,20 @@ public class AiMentorService {
             } else {
                 result.setMentorMessage("AI 멘토가 잠시 생각에 잠겼어요. 다시 시도해주세요!");
             }
+
+            // ★ 추가된 예외 처리 부분 시작
+        } catch (HttpServerErrorException.ServiceUnavailable e) {
+            // 구글 서버가 혼잡할 때 발생하는 503 에러 캐치
+            System.err.println("Gemini API 서버 혼잡(503): " + e.getMessage());
+            result.setMentorMessage("현재 AI 멘토를 찾는 분들이 너무 많아서 대답이 지연되고 있어요! 잠시 후 다시 말을 걸어주시겠어요? 😥");
+
         } catch (Exception e) {
+            // 그 외의 모든 에러 캐치
+            System.err.println("Gemini API 호출 중 에러 발생: " + e.getMessage());
             e.printStackTrace();
-            result.setMentorMessage("앗, 멘토와 연결이 끊어졌어요. 잠시 후 다시 말을 걸어주세요.");
+            result.setMentorMessage("앗, 멘토와 연결하는 중 인터넷 선이 살짝 꼬인 것 같아요. 다시 한 번 말씀해 주세요! 🔌");
         }
+        // ★ 추가된 예외 처리 부분 끝
 
         return result;
     }

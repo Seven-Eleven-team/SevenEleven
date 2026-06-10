@@ -2065,3 +2065,166 @@ body.mypage-body .dashboard .subscription-list .dashboard-sub-logo span {
     }
 }
 
+/* =========================================================
+   MYPAGE GOAL CARD PATCH v56
+   - 내 개인 소비 목표 게이지를 대시보드 목표 디자인과 통일
+   - 실제 저축 합계 기준 진행률 표시
+========================================================= */
+
+body.mypage .goal-card,
+body.mypage-body .goal-card {
+    overflow: hidden !important;
+}
+
+body.mypage .mypage-goal-list,
+body.mypage-body .mypage-goal-list {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 22px !important;
+}
+
+body.mypage .mypage-goal-item,
+body.mypage-body .mypage-goal-item {
+    width: 100% !important;
+    padding: 0 0 22px !important;
+    border-bottom: 1px solid #eef0f4 !important;
+}
+
+body.mypage .mypage-goal-item:last-child,
+body.mypage-body .mypage-goal-item:last-child {
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+}
+
+body.mypage .main-goal,
+body.mypage-body .main-goal {
+    margin: 0 !important;
+}
+
+body.mypage .goal-label-row,
+body.mypage-body .goal-label-row {
+    width: 100% !important;
+    margin-bottom: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 14px !important;
+}
+
+body.mypage .goal-type-badge,
+body.mypage-body .goal-type-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 28px !important;
+    padding: 0 12px !important;
+    border-radius: 999px !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    line-height: 1 !important;
+}
+
+body.mypage .goal-type-badge.fixed,
+body.mypage-body .goal-type-badge.fixed {
+    background: #eaf1f8 !important;
+    color: #1e2d4d !important;
+}
+
+body.mypage .goal-type-badge.normal,
+body.mypage-body .goal-type-badge.normal {
+    background: #f4f7fb !important;
+    color: #3F72AF !important;
+}
+
+body.mypage .goal-percent,
+body.mypage-body .goal-percent {
+    color: #1e2d4d !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    white-space: nowrap !important;
+}
+
+body.mypage .main-goal-title,
+body.mypage-body .main-goal-title {
+    margin: 0 0 8px !important;
+    color: #555555 !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+}
+
+body.mypage .goal-name,
+body.mypage-body .goal-name {
+    margin: 0 !important;
+    color: #111111 !important;
+    font-size: clamp(16px, 1vw, 19px) !important;
+    font-weight: 900 !important;
+    line-height: 1.35 !important;
+    word-break: break-word !important;
+}
+
+body.mypage .goal-money-row,
+body.mypage-body .goal-money-row {
+    width: 100% !important;
+    margin-top: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 4px !important;
+    color: #333333 !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    line-height: 1.3 !important;
+}
+
+body.mypage .goal-money-row span:first-child,
+body.mypage-body .goal-money-row span:first-child {
+    color: #1e2d4d !important;
+    font-weight: 900 !important;
+}
+
+body.mypage .goal-card .progress-bg,
+body.mypage-body .goal-card .progress-bg {
+    width: 100% !important;
+    height: 18px !important;
+    margin-top: 12px !important;
+    border-radius: 999px !important;
+    background: #eef3f8 !important;
+    overflow: hidden !important;
+}
+
+body.mypage .goal-card .progress-fill,
+body.mypage-body .goal-card .progress-fill {
+    height: 100% !important;
+    min-width: 0 !important;
+    border-radius: 999px !important;
+    background: linear-gradient(90deg, #1e2d4d 0%, #3F72AF 100%) !important;
+    transition: width 0.35s ease !important;
+}
+
+body.mypage .goal-card .empty-card-message,
+body.mypage-body .goal-card .empty-card-message {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    min-height: 260px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    color: #333333 !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+@media (max-width: 768px) {
+    body.mypage .mypage-goal-list,
+    body.mypage-body .mypage-goal-list {
+        gap: 18px !important;
+    }
+
+    body.mypage .goal-money-row,
+    body.mypage-body .goal-money-row {
+        flex-wrap: wrap !important;
+    }
+}
+
