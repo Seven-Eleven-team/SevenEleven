@@ -14,7 +14,7 @@
     <title>지출메이트 - 마이페이지</title>
 
     <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/css/mypage.css?v=10">
+          href="${pageContext.request.contextPath}/css/mypage.css?v=11">
 </head>
 
 <body class="mypage">
@@ -278,65 +278,93 @@
                     </a>
                 </div>
 
-                <c:if test="${not empty fixedGoal}">
-                    <div class="main-goal">
-                        <p class="main-goal-title">가장 중요한 목표</p>
-
-                        <p class="goal-name">
-                                ${fixedGoal.goalName}
-                        </p>
+                <div class="mypage-goal-list">
+                    <c:if test="${not empty fixedGoal}">
+                        <c:set var="fixedSavedAmount"
+                               value="${goalTotals[fixedGoal.id] != null ? goalTotals[fixedGoal.id] : 0}"/>
 
                         <c:set var="fixedRate"
-                               value="${fixedGoal.targetAmount > 0 ? (fixedGoal.savedAmount * 100.0 / fixedGoal.targetAmount) : 0}"/>
+                               value="${fixedGoal.targetAmount > 0 ? (fixedSavedAmount * 100.0 / fixedGoal.targetAmount) : 0}"/>
 
-                        <div class="progress-bg">
-                            <div class="progress-fill"
-                                 style="width: ${fixedRate}%;"></div>
+                        <c:set var="fixedRateWidth"
+                               value="${fixedRate > 100 ? 100 : fixedRate}"/>
+
+                        <div class="mypage-goal-item main-goal">
+                            <div class="goal-label-row">
+                                <span class="goal-type-badge fixed">고정 목표</span>
+                                <span class="goal-percent">
+                                    <fmt:formatNumber value="${fixedRate}" pattern="##0.0"/>%
+                                </span>
+                            </div>
+
+                            <p class="main-goal-title">가장 중요한 목표</p>
+
+                            <p class="goal-name">
+                                ${fixedGoal.goalName}
+                            </p>
+
+                            <div class="goal-money-row">
+                                <span>
+                                    ₩<fmt:formatNumber value="${fixedSavedAmount}" pattern="#,##0"/>
+                                </span>
+
+                                <span>
+                                    / ₩<fmt:formatNumber value="${fixedGoal.targetAmount}" pattern="#,##0"/>
+                                </span>
+                            </div>
+
+                            <div class="progress-bg">
+                                <div class="progress-fill"
+                                     style="width: ${fixedRateWidth}%;"></div>
+                            </div>
                         </div>
+                    </c:if>
 
-                        <div class="goal-progress-text">
-                            <span>
-                                ₩<fmt:formatNumber value="${fixedGoal.savedAmount}" pattern="#,##0"/>
-                            </span>
-
-                            <span>
-                                <fmt:formatNumber value="${fixedRate}" pattern="##0.0"/>%
-                            </span>
-                        </div>
-                    </div>
-                </c:if>
-
-                <c:forEach var="goal" items="${normalGoals}">
-                    <div class="goal-item">
-                        <p class="goal-name">
-                                ${goal.goalName}
-                        </p>
+                    <c:forEach var="goal" items="${normalGoals}">
+                        <c:set var="goalSavedAmount"
+                               value="${goalTotals[goal.id] != null ? goalTotals[goal.id] : 0}"/>
 
                         <c:set var="goalRate"
-                               value="${goal.targetAmount > 0 ? (goal.savedAmount * 100.0 / goal.targetAmount) : 0}"/>
+                               value="${goal.targetAmount > 0 ? (goalSavedAmount * 100.0 / goal.targetAmount) : 0}"/>
 
-                        <div class="progress-bg">
-                            <div class="progress-fill"
-                                 style="width: ${goalRate}%;"></div>
+                        <c:set var="goalRateWidth"
+                               value="${goalRate > 100 ? 100 : goalRate}"/>
+
+                        <div class="mypage-goal-item goal-item">
+                            <div class="goal-label-row">
+                                <span class="goal-type-badge normal">일반 목표</span>
+                                <span class="goal-percent">
+                                    <fmt:formatNumber value="${goalRate}" pattern="##0.0"/>%
+                                </span>
+                            </div>
+
+                            <p class="goal-name">
+                                ${goal.goalName}
+                            </p>
+
+                            <div class="goal-money-row">
+                                <span>
+                                    ₩<fmt:formatNumber value="${goalSavedAmount}" pattern="#,##0"/>
+                                </span>
+
+                                <span>
+                                    / ₩<fmt:formatNumber value="${goal.targetAmount}" pattern="#,##0"/>
+                                </span>
+                            </div>
+
+                            <div class="progress-bg">
+                                <div class="progress-fill"
+                                     style="width: ${goalRateWidth}%;"></div>
+                            </div>
                         </div>
+                    </c:forEach>
 
-                        <div class="goal-progress-text">
-                            <span>
-                                ₩<fmt:formatNumber value="${goal.savedAmount}" pattern="#,##0"/>
-                            </span>
-
-                            <span>
-                                <fmt:formatNumber value="${goalRate}" pattern="##0.0"/>%
-                            </span>
+                    <c:if test="${empty fixedGoal && empty normalGoals}">
+                        <div class="empty-card-message">
+                            등록된 소비 목표가 없습니다.
                         </div>
-                    </div>
-                </c:forEach>
-
-                <c:if test="${empty fixedGoal && empty normalGoals}">
-                    <div class="empty-card-message">
-                        등록된 소비 목표가 없습니다.
-                    </div>
-                </c:if>
+                    </c:if>
+                </div>
             </section>
 
         </div>

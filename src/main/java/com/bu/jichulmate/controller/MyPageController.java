@@ -97,7 +97,8 @@ public class MyPageController {
         for (Object[] row : savingDataRaw) {
             Long goalId = ((Number) row[0]).longValue();
             Long amount = ((Number) row[2]).longValue();
-            goalTotals.put(goalId, amount);
+
+            goalTotals.put(goalId, goalTotals.getOrDefault(goalId, 0L) + amount);
         }
 
         model.addAttribute("goalTotals", goalTotals);
