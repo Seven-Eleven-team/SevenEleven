@@ -184,6 +184,22 @@ public class MyPageService {
         user.setGender(request.getGender());
         user.setBirthDate(request.getBirthDate());
 
+        String mentorTone = request.getMentorTone();
+
+        if (mentorTone == null || mentorTone.isBlank()) {
+            mentorTone = "MILD";
+        }
+
+        mentorTone = mentorTone.toUpperCase();
+
+        if (!mentorTone.equals("MILD")
+                && !mentorTone.equals("MEDIUM")
+                && !mentorTone.equals("HOT")) {
+            mentorTone = "MILD";
+        }
+
+        user.setMentorTone(mentorTone);
+
         userRepository.save(user);
     }
 

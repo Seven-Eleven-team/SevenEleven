@@ -567,9 +567,9 @@
                             MEDIUM (중간맛)
                         </option>
 
-                        <option value="SPICY"
-                        ${(sessionScope.loginUser.mentorTone == 'SPICY' || user.mentorTone == 'SPICY') ? 'selected' : ''}>
-                            SPICY (매운맛)
+                        <option value="HOT"
+                        ${(sessionScope.loginUser.mentorTone == 'HOT' || user.mentorTone == 'HOT') ? 'selected' : ''}>
+                            HOT (매운맛)
                         </option>
                     </select>
                 </div>

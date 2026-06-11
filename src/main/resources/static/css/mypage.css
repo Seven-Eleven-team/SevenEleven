@@ -2228,3 +2228,106 @@ body.mypage-body .goal-card .empty-card-message {
     }
 }
 
+/* =========================================================
+   MYPAGE GLOBAL SIDEBAR DESIGN PATCH v57
+   - 메인페이지 햄버거 사이드바와 동일하게 보이도록 보정
+   - 공통 사이드바가 열렸을 때 마이페이지 전용 사이드바가 뒤에 비치는 문제 해결
+========================================================= */
+
+/* 공통 사이드바는 메인페이지 header.css 기준으로 고정 */
+body.mypage nav.sidebar,
+body.mypage-body nav.sidebar {
+    position: fixed !important;
+    top: 74px !important;
+    left: -280px !important;
+    width: 280px !important;
+    height: calc(100vh - 74px) !important;
+    background: #193b60 !important;
+    z-index: 9200 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    transition: left 0.3s ease !important;
+    transform: none !important;
+}
+
+/* 공통 사이드바 open 상태 */
+body.mypage nav.sidebar.open,
+body.mypage-body nav.sidebar.open,
+body.mypage nav.sidebar.is-open,
+body.mypage-body nav.sidebar.is-open,
+body.mypage nav.sidebar.active,
+body.mypage-body nav.sidebar.active,
+body.mypage.sidebar-open nav.sidebar,
+body.mypage-body.sidebar-open nav.sidebar,
+body.mypage.is-sidebar-open nav.sidebar,
+body.mypage-body.is-sidebar-open nav.sidebar {
+    left: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: none !important;
+}
+
+/* 공통 사이드바가 열렸을 때 마이페이지 전용 사이드바 숨김 */
+body.mypage:has(nav.sidebar.open) .mypage-sidebar,
+body.mypage-body:has(nav.sidebar.open) .mypage-sidebar,
+body.mypage.sidebar-open .mypage-sidebar,
+body.mypage-body.sidebar-open .mypage-sidebar,
+body.mypage.is-sidebar-open .mypage-sidebar,
+body.mypage-body.is-sidebar-open .mypage-sidebar {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* 공통 사이드바 내부 메뉴도 메인 기준으로 재보정 */
+body.mypage nav.sidebar ul,
+body.mypage-body nav.sidebar ul {
+    list-style: none !important;
+    padding: 20px !important;
+    margin: 0 !important;
+}
+
+body.mypage nav.sidebar ul li a,
+body.mypage-body nav.sidebar ul li a {
+    display: block !important;
+    color: #f9f7f7 !important;
+    text-decoration: none !important;
+    padding: 14px 16px !important;
+    border-radius: 8px !important;
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    text-align: left !important;
+    background: transparent !important;
+}
+
+body.mypage nav.sidebar ul li a:hover,
+body.mypage-body nav.sidebar ul li a:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 로그아웃 영역도 메인 기준 유지 */
+body.mypage nav.sidebar .sidebar-logout,
+body.mypage-body nav.sidebar .sidebar-logout {
+    margin-top: auto !important;
+    padding: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+body.mypage nav.sidebar .sidebar-logout a,
+body.mypage-body nav.sidebar .sidebar-logout a {
+    color: #f9f7f7 !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    opacity: 0.7 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+body.mypage nav.sidebar .sidebar-logout a:hover,
+body.mypage-body nav.sidebar .sidebar-logout a:hover {
+    opacity: 1 !important;
+}

@@ -316,8 +316,13 @@
     </div>
 </div>
 
+
+<%@ include file="/WEB-INF/views/common/layout/floatingBtn.jspf" %>
+<%@ include file="/WEB-INF/views/common/modal/faqModal.jspf" %>
 <%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
 <%@ include file="/WEB-INF/views/common/include/scripts.jspf" %>
+
+<script src="${pageContext.request.contextPath}/js/pages/faq.js"></script>
 
 <script>
     const ctx = '${pageContext.request.contextPath}';

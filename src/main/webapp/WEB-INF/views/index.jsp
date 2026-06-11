@@ -131,17 +131,7 @@
     </section>
 </main>
 
-<div class="floating-buttons">
-    <button type="button" class="floating-btn ai-btn" aria-label="AI 멘토링" data-auth-required="true">
-        <img src="${pageContext.request.contextPath}/images/ai_modal.jpg?v=2"
-             alt="AI 멘토링"
-             class="ai-mentoring-icon">
-    </button>
-
-    <button type="button" class="floating-btn chat-btn" aria-label="1대1 질의응답" data-auth-required="true">
-        <span>···</span>
-    </button>
-</div>
+<%@ include file="/WEB-INF/views/common/layout/floatingBtn.jspf" %>
 
 <%@ include file="/WEB-INF/views/common/layout/footer.jspf" %>
 
