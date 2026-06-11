@@ -72,6 +72,7 @@ public class PartyService {
         // 1. 내 판매글을 모두 가져와서 최신순으로 정렬합니다.
         List<PartyDetailResponse> allList = partyPostRepository.findBySellerUserId(sellerId)
                 .stream()
+                .filter(post -> !"CANCELED".equalsIgnoreCase(post.getStatus()))
                 .map(this::toResponse)
                 .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()))
                 .toList();
@@ -114,5 +115,24 @@ public class PartyService {
         response.setRejectReason(post.getRejectReason());
 
         return response;
+    }
+
+    @Transactional
+    public void deleteMyPost(Long userId, Long partyId) {
+        PartyPost post = partyPostRepository.findById(partyId)
+                .orElseThrow(() -> new RuntimeException("판매글을 찾을 수 없습니다."));
+
+        if (post.getSeller() == null || post.getSeller().getUserId() == null) {
+            throw new RuntimeException("판매자 정보를 확인할 수 없습니다.");
+        }
+
+        if (!post.getSeller().getUserId().equals(userId)) {
+            throw new RuntimeException("본인이 등록한 판매글만 삭제할 수 있습니다.");
+        }
+
+        post.setStatus("CANCELED");
+        post.setUpdatedAt(LocalDateTime.now());
+
+        partyPostRepository.save(post);
     }
 }

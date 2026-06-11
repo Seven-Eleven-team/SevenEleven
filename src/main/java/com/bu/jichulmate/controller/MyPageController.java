@@ -439,6 +439,29 @@ public class MyPageController {
         return "members/mypage/mysaleslist";
     }
 
+    @DeleteMapping("/sales/{partyId}")
+    @ResponseBody
+    public ResponseEntity<ApiResponse<String>> deleteMySale(
+            @PathVariable Long partyId,
+            HttpSession session
+    ) {
+        Long userId = SessionUtils.getLoginUserId(session);
+
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ApiResponse.error("로그인이 필요합니다."));
+        }
+
+        try {
+            partyService.deleteMyPost(userId, partyId);
+            return ResponseEntity.ok(ApiResponse.success("판매글이 삭제되었습니다."));
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest()
+                    .body(ApiResponse.error(e.getMessage()));
+        }
+    }
+
     @PostMapping("/withdraw")
     @ResponseBody
     public ResponseEntity<ApiResponse<String>> withdraw(

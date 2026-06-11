@@ -11,6 +11,8 @@ import com.bu.jichulmate.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.bu.jichulmate.domain.Attachment;
+import com.bu.jichulmate.service.FileService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,17 +26,20 @@ public class PartySellerService {
     private final SubscriptionRepository subscriptionRepository;
     private final PartyPostRepository partyPostRepository;
     private final PasswordEncoder passwordEncoder;
+    private final FileService fileService;
 
     public PartySellerService(PartySellerRepository partySellerRepository,
                               UserRepository userRepository,
                               SubscriptionRepository subscriptionRepository,
                               PartyPostRepository partyPostRepository,
-                              PasswordEncoder passwordEncoder) {
+                              PasswordEncoder passwordEncoder,
+                              FileService fileService) {
         this.partySellerRepository = partySellerRepository;
         this.userRepository = userRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.partyPostRepository = partyPostRepository;
         this.passwordEncoder = passwordEncoder;
+        this.fileService = fileService;
     }
 
     @Transactional
@@ -71,6 +76,14 @@ public class PartySellerService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
+        String profileImageUrl = null;
+
+        List<Attachment> attachments = fileService.findFiles("USERS", userId);
+
+        if (attachments != null && !attachments.isEmpty()) {
+            profileImageUrl = attachments.get(attachments.size() - 1).getFilePath();
+        }
+
         List<Map<String, Object>> usedOttList = subscriptionRepository.findByUserUserId(userId)
                 .stream()
                 .map(sub -> {
@@ -84,6 +97,7 @@ public class PartySellerService {
 
         List<Map<String, Object>> soldOttList = partyPostRepository.findBySellerUserId(userId)
                 .stream()
+                .filter(post -> !"CANCELED".equalsIgnoreCase(post.getStatus()))
                 .map(post -> {
                     Map<String, Object> map = new HashMap<>();
                     map.put("serviceId", post.getService().getId());
@@ -95,8 +109,10 @@ public class PartySellerService {
 
         Map<String, Object> result = new HashMap<>();
         result.put("nickname", user.getNickname());
+        result.put("profileImageUrl", profileImageUrl);
         result.put("usedOttList", usedOttList);
         result.put("soldOttList", soldOttList);
+
         return result;
     }
 }

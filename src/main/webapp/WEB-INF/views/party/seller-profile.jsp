@@ -76,18 +76,33 @@
         }
 
         .profile-img {
-            width: 200px;
-            height: 250px;
-
-            background: #d5d5d5;
-            border-radius: 12px;
+            width: 180px;
+            height: 180px;
+            background: #d9d9d9;
+            border-radius: 50%;
+            overflow: hidden;
 
             display: flex;
             align-items: center;
             justify-content: center;
 
-            font-size: 16px;
             color: #999;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .profile-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+        }
+
+        .profile-img span {
+            color: #999;
+            font-size: 16px;
+            font-weight: 600;
         }
 
         .profile-right {
@@ -350,6 +365,21 @@
                 font-size: 14px;
             }
         }
+
+        .profile-img span {
+            color: #999;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .profile-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+            display: block;
+        }
+
     </style>
 </head>
 <body>
@@ -371,7 +401,9 @@
 
     <div class="profile-card">
         <div class="profile-left">
-            <div class="profile-img">프로필</div>
+            <div class="profile-img" id="sellerProfileImageBox">
+                <span>프로필</span>
+            </div>
         </div>
 
         <div class="profile-right">
@@ -474,6 +506,31 @@
             })
             .then(function(data) {
                 document.getElementById('nickname').textContent = data.nickname || '-';
+
+                var profileBox = document.getElementById('sellerProfileImageBox');
+
+                if (profileBox) {
+                    profileBox.innerHTML = '';
+
+                    if (data.profileImageUrl) {
+                        var profileSrc = data.profileImageUrl;
+
+                        if (!profileSrc.startsWith('http') && !profileSrc.startsWith(ctx)) {
+                            profileSrc = ctx + profileSrc;
+                        }
+
+                        var img = document.createElement('img');
+                        img.src = profileSrc;
+                        img.alt = '프로필 이미지';
+
+                        profileBox.appendChild(img);
+                    } else {
+                        var span = document.createElement('span');
+                        span.textContent = '프로필';
+
+                        profileBox.appendChild(span);
+                    }
+                }
 
                 var usedList = document.getElementById('used-ott-list');
                 if (data.usedOttList && data.usedOttList.length > 0) {

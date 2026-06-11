@@ -188,7 +188,10 @@
                                                     onclick="openDetailModal(this)">
                                                 상세
                                             </button>
-                                            <button type="button" class="delete-btn" onclick="alert('판매글 삭제 기능은 별도 API 연결 후 활성화됩니다.');">삭제</button>
+                                            <button type="button" class="delete-btn"
+                                                    onclick="deleteSalePost(${s.id})">
+                                                삭제
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -274,6 +277,44 @@
 
     function closeDetailModal() {
         document.getElementById('detailModal').style.display = 'none';
+    }
+
+    function deleteSalePost(partyId) {
+        if (!partyId) {
+            alert("삭제할 판매글 정보를 확인할 수 없습니다.");
+            return;
+        }
+
+        const confirmed = confirm("해당 판매글을 삭제하시겠습니까?");
+
+        if (!confirmed) {
+            return;
+        }
+
+        fetch("${pageContext.request.contextPath}/mypage/sales/" + partyId, {
+            method: "DELETE",
+            headers: {
+                "Accept": "application/json"
+            }
+        })
+            .then(async function (response) {
+                const data = await response.json().catch(function () {
+                    return null;
+                });
+
+                if (!response.ok) {
+                    const message = data && data.message
+                        ? data.message
+                        : "판매글 삭제 중 오류가 발생했습니다.";
+                    throw new Error(message);
+                }
+
+                alert(data && data.data ? data.data : "판매글이 삭제되었습니다.");
+                location.reload();
+            })
+            .catch(function (error) {
+                alert(error.message || "판매글 삭제 중 오류가 발생했습니다.");
+            });
     }
 </script>
 
