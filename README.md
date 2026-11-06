@@ -73,4 +73,4 @@ docs/            패키지·프론트엔드·정적 리소스 구조 문서
 
 ## 관련 문서
 
-- [기존 README](docs/README_PREVIOUS.md)
+- [기존 README](README1.md)
